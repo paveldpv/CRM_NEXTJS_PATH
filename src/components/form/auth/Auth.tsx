@@ -36,6 +36,7 @@ export default function Auth() {
       localStorage.setItem("mes_password", values.password);
       //router.push(`/main?inn=${values.INN}`);
       router.push(`/main`);
+      ///dasdsad
     } else {
       alert(res.error);
     }
