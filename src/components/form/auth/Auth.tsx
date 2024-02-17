@@ -34,9 +34,9 @@ export default function Auth() {
       localStorage.setItem("mes_phone", values.phone);
       localStorage.setItem("mes_INN", `${values.INN}`);
       localStorage.setItem("mes_password", values.password);
-      //router.push(`/main?inn=${values.INN}`);
-      router.push(`/main`);
-      ///dasdsad
+      router.push(`/main?inn=${values.INN}`);
+      //router.push(`/main`);
+      
     } else {
       alert(res.error);
     }
