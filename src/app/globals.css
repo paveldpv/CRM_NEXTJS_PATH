@@ -2,26 +2,85 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+.gridContainer {
+  display: grid;
+  grid-template-columns: 1fr 25fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+}
+.gridMain {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 2fr 10fr 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+}
+.customInput {
+  @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
+}
+.labelForInput {
+  @apply block mb-1 text-xs font-bold font-medium  text-menu_color dark:text-white;
+}
+.buttonSubmit {
+  @apply font-bold text-5xl text-list_menu_even bg-highlight_one hover:bg-text_navigate_menu focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-highlight_three dark:hover:bg-highlight_two 
+  dark:hover:text-menu_color
+  transition delay-700 duration-300  ease-linear  mt-10;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+button {
+  @apply bg-transparent p-2  hover:bg-highlight_one text-menu_color font-semibold delay-100  duration-700 hover:text-white  border border-menu_color hover:border-transparent rounded;
+}
+::-webkit-scrollbar {
+  width: 1px;
+}
+
+
+.Loader {
+  position: absolute;
+  top: 40%;
+  display: block;
+  font-weight: 800;
+  user-select: none;
+  text-align: center;
+  text-align: center;
+  position: relative;
+  padding: 0 48px;
+  font-size: 100px;
+  color: black;
+}
+.Loader:before,
+.loader:after {
+  content: "";
+  display: block;
+  width: 15px;
+  height: 15px;
+  background: currentColor;
+  position: absolute;
+  animation: load 0.7s infinite alternate ease-in-out;
+  top: 0;
+}
+.Loader:after {
+  top: auto;
+  bottom: 0;
+}
+@keyframes load {
+  0% {
+    left: 0;
+    height: 43px;
+    width: 15px;
+    transform: translateX(0);
+  }
+  50% {
+    height: 10px;
+    width: 40px;
+  }
+  100% {
+    left: 100%;
+    height: 43px;
+    width: 15px;
+    transform: translateX(-100%);
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
+
