@@ -134,7 +134,7 @@ export type TDBUser = {
   dateBirthday?: Date;
   nameJobTitle?: string;
   linksAllowed: TLink[] | "ADMIN";
-  //srcPhot:"NOT_FOUND" | TResponseUploadFiles|string
+
   srcPhoto: string | TResponseUploadFiles;
 } & TFormRegistrate;
 
@@ -164,21 +164,61 @@ export type TResponseUploadFiles = {
 
 //#region ORGANIZATION
 export type TRequisitesBank = {
-  checkingAccount: number;
-  nameBank: string;
-  korAccount: string;
-  BIK: number;
+  checkingAccount: {
+    value: number;
+    title: string;
+  };
+  nameBank: {
+    value: string;
+    title: string;
+  };
+  korAccount: {
+    value: string;
+    title: string;
+  };
+  BIK: {
+    value: number;
+    title: string;
+  };
 };
+
 export type TRequisites = {
-  INN: number;
-  KPP: number;
-  legalAddress: string;
-  mailAddress: string;
-  phone: string;
-  nameDirector: string;
-  email: string;
-  OGRN: number;
-  OKVD: string[];
+  INN: {
+    value: number;
+    title: string;
+  };
+  KPP: {
+    value: number;
+    title: string;
+  };
+  legalAddress: {
+    value: string;
+    title: string;
+  };
+  mailAddress: {
+    value: string;
+    title: string;
+  };
+  phone: {
+    value: string;
+    title: string;
+  };
+  nameDirector: {
+    value: string;
+    title: string;
+  };
+  email: {
+    value: string;
+    title: string;
+  };
+  OGRN: {
+    value: number;
+    title: string;
+  };
+  OKVD: {
+    value: string[];
+    title: string;
+  };
   requisitesBank: TRequisitesBank;
   srcRequisites: TResponseUploadFiles | "NOT_FOUND";
 };
@@ -190,11 +230,12 @@ export type TEmai = {
 
 export type TTelegramParams = {
   idTelegramBot: string;
+  hrefChat: string;
 };
 
 export type TDataOrganization = {
-  idAdministrators: string[];
   INN: number;
+  dateRegistration: Date;
   nameOrganization: string;
   requisites: TRequisites;
   paramsEmailNewsletter: TEmai;
@@ -203,3 +244,8 @@ export type TDataOrganization = {
 };
 
 //#endregion ORGANIZATION
+
+export type TErrored = {
+  error: boolean;
+  message?: string;
+};

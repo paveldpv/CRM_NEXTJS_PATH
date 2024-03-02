@@ -11,7 +11,6 @@ export default function BottomNavBar() {
     <>
       <br />
       <div className=" w-full border-b-2 bg-list_menu_even"></div>
-      <NavLink id={idLink.setting} href={"main/setting"} description="Настройки" title="Настройки" />
       <button
         className="border-2 border-solid p-2 border-menu_color rounded-xs h-16 text-list_menu_even hover:bg-color_header  "
         onClick={out}

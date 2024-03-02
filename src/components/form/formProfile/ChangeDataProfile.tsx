@@ -1,6 +1,6 @@
 import { TDBUser } from "@/Types/Types";
 
-import { Rubik_Pixels } from "next/font/google";
+
 
 import {FormikErrors} from "formik"
 
@@ -9,10 +9,7 @@ import InputDate from "@/components/UI/InputElements/InputDate/InputDate";
 
 import TextField from "@mui/material/TextField";
 
-const rubik_Pixels = Rubik_Pixels({
-  subsets: ["latin", "cyrillic"],
-  weight: ["400"],
-});
+
 
 type TChangeDataProfile = {
   visible: boolean;
@@ -145,7 +142,7 @@ export default function ChangeDataProfile({
         />
         {values.linksAllowed === "ADMIN" ? (
           <>
-            <span className={rubik_Pixels.className}>
+            <span>
               <h3 className="text-color_header">РУКОВОДИТЕЛЬ</h3>
               <h6>полный доступ</h6>
             </span>

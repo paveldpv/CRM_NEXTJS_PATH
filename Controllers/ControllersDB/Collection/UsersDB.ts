@@ -13,21 +13,19 @@ const addNewAdmin = async (data: TDBUser): Promise<TAnswerUpdateDB> => {
       success: true,
     };
   } catch (error) {
-    return {
-      success: false,
-      message: `error add new admin ,data user :${data},error: ${error}`,
-    };
+    throw error
   }
 };
 
 const getUsers = async (INN: number): Promise<TDBUser[] | null> => {
   try {
     const connectDB = await connect(`${process.env.DB_URL}${INN}`);
-    const dataUSer: TDBUser | TDBUser[] | null = await modelUSer.find({});
+    const dataUSer = (await modelUSer.find({}));
     connectDB.connection.close();
-    return dataUSer;
+    return dataUSer
   } catch (error) {
-    return null;
+    throw error
+    
   }
 };
 
@@ -38,7 +36,7 @@ const getUserByParams = async (INN: number, user: Partial<TDBUser>): Promise<TDB
     connectDB.connection.close();
     return dataUSer;
   } catch (error) {
-    return null;
+    throw error
   }
 };
 
@@ -49,7 +47,7 @@ const getUser = async (INN: number, idUser: string): Promise<TDBUser | null> => 
     connectDB.connection.close();
     return dataUSer;
   } catch (error) {
-    return null;
+    throw error
   }
 };
 
@@ -63,9 +61,7 @@ const updateDataUser = async (INN: number, data: TDBUser): Promise<TAnswerUpdate
       success: true,
     };
   } catch (error) {
-    return {
-      success: false,
-    };
+    throw error
   }
 };
 
@@ -80,10 +76,8 @@ const removePhotoToDB = async (INN: number, idUser: string): Promise<TAnswerUpda
       success: true,
     };
   } catch (error) {
-    return {
-      success: false,
-      message: `error remove photo to db error :${error}`,
-    };
+    throw error
+    
   }
 };
 

@@ -1,7 +1,8 @@
 import { TAnswerUpdateDB, TDataOrganization } from "@/Types/Types";
+import moment from "moment";
 import ControllerOrganizationDB from "../ControllersDB/Collection/OrganizationDB";
 
-export const getParamsOrganization = async (INN: number): Promise<TDataOrganization | undefined|null> => {
+export const getParamsOrganization = async (INN: number): Promise<TDataOrganization | undefined> => {
   try {
     return await ControllerOrganizationDB.getParamsOrganization(INN);
   } catch (error) {
@@ -9,9 +10,7 @@ export const getParamsOrganization = async (INN: number): Promise<TDataOrganizat
     return undefined;
   }
 };
-export const updateParamsOrganization = async (
-  data: TDataOrganization
-): Promise<TAnswerUpdateDB> => {
+export const updateParamsOrganization = async (data: TDataOrganization): Promise<TAnswerUpdateDB> => {
   try {
     return await ControllerOrganizationDB.updateParamsOrganization(data);
   } catch (error) {
@@ -21,9 +20,27 @@ export const updateParamsOrganization = async (
     };
   }
 };
+export const createNewOrganization = async (INN: number, idAdministrator: string): Promise<TAnswerUpdateDB> => {
+  try {
+    const dataNewOrganization: Pick<TDataOrganization, "INN" | "dateRegistration" > = {
+      INN,      
+      dateRegistration: moment().toDate(),
+    };
+    return await ControllerOrganizationDB.createNewOrganization(dataNewOrganization)
+    
+  } catch (error) {
+    return {
+      success: false,
+      message: `error create new Organization , INN:${INN},error:${error}`,
+    };
+  }
+};
 
 const ControllerOrganization = {
-  getParamsOrganization,updateParamsOrganization
+  getParamsOrganization,
+  updateParamsOrganization,
+  createNewOrganization,
+  
 };
 
 module.exports = ControllerOrganization;

@@ -1,7 +1,9 @@
 import { getServerSession } from "next-auth";
-import authConfig from "../../../config/authConfig";
+
+import authConfig from "../../../../config/authConfig";
 import { TConfigAPP, TDBUser } from "@/Types/Types";
-import ControllerConfigApp from "../../../Controllers/Controllers/ConfigApp";
+
+import ControllerConfigApp from "../../../../Controllers/Controllers/ConfigApp";
 import Wrapper from "@/components/layout/Wrapper";
 import Link from "next/link";
 import { Session } from "next-auth";
@@ -14,6 +16,7 @@ async function getConfigApp(idUSer: string, INN: Number): Promise<TConfigAPP | n
 
 export default async function page() {
   const session = (await getServerSession(authConfig)) as { dataSessionUser: TDBUser } & Session;
+
   const [user, dataSessionUser]: [any | undefined, TDBUser] = [session?.user, session?.dataSessionUser];
 
   const configApp = (await getConfigApp(dataSessionUser.idUser, dataSessionUser.INN)) as {

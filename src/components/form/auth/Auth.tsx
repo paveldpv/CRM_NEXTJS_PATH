@@ -7,6 +7,7 @@ import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState,useLayoutEffect } from "react";
 
+
 export default function Auth() {
   const router = useRouter();
   const params = useSearchParams();
@@ -22,7 +23,7 @@ export default function Auth() {
     console.log(`not submit`);
 
     if (Object.keys(errors).length) return;
-
+    
     const res = await signIn("credentials", {
       phone: values.phone,
       password: values.password,
@@ -34,7 +35,7 @@ export default function Auth() {
       localStorage.setItem("mes_phone", values.phone);
       localStorage.setItem("mes_INN", `${values.INN}`);
       localStorage.setItem("mes_password", values.password);
-      router.push(`/main?inn=${values.INN}`);
+      router.push(`/${values.INN}/main`);
       //router.push(`/main`);
       
     } else {

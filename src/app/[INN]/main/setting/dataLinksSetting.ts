@@ -4,15 +4,15 @@ export const dataLinkSetting: TPropsNavLink[] = [
   {
     description:"Настройка профиля",
     title:'Настройка профиля',
-    href:'main/setting/profile'
+    href:'setting/profile'
   },{
     description: "Настройка приложения",
     title: "Настройка приложения",
-    href: `main/setting/settingapp`,
+    href: `setting/settingapp`,
   },
   {
     description: "Настройка организации",
     title: "Настройка организации",
-    href: `main/setting/settingorganization`,
+    href: `setting/settingorganization`,
   },
 ];

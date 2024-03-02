@@ -11,6 +11,7 @@ export type TInputProps = {
   handlerChangePicture: (file: File) => void;
   visible: boolean;
   defaultSrc: string;
+  title?:string
 
   src?: string;
   removePhoto?: (src: string) => void;
@@ -26,6 +27,7 @@ export default function InputPicture({
   defaultSrc,
   src,
   removePhoto,
+  title="изображение"
 }: TInputProps) {
   return (
     <section>
@@ -33,7 +35,8 @@ export default function InputPicture({
         {visible ? (
           <MiniLoader />
         ) : (
-          <div>
+          <fieldset className="border-2 border-solid border-menu_color p-3 w-full text-xs  rounded-xs  rounded-md col-span-1">
+            <legend className=" pr-1 pl-1">{title}</legend>
             <label htmlFor={name} className=" cursor-pointer">
               <Image
                 className=" p-2 rounded-xl"
@@ -64,7 +67,7 @@ export default function InputPicture({
                 <MdDelete />
               </button>
             )}
-          </div>
+          </fieldset>
         )}
       </div>
     </section>

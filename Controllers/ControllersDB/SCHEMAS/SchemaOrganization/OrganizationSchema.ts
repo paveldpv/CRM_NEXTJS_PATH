@@ -2,24 +2,25 @@ import { Schema, model, models } from "mongoose";
 
 import { TDataOrganization } from "@/Types/Types";
 
-import { requisitesSchema } from "./requisitesSchema";
+import { requisitesSchema } from "./RequisitesSchema";
 
 export const organizationSchema = new Schema<TDataOrganization>({
-  idAdministrators: {
-    type: [String],
-    required: false,
-  },
   INN: {
     type: Number,
     required: false,
   },
+  dateRegistration: {
+    type: Date,
+    required: true,
+  },
   nameOrganization: {
     type: String,
     required: false,
+    default: "не задано",
   },
   requisites: {
     type: requisitesSchema,
-    required: false,
+    required:false
   },
   paramsEmailNewsletter: {
     type: {
@@ -36,12 +37,17 @@ export const organizationSchema = new Schema<TDataOrganization>({
   telegram: {
     type: {
       idTelegramBot: String,
+      hrefChat: {
+        type: String,
+        required: false,
+        default: "не задан",
+      },
     },
     required: false,
   },
 });
 
 const modelOrganization =
-  models.organizationSchema|| model<TDataOrganization>("organizationSchema", organizationSchema) ;
+  models.organizationSchema || model<TDataOrganization>("organizationSchema", organizationSchema);
 
 export default modelOrganization;

@@ -3,7 +3,6 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import ControllersAuth from "../Controllers/Controllers/Auth";
 import { TDBUser, TFormLogin } from "@/Types/Types";
 
-
 const authConfig: AuthOptions = {
   secret: process.env.NEXTAUTH_SERCRET,
   pages: {
@@ -16,13 +15,11 @@ const authConfig: AuthOptions = {
     },
 
     async jwt({ token, user, account, profile }) {
-     
-      
       if (user) {
         return {
           ...token,
-           dataUser: JSON.parse(JSON.stringify(user)),
-         // dataUser:{...user._doc}
+          dataUser: JSON.parse(JSON.stringify(user)),
+          // dataUser:{...user._doc}
         };
       }
 
