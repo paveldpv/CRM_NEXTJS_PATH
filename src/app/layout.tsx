@@ -1,8 +1,8 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Comfortaa } from "next/font/google";
+import { Comfortaa,Comforter} from "next/font/google";
 
-const comfortaa = Comfortaa({ subsets: ["cyrillic", "latin"], weight: ["400", "600", "700"] });
+const comfortaa = Comfortaa({ subsets: ["cyrillic", "latin"], weight: ['400','700','600']});
 
 export const metadata: Metadata = {
   title: "Главная",
@@ -10,6 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  
   
   return (
     <html lang="ru">

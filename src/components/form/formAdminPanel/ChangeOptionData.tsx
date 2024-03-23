@@ -15,7 +15,7 @@ export default function ChangeOptionData({ activeField, defaultData, handlerChan
   return (
     <fieldset className="border-2 border-solid border-menu_color p-3 text-xs  rounded-xs  rounded-md col-span-1">
       <legend className=" pr-1 pl-1">Доп.параметры</legend>
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-2">
         <TextField disabled placeholder="id телеграм бота" {...styleTextFiled} />
         {activeField && telegram?.hrefChat !== "не задан" ? (
           <a href={telegram?.hrefChat} target="_blank" className=" text-2xl">

@@ -1,6 +1,6 @@
 import { Schema, model, models } from "mongoose";
 
-import { TConfigAPP } from "@/Types/Types";
+import { TConfigAPP } from "@/Types/subtypes/TAppearanceConfigApp";
 
 export const configSchema = new Schema<TConfigAPP>({
   idUser: String, 

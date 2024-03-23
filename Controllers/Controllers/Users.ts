@@ -106,5 +106,5 @@ const ControllerUsers = {
   getUserByParams,
   updateDataUser,
   deletePhoto,
-};
+}; 
 export default ControllerUsers;

@@ -1,12 +1,13 @@
 import { connect } from "mongoose";
 import modelConfig from "../SCHEMAS/configAppSchema";
-import { TAnswerUpdateDB, TConfigAPP } from "@/Types/Types";
+import { TAnswerUpdateDB, } from "@/Types/Types";
+import { TConfigAPP } from "@/Types/subtypes/TAppearanceConfigApp";
 
 const getConfig = async (INN: Number, idUser: string): Promise<TConfigAPP | null> => {
   try {
     const connectDB = await connect(`${process.env.DB_URL}${INN}`);
     const resultConfig = (await modelConfig.findOne({ idUser: idUser })) as TConfigAPP;
-    await connectDB.connection.close();
+    //await connectDB.connection.close();
     return JSON.parse(JSON.stringify(resultConfig));
   } catch (error) {
     return null;
@@ -18,7 +19,7 @@ const setConfig = async (INN: number, data: TConfigAPP): Promise<TAnswerUpdateDB
     const connectDB = await connect(`${process.env.DB_URL}${INN}`);
     const dataConfig = new modelConfig(data);
     await dataConfig.save();
-    await connectDB.connection.close();
+   // await connectDB.connection.close();
     return {
       success: true,
     };
@@ -34,7 +35,7 @@ const updateConfigApp = async (INN: number, idUser: string, dataConfig: TConfigA
   try {
     const connectDB = await connect(`${process.env.DB_URL}${INN}`);
     const updateConfig = await modelConfig.updateOne({ idUser: idUser }, dataConfig);    
-    connectDB.connection.close()
+    //connectDB.connection.close()
     return {
       success: true,
     };

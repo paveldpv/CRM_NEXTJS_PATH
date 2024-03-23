@@ -7,11 +7,19 @@ import { InputAdornment } from "@mui/material";
 import moment from "moment";
 
 export type TChangeBaseData = {} & TFieldFormAdminPanel;
+/**
+ * update,viewing and redaction data:
+ *
+ * INN
+ * Name Organization
+ * date registration
+ */
 
-export default function ChangeBaseDataOrganization({ activeField, defaultData,handlerChange }: TChangeBaseData) {
-  // INN
-  //nameOrganization
-  //date registration
+export default function ChangeBaseDataOrganization({
+  activeField,
+  defaultData,
+  handlerChange,
+}: TChangeBaseData) {
   return (
     <fieldset className="border-2 border-solid border-menu_color p-3 text-xs  rounded-xs  rounded-md col-span-2">
       <legend className=" pr-1 pl-1">Основное</legend>
@@ -25,7 +33,7 @@ export default function ChangeBaseDataOrganization({ activeField, defaultData,ha
               </InputAdornment>
             ),
             style: { color: "#64A989", fontSize: 18, borderColor: "#64A989" },
-          }}          
+          }}
           onChange={handlerChange}
           placeholder="Название организации"
           disabled={activeField}
@@ -35,9 +43,10 @@ export default function ChangeBaseDataOrganization({ activeField, defaultData,ha
           multiline
           label="название организации"
         />
-        <span className=" pt-2"> дата регистрации в системе : {moment(defaultData.dateRegistration).format("D/M/YYYY")}</span>
+        <span className=" pt-2">          
+          дата регистрации в системе : {moment(defaultData.dateRegistration).format("D/M/YYYY")}
+        </span>
       </div>
-      
     </fieldset>
   );
 }

@@ -1,4 +1,5 @@
-import { TAnswerUpdateDB, TDBUser, TDataOrganization, TFormRegistrate } from "@/Types/Types";
+import { TAnswerUpdateDB, TDBUser,  TFormRegistrate } from "@/Types/Types";
+
 import { changeAllowINN } from "../../function/changeAllowINN";
 import bcrypt from "bcrypt";
 import moment from "moment";

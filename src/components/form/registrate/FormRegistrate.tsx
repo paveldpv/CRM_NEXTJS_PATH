@@ -18,12 +18,12 @@ export default function FormRegistrate({}: Props) {
   };
   const onSubmit = async () => {
     if (Object.keys(errors).length) return;
-    const newUser: TDBUser = {
+    const newUser = {
       idUser: uniqid(),
       linksAllowed: "ADMIN",
       dateRegistrate: new Date(),
       ...values,
-    };
+    } as TDBUser; 
 
     const candidateNewAdmin = await fetchRegistrate(newUser);
   };

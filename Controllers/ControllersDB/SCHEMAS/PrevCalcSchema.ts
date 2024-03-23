@@ -1,6 +1,6 @@
 import { model, Schema, models } from "mongoose";
 
-import { TRequestPrevCalc } from "@/Types/Types";
+import { TRequestPrevCalc } from "@/Types/subtypes/TRequestPrevCalc";
 
 export const prevCalcSchema = new Schema<TRequestPrevCalc>({
   idRequest: String,

@@ -1,6 +1,7 @@
 "use client";
+
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
-import { TDBUser, TDataOrganization } from "@/Types/Types";
+import { TDBUser } from "@/Types/Types";
 import { useFormik } from "formik";
 import InputFile from "@/components/UI/InputElements/InputFiles/InputFile";
 import InputPicture from "@/components/UI/InputElements/InputPicture/InputPicture";
@@ -13,6 +14,7 @@ import ChangeOptionData from "./ChangeOptionData";
 import ChangeRequisites from "./ChangeRequisites";
 import ListAdmins from "./ListAdmins";
 import { TFullDataSettingOrganization } from "@/app/[INN]/main/setting/settingorganization/page";
+import { TDataOrganization } from "@/Types/subtypes/TOrganization";
 
 export type TFieldFormAdminPanel = {
   activeField: boolean;
@@ -25,8 +27,7 @@ export type TFormAdminPanel = {
   data: TFullDataSettingOrganization;
 };
 
-function FormAdminPanel({ INN, data }: TFormAdminPanel) {
-  //const [dataOrganization,setDataOrganization]=useState(data)
+function FormAdminPanel({  data }: TFormAdminPanel) {
   const dataUser = useDataUser((state) => state.dataUser) as TDBUser;
   const setOpenHelpInformer = useHelInformer((state) => state.setOpen);
   const messageInformer: TDataHelpInformer = useMemo(() => {
@@ -51,17 +52,14 @@ function FormAdminPanel({ INN, data }: TFormAdminPanel) {
     ...data?.dataOrganization,
   };
 
-  const onSubmit = async () => {
-    console.log(values);
-  };
+  const onSubmit = async () => {};
   const { setFieldValue, handleChange, values } = useFormik({ initialValues, onSubmit });
 
   const openHelpWindow = useCallback(() => setOpenHelpInformer(true, messageInformer), []);
 
   return (
     <>
-      <HelpInformerModalWindow />
-      <fieldset className="border-2 border-solid border-menu_color p-2 text-2xl  rounded-md ">
+      <fieldset className=" border-2 border-solid border-menu_color p-2 text-2xl  rounded-md ">
         <legend className="pr-1 pl-1  text-sm ">
           Настройка Организации
           <button
@@ -75,25 +73,25 @@ function FormAdminPanel({ INN, data }: TFormAdminPanel) {
             <FaQuestion />
           </button>
         </legend>
-        <form className="w-full h-full">
+        <form className="w-full h-full col-span-3">
           <section className="grid grid-cols-4 gap-5">
             <ChangeBaseDataOrganization
               activeField={dataUser.linksAllowed !== "ADMIN"}
               defaultData={initialValues}
               handlerChange={handleChange}
             />
-            <ListAdmins admins={data.listAdmins} />
+            <ListAdmins admins={data.admins} />
             <InputPicture
-              name="seal"
-              imageHeight={0}
-              imageWidth={0}
-              imageAlt={""}
-              handlerChangePicture={function (file: File): void {
-                throw new Error("Function not implemented.");
-              }}
-              visible={false}
-              defaultSrc={""}
-            />
+          name="seal"
+          imageHeight={0}
+          imageWidth={0}
+          imageAlt={""}
+          handlerChangePicture={function (file: File): void {
+            throw new Error("Function not implemented.");
+          }}
+          visible={false}
+          defaultSrc={""}
+        />
           </section>
           <section className=" grid grid-cols-3 gap-5">
             <ChangeRequisites
@@ -109,6 +107,7 @@ function FormAdminPanel({ INN, data }: TFormAdminPanel) {
           </section>
           {dataUser.linksAllowed === "ADMIN" && (
             <button
+            className=" mt-2 w-full"
               type="submit"
               onClick={(e) => {
                 e.preventDefault();
@@ -120,6 +119,7 @@ function FormAdminPanel({ INN, data }: TFormAdminPanel) {
           )}
         </form>
       </fieldset>
+      <HelpInformerModalWindow />
     </>
   );
 }

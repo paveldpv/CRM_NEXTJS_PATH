@@ -1,58 +1,80 @@
-import { TRequisites } from "@/Types/Types";
+import { TRequisites } from "@/Types/subtypes/TOrganization";
 import { Schema } from "mongoose";
 import { requisitesBankSchema } from "./RequisitesBankSchema";
 
 export const requisitesSchema = new Schema<TRequisites>({
+  
   INN: {
+    
     type: {
-      value: {
-        type: Number,
-        required: false,
-      },
-      title: {
-        type: String,
-        default: "ИНН",
-      },
+      title: String,
+      value: Number,
     },
+    required: false,
   },
   KPP: {
-    type: Number,
+    type: {
+      title: String,
+      value: Number,
+    },
     required: false,
   },
   legalAddress: {
-    type: String,
+    type: {
+      title: String,
+      value: String,
+    },
     required: false,
   },
   mailAddress: {
-    type: String,
+    type: {
+      title: String,
+      value: String,
+    },
     required: false,
   },
   phone: {
-    type: String,
+    type: {
+      title: String,
+      value: String,
+    },
     required: false,
   },
   nameDirector: {
-    type: String,
+    type: {
+      title: String,
+      value: String,
+    },
     required: false,
   },
   email: {
-    type: String,
+    type: {
+      title: String,
+      value: String,
+    },
     required: false,
   },
   OGRN: {
-    type: Number,
+    type: {
+      title: String,
+      value: Number,
+    },
     required: false,
   },
   OKVD: {
-    type: [String],
+    type: {
+      title: String,
+      value: [String],
+    },
     required: false,
   },
   requisitesBank: {
     type: requisitesBankSchema,
-    required: false,
+    
   },
   srcRequisites: {
     type: Schema.Types.Mixed,
     default: "NOT_FOUND",
   },
+  
 });

@@ -1,10 +1,11 @@
 import { Schema, model, models } from "mongoose";
 
-import { TDataOrganization } from "@/Types/Types";
+import { TDataOrganization } from "@/Types/subtypes/TOrganization";
 
 import { requisitesSchema } from "./RequisitesSchema";
 
 export const organizationSchema = new Schema<TDataOrganization>({
+  
   INN: {
     type: Number,
     required: false,
@@ -15,12 +16,56 @@ export const organizationSchema = new Schema<TDataOrganization>({
   },
   nameOrganization: {
     type: String,
-    required: false,
+
     default: "не задано",
   },
   requisites: {
     type: requisitesSchema,
-    required:false
+    default: {
+      INN: {
+        title: "ИНН",
+      },
+      KPP: {
+        title: "КПП",
+      },
+      legalAddress: {
+        title: "Юр.Адрес",
+      },
+      mailAddress: {
+        title: "почтовый адрес",
+      },
+      phone: {
+        title: "тел.",
+      },
+      nameDirector: {
+        title: "Директор",
+      },
+      email: {
+        title: "эл.почта",
+      },
+      OGRN: {
+        title: "ОГРН",
+      },
+      OKVD: {
+        title: "ОКВЭД",
+      },
+
+      requisitesBank: {
+        checkingAccount: {
+          title: "расчетный счет",
+        },
+        nameBank: {
+          title: "банк",
+        },
+        korAccount: {
+          title: "кор.счет",
+        },
+        BIK: {
+          title: "БИК",
+        },
+      },
+      srcRequisites: "NOT_FOUND",
+    },
   },
   paramsEmailNewsletter: {
     type: {
@@ -42,6 +87,9 @@ export const organizationSchema = new Schema<TDataOrganization>({
         required: false,
         default: "не задан",
       },
+    },
+    default: {
+      hrefChat: "не задан",
     },
     required: false,
   },

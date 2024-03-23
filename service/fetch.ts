@@ -1,12 +1,5 @@
-import {
-  TDBUser,
-  TAnswerUpdateDB,
-  TFormLogin,
-  TConfigAPP,
-  TRequestPrevCalc,
-  TResponseService,
-  TResponseUploadFiles,
-} from "@/Types/Types";
+import { TDBUser, TAnswerUpdateDB, TFormLogin, TResponseService, TResponseUploadFiles } from "@/Types/Types";
+import { TConfigAPP } from "@/Types/subtypes/TAppearanceConfigApp";
 
 export const fetchRegistrate = async (data: TDBUser): Promise<TAnswerUpdateDB> => {
   const response = await fetch("api/registrate", { method: "POST", body: JSON.stringify(data) });
@@ -34,4 +27,3 @@ export const fetchSaveColorConfigApp = async (
   }
   return response.json();
 };
-

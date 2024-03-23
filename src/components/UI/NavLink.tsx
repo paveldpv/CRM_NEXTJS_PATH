@@ -16,7 +16,6 @@ function NavLink({ className, description = ``, title = ``, id, children, ...pro
   const pathName = usePathname();
   const activeLink = pathName.includes(props.href);
   const INN = pathName.split('/').filter(param=>!!param)[0]
-
   console.log("🚀 ~ NavLink ~ INN:", INN)
 
   return (
@@ -25,7 +24,7 @@ function NavLink({ className, description = ``, title = ``, id, children, ...pro
         activeLink ? "bg-color_header  text-menu_color" : "bg-menu_color text-list_menu_even  "
       } `}
     >
-      <Link className="flex  gap-2 items-center    mx-auto my-0  " href={`/${INN}/main/${props.href}`}>
+      <Link  className="flex  gap-2 items-center    mx-auto my-0  " href={`/${INN}/main/${props.href}`}>
         <span className=" text-2xl ">{id && <IconNav id={id} />}</span>
         <span className=" truncate text-xs  ">{title}</span>
       </Link>

@@ -1,7 +1,7 @@
 "use client";
 import { TFieldFormAdminPanel } from "./FormAdminPanel";
 
-import { useId, useState, useCallback, memo, useEffect } from "react";
+import { useId, useState, useCallback, memo, useEffect, useMemo } from "react";
 import { useMiniLoader } from "../../../../store/storeMiniLoader";
 
 import MiniLoader from "@/components/UI/Loaders/MiniLoader";
@@ -11,15 +11,56 @@ import { FaArrowCircleDown } from "react-icons/fa";
 import { Accordion, AccordionDetails, AccordionSummary, TextField, Tooltip } from "@mui/material";
 
 import { styleTextFiled } from "../../../../config/muiCustomStyle/textField";
+import { TRequisites, TValueFiledRequisites } from "@/Types/subtypes/TOrganization";
+
+
+/**
+ * update,viewing and redaction data:
+ *
+ * requisites and requisites bank
+ * auto fill data(drag and drop event)
+ */
 
 export type TChangeRequisites = {} & TFieldFormAdminPanel;
 
 function ChangeRequisites({ activeField, defaultData, handlerChange }: TChangeRequisites) {
   const { requisites, ...otherOption } = defaultData;
+  const { requisitesBank, srcRequisites, _id, ...baseRequisites } = requisites!;
+
+  const initialFieldBaseRequisites: { name: string; data: TValueFiledRequisites<string | number | string[]> }[] =
+    useMemo(() => {
+      let res = [];
+      for (const key in baseRequisites) {
+        const data = baseRequisites[key] as TValueFiledRequisites<string | number | string[]>;
+        res.push({
+          name: key,
+          data,
+        });
+      }
+      return res;
+    }, [defaultData]);
+
+  const initialFieldBankRequisites = useMemo(() => {
+    let res = [];
+    for (const key in requisitesBank) {
+      if (key !== "_id") {
+        const data = requisitesBank[key];
+        res.push({
+          name: key,
+          data,
+        });
+      }
+    }
+    return res;
+  }, [defaultData]);
 
   const idInput = useId();
   const [loader, setLoader] = useMiniLoader((state) => [state.visible, state.setVisibleLoader]);
   const [dataRequisites, setDataRequisites] = useState(requisites);
+
+  const [arrFieldBaseRequisites,setArrFieldBaseRequisites]=useState(initialFieldBaseRequisites)
+  const [arrFieldBankRequisites,setFieldBankRequisites]=useState(initialFieldBankRequisites)
+
   const [activeFieldFile, setActiveFieldFile] = useState(false);
 
   useEffect(() => setLoader(false), []);
@@ -79,107 +120,22 @@ function ChangeRequisites({ activeField, defaultData, handlerChange }: TChangeRe
               >
                 <h5 className=" underline font-bold">Реквизиты</h5>
               </AccordionSummary>
-              <AccordionDetails className=" p-4 flex flex-col gap-1">
-                <TextField
-                  {...styleTextFiled}
-                  defaultValue={dataRequisites?.INN}
-                  disabled={activeField}
-                  fullWidth
-                  multiline
-                  onChange={handlerChange}
-                  placeholder="ИНН"
-                  name="INN"
-                  label="ИНН"
-                />
-                <TextField
-                  {...styleTextFiled}
-                  defaultValue={dataRequisites?.KPP}
-                  disabled={activeField}
-                  fullWidth
-                  multiline
-                  onChange={handlerChange}
-                  placeholder="КПП"
-                  name="KPP"
-                  label="КПП"
-                />
-                <TextField
-                  {...styleTextFiled}
-                  defaultValue={dataRequisites?.legalAddress}
-                  disabled={activeField}
-                  fullWidth
-                  multiline
-                  onChange={handlerChange}
-                  placeholder="Юр.Адрес"
-                  name="legalAddress"
-                  label="Юр.Адрес"
-                />
-                <TextField
-                  {...styleTextFiled}
-                  defaultValue={dataRequisites?.mailAddress}
-                  disabled={activeField}
-                  fullWidth
-                  multiline
-                  onChange={handlerChange}
-                  placeholder="почт.Адрес"
-                  name="mailAddress"
-                  label="почт.Адрес"
-                />
-                <TextField
-                  {...styleTextFiled}
-                  defaultValue={dataRequisites?.phone}
-                  disabled={activeField}
-                  fullWidth
-                  multiline
-                  onChange={handlerChange}
-                  placeholder="тел."
-                  name="phone"
-                  label="тел."
-                />
-                <TextField
-                  {...styleTextFiled}
-                  defaultValue={dataRequisites?.email}
-                  disabled={activeField}
-                  fullWidth
-                  multiline
-                  onChange={handlerChange}
-                  placeholder="эл.Почта"
-                  name="email"
-                  label="эл.Почта"
-                />
-                <TextField
-                  {...styleTextFiled}
-                  defaultValue={dataRequisites?.nameDirector}
-                  disabled={activeField}
-                  fullWidth
-                  multiline
-                  onChange={handlerChange}
-                  placeholder="директор"
-                  name="nameDirector"
-                  label="директор"
-                />
-                <TextField
-                  {...styleTextFiled}
-                  defaultValue={dataRequisites?.OGRN}
-                  disabled={activeField}
-                  fullWidth
-                  multiline
-                  onChange={handlerChange}
-                  placeholder="ОГРН"
-                  name="OGRN"
-                  label="ОГРН"
-                />
-                <TextField
-                  {...styleTextFiled}
-                  defaultValue={dataRequisites?.OKVD}
-                  disabled={activeField}
-                  fullWidth
-                  multiline
-                  onChange={handlerChange}
-                  placeholder="ОКВЭД"
-                  name="OKVD"
-                  label="ОКВЭД"
-                />
-                {typeof dataRequisites?.srcRequisites ==="string"  ? (
+              <AccordionDetails className=" p-4 flex flex-col gap-2">
+                {arrFieldBaseRequisites.map((item, index) => (
+                  <TextField
+                    key={index}
+                    {...styleTextFiled}
+                    defaultValue={item.data.value?.toString()}
+                    disabled={activeField}
+                    fullWidth
+                    multiline
+                    onChange={handlerChange}
+                    placeholder={item.data.title}
+                    name={item.name}
+                    label={item.data.title}
+                  />
+                ))}
+                {typeof dataRequisites?.srcRequisites === "string" ? (
                   <input type="file" />
                 ) : (
                   <Tooltip title={`размер файла - ${dataRequisites?.srcRequisites.size || "не определен"}`}>
@@ -201,51 +157,21 @@ function ChangeRequisites({ activeField, defaultData, handlerChange }: TChangeRe
               >
                 <h5 className=" underline font-bold">Банковские реквизиты</h5>
               </AccordionSummary>
-              <AccordionDetails className=" p-4 flex flex-col gap-1">
-                <TextField
-                  {...styleTextFiled}
-                  defaultValue={dataRequisites?.requisitesBank.checkingAccount}
-                  disabled={activeField}
-                  fullWidth
-                  multiline
-                  onChange={handlerChange}
-                  placeholder="рас.Счет"
-                  name="checkingAccount"
-                  label="рас.Счет"
-                />
-                <TextField
-                  {...styleTextFiled}
-                  defaultValue={dataRequisites?.requisitesBank.nameBank}
-                  disabled={activeField}
-                  fullWidth
-                  multiline
-                  onChange={handlerChange}
-                  placeholder="Банк"
-                  name="nameBank"
-                  label="Банк"
-                />
-                <TextField
-                  {...styleTextFiled}
-                  defaultValue={dataRequisites?.requisitesBank.korAccount}
-                  disabled={activeField}
-                  fullWidth
-                  multiline
-                  onChange={handlerChange}
-                  placeholder="кор.Счет"
-                  name="korAccount"
-                  label="кор.Счет"
-                />
-                <TextField
-                  {...styleTextFiled}
-                  defaultValue={dataRequisites?.requisitesBank.BIK}
-                  disabled={activeField}
-                  fullWidth
-                  multiline
-                  onChange={handlerChange}
-                  placeholder="БИК"
-                  name="BIK"
-                  label="БИК"
-                />
+              <AccordionDetails className=" p-4 flex flex-col gap-2">
+                {arrFieldBankRequisites.map((item, index) => (
+                  <TextField
+                    key={index}
+                    {...styleTextFiled}
+                    defaultValue={item.data.value?.toString()}
+                    disabled={activeField}
+                    fullWidth
+                    multiline
+                    onChange={handlerChange}
+                    placeholder={item.data.title}
+                    name={item.name}
+                    label={item.data.title}
+                  />
+                ))}
               </AccordionDetails>
             </Accordion>
           </ul>

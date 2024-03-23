@@ -1,12 +1,13 @@
 import { getServerSession } from "next-auth";
 
 import authConfig from "../../../../config/authConfig";
-import { TConfigAPP, TDBUser } from "@/Types/Types";
+import { TDBUser } from "@/Types/Types";
 
 import ControllerConfigApp from "../../../../Controllers/Controllers/ConfigApp";
 import Wrapper from "@/components/layout/Wrapper";
 import Link from "next/link";
 import { Session } from "next-auth";
+import { TConfigAPP } from "@/Types/subtypes/TAppearanceConfigApp";
 
 async function getConfigApp(idUSer: string, INN: Number): Promise<TConfigAPP | null> {
   const config: TConfigAPP | null = await ControllerConfigApp.getConfig(INN, idUSer);

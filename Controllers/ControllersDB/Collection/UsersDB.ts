@@ -7,25 +7,25 @@ const addNewAdmin = async (data: TDBUser): Promise<TAnswerUpdateDB> => {
     const connectDB = await connect(`${process.env.DB_URL}${data.INN}`);
     const newAdmin = new modelUSer(data);
     await newAdmin.save();
-    connectDB.connection.close();
+    // connectDB.connection.close();
 
     return {
       success: true,
     };
   } catch (error) {
-    throw error
+    throw error;
   }
 };
 
 const getUsers = async (INN: number): Promise<TDBUser[] | null> => {
   try {
     const connectDB = await connect(`${process.env.DB_URL}${INN}`);
-    const dataUSer = (await modelUSer.find({}));
-    connectDB.connection.close();
-    return dataUSer
+    const dataUSer = await modelUSer.find({});
+
+    // connectDB.connection.close();
+    return dataUSer;
   } catch (error) {
-    throw error
-    
+    throw error;
   }
 };
 
@@ -36,7 +36,7 @@ const getUserByParams = async (INN: number, user: Partial<TDBUser>): Promise<TDB
     connectDB.connection.close();
     return dataUSer;
   } catch (error) {
-    throw error
+    throw error;
   }
 };
 
@@ -44,10 +44,10 @@ const getUser = async (INN: number, idUser: string): Promise<TDBUser | null> => 
   try {
     const connectDB = await connect(`${process.env.DB_URL}${INN}`);
     const dataUSer: TDBUser | null = await modelUSer.findOne({ idUSer: idUser });
-    connectDB.connection.close();
+    // connectDB.connection.close();
     return dataUSer;
   } catch (error) {
-    throw error
+    throw error;
   }
 };
 
@@ -55,29 +55,27 @@ const updateDataUser = async (INN: number, data: TDBUser): Promise<TAnswerUpdate
   try {
     const connectDB = await connect(`${process.env.DB_URL}${data.INN}`);
     const update = await modelUSer.updateOne({ idUser: data.idUser }, data);
-    connectDB.connection.close();
+    //connectDB.connection.close();
 
     return {
       success: true,
     };
   } catch (error) {
-    throw error
+    throw error;
   }
 };
 
 const removePhotoToDB = async (INN: number, idUser: string): Promise<TAnswerUpdateDB> => {
   try {
-
     const connectDB = await connect(`${process.env.DB_URL}${INN}`);
-    const update = await modelUSer.updateOne({ idUser: idUser }, {$set:{srcPhoto:'NOT_FOUND'}});
-    connectDB.connection.close();
+    const update = await modelUSer.updateOne({ idUser: idUser }, { $set: { srcPhoto: "NOT_FOUND" } });
+    //connectDB.connection.close();
 
     return {
       success: true,
     };
   } catch (error) {
-    throw error
-    
+    throw error;
   }
 };
 
@@ -87,6 +85,6 @@ const ControllerUsersDB = {
   getUserByParams,
   getUsers,
   updateDataUser,
-  removePhotoToDB
+  removePhotoToDB,
 };
 export default ControllerUsersDB;

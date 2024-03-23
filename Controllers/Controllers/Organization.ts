@@ -1,4 +1,5 @@
-import { TAnswerUpdateDB, TDataOrganization } from "@/Types/Types";
+import { TDataOrganization } from "@/Types/subtypes/TOrganization";
+import { TAnswerUpdateDB} from "@/Types/Types";
 import moment from "moment";
 import ControllerOrganizationDB from "../ControllersDB/Collection/OrganizationDB";
 

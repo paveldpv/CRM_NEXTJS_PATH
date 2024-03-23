@@ -1,6 +1,7 @@
-import { TAnswerUpdateDB, TConfigAPP } from "@/Types/Types";
+import { TAnswerUpdateDB} from "@/Types/Types";
 import ControllerConfigDB from "../ControllersDB/Collection/ConfigAppDB";
 import getInitialConfigApp from "../../function/initialConfigApp";
+import { TConfigAPP } from "@/Types/subtypes/TAppearanceConfigApp";
 
 const getConfig = async (INN: Number, idUser: string): Promise<TConfigAPP | null> => {
   try {

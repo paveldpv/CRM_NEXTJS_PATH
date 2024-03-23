@@ -1,9 +1,10 @@
-import { TAnswerUpdateDB, TRequestPrevCalc } from "@/Types/Types";
+import { TAnswerUpdateDB} from "@/Types/Types";
 
 import ControllerPrevCalDB from "../ControllersDB/Collection/PrevCalcDB";
 
 import moment from "moment";
 import uniqid from "uniqid";
+import { TRequestPrevCalc } from "@/Types/subtypes/TRequestPrevCalc";
 
 const saveRequest = async (INN: number, data: TRequestPrevCalc): Promise<TAnswerUpdateDB> => {
   try {

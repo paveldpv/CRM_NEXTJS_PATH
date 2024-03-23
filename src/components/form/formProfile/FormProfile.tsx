@@ -1,5 +1,5 @@
 "use client";
-import { TConfigAPP, TDBUser } from "@/Types/Types";
+import {  TDBUser } from "@/Types/Types";
 import { useFormik } from "formik";
 import { useDataUser } from "../../../../store/storeConfigApp";
 import { useProcessLoader } from "../../../../store/storeProcessLoader";

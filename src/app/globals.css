@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+/* body {
+  font-family: var(--defaultFont);
+} */
+
 .gridContainer {
   display: grid;
   grid-template-columns: 1fr 25fr;

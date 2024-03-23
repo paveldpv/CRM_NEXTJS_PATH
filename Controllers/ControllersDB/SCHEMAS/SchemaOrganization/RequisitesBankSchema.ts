@@ -1,9 +1,35 @@
-import { TRequisitesBank } from '@/Types/Types';
-import {Schema}from 'mongoose'
+import { TRequisitesBank } from "@/Types/subtypes/TOrganization";
+import { Schema } from "mongoose";
 
 export const requisitesBankSchema = new Schema<TRequisitesBank>({
-   checkingAccount:Number,
-   nameBank:String,
-   korAccount:String,
-   BIK:Number
+  
+  checkingAccount: {
+    type: {
+      title: String,
+      value: Number,
+    },
+   
+    required:false
+  },
+  nameBank: {
+    required:false,
+    type: {
+      title: String,
+      value: String,
+    },
+  },
+  korAccount: {
+    required:false,
+    type: {
+      title: String,
+      value: String,
+    },
+  },
+  BIK: {
+    required:false,
+    type: {
+      title: String,
+      value: Number,
+    },
+  },
 });
