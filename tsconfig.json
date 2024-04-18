@@ -17,15 +17,14 @@
     "plugins": [
       {
         "name": "next"
-      }
+      },
+      { "name": "typescript-plugin-css-modules" }
     ],
     "paths": {
       "@/*": ["./src/*"]
     },
-    "allowSyntheticDefaultImports": true,
-    
+    "allowSyntheticDefaultImports": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }
-

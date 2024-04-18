@@ -1,5 +1,6 @@
 import NavBar from "@/components/layout/NavBar";
 import Header from "@/components/layout/Header";
+import StaticLoader from "@/components/UI/Loaders/staticLoaders/StaticLoader/StaticLoader";
 
 import { Suspense } from "react";
 
@@ -21,7 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Suspense
             fallback={
               <div className=" flex justify-center items-center">
-                <span className="Loader">Загружаем</span>
+                <StaticLoader/>
               </div>
             }
           >

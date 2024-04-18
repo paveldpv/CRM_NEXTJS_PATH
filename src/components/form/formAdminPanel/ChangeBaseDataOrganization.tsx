@@ -10,9 +10,11 @@ export type TChangeBaseData = {} & TFieldFormAdminPanel;
 /**
  * update,viewing and redaction data:
  *
- * INN
- * Name Organization
- * date registration
+ * - INN
+ * 
+ * - Name Organization
+ * 
+ * - date registration
  */
 
 export default function ChangeBaseDataOrganization({

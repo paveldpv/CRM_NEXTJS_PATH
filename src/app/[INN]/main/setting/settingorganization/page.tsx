@@ -39,6 +39,7 @@ export const revalidate = 10;
 
 export default async function page({ params }: { params: { INN: string } }) {
   const dataOrganization = await getDataOrganization(Number(params.INN));
+  
 
   return (
     <div>

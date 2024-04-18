@@ -1,4 +1,4 @@
-import { Schema, model, models } from "mongoose";
+import { Model, Schema, model, models } from "mongoose";
 
 import { TDBUser } from "@/Types/Types";
 
@@ -35,5 +35,5 @@ export const userSchema = new Schema<TDBUser>({
   },
   linksAllowed: Schema.Types.Mixed,
 });
-const modelUSer = models.user || model<TDBUser>("user", userSchema);
+const modelUSer = models.user as Model<TDBUser>  || model<TDBUser>("user", userSchema);
 export default modelUSer;

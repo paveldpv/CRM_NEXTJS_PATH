@@ -27,7 +27,7 @@ export type TFormAdminPanel = {
   data: TFullDataSettingOrganization;
 };
 
-function FormAdminPanel({  data }: TFormAdminPanel) {
+function FormAdminPanel({ data, INN }: TFormAdminPanel) {
   const dataUser = useDataUser((state) => state.dataUser) as TDBUser;
   const setOpenHelpInformer = useHelInformer((state) => state.setOpen);
   const messageInformer: TDataHelpInformer = useMemo(() => {
@@ -82,24 +82,25 @@ function FormAdminPanel({  data }: TFormAdminPanel) {
             />
             <ListAdmins admins={data.admins} />
             <InputPicture
-          name="seal"
-          imageHeight={0}
-          imageWidth={0}
-          imageAlt={""}
-          handlerChangePicture={function (file: File): void {
-            throw new Error("Function not implemented.");
-          }}
-          visible={false}
-          defaultSrc={""}
-        />
+              name="seal"
+              imageHeight={0}
+              imageWidth={0}
+              imageAlt={""}
+              handlerChangePicture={function (file: File): void {
+                throw new Error("Function not implemented.");
+              }}
+              visible={false}
+              defaultSrc={""}
+            />
           </section>
-          <section className=" grid grid-cols-3 gap-5">
+          <section className=" grid grid-cols-3 gap-5 mt-3">
             <ChangeRequisites
               activeField={dataUser.linksAllowed !== "ADMIN"}
               defaultData={initialValues}
               handlerChange={handleChange}
             />
             <ChangeOptionData
+              INN={INN}
               activeField={dataUser.linksAllowed !== "ADMIN"}
               defaultData={initialValues}
               handlerChange={handleChange}
@@ -107,7 +108,7 @@ function FormAdminPanel({  data }: TFormAdminPanel) {
           </section>
           {dataUser.linksAllowed === "ADMIN" && (
             <button
-            className=" mt-2 w-full"
+              className=" mt-2 w-full"
               type="submit"
               onClick={(e) => {
                 e.preventDefault();

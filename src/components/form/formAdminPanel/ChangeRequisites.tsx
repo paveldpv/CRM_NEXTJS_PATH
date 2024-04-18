@@ -1,7 +1,7 @@
 "use client";
 import { TFieldFormAdminPanel } from "./FormAdminPanel";
 
-import { useId, useState, useCallback, memo, useEffect, useMemo } from "react";
+import React, { useId, useState, useCallback, memo, useEffect, useMemo } from "react";
 import { useMiniLoader } from "../../../../store/storeMiniLoader";
 
 import MiniLoader from "@/components/UI/Loaders/MiniLoader";
@@ -13,32 +13,28 @@ import { Accordion, AccordionDetails, AccordionSummary, TextField, Tooltip } fro
 import { styleTextFiled } from "../../../../config/muiCustomStyle/textField";
 import { TRequisites, TValueFiledRequisites } from "@/Types/subtypes/TOrganization";
 
-
-/**
- * update,viewing and redaction data:
- *
- * requisites and requisites bank
- * auto fill data(drag and drop event)
- */
-
 export type TChangeRequisites = {} & TFieldFormAdminPanel;
 
 function ChangeRequisites({ activeField, defaultData, handlerChange }: TChangeRequisites) {
   const { requisites, ...otherOption } = defaultData;
   const { requisitesBank, srcRequisites, _id, ...baseRequisites } = requisites!;
 
-  const initialFieldBaseRequisites: { name: string; data: TValueFiledRequisites<string | number | string[]> }[] =
-    useMemo(() => {
-      let res = [];
-      for (const key in baseRequisites) {
-        const data = baseRequisites[key] as TValueFiledRequisites<string | number | string[]>;
-        res.push({
-          name: key,
-          data,
-        });
-      }
-      return res;
-    }, [defaultData]);
+
+
+  const initialFieldBaseRequisites: {
+    name: string;
+    data: TValueFiledRequisites<string | number | string[]>;
+  }[] = useMemo(() => {
+    let res = [];
+    for (const key in baseRequisites) {
+      const data = baseRequisites[key] as TValueFiledRequisites<string | number | string[]>;
+      res.push({
+        name: key,
+        data,
+      });
+    }
+    return res;
+  }, [defaultData]);
 
   const initialFieldBankRequisites = useMemo(() => {
     let res = [];
@@ -58,12 +54,12 @@ function ChangeRequisites({ activeField, defaultData, handlerChange }: TChangeRe
   const [loader, setLoader] = useMiniLoader((state) => [state.visible, state.setVisibleLoader]);
   const [dataRequisites, setDataRequisites] = useState(requisites);
 
-  const [arrFieldBaseRequisites,setArrFieldBaseRequisites]=useState(initialFieldBaseRequisites)
-  const [arrFieldBankRequisites,setFieldBankRequisites]=useState(initialFieldBankRequisites)
+  const [arrFieldBaseRequisites, setArrFieldBaseRequisites] = useState(initialFieldBaseRequisites);
+  const [arrFieldBankRequisites, setFieldBankRequisites] = useState(initialFieldBankRequisites);
 
   const [activeFieldFile, setActiveFieldFile] = useState(false);
 
-  useEffect(() => setLoader(false), []);
+  useEffect(() => setLoader(true), []);
 
   //#region dragFile
   const dragEntry = useCallback((e: React.DragEvent<HTMLFieldSetElement>) => {
@@ -79,10 +75,22 @@ function ChangeRequisites({ activeField, defaultData, handlerChange }: TChangeRe
   const drop = useCallback(async (e: React.DragEvent<HTMLLabelElement>) => {
     e.stopPropagation();
     e.preventDefault();
-    console.log(e.dataTransfer.files[0]);
+    setLoader(true)
+    const file = e.dataTransfer.files[0]
     // auto definition requisites
   }, []);
   //#endregion
+  const onChangeFile = useCallback(async(e:React.ChangeEvent<HTMLInputElement>)=>{
+    e.preventDefault()
+    e.stopPropagation()
+    setLoader(true)
+    if(!e.target.files || e.target.files.length === 0)return
+    const file = e.currentTarget.files
+    
+    
+ 
+
+  },[])
 
   if (activeFieldFile) {
     return (
@@ -93,7 +101,7 @@ function ChangeRequisites({ activeField, defaultData, handlerChange }: TChangeRe
         className=" flex justify-center items-center w-full h-full border-2  mt-3 border-dashed border-menu_color p-3 text-4xl  rounded-xs  rounded-md col-span-2 "
         htmlFor={idInput}
       >
-        <input multiple={false} type="file" id={idInput} hidden />
+        <input multiple={false} type="file" id={idInput} hidden accept="application/pdf, .docx" />
         <FaFileUpload />
       </label>
     );
@@ -103,9 +111,17 @@ function ChangeRequisites({ activeField, defaultData, handlerChange }: TChangeRe
         className="border-2 border-solid border-menu_color p-3 text-xs  rounded-xs  rounded-md col-span-2"
         onDragEnter={dragEntry}
       >
-        <legend className=" pr-1 pl-1">Реквизиты</legend>
+        <Tooltip title=" для автозаполнения добавьте файл с реквзитами ">
+          <legend className=" pr-1 pl-1 flex  gap-2">
+            <span>Реквизиты</span>
+            <label htmlFor={idInput} className=" text-sm cursor-pointer hover:text-color_header">
+              <FaFileUpload />
+            </label>
+            <input onChange={onChangeFile} accept="application/pdf, .docx" multiple={false} type="file" id={idInput} hidden />
+          </legend>
+        </Tooltip>
         {loader ? (
-          <div className="flex content-center items-center">
+          <div className=" flex justify-center items-center mt-24">
             <MiniLoader />
           </div>
         ) : (
@@ -180,4 +196,15 @@ function ChangeRequisites({ activeField, defaultData, handlerChange }: TChangeRe
     );
   }
 }
+
+/**
+ * update,viewing and redaction data:
+ *
+ * - requisites and requisites bank
+ *
+ * - auto fill data(drag and drop event)
+ *
+ * - memo function
+ */
+
 export default memo(ChangeRequisites);
