@@ -1,5 +1,5 @@
-import { TAnswerUpdateDB} from "@/Types/Types";
-import { TDataOrganization } from "@/Types/subtypes/TOrganization";
+import { TAnswerUpdateDB } from "@/Types/Types";
+import { TDaDataOrganization, TDataOrganization } from "@/Types/subtypes/TOrganization";
 import { connect } from "mongoose";
 
 import modelOrganization from "../SCHEMAS/SchemaOrganization/OrganizationSchema";
@@ -7,7 +7,7 @@ import modelOrganization from "../SCHEMAS/SchemaOrganization/OrganizationSchema"
 export const getParamsOrganization = async (INN: number): Promise<TDataOrganization | undefined> => {
   const connectDB = await connect(`${process.env.DB_URL}${INN}`);
   const data = await modelOrganization.findOne({ INN: INN });
- // await connectDB.connection.close();
+  // await connectDB.connection.close();
   return JSON.parse(JSON.stringify(data));
 };
 export const updateParamsOrganization = async (data: TDataOrganization): Promise<TAnswerUpdateDB> => {
@@ -17,15 +17,14 @@ export const updateParamsOrganization = async (data: TDataOrganization): Promise
   return { success: true };
 };
 
-export const createNewOrganization = async (
-  data: Pick<TDataOrganization, "INN" | "dateRegistration">
-): Promise<TAnswerUpdateDB> => {
+export const createNewOrganization = async ( data: TDaDataOrganization,INN:string): Promise<TAnswerUpdateDB> => {
+
   
   
-  const connectDB = await connect(`${process.env.DB_URL}${data.INN}`);
+  const connectDB = await connect(`${process.env.DB_URL}${INN}`);
   const newOrganization = new modelOrganization(data);
   await newOrganization.save();
-  //await connectDB.connection.close();
+  
   return {
     success: true,
   };

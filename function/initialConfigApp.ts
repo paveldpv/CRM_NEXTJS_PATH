@@ -1,5 +1,6 @@
-import { TConfigAPP } from "@/Types/Types";
+
 import { nameSettingLayout,keyConfigLayout } from "@/Types/enums";
+import { TConfigAPP } from "@/Types/subtypes/TAppearanceConfigApp";
 
 const getInitialConfigApp = (idUser: string): TConfigAPP => {
   return {

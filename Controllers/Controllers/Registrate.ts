@@ -42,6 +42,8 @@ const registrateNewOrganization = async (data: TDBUser): Promise<TAnswerUpdateDB
   const saveInitialConfigUser = await ControllerConfigApp.setConfig(data.INN, data.idUser); 
   //
   const saveInitialDataOrganization = await ControllerOrganization.createNewOrganization(data.INN, data.idUser);
+  console.log(saveInitialDataOrganization);
+  
 
   
   if (saveData.success && saveInitialConfigUser?.success && saveInitialDataOrganization.success) {

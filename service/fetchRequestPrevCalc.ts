@@ -1,4 +1,5 @@
-import { TAnswerUpdateDB, TRequestPrevCalc, TResponseService } from "@/Types/Types";
+import { TRequestPrevCalc } from "@/Types/subtypes/TRequestPrevCalc";
+import { TAnswerUpdateDB, TResponseService } from "@/Types/Types";
 
 export const fetchRequestPrevCalc = async (INN: number, data: TRequestPrevCalc): Promise<TResponseService> => {
   const response = await fetch(`/api/prevcalc/${INN}`, {

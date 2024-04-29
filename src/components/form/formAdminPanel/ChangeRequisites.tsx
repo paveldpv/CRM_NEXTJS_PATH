@@ -80,15 +80,13 @@ function ChangeRequisites({ activeField, defaultData, handlerChange }: TChangeRe
     // auto definition requisites
   }, []);
   //#endregion
+  
   const onChangeFile = useCallback(async(e:React.ChangeEvent<HTMLInputElement>)=>{
     e.preventDefault()
     e.stopPropagation()
     setLoader(true)
     if(!e.target.files || e.target.files.length === 0)return
-    const file = e.currentTarget.files
-    
-    
- 
+    const file = e.currentTarget.files     
 
   },[])
 
@@ -111,7 +109,7 @@ function ChangeRequisites({ activeField, defaultData, handlerChange }: TChangeRe
         className="border-2 border-solid border-menu_color p-3 text-xs  rounded-xs  rounded-md col-span-2"
         onDragEnter={dragEntry}
       >
-        <Tooltip title=" для автозаполнения добавьте файл с реквзитами ">
+        <Tooltip title="для автозаполнения добавьте файл с реквзитами ">
           <legend className=" pr-1 pl-1 flex  gap-2">
             <span>Реквизиты</span>
             <label htmlFor={idInput} className=" text-sm cursor-pointer hover:text-color_header">

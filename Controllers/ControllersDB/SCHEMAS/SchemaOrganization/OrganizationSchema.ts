@@ -1,101 +1,222 @@
 import { Schema, model, models } from "mongoose";
 
-import { TDataOrganization } from "@/Types/subtypes/TOrganization";
+import { TDaDataOrganization } from "@/Types/subtypes/TOrganization";
 
-import { requisitesSchema } from "./RequisitesSchema";
-
-export const organizationSchema = new Schema<TDataOrganization>({
-  
-  INN: {
-    type: Number,
-    required: false,
-  },
-  dateRegistration: {
+export const organizationSchema = new Schema<TDaDataOrganization>({
+  dataRegistrateFormApp: {
     type: Date,
-    required: true,
-  },
-  nameOrganization: {
-    type: String,
-
-    default: "не задано",
-  },
-  requisites: {
-    type: requisitesSchema,
-    default: {
-      INN: {
-        title: "ИНН",
-      },
-      KPP: {
-        title: "КПП",
-      },
-      legalAddress: {
-        title: "Юр.Адрес",
-      },
-      mailAddress: {
-        title: "почтовый адрес",
-      },
-      phone: {
-        title: "тел.",
-      },
-      nameDirector: {
-        title: "Директор",
-      },
-      email: {
-        title: "эл.почта",
-      },
-      OGRN: {
-        title: "ОГРН",
-      },
-      OKVD: {
-        title: "ОКВЭД",
-      },
-
-      requisitesBank: {
-        checkingAccount: {
-          title: "расчетный счет",
-        },
-        nameBank: {
-          title: "банк",
-        },
-        korAccount: {
-          title: "кор.счет",
-        },
-        BIK: {
-          title: "БИК",
-        },
-      },
-      srcRequisites: "NOT_FOUND",
-    },
-  },
-  paramsEmailNewsletter: {
-    type: {
-      password: String,
-      email: String,
-      dataUpdate: String,
-    },
     required: false,
   },
-  seal: {
-    type: Schema.Types.Mixed,
-    default: "NOT_FOUND",
+  value: {
+    type: String,
+    required: false,
+    default: "sfsdf",
   },
-  telegram: {
+  unrestricted_value: {
+    type: String,
+    required: false,
+  },
+  data: {
     type: {
-      idTelegramBot: String,
-      hrefChat: {
+      capital: {
         type: String,
         required: false,
-        default: "не задан",
+      },
+      kpp: {
+        type: Number,
+        required: false,
+      },
+      invalid: {
+        type: String,
+        required: false,
+      },
+      management: {
+        type: {
+          name: {
+            type: String,
+            required: false,
+          },
+          post: {
+            type: String,
+            required: false,
+          },
+          discriminator: {
+            type: String,
+            required: false,
+          },
+        },
+        
+      },
+      founders: Schema.Types.Mixed,
+      managers: Schema.Types.Mixed,
+      predecessors: Schema.Types.Mixed,
+      branch_type: {
+        type: String,
+        required: false,
+      },
+      branch_count: {
+        type: Number,
+        required: false,
+      },
+      hid: {
+        type: String,
+        required: false,
+      },
+      state: {
+        type: {
+          status: {
+            type: String,
+            required: false,
+          },
+          actuality_date: {
+            type: String,
+            required: false,
+          },
+          registration_date: {
+            type: String,
+            required: false,
+          },
+          liquidation_date: {
+            type: String,
+            required: false,
+          },
+        },
+       
+      },
+      // opf: {
+      //   type: {
+      //     // type: {
+      //     //   type: String,
+      //     //   required: false,
+      //     // },
+      //     code: {
+      //       type: String,
+      //       required: false,
+      //     },
+      //     full: {
+      //       type: String,
+      //       required: false,
+      //     },
+      //     short: {
+      //       type: String,
+      //       required: false,
+      //     },
+      //   },
+        
+      // },
+      name: {
+        type: {
+          full_with_opf: {
+            type: String,
+            required: false,
+          },
+          short_with_opf: {
+            type: String,
+            required: false,
+          },
+          latin: {
+            type: String,
+            required: false,
+          },
+          full: {
+            type: String,
+            required: false,
+          },
+          short: {
+            type: String,
+            required: false,
+          },
+        },
+        
+      },
+      inn: {
+        type: String,
+        required: false,
+      },
+      ogrn: {
+        type: String,
+        required: false,
+      },
+      okpo: {
+        type: String,
+        required: false,
+      },
+      okato: {
+        type: String,
+        required: false,
+      },
+      oktmo: {
+        type: String,
+        required: false,
+      },
+      okogu: {
+        type: String,
+        required: false,
+      },
+      okfs: {
+        type: String,
+        required: false,
+      },
+      okved: {
+        type: String,
+        required: false,
+      },
+      okveds: {
+        type: [
+          {
+            main: {
+              type: String,
+              required: false,
+            },
+            type: {
+              type: String,
+              required: false,
+            },
+            code: {
+              type: String,
+              required: false,
+            },
+            name: {
+              type: String,
+              required: false,
+            },
+          },
+        ],
+      },
+      address: {
+        type: {
+          value: {
+            type: String,
+            required: false,
+          },
+          unrestricted_value: {
+            type: String,
+            required: false,
+          },
+        },
+        
+      },
+      phone: {
+        type: String,
+        required: false,
+      },
+      emails: {
+        type: [{ value: String}],
+        required: false,
+      },
+      ogrn_date: {
+        type: String,
+        required: false,
+      },
+      employee_count: {
+        type: Number,
+        required: false,
       },
     },
-    default: {
-      hrefChat: "не задан",
-    },
-    required: false,
   },
 });
 
 const modelOrganization =
-  models.organizationSchema || model<TDataOrganization>("organizationSchema", organizationSchema);
+  models.organizationSchema || model<TDaDataOrganization>("organizationSchema", organizationSchema);
 
 export default modelOrganization;

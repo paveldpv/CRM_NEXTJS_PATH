@@ -1,7 +1,10 @@
-import { TDataOrganization } from "@/Types/subtypes/TOrganization";
-import { TAnswerUpdateDB} from "@/Types/Types";
+import { TDaDataOrganization, TDataOrganization } from "@/Types/subtypes/TOrganization";
+import { TAnswerUpdateDB } from "@/Types/Types";
 import moment from "moment";
 import ControllerOrganizationDB from "../ControllersDB/Collection/OrganizationDB";
+import { fetchGetDataOrganization } from "../../service/DaData/getDataOrganization";
+import { TError } from "@/Types/subtypes/TError";
+import { isError } from "../../function/IsError";
 
 export const getParamsOrganization = async (INN: number): Promise<TDataOrganization | undefined> => {
   try {
@@ -21,14 +24,23 @@ export const updateParamsOrganization = async (data: TDataOrganization): Promise
     };
   }
 };
+
 export const createNewOrganization = async (INN: number, idAdministrator: string): Promise<TAnswerUpdateDB> => {
   try {
-    const dataNewOrganization: Pick<TDataOrganization, "INN" | "dateRegistration" > = {
-      INN,      
-      dateRegistration: moment().toDate(),
-    };
-    return await ControllerOrganizationDB.createNewOrganization(dataNewOrganization)
+    let dataOrganization = await fetchGetDataOrganization({ query: INN.toString() });
+
     
+    if (isError(dataOrganization)) {
+      return {
+        success: dataOrganization.error,
+        message: dataOrganization.message,
+      };
+    }
+    
+    dataOrganization.dataRegistrateFormApp = moment().toDate();
+    
+    
+    return await ControllerOrganizationDB.createNewOrganization(dataOrganization, INN.toString());
   } catch (error) {
     return {
       success: false,
@@ -41,7 +53,6 @@ const ControllerOrganization = {
   getParamsOrganization,
   updateParamsOrganization,
   createNewOrganization,
-  
 };
 
 module.exports = ControllerOrganization;
