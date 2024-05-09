@@ -1,5 +1,5 @@
 
-export type TQueryGetDataOrganization = {
+export type TQueryGetDaDataOrganization = {
    query:string,
    count?:number,
    kpp?:string,

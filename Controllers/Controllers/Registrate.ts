@@ -1,4 +1,4 @@
-import { TAnswerUpdateDB, TDBUser,  TFormRegistrate } from "@/Types/Types";
+import { TAnswerUpdateDB, TDBUser, TFormRegistrate } from "@/Types/Types";
 
 import { changeAllowINN } from "../../function/changeAllowINN";
 import bcrypt from "bcrypt";
@@ -7,6 +7,7 @@ import moment from "moment";
 import ControllerUsers from "./Users";
 import ControllerConfigApp from "./ConfigApp";
 import ControllerOrganization from "./Organization";
+import { SALT_ROUND } from "../../config/RegistrateConfig";
 
 /**
  *  while creating new organization create new data user  with params "linksAllowed " == "ADMIN"
@@ -29,23 +30,26 @@ const registrateNewOrganization = async (data: TDBUser): Promise<TAnswerUpdateDB
     };
   }
 
-  const { SALT_ROUND } = require("./../../config/RegistrateConfig");
+  //const { SALT_ROUND } = require("./../../config/RegistrateConfig");
+  const currentDate = moment().toDate();
+
   const genSalt = await bcrypt.genSalt(SALT_ROUND);
+
   const registrateData = {
     ...data,
     password: bcrypt.hashSync(data.password, genSalt),
-    dateRegistrate: moment().toDate(),
+    dateRegistrate: currentDate,
   };
 
   const saveData = await ControllerUsers.addNewAdmin(registrateData);
-
-  const saveInitialConfigUser = await ControllerConfigApp.setConfig(data.INN, data.idUser); 
+  const saveInitialConfigUser = await ControllerConfigApp.setConfig(data.INN, data.idUser);
   //
-  const saveInitialDataOrganization = await ControllerOrganization.createNewOrganization(data.INN, data.idUser);
-  console.log(saveInitialDataOrganization);
-  
+  const saveInitialDataOrganization = await ControllerOrganization.createNewOrganization(
+    data.INN,
+    data.idUser,
+    currentDate
+  );
 
-  
   if (saveData.success && saveInitialConfigUser?.success && saveInitialDataOrganization.success) {
     return {
       success: true,

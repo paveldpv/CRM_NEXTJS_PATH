@@ -1,10 +1,10 @@
 import { TDaDataOrganization } from "@/Types/subtypes/TOrganization";
-import { TQueryGetDataOrganization } from "@/Types/subtypes/TQueryGetDataOrganization";
+import { TQueryGetDaDataOrganization } from "@/Types/subtypes/TQueryGetDaDataOrganization";
 import { apiKey } from "../../config/DaDataConfig";
 import { TError } from "@/Types/subtypes/TError";
 
 export const fetchGetDataOrganization = async (
-  queryData: TQueryGetDataOrganization
+  queryData: TQueryGetDaDataOrganization
 ): Promise<TDaDataOrganization | TError> => {
   const url = "http://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party";
   console.log(queryData);

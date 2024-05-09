@@ -94,29 +94,29 @@ export type TDaDataOrganization = {
       full?: string;
       short?: string;
     };
-    inn: string;
-    ogrn: string;
-    okpo: string;
-    okato: string;
-    oktmo: string;
-    okogu: string;
-    okfs: string;
-    okved: string;
+    inn?: string;
+    ogrn?: string;
+    okpo?: string;
+    okato?: string;
+    oktmo?: string;
+    okogu?: string;
+    okfs?: string;
+    okved?: string;
     okveds: {
-      main: string;
-      type: string;
-      code: string;
-      name: string;
+      main?: string;
+      type?: string;
+      code?: string;
+      name?: string;
     }[];
     address: {
-      value: string;
-      unrestricted_value: string;
+      value?: string;
+      unrestricted_value?: string;
     };
-    phone: string;
+    phone?: string;
     emails: {
-      value: string;
+      value?: string;
     }[];
-    ogrn_date: string;
-    employee_count: number;
+    ogrn_date?: string;
+    employee_count?: number;
   };
 };

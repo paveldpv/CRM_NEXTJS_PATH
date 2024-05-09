@@ -13,7 +13,7 @@ export default function page() {
         </li>
         <hr />
         <li>
-          <Link className="labelForInput" href={"/registrate"}>Регитсрация</Link>
+          <Link className="labelForInput" href={"/registrate"}>Регистрация</Link>
         </li>
         
       </ul>

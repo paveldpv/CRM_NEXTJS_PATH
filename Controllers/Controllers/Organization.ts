@@ -3,7 +3,7 @@ import { TAnswerUpdateDB } from "@/Types/Types";
 import moment from "moment";
 import ControllerOrganizationDB from "../ControllersDB/Collection/OrganizationDB";
 import { fetchGetDataOrganization } from "../../service/DaData/getDataOrganization";
-import { TError } from "@/Types/subtypes/TError";
+
 import { isError } from "../../function/IsError";
 
 export const getParamsOrganization = async (INN: number): Promise<TDataOrganization | undefined> => {
@@ -25,7 +25,7 @@ export const updateParamsOrganization = async (data: TDataOrganization): Promise
   }
 };
 
-export const createNewOrganization = async (INN: number, idAdministrator: string): Promise<TAnswerUpdateDB> => {
+export const createNewOrganization = async (INN: number, idAdministrator: string,dateCreate:Date): Promise<TAnswerUpdateDB> => {
   try {
     let dataOrganization = await fetchGetDataOrganization({ query: INN.toString() });
 
@@ -37,9 +37,10 @@ export const createNewOrganization = async (INN: number, idAdministrator: string
       };
     }
     
-    dataOrganization.dataRegistrateFormApp = moment().toDate();
+    dataOrganization.dataRegistrateFormApp = dateCreate;
     
-    
+  // save data geoLacation
+    //const saveGeoLocation =  await ...
     return await ControllerOrganizationDB.createNewOrganization(dataOrganization, INN.toString());
   } catch (error) {
     return {
