@@ -6,8 +6,10 @@ import { TError } from "@/Types/subtypes/TError";
 export const fetchGetDataOrganization = async (
   queryData: TQueryGetDaDataOrganization
 ): Promise<TDaDataOrganization | TError> => {
+
   const url = "http://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party";
-  console.log(queryData);
+
+  
   
   try {
     const responseData = await fetch(url, {
@@ -20,6 +22,8 @@ export const fetchGetDataOrganization = async (
       },
       body: JSON.stringify(queryData),
     });
+    
+    console.log(responseData.status);
     
     
     if (responseData.ok) {

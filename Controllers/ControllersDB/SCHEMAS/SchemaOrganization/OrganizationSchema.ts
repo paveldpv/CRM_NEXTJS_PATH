@@ -2,7 +2,7 @@ import { Schema, model, models } from "mongoose";
 
 import { TDaDataOrganization } from "@/Types/subtypes/TOrganization";
 
-export const organizationSchema = new Schema<TDaDataOrganization>({
+export const DaDataOrganizationSchema = new Schema<TDaDataOrganization>({
   dataRegistrateFormApp: {
     type: Date,
     required: false,
@@ -217,6 +217,6 @@ export const organizationSchema = new Schema<TDaDataOrganization>({
 });
 
 const modelOrganization =
-  models.organizationSchema || model<TDaDataOrganization>("organizationSchema", organizationSchema);
+  models.DaDataOrganizationSchema || model<TDaDataOrganization>("DaDataOrganizationSchema",DaDataOrganizationSchema);
 
 export default modelOrganization;

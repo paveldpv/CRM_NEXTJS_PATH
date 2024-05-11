@@ -5,7 +5,8 @@ export type TGeoLocation = {
    },
    date:Date,
    process:PURPOSE_USE,
-   idEmployee:string
+   idEmployee:string,
+   ip?:string
    
 }
 

@@ -5,6 +5,9 @@ import modelGeoLocation from "../SCHEMAS/geoLocationSchema";
 
 
 export const saveGeoLocation=async(INN:string,data:TGeoLocation):Promise<TAnswerUpdateDB> => {
+
+   console.log("🚀 ~ saveGeoLocation ~ data:", data)
+   
    await connect(`${process.env.DB_URL}${INN}`)
    const resultSaveGeoLocation = new  modelGeoLocation(data)
    await resultSaveGeoLocation.save()
@@ -15,9 +18,9 @@ export const saveGeoLocation=async(INN:string,data:TGeoLocation):Promise<TAnswer
 
 }
 
-const ControllerGeoLocation = {
+const ControllerGeoLocationDB = {
    saveGeoLocation
 }
-module.exports = ControllerGeoLocation
+module.exports = ControllerGeoLocationDB
 
-export default ControllerGeoLocation
+export default ControllerGeoLocationDB

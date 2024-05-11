@@ -8,6 +8,7 @@ import ControllerUsers from "./Users";
 import ControllerConfigApp from "./ConfigApp";
 import ControllerOrganization from "./Organization";
 import { SALT_ROUND } from "../../config/RegistrateConfig";
+import { TGeoLocation } from "@/Types/subtypes/TGeoLocation";
 
 /**
  *  while creating new organization create new data user  with params "linksAllowed " == "ADMIN"
@@ -15,7 +16,7 @@ import { SALT_ROUND } from "../../config/RegistrateConfig";
  * create initial params organization
  */
 
-const registrateNewOrganization = async (data: TDBUser): Promise<TAnswerUpdateDB> => {
+const registrateNewOrganization = async (data: TDBUser,dataGeo:TGeoLocation): Promise<TAnswerUpdateDB> => {
   if (!(data.INN && changeAllowINN(data.INN))) {
     console.log("INN Not allowed");
     return { success: false, message: "Данная орагнизация не согласована с владельцем платформы" };
@@ -30,7 +31,7 @@ const registrateNewOrganization = async (data: TDBUser): Promise<TAnswerUpdateDB
     };
   }
 
-  //const { SALT_ROUND } = require("./../../config/RegistrateConfig");
+  
   const currentDate = moment().toDate();
 
   const genSalt = await bcrypt.genSalt(SALT_ROUND);
@@ -41,13 +42,13 @@ const registrateNewOrganization = async (data: TDBUser): Promise<TAnswerUpdateDB
     dateRegistrate: currentDate,
   };
 
-  const saveData = await ControllerUsers.addNewAdmin(registrateData);
-  const saveInitialConfigUser = await ControllerConfigApp.setConfig(data.INN, data.idUser);
-  //
+  const saveData                    = await ControllerUsers.addNewAdmin(registrateData);
+  const saveInitialConfigUser       = await ControllerConfigApp.setConfig(data.INN, data.idUser);  //
   const saveInitialDataOrganization = await ControllerOrganization.createNewOrganization(
     data.INN,
     data.idUser,
-    currentDate
+    currentDate,
+    dataGeo
   );
 
   if (saveData.success && saveInitialConfigUser?.success && saveInitialDataOrganization.success) {

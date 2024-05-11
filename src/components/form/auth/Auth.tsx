@@ -38,7 +38,7 @@ export default function Auth() {
       router.push(`/${values.INN}/main`);
       //router.push(`/main`);
       
-      router.push(`/main?inn=${values.INN}`);
+     // router.push(`/main?inn=${values.INN}`);
      // router.push(`/main`);
     } else {
       alert(res.error);

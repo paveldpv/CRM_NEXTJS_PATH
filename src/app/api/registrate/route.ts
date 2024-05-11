@@ -1,11 +1,15 @@
 import { NextResponse, NextRequest } from "next/server";
 import ControllerRegistrate from "../../../../Controllers/Controllers/Registrate";
+import { TDBUser } from "@/Types/Types";
+import { TGeoLocation } from "@/Types/subtypes/TGeoLocation";
+
+
 export async function POST(req: NextRequest) {
-  const body = await req.json();
+  const {data,dataGeo} = await req.json() as {data:TDBUser,dataGeo:TGeoLocation}
 
-  console.log("🚀 ~ POST ~ body :", body )
+  
 
-  const result = await ControllerRegistrate.registrateNewOrganization(body);
-  return NextResponse.json("result");
- // return NextResponse.json(result);
+ const result = await ControllerRegistrate.registrateNewOrganization(data,dataGeo);
+ 
+ return NextResponse.json(result);
 }

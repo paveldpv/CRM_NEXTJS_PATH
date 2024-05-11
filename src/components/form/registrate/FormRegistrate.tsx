@@ -8,10 +8,11 @@ import uniqid from "uniqid";
 import { fetchRegistrate } from "../../../../service/fetch";
 import { PURPOSE_USE, TGeoLocation } from "@/Types/subtypes/TGeoLocation";
 import { useRouter } from 'next/navigation';
-import { redirect } from 'next/navigation'
-type Props = {};
 
-export default function FormRegistrate({}: Props) {
+import { typicalError } from "@/Types/enums";
+
+
+export default function FormRegistrate() {
   const { push } = useRouter();
   const initialValues: TFormRegistrate = {
     email: "",
@@ -21,11 +22,13 @@ export default function FormRegistrate({}: Props) {
   };
 
   const onSubmit = async () => {
+   
     if (Object.keys(errors).length) return;
     navigator.geolocation.getCurrentPosition(
-      (pos) => {
+      async (pos) => {
         const idNewAdmin = uniqid();
         const { latitude, longitude } = pos.coords;
+
         const dataGeo: Omit<TGeoLocation, "date"> = {
           location: {
             latitude,
@@ -37,29 +40,25 @@ export default function FormRegistrate({}: Props) {
 
         const newUser = {
           idUser: idNewAdmin,
-          linksAllowed: "ADMIN",
-          //   dateRegistrate: new Date(),
+          linksAllowed: "ADMIN",         
           ...values,
         } as TDBUser;
-        console.log(dataGeo,newUser);
         
-
+        const candidateNewAdmin = await fetchRegistrate(newUser,dataGeo);
+        if(candidateNewAdmin.success){
+          //добавить довить для входа в localStorage
+          push('/sign')
+        }
 
       },
-      (errGeo) => {
-        
-        push('/ErrorPage')
+      (errGeo) => {        
+        push(`/ERROR/${typicalError.not_geo}`)
         
       }
     );
-    // const newUser = {
-    //   idUser: uniqid(),
-    //   linksAllowed: "ADMIN",
-    //   dateRegistrate: new Date(),
-    //   ...values,
-    // } as TDBUser;
+   
 
-    //const candidateNewAdmin = await fetchRegistrate(newUser);
+    
   };
 
   const { handleChange, values, errors, setErrors } = useFormik({

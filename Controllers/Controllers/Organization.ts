@@ -5,6 +5,8 @@ import ControllerOrganizationDB from "../ControllersDB/Collection/OrganizationDB
 import { fetchGetDataOrganization } from "../../service/DaData/getDataOrganization";
 
 import { isError } from "../../function/IsError";
+import { TGeoLocation } from "@/Types/subtypes/TGeoLocation";
+import ControllerGeoLocation from "./GeoLocation";
 
 export const getParamsOrganization = async (INN: number): Promise<TDataOrganization | undefined> => {
   try {
@@ -25,10 +27,13 @@ export const updateParamsOrganization = async (data: TDataOrganization): Promise
   }
 };
 
-export const createNewOrganization = async (INN: number, idAdministrator: string,dateCreate:Date): Promise<TAnswerUpdateDB> => {
+export const createNewOrganization = async (INN: number, idAdministrator: string,dateCreate:Date,dataGeo:TGeoLocation): Promise<TAnswerUpdateDB> => {
   try {
     let dataOrganization = await fetchGetDataOrganization({ query: INN.toString() });
 
+   
+
+    console.log("🚀 ~ createNewOrganization ~ dataOrganization:", dataOrganization)
     
     if (isError(dataOrganization)) {
       return {
@@ -36,11 +41,12 @@ export const createNewOrganization = async (INN: number, idAdministrator: string
         message: dataOrganization.message,
       };
     }
-    
+
     dataOrganization.dataRegistrateFormApp = dateCreate;
-    
-  // save data geoLacation
-    //const saveGeoLocation =  await ...
+    dataGeo.date = dateCreate
+  
+    const saveGeoLocation =  await ControllerGeoLocation.setDataLocation(INN.toString(),dataGeo)
+
     return await ControllerOrganizationDB.createNewOrganization(dataOrganization, INN.toString());
   } catch (error) {
     return {

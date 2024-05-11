@@ -32,3 +32,6 @@ export enum typeDialog {
   default = "DEFAULT",
   dialog = "DIALOG",
 }
+export enum typicalError {
+  not_geo = "NOT_GEO"
+}
