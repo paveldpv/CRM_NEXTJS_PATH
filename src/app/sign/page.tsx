@@ -1,5 +1,6 @@
 import Auth from "@/components/form/auth/Auth";
 import { Metadata } from "next";
+import DialogWindow from "@/components/additional/DialogWindow";
 
 export const metadata: Metadata = {
   title: "AUTH",
@@ -10,6 +11,7 @@ export default function auth() {
   return (
     <>
       <Auth />
+      <DialogWindow/>
     </>
   );
 }

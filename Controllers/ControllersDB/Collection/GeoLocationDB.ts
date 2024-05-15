@@ -4,9 +4,7 @@ import { TGeoLocation } from "@/Types/subtypes/TGeoLocation";
 import modelGeoLocation from "../SCHEMAS/geoLocationSchema";
 
 
-export const saveGeoLocation=async(INN:string,data:TGeoLocation):Promise<TAnswerUpdateDB> => {
-
-   console.log("🚀 ~ saveGeoLocation ~ data:", data)
+export const saveGeoLocation=async(INN:string,data:TGeoLocation):Promise<TAnswerUpdateDB> => {   
    
    await connect(`${process.env.DB_URL}${INN}`)
    const resultSaveGeoLocation = new  modelGeoLocation(data)

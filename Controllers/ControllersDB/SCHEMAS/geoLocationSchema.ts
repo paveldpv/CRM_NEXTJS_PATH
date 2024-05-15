@@ -20,11 +20,16 @@ export const geoLocationSchema = new Schema<TGeoLocation>({
     type: String,
     required: true,
   },
+  idEmployee:{
+    type:String,
+    required:true
+  },
   ip: {
     type: String,
     required: false,
     default: "не отслеживалось",
-  },
+  },  
+  
 });
 
 const modelGeoLocation =

@@ -27,13 +27,13 @@ export const updateParamsOrganization = async (data: TDataOrganization): Promise
   }
 };
 
-export const createNewOrganization = async (INN: number, idAdministrator: string,dateCreate:Date,dataGeo:TGeoLocation): Promise<TAnswerUpdateDB> => {
+export const createNewOrganization = async (INN: number, idAdministrator: string ,dateCreate:Date,dataGeo:TGeoLocation): Promise<TAnswerUpdateDB> => {
   try {
     let dataOrganization = await fetchGetDataOrganization({ query: INN.toString() });
 
    
 
-    console.log("🚀 ~ createNewOrganization ~ dataOrganization:", dataOrganization)
+    
     
     if (isError(dataOrganization)) {
       return {
@@ -44,10 +44,13 @@ export const createNewOrganization = async (INN: number, idAdministrator: string
 
     dataOrganization.dataRegistrateFormApp = dateCreate;
     dataGeo.date = dateCreate
+   
   
-    const saveGeoLocation =  await ControllerGeoLocation.setDataLocation(INN.toString(),dataGeo)
+    const saveGeoLocation     = await ControllerGeoLocation.setDataLocation(INN.toString(),dataGeo)
+    const saveNewOrganization = await ControllerOrganizationDB.createNewOrganization(dataOrganization, INN.toString());
+    
 
-    return await ControllerOrganizationDB.createNewOrganization(dataOrganization, INN.toString());
+    return saveNewOrganization
   } catch (error) {
     return {
       success: false,

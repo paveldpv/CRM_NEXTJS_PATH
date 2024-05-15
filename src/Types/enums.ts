@@ -33,5 +33,6 @@ export enum typeDialog {
   dialog = "DIALOG",
 }
 export enum typicalError {
-  not_geo = "NOT_GEO"
+  not_geo = "NOT_GEO",
+  not_valid_password ='NOT_VALID_PAS'
 }

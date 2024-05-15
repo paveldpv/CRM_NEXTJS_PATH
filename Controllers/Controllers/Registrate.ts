@@ -43,7 +43,7 @@ const registrateNewOrganization = async (data: TDBUser,dataGeo:TGeoLocation): Pr
   };
 
   const saveData                    = await ControllerUsers.addNewAdmin(registrateData);
-  const saveInitialConfigUser       = await ControllerConfigApp.setConfig(data.INN, data.idUser);  //
+  const saveInitialConfigUser       = await ControllerConfigApp.setConfig(data.INN, data.idUser);  
   const saveInitialDataOrganization = await ControllerOrganization.createNewOrganization(
     data.INN,
     data.idUser,

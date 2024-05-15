@@ -3,8 +3,9 @@ import ERROR_PAGE from "@/components/layout/ERROR_PAGE";
 
 const messageListTypicalError = {
   NOT_GEO: "для регистрации необходимо разрешить доступ к геолокации",
+  NOT_VALID_PAS: "не верные данные для  авторизации",
 };
-//chrome://settings/
+
 export default function page({ params }: { params: { TYPE_ERROR: typicalError } }) {
   return (
     <ERROR_PAGE>

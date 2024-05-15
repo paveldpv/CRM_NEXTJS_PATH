@@ -1,19 +1,33 @@
 "use client";
-import { useFormik } from "formik";
-import { fieldData } from "./FieldData";
-import Link from "next/link";
-import SignupSchemaFormRegistrate from "../../../../validateForm/validateFormRegistrate";
 import { TDBUser, TFormRegistrate } from "@/Types/Types";
-import uniqid from "uniqid";
-import { fetchRegistrate } from "../../../../service/fetch";
 import { PURPOSE_USE, TGeoLocation } from "@/Types/subtypes/TGeoLocation";
-import { useRouter } from 'next/navigation';
+import { typeDialog, typicalError } from "@/Types/enums";
 
-import { typicalError } from "@/Types/enums";
+import uniqid from "uniqid";
 
+import { fieldData } from "./FieldData";
+
+import { useFormik } from "formik";
+import { useRouter } from "next/navigation";
+import { useMiniLoader } from "../../../../store/storeMiniLoader";
+import { useDialogWindow } from "../../../../store/storeDialogWindow";
+
+import SignupSchemaFormRegistrate from "../../../../validateForm/validateFormRegistrate";
+
+import { fetchRegistrate } from "../../../../service/fetch";
+
+import Link from "next/link";
+import MiniLoader from "@/components/UI/Loaders/MiniLoader";
+import { useEffect } from "react";
 
 export default function FormRegistrate() {
+  const [loader, setLoader] = useMiniLoader((state) => [state.visible, state.setVisibleLoader]);
+  const [setOpenDialog] = useDialogWindow((state) => [state.setOpen]);
+  useEffect(() => {
+    setLoader(false);
+  }, []);
   const { push } = useRouter();
+
   const initialValues: TFormRegistrate = {
     email: "",
     password: "",
@@ -21,8 +35,9 @@ export default function FormRegistrate() {
     INN: null,
   };
 
-  const onSubmit = async () => {
-   
+  const onSubmit = async () => {    
+
+    setLoader(true);
     if (Object.keys(errors).length) return;
     navigator.geolocation.getCurrentPosition(
       async (pos) => {
@@ -40,25 +55,36 @@ export default function FormRegistrate() {
 
         const newUser = {
           idUser: idNewAdmin,
-          linksAllowed: "ADMIN",         
+          linksAllowed: "ADMIN",
           ...values,
         } as TDBUser;
-        
-        const candidateNewAdmin = await fetchRegistrate(newUser,dataGeo);
-        if(candidateNewAdmin.success){
-          //добавить довить для входа в localStorage
-          push('/sign')
-        }
 
+        const candidateNewAdmin = await fetchRegistrate(newUser, dataGeo);
+
+        if (candidateNewAdmin.success) {     
+          
+          localStorage.setItem("mes_phone",newUser.phone)
+          localStorage.setItem("mes_INN", newUser.INN);
+          localStorage.setItem("mes_password", newUser.password);
+
+          setLoader(false);
+          setOpenDialog(true, { title: "регистрация прошла успешно"});
+
+          setTimeout(() => {
+            push("/sign");
+          }, 1700);
+        }
+        else{
+          
+          
+          setOpenDialog(true, { title: "Ошибка", message: candidateNewAdmin.message }, typeDialog.error);
+        }
+        setLoader(false)
       },
-      (errGeo) => {        
-        push(`/ERROR/${typicalError.not_geo}`)
-        
+      (errGeo) => {
+        push(`/ERROR/${typicalError.not_geo}`);
       }
     );
-   
-
-    
   };
 
   const { handleChange, values, errors, setErrors } = useFormik({
@@ -73,45 +99,55 @@ export default function FormRegistrate() {
         e.preventDefault();
         onSubmit();
       }}
-      className="  w-3/4 bg-color_header p-9 rounded-md  flex flex-col gap-4"
+      className={` relative w-3/4  `}
     >
-      {fieldData.map((field, index) => (
-        <div key={index}>
-          <label htmlFor={field.title} className="labelForInput">
-            {field.placeholder}
-          </label>
-          <input
-            name={field.title}
-            id={field.title}
-            type={field.type}
-            placeholder={field.placeholder}
-            // @ts-ignore: error message
-            className={`customInput ${!!errors[field.title] && " bg-red-700"}`}
-            onChange={handleChange}
-            // @ts-ignore: error message
-            value={`${[values[field.title]]}`}
-          />
-          {/* @ts-ignore: error message */}
-          {!!errors[field.title] && (
-            // @ts-ignore: error message
-            <span className=" pt-4 select-none text-xl  text-red-900 mt-4 font-bold ">
-              {
-                // @ts-ignore: error message
-                errors[field.title]
-              }
-            </span>
-          )}
-        </div>
-      ))}
-      <button type="submit" className="buttonSubmit">
-        Регистрация
-      </button>
-      <Link
-        className=" rounded-xl p-5 bg-highlight_two w-24 font-bold text-4xs hover:underline hover:text-highlight_one"
-        href={"/sign"}
+      <MiniLoader className=" absolute left-1/2  top-56 scale-150" />
+
+      <div
+        className={`bg-color_header p-9 rounded-md flex flex-col gap-4  ${
+          loader && "blur-md opacity-70 delay-500  duration-500"
+        }`}
       >
-        Войти
-      </Link>
+        {fieldData.map((field, index) => (
+          <div key={index}>
+            <label htmlFor={field.title} className="labelForInput">
+              {field.placeholder}
+            </label>
+            <input
+              disabled={loader}
+              name={field.title}
+              id={field.title}
+              type={field.type}
+              placeholder={field.placeholder}
+              // @ts-ignore: error message
+              className={`customInput ${!!errors[field.title] && " bg-red-700"}`}
+              onChange={handleChange}
+              // @ts-ignore: error message
+              value={`${[values[field.title]]}`}
+            />
+            {/* @ts-ignore: error message */}
+            {!!errors[field.title] && (
+              // @ts-ignore: error message
+              <span className=" pt-4 select-none text-xl  text-red-900 mt-4 font-bold ">
+                {
+                  // @ts-ignore: error message
+                  errors[field.title]
+                }
+              </span>
+            )}
+          </div>
+        ))}
+        <button type="submit" hidden={loader} className={`buttonSubmit`}>
+          Регистрация
+        </button>
+        <Link
+          hidden={loader}
+          className=" rounded-xl p-5 bg-highlight_two w-24 font-bold text-4xs hover:underline hover:text-highlight_one"
+          href={"/sign"}
+        >
+          Войти
+        </Link>
+      </div>
     </form>
   );
 }
