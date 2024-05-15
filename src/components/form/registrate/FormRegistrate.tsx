@@ -71,6 +71,7 @@ export default function FormRegistrate() {
           setOpenDialog(true, { title: "регистрация прошла успешно"});
 
           setTimeout(() => {
+            setOpenDialog(false);
             push("/sign");
           }, 1700);
         }

@@ -40,26 +40,35 @@ const registrateNewOrganization = async (data: TDBUser,dataGeo:TGeoLocation): Pr
     ...data,
     password: bcrypt.hashSync(data.password, genSalt),
     dateRegistrate: currentDate,
-  };
+  }; 
 
-  const saveData                    = await ControllerUsers.addNewAdmin(registrateData);
-  const saveInitialConfigUser       = await ControllerConfigApp.setConfig(data.INN, data.idUser);  
-  const saveInitialDataOrganization = await ControllerOrganization.createNewOrganization(
+  
+
+  const saveData                    =  ControllerUsers.addNewAdmin(registrateData);
+  const saveInitialConfigUser       =  ControllerConfigApp.setConfig(data.INN, data.idUser);  
+  const saveInitialDataOrganization = ControllerOrganization.createNewOrganization(
     data.INN,
     data.idUser,
     currentDate,
     dataGeo
   );
-
-  if (saveData.success && saveInitialConfigUser?.success && saveInitialDataOrganization.success) {
-    return {
-      success: true,
-    };
+  let resultRegistrate:TAnswerUpdateDB={
+    success:true
   }
-  return {
-    success: false,
-    message: "Ошибка сохранения данных",
-  };
+
+  const result =await Promise.allSettled([saveData,saveInitialConfigUser,saveInitialDataOrganization])
+  result.forEach(promise => {
+    if(promise.status==='rejected'){
+      resultRegistrate.success=false
+      resultRegistrate.message = "ошибка Сохранения данных, ошибка БД"
+      
+    }
+  });
+  return resultRegistrate
+  
+
+
+  
 };
 const ControllerRegistrate = {
   registrateNewOrganization,
