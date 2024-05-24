@@ -70,8 +70,8 @@ const registrateNewOrganization = async (data: TDBUser,dataGeo:TGeoLocation): Pr
 
   
 };
-const ControllerRegistrate = {
+const ServiceRegistrate = {
   registrateNewOrganization,
 };
 
-export default ControllerRegistrate;
+export default ServiceRegistrate;

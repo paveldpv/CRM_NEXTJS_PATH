@@ -1,7 +1,13 @@
 
 import { nameSettingLayout,keyConfigLayout } from "@/Types/enums";
 import { TConfigAPP } from "@/Types/subtypes/TAppearanceConfigApp";
-
+/**
+ * get initial setting app
+ * 
+ * 
+ * @param idUser 
+ * @returns object TConfigApp
+ */
 const getInitialConfigApp = (idUser: string): TConfigAPP => {
   return {
     idUser: idUser,

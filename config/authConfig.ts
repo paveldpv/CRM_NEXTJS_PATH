@@ -1,6 +1,6 @@
 import type { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import ControllersAuth from "../Controllers/Controllers/Auth";
+import ControllersAuth from "../Controllers/Service/Auth";
 import { TDBUser, TFormLogin } from "@/Types/Types";
 
 const authConfig: AuthOptions = {

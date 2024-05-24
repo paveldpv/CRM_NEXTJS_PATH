@@ -14,8 +14,8 @@ export const setDataLocation = async (INN: string, data: TGeoLocation): Promise<
   }
 };
 
-const ControllerGeoLocation = {
+const ServiceGeoLocation = {
   setDataLocation,
 };
-module.exports = ControllerGeoLocation;
-export default ControllerGeoLocation;
+module.exports = ServiceGeoLocation;
+export default ServiceGeoLocation;

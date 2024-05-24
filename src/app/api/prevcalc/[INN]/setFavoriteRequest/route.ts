@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import ControllerPrevCalc from "../../../../../../Controllers/Controllers/PrevCalc";
+import ControllerPrevCalc from "../../../../../../Controllers/Service/PrevCalc";
 
 export async function POST(req: NextRequest, { params }: { params: { INN: number } }, res: NextResponse) {
   const INN = params.INN;
-  const {idRequest,isFavorite} = await req.json()
-  const dataResponse = await ControllerPrevCalc.setFavoriteRequest(INN,idRequest,isFavorite);
+  const { idRequest, isFavorite } = await req.json();
+  const dataResponse = await ControllerPrevCalc.setFavoriteRequest(INN, idRequest, isFavorite);
   return NextResponse.json(dataResponse);
 }

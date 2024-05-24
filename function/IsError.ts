@@ -1,5 +1,11 @@
 import { TError } from "@/Types/subtypes/TError";
-import { TDaDataOrganization } from "@/Types/subtypes/TOrganization";
+/**
+ * check for TERROR
+ * 
+ * 
+ * @param data 
+ * @returns boolean
+ */
 
 export const isError = (data: any| TError): data is TError => {  
   

@@ -4,12 +4,12 @@ import ProgressLoader from "@/components/UI/Loaders/ProgressLoader";
 import DialogWindow from "@/components/additional/DialogWindow";
 
 import FormAdminPanel from "@/components/form/formAdminPanel/FormAdminPanel";
-import ControllerOrganization from "../../../../../../Controllers/Controllers/Organization";
+import ControllerOrganization from "../../../../../../Controllers/Service/Organization";
 
 import { TApprover } from "@/Types/customType";
 import { TDataOrganization } from "@/Types/subtypes/TOrganization";
 import ListAdmins from "@/components/form/formAdminPanel/ListAdmins";
-import ControllerUsers from "../../../../../../Controllers/Controllers/Users";
+import ControllerUsers from "../../../../../../Controllers/Service/Users";
 import { TDBUser } from "@/Types/Types";
 
 export type TFullDataSettingOrganization = {
@@ -39,7 +39,6 @@ export const revalidate = 10;
 
 export default async function page({ params }: { params: { INN: string } }) {
   const dataOrganization = await getDataOrganization(Number(params.INN));
-  
 
   return (
     <div>

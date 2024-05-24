@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import ControllerPrevCalc from "../../../../../../Controllers/Controllers/PrevCalc";
+import ControllerPrevCalc from "../../../../../../Controllers/Service/PrevCalc";
 
 export async function POST(req: NextRequest, { params }: { params: { INN: number } }, res: NextResponse) {
   const INN = params.INN;

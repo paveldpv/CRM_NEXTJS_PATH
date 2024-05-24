@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import authConfig from "../../../../config/authConfig";
 import { TDBUser } from "@/Types/Types";
 
-import ControllerConfigApp from "../../../../Controllers/Controllers/ConfigApp";
+import ControllerConfigApp from "../../../../Controllers/Service/ConfigApp";
 import Wrapper from "@/components/layout/Wrapper";
 import Link from "next/link";
 import { Session } from "next-auth";

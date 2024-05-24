@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import { TConfigAPP } from "@/Types/Types";
-import ControllerConfigApp from "../../../../../Controllers/Controllers/ConfigApp";
+import ControllerConfigApp from "../../../../../Controllers/Service/ConfigApp";
 
 export async function POST(req: NextRequest, { params }: { params: { INN: string } }, res: NextResponse) {
   const INN = params.INN;

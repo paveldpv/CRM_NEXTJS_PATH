@@ -1,3 +1,4 @@
+import { TEntities } from "../abstractsType/abstractsType";
 import { TResponseUploadFiles } from "../Types";
 
 //#region type prev calc request
@@ -55,8 +56,9 @@ export type TSketchDetail = {
    idRequest?: string;
    dateRequest?: Date;
    verified?: boolean;
-   safeDeleted?: boolean;
+   //safeDeleted?: boolean;
    favorites?: boolean;
- };
+   
+ } & TEntities;
  
  //#endregion

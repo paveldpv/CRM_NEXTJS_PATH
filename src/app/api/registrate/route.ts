@@ -1,5 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
-import ControllerRegistrate from "../../../../Controllers/Controllers/Registrate";
+
+import ServiceRegistrate from "../../../../Controllers/Service/Registrate";
 import { TDBUser } from "@/Types/Types";
 import { TGeoLocation } from "@/Types/subtypes/TGeoLocation";
 
@@ -9,7 +10,7 @@ export async function POST(req: NextRequest) {
   const ip = (req.headers.get("x-forwarded-for") ?? "127.0.0.1").split(",")[0];
   dataGeo.ip = ip;
 
-  const result = await ControllerRegistrate.registrateNewOrganization(data, dataGeo);
+  const result = await ServiceRegistrate.registrateNewOrganization(data, dataGeo);
 
   return NextResponse.json(result);
 }
