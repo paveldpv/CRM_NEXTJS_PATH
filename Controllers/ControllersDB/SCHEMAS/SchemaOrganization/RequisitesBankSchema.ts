@@ -1,4 +1,5 @@
-import { TRequisitesBank } from "@/Types/subtypes/TOrganization";
+
+import { TRequisitesBank } from "@/Types/subtypes/TRequisites";
 import { Schema } from "mongoose";
 
 export const requisitesBankSchema = new Schema<TRequisitesBank>({

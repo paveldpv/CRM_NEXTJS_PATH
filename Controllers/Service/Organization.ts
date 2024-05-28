@@ -15,6 +15,8 @@ import ControllerOrganizationDB from "../ControllersDB/Collection/OrganizationDB
 
 import { getInitialDataRequisites } from "../../function/getInitialDataRequisites";
 import { getInitialDataOrganization } from "../../function/getInitialDataOrganization";
+import ServiceRequisites from "./Requisites";
+import ServiceDaDataOrganization from "./DaDataOrganization";
 
 export const getParamsOrganization = async (INN: number): Promise<TDataOrganization | undefined> => {
   try {
@@ -39,8 +41,12 @@ export const updateParamsOrganization = async (data: TDataOrganization): Promise
 
 export const createNewOrganization = async (INN: number, idAdministrator: string ,dateCreate:Date,dataGeo:TGeoLocation): Promise<TAnswerUpdateDB> => {
   try {
-    let daDataOrganization = await fetchGetDataOrganization({ query: INN.toString() });
+    console.log(`REGISTRATE NEW ORGANIZATION...`);
     
+    let daDataOrganization = await fetchGetDataOrganization({ query: INN.toString() });
+    let res:TAnswerUpdateDB= {
+      success:true
+    }
 
     
     
@@ -55,15 +61,28 @@ export const createNewOrganization = async (INN: number, idAdministrator: string
     dataGeo.date = dateCreate  
    
   
-    const saveGeoLocation             = await ServiceGeoLocation.setDataLocation(INN.toString(),dataGeo)
-    const saveInitialDataOrganization = await ControllerOrganizationDB.addDataOrganization(getInitialDataOrganization(daDataOrganization,dateCreate))
-    
-    const saveDaDataOrganization      = await ControllerDaDataOrganization.addDaDataOrganization(daDataOrganization, INN.toString());
-   const saveInitialDataRequisites =  await ControllerRequisites.saveRequisites(getInitialDataRequisites(daDataOrganization,dateCreate))
-    
+    const saveGeoLocation             =  ServiceGeoLocation.setDataLocation(INN.toString(),dataGeo)
+    const saveInitialDataOrganization =  ControllerOrganizationDB.addDataOrganization(getInitialDataOrganization(daDataOrganization,dateCreate))
+    const saveInitialDataRequisites   =  ServiceRequisites.addRequisites(INN.toString(),getInitialDataRequisites(daDataOrganization,dateCreate))
+    const saveDaDataOrganization      =  ServiceDaDataOrganization.addDaData(INN.toString(),undefined,daDataOrganization)
     
 
-    return saveDaDataOrganization
+
+
+    const asyncRequest =await Promise.allSettled([saveGeoLocation,saveInitialDataOrganization,saveInitialDataRequisites,saveDaDataOrganization])
+    asyncRequest.forEach(req=>{     
+     
+      
+      if(req.status=="rejected" || !req.value.success){
+        res.success = false,
+        res.message = req.status==="rejected" ?"error async req":`error Promise All Settled ,error :${req.value.message}`
+        
+      }
+
+      
+    })
+    return res
+    
   } catch (error) {
     return {
       success: false,

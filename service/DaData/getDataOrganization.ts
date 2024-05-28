@@ -1,7 +1,8 @@
-import { TDaDataOrganization } from "@/Types/subtypes/TOrganization";
+
 import { TQueryGetDaDataOrganization } from "@/Types/subtypes/TQueryGetDaDataOrganization";
 import { apiKey } from "../../config/DaDataConfig";
 import { TError } from "@/Types/subtypes/TError";
+import { TDaDataOrganization } from "@/Types/subtypes/TDaDataOrganization";
 
 export const fetchGetDataOrganization = async (
   queryData: TQueryGetDaDataOrganization

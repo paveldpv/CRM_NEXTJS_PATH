@@ -1,5 +1,5 @@
 import { TDaDataOrganization } from "@/Types/subtypes/TDaDataOrganization";
-import { Schema, model, models } from "mongoose";
+import { Model, Schema, model, models } from "mongoose";
 
 
 
@@ -223,6 +223,6 @@ export const DaDataOrganizationSchema = new Schema<TDaDataOrganization>({
 });
 
 const modelDaDataOrganization =
-  models.DaDataOrganizationSchema || model<TDaDataOrganization>("DaDataOrganizationSchema",DaDataOrganizationSchema);
+  (models.DaDataOrganizationSchema as Model<TDaDataOrganization>) || model<TDaDataOrganization>("DaDataOrganizationSchema",DaDataOrganizationSchema);
 
 export default modelDaDataOrganization;

@@ -1,4 +1,3 @@
-
 import { Model, model, models, Schema } from "mongoose";
 import { requisitesBankSchema } from "./RequisitesBankSchema";
 import { TRequisites } from "@/Types/subtypes/TRequisites";
@@ -63,12 +62,40 @@ export const requisitesSchema = new Schema<TRequisites>({
   OKVD: {
     type: {
       title: String,
-      value: [String],
+      value: Schema.Types.Mixed,
     },
     required: false,
   },
   requisitesBank: {
-    type: requisitesBankSchema,
+    checkingAccount: {
+      type: {
+        title: String,
+        value: String,
+      },
+
+      required: false,
+    },
+    nameBank: {
+      required: false,
+      type: {
+        title: String,
+        value: String,
+      },
+    },
+    korAccount: {
+      required: false,
+      type: {
+        title: String,
+        value: String,
+      },
+    },
+    BIK: {
+      required: false,
+      type: {
+        title: String,
+        value: String,
+      },
+    },
   },
   srcRequisites: {
     type: Schema.Types.Mixed,

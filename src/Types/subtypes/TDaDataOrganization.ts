@@ -1,8 +1,7 @@
 import { TEntities } from "../abstractsType/abstractsType";
 
 export type TDaDataOrganization = {
-   dataRegistrateFormApp?: Date;
- 
+   dataRegistrateFormApp?: Date; 
    value?: string;
    unrestricted_value?: string;
    data: {

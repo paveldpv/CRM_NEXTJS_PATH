@@ -1,6 +1,7 @@
 import { TErrored,  TResponseUploadFiles } from "@/Types/Types";
 import { SERVER_DOTNET } from "../../config/config";
-import { TRequisites } from "@/Types/subtypes/TOrganization";
+import { TRequisites } from "@/Types/subtypes/TRequisites";
+
 
 export const fetchUploadFilePrevCal = async (
   formData: FormData

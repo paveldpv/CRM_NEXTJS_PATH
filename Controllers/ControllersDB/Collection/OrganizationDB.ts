@@ -18,9 +18,7 @@ export const updateParamsOrganization = async (data: TDataOrganization): Promise
   return { success: true };
 };
 
-export const addDataOrganization = async (
-  data: TDataOrganization | Partial<TDataOrganization>
-): Promise<TAnswerUpdateDB> => {
+export const addDataOrganization = async (data: TDataOrganization | Partial<TDataOrganization>): Promise<TAnswerUpdateDB> => {
   await connect(`${process.env.DB_URL}${data.INN}`);
   const newOrganization = new modelOrganization(data);
   await newOrganization.save();
