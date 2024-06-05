@@ -34,6 +34,10 @@ export const userSchema = new Schema<TDBUser>({
     default: new Date(),
   },
   linksAllowed: Schema.Types.Mixed,
+  safeDeleted:{
+    type:Boolean,
+    default:false
+  }
 });
 const modelUSer = models.user as Model<TDBUser>  || model<TDBUser>("user", userSchema);
 export default modelUSer;

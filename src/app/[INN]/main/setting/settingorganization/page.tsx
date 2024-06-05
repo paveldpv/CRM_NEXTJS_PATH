@@ -21,7 +21,7 @@ export const getDataOrganization = cache(
   async (INN: number): Promise<TFullDataSettingOrganization | undefined> => {
     const [dataOrganizationResult, dataUsersResult] = await Promise.allSettled([
       ControllerOrganization.getParamsOrganization(INN),
-      ControllerUsers.getUsers(INN),
+      ControllerUsers.getUsers(INN.toString()),
     ]);
 
     if (dataOrganizationResult.status === "rejected" || dataUsersResult.status === "rejected") return;

@@ -1,3 +1,4 @@
+import { TEntities } from "./abstractsType/abstractsType";
 import { idLink, nameSettingLayout, keyConfigLayout, keyColorOption } from "./enums";
 
 //#region type visual config app
@@ -136,7 +137,7 @@ export type TDBUser = {
   linksAllowed: TLink[] | "ADMIN";
 
   srcPhoto: string | TResponseUploadFiles;
-} & TFormRegistrate;
+} & TFormRegistrate &TEntities;
 
 export type TAnswerUpdateDB = {
   success: boolean;

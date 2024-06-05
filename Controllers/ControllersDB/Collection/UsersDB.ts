@@ -4,7 +4,7 @@ import modelUSer from "../SCHEMAS/usersSchema";
 
 const addNewAdmin = async (data: TDBUser): Promise<TAnswerUpdateDB> => {
   try {
-    const connectDB = await connect(`${process.env.DB_URL}${data.INN}`);
+    await connect(`${process.env.DB_URL}${data.INN}`);
     const newAdmin = new modelUSer(data);
     await newAdmin.save();
     // connectDB.connection.close();
@@ -17,7 +17,7 @@ const addNewAdmin = async (data: TDBUser): Promise<TAnswerUpdateDB> => {
   }
 };
 
-const getUsers = async (INN: number): Promise<TDBUser[] | null> => {
+const getUsers = async (INN: string): Promise<TDBUser[] | null> => {
   try {
     const connectDB = await connect(`${process.env.DB_URL}${INN}`);
     const dataUSer = await modelUSer.find({});
@@ -29,20 +29,20 @@ const getUsers = async (INN: number): Promise<TDBUser[] | null> => {
   }
 };
 
-const getUserByParams = async (INN: number, user: Partial<TDBUser>): Promise<TDBUser | null> => {
+const getUserByParams = async (INN: string, user: Partial<TDBUser>): Promise<TDBUser | null> => {
   try {
-    const connectDB = await connect(`${process.env.DB_URL}${INN}`);
+    await connect(`${process.env.DB_URL}${INN}`);
     const dataUSer: TDBUser | null = await modelUSer.findOne(user);
-    connectDB.connection.close();
+
     return dataUSer;
   } catch (error) {
     throw error;
   }
 };
 
-const getUser = async (INN: number, idUser: string): Promise<TDBUser | null> => {
+const getUser = async (INN: string, idUser: string): Promise<TDBUser | null> => {
   try {
-    const connectDB = await connect(`${process.env.DB_URL}${INN}`);
+    await connect(`${process.env.DB_URL}${INN}`);
     const dataUSer: TDBUser | null = await modelUSer.findOne({ idUSer: idUser });
     // connectDB.connection.close();
     return dataUSer;
@@ -51,9 +51,9 @@ const getUser = async (INN: number, idUser: string): Promise<TDBUser | null> => 
   }
 };
 
-const updateDataUser = async (INN: number, data: TDBUser): Promise<TAnswerUpdateDB> => {
+const updateDataUser = async (INN: string, data: TDBUser): Promise<TAnswerUpdateDB> => {
   try {
-    const connectDB = await connect(`${process.env.DB_URL}${data.INN}`);
+    await connect(`${process.env.DB_URL}${data.INN}`);
     const update = await modelUSer.updateOne({ idUser: data.idUser }, data);
     //connectDB.connection.close();
 
@@ -65,9 +65,9 @@ const updateDataUser = async (INN: number, data: TDBUser): Promise<TAnswerUpdate
   }
 };
 
-const removePhotoToDB = async (INN: number, idUser: string): Promise<TAnswerUpdateDB> => {
+const removePhotoToDB = async (INN: string, idUser: string): Promise<TAnswerUpdateDB> => {
   try {
-    const connectDB = await connect(`${process.env.DB_URL}${INN}`);
+    await connect(`${process.env.DB_URL}${INN}`);
     const update = await modelUSer.updateOne({ idUser: idUser }, { $set: { srcPhoto: "NOT_FOUND" } });
     //connectDB.connection.close();
 
@@ -78,6 +78,12 @@ const removePhotoToDB = async (INN: number, idUser: string): Promise<TAnswerUpda
     throw error;
   }
 };
+const getUsersByListID = async(INN:string,listID:string[]) =>{
+  await connect(`${process.env.DB_URL}${INN}`);
+  return await modelUSer.find({idUser:{$in:listID}})
+
+}
+
 
 const ControllerUsersDB = {
   addNewAdmin,
@@ -86,5 +92,6 @@ const ControllerUsersDB = {
   getUsers,
   updateDataUser,
   removePhotoToDB,
+  getUsersByListID
 };
 export default ControllerUsersDB;

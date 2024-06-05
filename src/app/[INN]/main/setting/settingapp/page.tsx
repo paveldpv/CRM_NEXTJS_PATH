@@ -4,7 +4,7 @@ import React from "react";
 
 
 export default function page({ params }: { params: { INN: string } }) {
-  console.log(params);
+  
   
   return (
     <div>

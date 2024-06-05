@@ -1,12 +1,13 @@
 import { TDBUser, TAnswerUpdateDB } from "@/Types/Types";
 import ControllerUsersDB from "../ControllersDB/Collection/UsersDB";
 import { fetchDeletedFiles } from "../../service/Server/fetchServer";
+import { TError } from "@/Types/subtypes/TError";
 
 /**
  *  get users for id , id this array string
  */
 
-const getUser = async (INN: number, idUser: string): Promise<TDBUser | null> => {
+const getUser = async (INN: string, idUser: string): Promise<TDBUser | null> => {
   try {
     const result = await ControllerUsersDB.getUser(INN, idUser);
     return result;
@@ -34,7 +35,7 @@ const addNewAdmin = async (data: TDBUser): Promise<TAnswerUpdateDB> => {
 /**
  *  return users in one organization given INN
  */
-const getUsers = async (INN: number): Promise<TDBUser[] | null> => {
+const getUsers = async (INN: string): Promise<TDBUser[] | null> => {
   try {
     const result = await ControllerUsersDB.getUsers(INN);
     return JSON.parse(JSON.stringify(result));
@@ -48,7 +49,7 @@ const getUsers = async (INN: number): Promise<TDBUser[] | null> => {
 /**
  *  return one user for given params
  */
-const getUserByParams = async (INN: number, user: Partial<TDBUser>): Promise<TDBUser | null> => {
+const getUserByParams = async (INN: string, user: Partial<TDBUser>): Promise<TDBUser | null> => {
   try {
     const result = await ControllerUsersDB.getUserByParams(INN, user);
     return result;
@@ -58,7 +59,7 @@ const getUserByParams = async (INN: number, user: Partial<TDBUser>): Promise<TDB
   }
 };
 
-const updateDataUser = async (INN: number, user: TDBUser): Promise<TAnswerUpdateDB> => {
+const updateDataUser = async (INN: string, user: TDBUser): Promise<TAnswerUpdateDB> => {
   try {
     return await ControllerUsersDB.updateDataUser(INN, user);
   } catch (error) {
@@ -70,7 +71,7 @@ const updateDataUser = async (INN: number, user: TDBUser): Promise<TAnswerUpdate
   }
 };
 
-const deletePhoto = async (INN: number, idUser: string, fullPath: string): Promise<TAnswerUpdateDB> => {
+const deletePhoto = async (INN: string, idUser: string, fullPath: string): Promise<TAnswerUpdateDB> => {
   try {
     const removePhotoToDB = await ControllerUsersDB.removePhotoToDB(INN, idUser);
 
@@ -98,13 +99,35 @@ const deletePhoto = async (INN: number, idUser: string, fullPath: string): Promi
     };
   }
 };
+const getUsersByListID = async(INN:string,listID:string[]):Promise<TDBUser[]|TError> =>{
+  try {
+    return await ControllerUsersDB.getUsersByListID(INN,listID)
+    
+  } catch (error) {
+    return {
+      error:true,
+      message:`error get users by ID , INN:${INN}, list id :${listID}`
+    }
+  }
+}
 
-const ControllerUsers = {
+// const ControllerUsers = {
+//   getUser,
+//   addNewAdmin,
+//   getUsers,
+//   getUserByParams,
+//   updateDataUser,
+//   deletePhoto,
+// }; 
+// export default ControllerUsers;
+
+const ServiceUsers = {
   getUser,
   addNewAdmin,
   getUsers,
   getUserByParams,
   updateDataUser,
   deletePhoto,
+  getUsersByListID
 }; 
-export default ControllerUsers;
+export default ServiceUsers;
