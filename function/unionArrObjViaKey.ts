@@ -1,8 +1,8 @@
 /**
  * объединяет два массива
  *
- * по ЗНАЧЕНИЮ ключа keyFirsObj(из значений обьекта первого массива)  
- * 
+ * по ЗНАЧЕНИЮ ключа keyFirsObj(из значений обьекта первого массива)
+ *
  * с значениями второго переданного массива где нужное значение ищется по значению keySecondObj
  *
  *
@@ -14,12 +14,7 @@
  * @param keySecondObj
  * @returns
  */
-export const unionFunc = <T, K>(
-  firstArr: T[],
-  secondArr: K[],
-  keyFirsObj: keyof T,
-  keySecondObj: keyof K
-): (T & K)[] => {
+export const unionArrObjViaKey = <T, K>(firstArr: T[], secondArr: K[], keyFirsObj: keyof T, keySecondObj: keyof K): (T & K)[] => {
   let objSecondArr: any = {};
 
   secondArr.forEach((element) => {
