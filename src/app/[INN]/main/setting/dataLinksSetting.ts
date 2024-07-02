@@ -18,7 +18,7 @@ export const dataLinkSetting: TPropsNavLink[] = [
   {
     description: "История входа в приложение",
     title: "История входа в приложение",
-    href: `setting/historyEntryLocation/10`,
+    href: `setting/historyEntryLocation/5/null/null`,
   },
   
 ];
