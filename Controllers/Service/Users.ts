@@ -2,6 +2,7 @@ import { TDBUser, TAnswerUpdateDB } from "@/Types/Types";
 import ControllerUsersDB from "../ControllersDB/Collection/UsersDB";
 import { fetchDeletedFiles } from "../../service/Server/fetchServer";
 import { TError } from "@/Types/subtypes/TError";
+import { normalizeMongoData } from "../../function/normalizeMongoData";
 
 /**
  *  get users for id , id this array string
@@ -10,7 +11,7 @@ import { TError } from "@/Types/subtypes/TError";
 const getUser = async (INN: string, idUser: string): Promise<TDBUser | null> => {
   try {
     const result = await ControllerUsersDB.getUser(INN, idUser);
-    return result;
+    return normalizeMongoData(result);
   } catch (error) {
     return null;
   }
@@ -37,8 +38,8 @@ const addNewAdmin = async (data: TDBUser): Promise<TAnswerUpdateDB> => {
  */
 const getUsers = async (INN: string): Promise<TDBUser[] | null> => {
   try {
-    const result = await ControllerUsersDB.getUsers(INN);
-    return JSON.parse(JSON.stringify(result));
+    const result=  await ControllerUsersDB.getUsers(INN);
+    return normalizeMongoData(result);
   } catch (error) {
     console.log(`error get userS , error :${error}`);
 
@@ -51,8 +52,8 @@ const getUsers = async (INN: string): Promise<TDBUser[] | null> => {
  */
 const getUserByParams = async (INN: string, user: Partial<TDBUser>): Promise<TDBUser | null> => {
   try {
-    const result = await ControllerUsersDB.getUserByParams(INN, user);
-    return result;
+    const result =  await ControllerUsersDB.getUserByParams(INN, user);
+    return normalizeMongoData(result);
   } catch (error) {
     console.log(`error get user by params ,error:${error}`);
     return null;
@@ -99,27 +100,17 @@ const deletePhoto = async (INN: string, idUser: string, fullPath: string): Promi
     };
   }
 };
-const getUsersByListID = async(INN:string,listID:string[]):Promise<TDBUser[]|TError> =>{
+const getUsersByListID = async (INN: string, listID: string[]): Promise<TDBUser[] | TError> => {
   try {
-    return await ControllerUsersDB.getUsersByListID(INN,listID)
-    
+    const data = await ControllerUsersDB.getUsersByListID(INN, listID);
+    return normalizeMongoData(data);
   } catch (error) {
     return {
-      error:true,
-      message:`error get users by ID , INN:${INN}, list id :${listID}`
-    }
+      error: true,
+      message: `error get users by ID , INN:${INN}, list id :${listID}`,
+    };
   }
-}
-
-// const ControllerUsers = {
-//   getUser,
-//   addNewAdmin,
-//   getUsers,
-//   getUserByParams,
-//   updateDataUser,
-//   deletePhoto,
-// }; 
-// export default ControllerUsers;
+};
 
 const ServiceUsers = {
   getUser,
@@ -128,6 +119,6 @@ const ServiceUsers = {
   getUserByParams,
   updateDataUser,
   deletePhoto,
-  getUsersByListID
-}; 
+  getUsersByListID,
+};
 export default ServiceUsers;

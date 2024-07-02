@@ -20,7 +20,7 @@ const addNewAdmin = async (data: TDBUser): Promise<TAnswerUpdateDB> => {
 const getUsers = async (INN: string): Promise<TDBUser[] | null> => {
   try {
     const connectDB = await connect(`${process.env.DB_URL}${INN}`);
-    const dataUSer = await modelUSer.find({});
+    const dataUSer = await modelUSer.find({},{safeDeleted:false});
 
     // connectDB.connection.close();
     return dataUSer;
@@ -80,7 +80,7 @@ const removePhotoToDB = async (INN: string, idUser: string): Promise<TAnswerUpda
 };
 const getUsersByListID = async(INN:string,listID:string[]) =>{
   await connect(`${process.env.DB_URL}${INN}`);
-  return await modelUSer.find({idUser:{$in:listID}})
+  return JSON.parse(JSON.stringify(await modelUSer.find({idUser:{$in:listID}})))
 
 }
 

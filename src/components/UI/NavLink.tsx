@@ -16,7 +16,7 @@ function NavLink({ className, description = ``, title = ``, id, children, ...pro
   const pathName = usePathname();
   const activeLink = pathName.includes(props.href);
   const INN = pathName.split('/').filter(param=>!!param)[0]
-  console.log("🚀 ~ NavLink ~ INN:", INN)
+ 
 
   return (
     <span

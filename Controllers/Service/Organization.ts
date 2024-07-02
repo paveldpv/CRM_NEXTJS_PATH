@@ -1,16 +1,15 @@
 import {  TDataOrganization } from "@/Types/subtypes/TOrganization";
 import { TAnswerUpdateDB } from "@/Types/Types";
-import moment from "moment";
+
 import { fetchGetDataOrganization } from "../../service/DaData/getDataOrganization";
 
 import { isError } from "../../function/IsError";
 import { TGeoLocation } from "@/Types/subtypes/TGeoLocation";
 
-import ServiceGeoLocation from "./GeoLocation";
-import ControllerOrganizationDB from "../ControllersDB/Collection/OrganizationDB";
 
-// import ControllerDaDataOrganization from "../ControllersDB/Collection/DaDataOrganization";//!
-// import ControllerRequisites from "../ControllersDB/Collection/Requisites";//!
+import ControllerOrganizationDB from "../ControllersDB/Collection/OrganizationDB";
+import { ServiceGeoLocation } from "./serviceGeoLocation";
+
 
 
 import { getInitialDataRequisites } from "../../function/getInitialDataRequisites";
@@ -61,7 +60,8 @@ export const createNewOrganization = async (INN: number, idAdministrator: string
     dataGeo.date = dateCreate  
    
   
-    const saveGeoLocation             =  ServiceGeoLocation.setDataLocation(INN.toString(),dataGeo)
+    //const saveGeoLocation             =  ServiceGeoLocation.setDataLocation(INN.toString(),dataGeo)
+    const saveGeoLocation             =  new ServiceGeoLocation(INN.toString()).setDataLocation(dataGeo)
     const saveInitialDataOrganization =  ControllerOrganizationDB.addDataOrganization(getInitialDataOrganization(daDataOrganization,dateCreate))
     const saveInitialDataRequisites   =  ServiceRequisites.addRequisites(INN.toString(),getInitialDataRequisites(daDataOrganization,dateCreate))
     const saveDaDataOrganization      =  ServiceDaDataOrganization.addDaData(INN.toString(),undefined,daDataOrganization)

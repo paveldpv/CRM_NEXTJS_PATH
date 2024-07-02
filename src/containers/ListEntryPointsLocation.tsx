@@ -10,51 +10,48 @@ import { GiPositionMarker } from "react-icons/gi";
 const processEntry = {
   REDACT: {
     title: "Изменение данных",
-    color: "text-blue-400",
+    color: "bg-blue-400",
   },
   AUTH: {
     title: "Вход в систему",
-    color: "text-lime-500",
+    color: "bg-blue-400",
   },
   REGISTRATE: {
     title: "Регистрация",
-    color: "text-red-400 ",
+    color: "bg-red-400 ",
   },
 };
 
 export default function ListEntryPointsLocation( {dataEntryUsers }: TListEntryPointsLocation) {
+  
+  
   return (
-    <div>
-      <ul>
-        <li>Сотрудник</li>
-        <li>Цель</li>
-        <li>Точка Входа</li>
-        <li>время</li>
-      </ul>
+    <div className=" ">
+     
       {dataEntryUsers.map((personalData, index) => {
         return (
-          <ul key={index}>
+          <ul key={index} className="grid     grid-cols-4 gap-2 mt-2">
             <li>
-              <ul>
+              <ul className=" itemList ">
                 <li>{personalData.name}</li>
                 <li>{personalData.surname}</li>
                 <li>{personalData.lastName}</li>
               </ul>
             </li>
-            <li className={`${processEntry[personalData.process].color}`}>
+            <li className={`${processEntry[personalData.process].color}  flex items-center justify-center`}>
               {processEntry[personalData.process].title}
             </li>
-            <li>
+            
               <a
-              className=" text-3xl text-green-400"
+              className="  flex items-center justify-center  itemList hover:bg-color_header  delay-100  duration-300 "
                 href={`https://www.openstreetmap.org/#map=18/${personalData.location.latitude}/${personalData.location.longitude}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <GiPositionMarker />
               </a>
-            </li>
-            <li>{moment(personalData.date).format("MM dd YYYY")}</li>
+          
+            <li className=" itemList">{moment(personalData.date).format("DD - MM - YYYY")}</li>
           </ul>
         );
       })}

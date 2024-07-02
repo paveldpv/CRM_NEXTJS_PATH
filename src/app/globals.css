@@ -39,6 +39,10 @@ button {
   width: 1px;
 }
 
+.itemList{
+  @apply text-menu_color border-2 border-solid border-menu_color rounded-md p-2 text-center text-sm
+}
+
 
 
 .style_border  {
