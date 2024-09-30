@@ -1,3 +1,3 @@
-export const _ALLOWINN = [6230107253];
+export const _ALLOW_INN = ["6230107253"];
 
 

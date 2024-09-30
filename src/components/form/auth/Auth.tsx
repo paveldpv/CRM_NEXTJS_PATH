@@ -23,12 +23,12 @@ export default function Auth() {
 
   useEffect(() => {
     setLoader(false);
-  }, []);
+  }, [setLoader]);
 
   const initialValues: TFormLogin = {
     password: globalThis?.localStorage?.getItem("mes_password") || ``,
     phone: globalThis?.localStorage?.getItem("mes_phone") || ``,
-    INN: Number(globalThis?.localStorage?.getItem("mes_INN") || params.get("inn")) || null,
+    INN: globalThis?.localStorage?.getItem("mes_INN") || params.get("inn") || ``,
   };
 
   const onSubmit = async () => {
@@ -41,12 +41,14 @@ export default function Auth() {
       INN: values.INN,
       redirect: false,
     });
+    console.log("=============");
+    
     console.log(res);
     if (!res?.error) {
       localStorage.setItem("mes_phone", values.phone);
       localStorage.setItem("mes_INN", `${values.INN}`);
       localStorage.setItem("mes_password", values.password);
-      push(`/${values.INN}/main`);
+      push(`/${values.INN}/${values.phone}/main`);
       //router.push(`/main`);
       // router.push(`/main?inn=${values.INN}`);
       // router.push(`/main`);

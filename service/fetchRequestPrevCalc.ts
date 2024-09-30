@@ -1,7 +1,7 @@
 import { TRequestPrevCalc } from "@/Types/subtypes/TRequestPrevCalc";
 import { TAnswerUpdateDB, TResponseService } from "@/Types/Types";
 
-export const fetchRequestPrevCalc = async (INN: number, data: TRequestPrevCalc): Promise<TResponseService> => {
+export const fetchRequestPrevCalc = async (INN: number, data: Omit<TRequestPrevCalc,'safeDeleted'>): Promise<TResponseService> => {
   const response = await fetch(`/api/prevcalc/${INN}`, {
     method: "POST",
     body: JSON.stringify(data),

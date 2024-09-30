@@ -3,18 +3,7 @@ import { keyConfigLayout, nameSettingLayout } from "@/Types/enums";
 
 export const dataTypicallyColor: TSelectTypicallyColor[] = [
   {
-    index: 0,
-    configBottom: {
-      keyConfig: keyConfigLayout.bottom,
-      name: nameSettingLayout.bottom,
-      color: {
-        bgColor: " #d8dde1",
-        textColor: "#b8c0c7,",
-        borderColor: "#d8dde1",
-      },
-      font: "Comfortaa",
-      textSize: "1.5rem",
-    },
+    index: 0,    
     configHeader: {
       keyConfig: keyConfigLayout.header,
       name: nameSettingLayout.header,
@@ -50,18 +39,7 @@ export const dataTypicallyColor: TSelectTypicallyColor[] = [
     },
   },
   {
-    index: 1,
-    configBottom: {
-      keyConfig: keyConfigLayout.bottom,
-      name: nameSettingLayout.bottom,
-      color: {
-        bgColor: " #040000,",
-        textColor: "#80679b",
-        borderColor: "#090709",
-      },
-      font: "Comfortaa",
-      textSize: "1.5rem",
-    },
+    index: 1,   
     configHeader: {
       keyConfig: keyConfigLayout.header,
       name: nameSettingLayout.header,
@@ -97,18 +75,7 @@ export const dataTypicallyColor: TSelectTypicallyColor[] = [
     },
   },
   {
-    index: 2,
-    configBottom: {
-      keyConfig: keyConfigLayout.bottom,
-      name: nameSettingLayout.bottom,
-      color: {
-        bgColor: "#000000",
-        textColor: "#f1ca28",
-        borderColor: "#f1ca28",
-      },
-      font: "Comfortaa",
-      textSize: "1.5rem",
-    },
+    index: 2,   
     configHeader: {
       keyConfig: keyConfigLayout.header,
       name: nameSettingLayout.header,
@@ -144,18 +111,7 @@ export const dataTypicallyColor: TSelectTypicallyColor[] = [
     },
   },
   {
-    index: 3,
-    configBottom: {
-      keyConfig: keyConfigLayout.bottom,
-      name: nameSettingLayout.bottom,
-      color: {
-        bgColor: "#F47C28",
-        textColor: "#D1D5E3 ",
-        borderColor: "#F47C28",
-      },
-      font: "Comfortaa",
-      textSize: "1.5rem",
-    },
+    index: 3,    
     configHeader: {
       keyConfig: keyConfigLayout.header,
       name: nameSettingLayout.header,

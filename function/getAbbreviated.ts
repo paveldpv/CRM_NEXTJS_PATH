@@ -1,5 +1,5 @@
 /**
- * return abbreviated from full name
+ * return abbreviated from full name organization
  * 
  * @param name 
  * 

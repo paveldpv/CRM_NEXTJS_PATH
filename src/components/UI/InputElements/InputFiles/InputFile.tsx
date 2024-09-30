@@ -15,6 +15,7 @@ export type TInputFile = {
     shouldValidate?: boolean | undefined
   ) => Promise<FormikErrors<{ files?: File }>> | Promise<void>;
   values?: FileList;
+  
 };
 
 const InputFile = forwardRef(({ setFieldValue, values }: TInputFile, ref: Ref<HTMLInputElement>) => {
@@ -63,7 +64,7 @@ const InputFile = forwardRef(({ setFieldValue, values }: TInputFile, ref: Ref<HT
       <>
         <Tooltip title={`Если необходимо`}>
           <label
-            className="  text-menu_color flex justify-center items-center items-center  font-bold w-full h-20 border-2 border-dashed  border-menu_color rounded-md xl:text-lg lg:text-xs sm:text-xs "
+            className="  text-menu_color flex justify-center  items-center  font-bold w-full h-20 border-2 border-dashed  border-menu_color rounded-md xl:text-lg lg:text-xs sm:text-xs "
             htmlFor={idInputFile}
           >
             <div className="flex  flex-col  items-center gap-2">

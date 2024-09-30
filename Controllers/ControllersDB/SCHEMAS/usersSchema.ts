@@ -38,6 +38,12 @@ export const userSchema = new Schema<TDBUser>({
     type:Boolean,
     default:false
   }
-});
-const modelUSer = models.user as Model<TDBUser>  || model<TDBUser>("user", userSchema);
-export default modelUSer;
+})
+
+
+
+
+
+const modelUser = models.user as Model<TDBUser>  || model<TDBUser >("user", userSchema);
+
+export default modelUser;

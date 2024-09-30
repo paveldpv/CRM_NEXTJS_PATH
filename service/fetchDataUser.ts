@@ -1,7 +1,7 @@
-import { TAnswerUpdateDB, TDBUser } from "@/Types/Types";
+import { TAnswerUpdateDB, TDBUser, TWithoutPassUser } from "@/Types/Types";
 
 export const fetchUpdateDataUser = async (
-  data: TDBUser
+  data: TWithoutPassUser
 ): Promise<TAnswerUpdateDB> => {
   try {
     const response = await fetch(`/api/datauser/${data.INN}/updatedatauser`, {
@@ -37,7 +37,7 @@ export const deleteUser = async (
   }
 };
 
-export const deletePhotoUser =async(INN:number,idUser:string,fullPath:string): Promise<TAnswerUpdateDB>=>{
+export const deletePhotoUser =async(INN:string,idUser:string,fullPath:string): Promise<TAnswerUpdateDB>=>{
   try {
     const response = await fetch(`/api/datauser/${INN}/deletePhoto`, {
       method: "POST",

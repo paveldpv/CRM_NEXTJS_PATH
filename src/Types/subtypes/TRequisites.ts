@@ -1,4 +1,5 @@
 import { TEntities, TValueFiled } from "../abstractsType/abstractsType";
+import { NotData } from "../enums";
 import { TResponseUploadFiles } from "../Types";
 
 
@@ -26,6 +27,6 @@ export type TRequisitesBank = {
    OGRN: TValueFiled<number|string>;
    OKVD: TValueFiled<string[]|string>;
    requisitesBank: TRequisitesBank;
-   srcRequisites: TResponseUploadFiles | "NOT_FOUND";
+   srcRequisites: TResponseUploadFiles |NotData.notFile;
    
  } & TEntities;

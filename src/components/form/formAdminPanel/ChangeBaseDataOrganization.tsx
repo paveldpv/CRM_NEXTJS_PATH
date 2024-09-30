@@ -31,17 +31,17 @@ export default function ChangeBaseDataOrganization({
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <span className="  rounded-sm p-1">«ООО»</span>
+                <span className="  rounded-sm p-1">«{defaultData.nameOrganization?.abbreviated}»</span>
               </InputAdornment>
             ),
-            style: { color: "#64A989", fontSize: 18, borderColor: "#64A989" },
+            style: { color: "#64A989", fontSize: 14, borderColor: "#64A989" },
           }}
           onChange={handlerChange}
           placeholder="Название организации"
           disabled={activeField}
-          defaultValue={defaultData?.nameOrganization}
+          defaultValue={defaultData?.nameOrganization?.fullName}
           {...styleTextFiled}
-          name="nameOrganization"
+          name="nameOrganization.fullName"
           multiline
           label="название организации"
         />

@@ -1,7 +1,5 @@
-import { idLink } from "@/Types/enums";
-import NavLink from "../UI/NavLink";
-import { signOut } from "next-auth/react";
-import { PiSignOutBold } from "react-icons/pi";
+import { signOut } from "next-auth/react"
+import { PiSignOutBold } from "react-icons/pi"
 
 export default function BottomNavBar() {
   const out = () => {

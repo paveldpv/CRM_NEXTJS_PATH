@@ -9,7 +9,7 @@ import React from "react";
 import { useDialogWindow } from "../../../../store/storeDialogWindow";
 import { typeDialog } from "@/Types/enums";
 
-export type TChangeOptionData = { INN: Number } & TFieldFormAdminPanel;
+export type TChangeOptionData = { INN: string } & TFieldFormAdminPanel;
 
 /**
  * update,viewing and redaction data:

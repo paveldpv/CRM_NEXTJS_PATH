@@ -7,7 +7,12 @@ export enum idLink {
   statistic = "statistic",
   price = "pice",
   setting = 'setting',
-  out='out'
+  out='out',
+  setting_profile='setting_profile',
+  setting_app='setting_app',
+  setting_organization ="setting_organization",
+  setting_history_entry_location='setting_history_entry_location'
+
 }
 export enum nameSettingLayout {
   header = "Настройка Шапки",
@@ -36,4 +41,8 @@ export enum typicalError {
   not_geo = "NOT_GEO",
   not_valid_password ='NOT_VALID_PAS',
   error_DB = "ERROR_DB"
+}
+export enum NotData {
+  notStringData = "не задано",
+  notFile = "NOT_FOUND"
 }

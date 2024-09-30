@@ -1,4 +1,4 @@
-import { _ALLOWINN } from "../config/_ALLOWINN";
+import { _ALLOW_INN } from "../config/_ALLOWINN";
 /**
  *  compare current inn  with allow list inn
  * 
@@ -7,7 +7,7 @@ import { _ALLOWINN } from "../config/_ALLOWINN";
  * @param INN 
  * @returns boolean
  */
-export const changeAllowINN = (INN: number): boolean => {  
-   return _ALLOWINN.includes(INN);
+export const isAllowINN = (INN: string): boolean => {  
+   return _ALLOW_INN.includes(INN);
  };
 

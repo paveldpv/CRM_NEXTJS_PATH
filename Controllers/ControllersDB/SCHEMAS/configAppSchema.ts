@@ -1,6 +1,6 @@
 
 import { TConfigAPP } from "@/Types/subtypes/TAppearanceConfigApp";
-import { Schema, model, models } from "mongoose";
+import { Model, Schema, model, models } from "mongoose";
 
 
 
@@ -40,5 +40,5 @@ export const configSchema = new Schema<TConfigAPP>({
     keyConfig: String,
   },
 });
-const modelConfig = models.config || model<TConfigAPP>("config", configSchema);
+const modelConfig = models.configSchema as Model<TConfigAPP> || model<TConfigAPP>("configSchema", configSchema);
 export default modelConfig;

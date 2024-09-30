@@ -1,4 +1,4 @@
-import { model, Schema, models } from "mongoose";
+import { model, Schema, models, Model } from "mongoose";
 
 import { TRequestPrevCalc } from "@/Types/subtypes/TRequestPrevCalc";
 
@@ -73,6 +73,6 @@ export const prevCalcSchema = new Schema<TRequestPrevCalc>({
   },
 });
 
-const modelPrevCalc = models.prevCalc || model<TRequestPrevCalc>("prevCalc", prevCalcSchema);
+const modelPrevCalc = models.prevCalc as Model<TRequestPrevCalc> || model<TRequestPrevCalc>("prevCalc", prevCalcSchema);
 
 export default modelPrevCalc;

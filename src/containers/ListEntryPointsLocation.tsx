@@ -1,7 +1,7 @@
 
 import moment from "moment";
 import Image from "next/image";
-import { mapCity } from "../../config/_thirdPartyResources/srcImage";
+import { mapCity } from "../../config/urls";
 import { PURPOSE_USE } from "@/Types/subtypes/TGeoLocation";
 import { TListEntryPointsLocation } from "@/app/[INN]/main/setting/historyEntryLocation/[...FILTER]/page";
 
@@ -29,7 +29,7 @@ export default function ListEntryPointsLocation({ dataEntryUsers }: Omit<TListEn
         return (
           <ul key={index} className="grid     grid-cols-4 gap-2 mt-2">
             <li>
-              <ul className=" itemList ">
+              <ul className=" itemList ">                
                 <li>{personalData.name}</li>
                 <li>{personalData.surname}</li>
                 <li>{personalData.lastName}</li>

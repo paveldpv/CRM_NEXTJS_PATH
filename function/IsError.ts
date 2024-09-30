@@ -7,7 +7,12 @@ import { TError } from "@/Types/subtypes/TError";
  * @returns boolean
  */
 
-export const isError = (data: any| TError): data is TError => {  
+export const isError =<T> (data: any| TError): data is TError => {  
   
-  return data.hasOwnProperty('error');
+    return (data as TError)?.error!==undefined
+ // return data?.hasOwnProperty('error');
 };
+
+// function isFish(pet: Fish | Bird): pet is Fish {
+//   return (pet as Fish).swim !== undefined;
+// }

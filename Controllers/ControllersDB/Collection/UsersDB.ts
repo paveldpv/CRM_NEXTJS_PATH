@@ -1,97 +1,62 @@
-import { TAnswerUpdateDB, TDBUser } from "@/Types/Types";
+import { TDBUser } from "@/Types/Types";
 import { connect } from "mongoose";
 import modelUSer from "../SCHEMAS/usersSchema";
+import ContextOrganization from "../../classes/contextOrganization";
 
-const addNewAdmin = async (data: TDBUser): Promise<TAnswerUpdateDB> => {
-  try {
-    await connect(`${process.env.DB_URL}${data.INN}`);
+export default class ControllerDBUser extends ContextOrganization {
+  constructor(INN: string) {
+    super(INN);
+  }
+
+  public async addNewUser(data: TDBUser): Promise<void> {
+    await connect(`${process.env.DB_URL}${this.INN}`);
     const newAdmin = new modelUSer(data);
     await newAdmin.save();
-    // connectDB.connection.close();
-
-    return {
-      success: true,
-    };
-  } catch (error) {
-    throw error;
   }
-};
 
-const getUsers = async (INN: string): Promise<TDBUser[] | null> => {
-  try {
-    const connectDB = await connect(`${process.env.DB_URL}${INN}`);
-    const dataUSer = await modelUSer.find({},{safeDeleted:false});
-
-    // connectDB.connection.close();
+  public async getUsers(): Promise<TDBUser[] | []> {
+    await connect(`${process.env.DB_URL}${this.INN}`);
+    const dataUSer = await modelUSer.find({}, { safeDeleted: false });
     return dataUSer;
-  } catch (error) {
-    throw error;
   }
-};
 
-const getUserByParams = async (INN: string, user: Partial<TDBUser>): Promise<TDBUser | null> => {
-  try {
-    await connect(`${process.env.DB_URL}${INN}`);
-    const dataUSer: TDBUser | null = await modelUSer.findOne(user);
-
+  public async getUsersWithDeleted(): Promise<TDBUser[] | []> {
+    await connect(`${process.env.DB_URL}${this.INN}`);
+    const dataUSer = await modelUSer.find({});
     return dataUSer;
-  } catch (error) {
-    throw error;
   }
-};
 
-const getUser = async (INN: string, idUser: string): Promise<TDBUser | null> => {
-  try {
-    await connect(`${process.env.DB_URL}${INN}`);
-    const dataUSer: TDBUser | null = await modelUSer.findOne({ idUSer: idUser });
-    // connectDB.connection.close();
+  public async getUsersByParams(params: Partial<TDBUser>): Promise<TDBUser | null> {
+    await connect(`${process.env.DB_URL}${this.INN}`);
+    const dataUSer = await modelUSer.findOne(params,);
     return dataUSer;
-  } catch (error) {
-    throw error;
   }
-};
 
-const updateDataUser = async (INN: string, data: TDBUser): Promise<TAnswerUpdateDB> => {
-  try {
-    await connect(`${process.env.DB_URL}${data.INN}`);
-    const update = await modelUSer.updateOne({ idUser: data.idUser }, data);
-    //connectDB.connection.close();
-
-    return {
-      success: true,
-    };
-  } catch (error) {
-    throw error;
+  public async getUserByID(idEmployee: string): Promise<TDBUser | null> {
+    await connect(`${process.env.DB_URL}${this.INN}`);
+    const dataUser = await modelUSer.findOne({ idUser: idEmployee });
+    return dataUser;
   }
-};
-
-const removePhotoToDB = async (INN: string, idUser: string): Promise<TAnswerUpdateDB> => {
-  try {
-    await connect(`${process.env.DB_URL}${INN}`);
-    const update = await modelUSer.updateOne({ idUser: idUser }, { $set: { srcPhoto: "NOT_FOUND" } });
-    //connectDB.connection.close();
-
-    return {
-      success: true,
-    };
-  } catch (error) {
-    throw error;
+  
+  public async updateDataUser(updateDataUser: TDBUser): Promise<void> {
+    await connect(`${process.env.DB_URL}${this.INN}`);
+    await modelUSer.updateOne({ idUser: updateDataUser.idUser }, updateDataUser);
   }
-};
-const getUsersByListID = async(INN:string,listID:string[]) =>{
-  await connect(`${process.env.DB_URL}${INN}`);
-  return JSON.parse(JSON.stringify(await modelUSer.find({idUser:{$in:listID}})))
+
+  public async deletedPhotToDB(idEmployee: string): Promise<void> {
+    await connect(`${process.env.DB_URL}${this.INN}`);
+    await modelUSer.updateOne({ idUser: idEmployee }, { $set: { srcPhoto: "NOT_FOUND" } });
+  }
+
+  public async getUsersByGroupID(listID: string[]): Promise<TDBUser[] | []> {
+    await connect(`${process.env.DB_URL}${this.INN}`);
+    return await modelUSer.find({ idUser: { $in: listID } });
+  }
+  
+  public async getAdmins():Promise<TDBUser[]|[]>{
+    await connect(`${process.env.DB_URL}${this.INN}`)
+    return await modelUSer.find({},{linksAllowed:"ADMIN"})
+  }
 
 }
 
-
-const ControllerUsersDB = {
-  addNewAdmin,
-  getUser,
-  getUserByParams,
-  getUsers,
-  updateDataUser,
-  removePhotoToDB,
-  getUsersByListID
-};
-export default ControllerUsersDB;

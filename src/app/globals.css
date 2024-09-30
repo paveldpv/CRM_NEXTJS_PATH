@@ -20,6 +20,15 @@
   grid-column-gap: 0px;
   grid-row-gap: 0px;
 }
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active{
+   -webkit-box-shadow: 0 0 0 30px #64A989 inset !important;
+   -webkit-text-fill-color: #ffffff !important;
+}
+
 .customInput {
   @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
 }

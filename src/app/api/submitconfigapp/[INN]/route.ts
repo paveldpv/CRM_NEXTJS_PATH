@@ -1,20 +1,21 @@
-import { NextResponse, NextRequest } from "next/server";
-import { TConfigAPP } from "@/Types/Types";
-import ControllerConfigApp from "../../../../../Controllers/Service/ConfigApp";
+import { TConfigAPP } from '@/Types/subtypes/TAppearanceConfigApp'
+import { NextRequest, NextResponse } from 'next/server'
+import { ServiceConfigApp } from '../../../../../Controllers/Service/serviceConfigApp'
 
-export async function POST(req: NextRequest, { params }: { params: { INN: string } }, res: NextResponse) {
-  const INN = params.INN;
+export async function POST(
+	req: NextRequest,
+	{ params }: { params: { INN: string } },
+	res: NextResponse
+) {
+	const INN = params.INN
+	const requestData = await req.json()
+	const { dataConfig } = requestData as {
+		dataConfig: TConfigAPP
+	}
 
-  const { idUser, dataConfig } = (await req.json()) as { idUser: string; dataConfig: TConfigAPP };
-  const updateConfigApp = await ControllerConfigApp.updateConfigApp(+INN, idUser, dataConfig);
+	const serviceConfigApp = new ServiceConfigApp(INN)
 
-  console.log("🚀 ~ POST ~ updateConfigApp :", updateConfigApp);
+	const response = await serviceConfigApp.updatePersonalConfig(dataConfig)
 
-  if (!updateConfigApp) {
-    return NextResponse.json({
-      status: 500,
-    });
-  }
-
-  return NextResponse.json({ ...updateConfigApp, status: 200 });
+	return NextResponse.json(response || 'OK', { status: 200 })
 }

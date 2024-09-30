@@ -1,5 +1,5 @@
 "use Client";
-import { TSketchDetail } from "@/Types/Types";
+
 
 import { useState, useCallback, useMemo, SetStateAction, Dispatch } from "react";
 
@@ -11,6 +11,7 @@ import { Tooltip } from "@mui/material";
 
 import PreviewSketch from "./PreviewSketc/PreviewSketch";
 import NewSketch from "./NewSketch/NewSketch";
+import { TSketchDetail } from "@/Types/subtypes/TRequestPrevCalc";
 
 export default function SketchDetail({dataSketchDetail,setDataSketchDetail}: {
   dataSketchDetail: TSketchDetail[] | undefined;

@@ -1,4 +1,4 @@
-import { TDBUser } from "@/Types/Types";
+import { TDBUser, TWithoutPassUser } from "@/Types/Types";
 
 
 
@@ -14,7 +14,7 @@ import TextField from "@mui/material/TextField";
 type TChangeDataProfile = {
   visible: boolean;
   handlerChange: any;
-  values: TDBUser;
+  values: TWithoutPassUser;
   setFieldValue?:(field: string, value: any, shouldValidate?: boolean | undefined) => Promise<void> |Promise<FormikErrors<TDBUser>>
 };
 
@@ -25,6 +25,8 @@ export default function ChangeDataProfile({
   values,
   setFieldValue
 }: TChangeDataProfile) {
+  console.log(values);
+  
   if (visible) {
     return (
       <section className=" flex justify-center items-center  border-r-2 border-solid border-menu_color col-span-2  ">

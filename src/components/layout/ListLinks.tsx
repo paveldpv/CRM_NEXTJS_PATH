@@ -9,13 +9,13 @@ type TListLink = {
   
 };
 
-export default function ListLinks({ listLinks = [], className }: TListLink) {
-   
+export default function ListLinks({ listLinks = [], className }: TListLink) {   
 
   return (
     <>
       {listLinks.map((link, index) => (
         <NavLink          
+          paramsHref={link?.paramsHref}
           id={link.id}
           title={link.title}
           href={link.href}

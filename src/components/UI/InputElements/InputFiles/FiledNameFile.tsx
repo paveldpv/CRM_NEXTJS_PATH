@@ -16,7 +16,7 @@ type TFiledNameFile = {
   const mouseLeave = useCallback(() => {
     setHover(false);
   }, []);
-  const mouseEntry = useCallback((index: number) => {
+  const mouseEntry = useCallback(() => {
     setHover(true);
   }, []);
   const [hover, setHover] = useState(false);
@@ -26,7 +26,7 @@ type TFiledNameFile = {
       "files",
       [...values].filter((item) => item.name != file.name)
     );
-  }, [file]);
+  }, [file.name, setFieldValue, values]);
 
   return (
     <li className=" text-xs flex justify-between ">

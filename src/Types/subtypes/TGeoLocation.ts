@@ -4,6 +4,7 @@ export type TGeoLocation = {
   process: PURPOSE_USE;
   idEmployee: string;
   ip?: string;
+  descriptionProcess?:string//?enums
 };
 export type TCoordinateLocation = {
   latitude: number;

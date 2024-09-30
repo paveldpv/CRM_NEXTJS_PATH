@@ -1,12 +1,17 @@
-import { TRequestPrevCalc } from "@/Types/Types";
-import { NextRequest, NextResponse } from "next/server";
-import ControllerPrevCalc from "../../../../../Controllers/Service/PrevCalc";
+import { TRequestPrevCalc } from '@/Types/subtypes/TRequestPrevCalc'
+import { NextRequest, NextResponse } from 'next/server'
+import { ServicePrevCalc } from '../../../../../Controllers/Service/servicePrevCalc'
 
-export async function POST(req: NextRequest, { params }: { params: { INN: number } }, res: NextResponse) {
-  const INN = params.INN;
-  const data = (await req.json()) as TRequestPrevCalc;
+export async function POST(
+	req: NextRequest,
+	{ params }: { params: { INN: string } },
+	res: NextResponse
+) {
+	const INN = params.INN
+	const requestData = (await req.json()) as TRequestPrevCalc
 
-  const saveRequest = await ControllerPrevCalc.saveRequest(INN, data);
+	const servicePrevCalc = new ServicePrevCalc(INN)
+	const saveRequest = await servicePrevCalc.saveRequest(requestData)
 
-  return NextResponse.json(saveRequest);
+	return NextResponse.json(saveRequest)
 }

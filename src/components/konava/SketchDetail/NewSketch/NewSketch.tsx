@@ -1,5 +1,5 @@
 "use client";
-import { TLine, TParamsSegment, TSketchDetail } from "@/Types/Types";
+// import { TLine } from "@/Types/Types";
 
 import { Dispatch, SetStateAction, useEffect, useState, useCallback, memo, useRef } from "react";
 
@@ -20,6 +20,7 @@ const Scene = dynamic(() => import("./Scene/Scene"), { ssr: false });
 import HelpInformerModalWindow from "@/components/additional/HelpInformerModalWindow";
 
 import { dataHelperForFormPrevCalc } from "@/components/form/formPrevCalc/_DataHelperInfo";
+import { TLine, TParamsSegment, TSketchDetail } from '@/Types/subtypes/TRequestPrevCalc'
 
 
 
@@ -28,6 +29,7 @@ export type TNewSketch = {
   setOpen?: Dispatch<SetStateAction<boolean>>;
   setIdRedactSketch?: Dispatch<SetStateAction<string | undefined>>;
 } & Partial<TSketchDetail>;
+
 
 function NewSketch({ setDataSketchDetail, idSketch, lines, params, setOpen, setIdRedactSketch }: TNewSketch) {
   const setOpenHelpWindow = useHelInformer((state) => state.setOpen);

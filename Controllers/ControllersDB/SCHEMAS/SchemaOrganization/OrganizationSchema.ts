@@ -1,8 +1,10 @@
-import { Model, Schema, model, models } from "mongoose";
+import mongoose, { Model, Mongoose, Schema, model, models } from "mongoose";
 
 import { TDataOrganization } from "@/Types/subtypes/TOrganization";
 
 import { requisitesSchema } from "./RequisitesSchema";
+
+
 
 export const organizationSchema = new Schema<TDataOrganization>({
   INN: {
@@ -25,54 +27,7 @@ export const organizationSchema = new Schema<TDataOrganization>({
       },
     },
   },
-  // requisites: {
-  //   type: requisitesSchema,
-  //   default: {
-  //     INN: {
-  //       title: "ИНН",
-  //     },
-  //     KPP: {
-  //       title: "КПП",
-  //     },
-  //     legalAddress: {
-  //       title: "Юр.Адрес",
-  //     },
-  //     mailAddress: {
-  //       title: "почтовый адрес",
-  //     },
-  //     phone: {
-  //       title: "тел.",
-  //     },
-  //     nameDirector: {
-  //       title: "Директор",
-  //     },
-  //     email: {
-  //       title: "эл.почта",
-  //     },
-  //     OGRN: {
-  //       title: "ОГРН",
-  //     },
-  //     OKVD: {
-  //       title: "ОКВЭД",
-  //     },
-
-  //     requisitesBank: {
-  //       checkingAccount: {
-  //         title: "расчетный счет",
-  //       },
-  //       nameBank: {
-  //         title: "банк",
-  //       },
-  //       korAccount: {
-  //         title: "кор.счет",
-  //       },
-  //       BIK: {
-  //         title: "БИК",
-  //       },
-  //     },
-  //     srcRequisites: "NOT_FOUND",
-  //   },
-  // },
+  
   paramsEmailNewsletter: {
     type: {
       password: String,
@@ -121,10 +76,19 @@ export const organizationSchema = new Schema<TDataOrganization>({
       }
     }
   }
-});
+})
+
+
+
+
+
 
 const modelOrganization =
   (models.organizationSchema as Model<TDataOrganization>) ||
   model<TDataOrganization>("organizationSchema", organizationSchema);
+
+
+  
+
 
 export default modelOrganization;

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function page({ params }: { params: { INN: string } }) {
   const INN = Number(params.INN);
 
-  console.log("🚀 ~ page ~ INN:", INN)
+  
   return (
     <>
       <FormPrevCalc INN={INN} />

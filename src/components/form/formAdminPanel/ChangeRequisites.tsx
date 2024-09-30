@@ -1,198 +1,185 @@
 "use client";
 import { TFieldFormAdminPanel } from "./FormAdminPanel";
 
-import React, { useId, useState, useCallback, memo, useEffect, useMemo } from "react";
-import { useMiniLoader } from "../../../../store/storeMiniLoader";
-
-import MiniLoader from "@/components/UI/Loaders/MiniLoader";
+import { useId, memo, useMemo } from "react";
 
 import { FaFileUpload } from "react-icons/fa";
+import { IoIosWarning } from "react-icons/io";
+import { FaDownload } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+
 import { FaArrowCircleDown } from "react-icons/fa";
 import { Accordion, AccordionDetails, AccordionSummary, TextField, Tooltip } from "@mui/material";
-
 import { styleTextFiled } from "../../../../config/muiCustomStyle/textField";
-import { TRequisites, TValueFiledRequisites } from "@/Types/subtypes/TOrganization";
+import { TRequisites } from "@/Types/subtypes/TRequisites";
+import { NotData } from "@/Types/enums";
+import InputFile from "@/components/UI/InputElements/InputFiles/InputFile";
+import { File } from "buffer";
+import { FormikErrors } from "formik";
+import { TResponseUploadFiles } from "@/Types/Types";
+import { formatBytes } from "../../../../function/helpers/formatBytes";
+import { TFullDataSettingOrganization } from "@/app/[INN]/main/setting/settingorganization/page";
 
-export type TChangeRequisites = {} & TFieldFormAdminPanel;
+export type TChangeRequisites = {
+  defaultData: Partial<TRequisites>;
+ setFieldValue:(field: string, value: any, shouldValidate?: boolean) => Promise<FormikErrors<TFullDataSettingOrganization>> | Promise<void>
+} & Omit<TFieldFormAdminPanel, "defaultData">;
 
-function ChangeRequisites({ activeField, defaultData, handlerChange }: TChangeRequisites) {
-  const { requisites, ...otherOption } = defaultData;
-  const { requisitesBank, srcRequisites, _id, ...baseRequisites } = requisites!;
+function ChangeRequisites({ activeField, defaultData, handlerChange, setFieldValue }: TChangeRequisites) {
+  const { safeDeleted, srcRequisites, requisitesBank, ...baseRequisites } = defaultData;
 
-
-
-  const initialFieldBaseRequisites: {
-    name: string;
-    data: TValueFiledRequisites<string | number | string[]>;
-  }[] = useMemo(() => {
-    let res = [];
+  const arrBaseRequisites = useMemo(() => {
+    let arr = [];
     for (const key in baseRequisites) {
-      const data = baseRequisites[key] as TValueFiledRequisites<string | number | string[]>;
-      res.push({
-        name: key,
-        data,
-      });
+      let objData = {
+        name: `${key}.value`,
+        // @ts-ignore: error message
+        title: baseRequisites[key]?.title,
+        // @ts-ignore: error message
+        value: baseRequisites[key]?.value,
+      };
+      arr.push(objData);
     }
-    return res;
-  }, [defaultData]);
+    return arr;
+  }, [baseRequisites]);
 
-  const initialFieldBankRequisites = useMemo(() => {
-    let res = [];
+  const arrBankRequisites = useMemo(() => {
+    let arr = [];
     for (const key in requisitesBank) {
-      if (key !== "_id") {
-        const data = requisitesBank[key];
-        res.push({
-          name: key,
-          data,
-        });
-      }
+      let objData = {
+        name: `${key}.value`,
+        title: requisitesBank[key].title,
+        value: requisitesBank[key].value?.toString(),
+      };
+      arr.push(objData);
     }
-    return res;
-  }, [defaultData]);
+    return arr;
+  }, [requisitesBank]);
+
+  const missingSrcRequisites = useMemo(() => {
+    return srcRequisites === "NOT_FOUND";
+  }, [srcRequisites]);
+
+  const missingDataRequisites = useMemo(() => {
+    const missingBankRequisites = arrBankRequisites.find((el) => el.value === NotData.notStringData);
+    if (missingBankRequisites) {
+      return true;
+    }
+    const missingBaseRequisites = arrBaseRequisites.find((el) => el.value === NotData.notStringData);
+    if (missingBaseRequisites) {
+      return true;
+    }
+  }, [arrBankRequisites, arrBaseRequisites]);
 
   const idInput = useId();
-  const [loader, setLoader] = useMiniLoader((state) => [state.visible, state.setVisibleLoader]);
-  const [dataRequisites, setDataRequisites] = useState(requisites);
 
-  const [arrFieldBaseRequisites, setArrFieldBaseRequisites] = useState(initialFieldBaseRequisites);
-  const [arrFieldBankRequisites, setFieldBankRequisites] = useState(initialFieldBankRequisites);
+  return (
+    <fieldset
+      className="border-2 border-solid border-menu_color p-3 text-xs  rounded-xs  rounded-md col-span-2"
+      // onDragEnter={dragEntry}
+    >
+      <ul className=" flex gap-2">
+        <li>
+          {missingDataRequisites && (
+            <Tooltip title={`отсутствуют  данные`} className="  text-2xl text-red-400 w-9">
+              <span>
+                <IoIosWarning />
+              </span>
+            </Tooltip>
+          )}
+        </li>
+        <li>
+          {missingSrcRequisites && (
+            <Tooltip title={"не прикреплены реквизиты"} className="  text-2xl text-red-400">
+              <span>
+                <FaFileUpload />
+              </span>
+            </Tooltip>
+          )}
+        </li>
+      </ul>
 
-  const [activeFieldFile, setActiveFieldFile] = useState(false);
-
-  useEffect(() => setLoader(true), []);
-
-  //#region dragFile
-  const dragEntry = useCallback((e: React.DragEvent<HTMLFieldSetElement>) => {
-    setActiveFieldFile(true);
-  }, []);
-  const dragLeave = useCallback((e: React.DragEvent<HTMLLabelElement>) => {
-    setActiveFieldFile(false);
-  }, []);
-  const dragOver = useCallback((e: React.DragEvent<HTMLLabelElement>) => {
-    e.preventDefault();
-  }, []);
-
-  const drop = useCallback(async (e: React.DragEvent<HTMLLabelElement>) => {
-    e.stopPropagation();
-    e.preventDefault();
-    setLoader(true)
-    const file = e.dataTransfer.files[0]
-    // auto definition requisites
-  }, []);
-  //#endregion
-  
-  const onChangeFile = useCallback(async(e:React.ChangeEvent<HTMLInputElement>)=>{
-    e.preventDefault()
-    e.stopPropagation()
-    setLoader(true)
-    if(!e.target.files || e.target.files.length === 0)return
-    const file = e.currentTarget.files     
-
-  },[])
-
-  if (activeFieldFile) {
-    return (
-      <label
-        onDrop={drop}
-        onDragOver={dragOver}
-        onDragLeave={dragLeave}
-        className=" flex justify-center items-center w-full h-full border-2  mt-3 border-dashed border-menu_color p-3 text-4xl  rounded-xs  rounded-md col-span-2 "
-        htmlFor={idInput}
-      >
-        <input multiple={false} type="file" id={idInput} hidden accept="application/pdf, .docx" />
-        <FaFileUpload />
-      </label>
-    );
-  } else {
-    return (
-      <fieldset
-        className="border-2 border-solid border-menu_color p-3 text-xs  rounded-xs  rounded-md col-span-2"
-        onDragEnter={dragEntry}
-      >
-        <Tooltip title="для автозаполнения добавьте файл с реквзитами ">
-          <legend className=" pr-1 pl-1 flex  gap-2">
-            <span>Реквизиты</span>
-            <label htmlFor={idInput} className=" text-sm cursor-pointer hover:text-color_header">
-              <FaFileUpload />
-            </label>
-            <input onChange={onChangeFile} accept="application/pdf, .docx" multiple={false} type="file" id={idInput} hidden />
-          </legend>
-        </Tooltip>
-        {loader ? (
-          <div className=" flex justify-center items-center mt-24">
-            <MiniLoader />
-          </div>
+      <ul className=" flex flex-col gap-2">
+        <Accordion>
+          <AccordionSummary
+            expandIcon={
+              <p className=" text-2xl">
+                <FaArrowCircleDown />
+              </p>
+            }
+          >
+            <h5 className=" underline font-bold">Реквизиты</h5>
+          </AccordionSummary>
+          <AccordionDetails className=" p-4 flex flex-col gap-2">
+            {arrBaseRequisites.map((item, index) => (
+              <TextField
+                error={NotData.notStringData === item.value}
+                key={index}
+                {...styleTextFiled}
+                defaultValue={item.value}
+                disabled={activeField}
+                fullWidth
+                multiline
+                onChange={handlerChange}
+                placeholder={item.title}
+                name={item.name}
+                label={item.title}
+              />
+            ))}
+          </AccordionDetails>
+        </Accordion>
+        <hr />
+        <Accordion>
+          <AccordionSummary
+            expandIcon={
+              <p className=" text-2xl">
+                <FaArrowCircleDown />
+              </p>
+            }
+          >
+            <h5 className=" underline font-bold">Банковские реквизиты</h5>
+          </AccordionSummary>
+          <AccordionDetails className=" p-4 flex flex-col gap-2 border-b border-menu_color border-2 pb-4">
+            {arrBankRequisites.map((item, index) => (
+              <TextField
+                error={NotData.notStringData === item.value}
+                key={index}
+                {...styleTextFiled}
+                defaultValue={item.value}
+                disabled={activeField}
+                fullWidth
+                multiline
+                onChange={handlerChange}
+                placeholder={item.title}
+                name={item.name}
+                label={item.title}
+              />
+            ))}
+          </AccordionDetails>
+        </Accordion>
+        {missingSrcRequisites ? (
+          <></>
+          // <InputFile setFieldValue={setFieldValue} />
         ) : (
-          <ul className=" flex flex-col gap-2">
-            <Accordion>
-              <AccordionSummary
-                expandIcon={
-                  <p className=" text-2xl">
-                    <FaArrowCircleDown />
-                  </p>
-                }
-              >
-                <h5 className=" underline font-bold">Реквизиты</h5>
-              </AccordionSummary>
-              <AccordionDetails className=" p-4 flex flex-col gap-2">
-                {arrFieldBaseRequisites.map((item, index) => (
-                  <TextField
-                    key={index}
-                    {...styleTextFiled}
-                    defaultValue={item.data.value?.toString()}
-                    disabled={activeField}
-                    fullWidth
-                    multiline
-                    onChange={handlerChange}
-                    placeholder={item.data.title}
-                    name={item.name}
-                    label={item.data.title}
-                  />
-                ))}
-                {typeof dataRequisites?.srcRequisites === "string" ? (
-                  <input type="file" />
-                ) : (
-                  <Tooltip title={`размер файла - ${dataRequisites?.srcRequisites.size || "не определен"}`}>
-                    <a download href={dataRequisites?.srcRequisites.FullPath}>
-                      {dataRequisites?.srcRequisites.NameFile} - скачать
-                    </a>
-                  </Tooltip>
-                )}
-              </AccordionDetails>
-            </Accordion>
-            <hr />
-            <Accordion>
-              <AccordionSummary
-                expandIcon={
-                  <p className=" text-2xl">
-                    <FaArrowCircleDown />
-                  </p>
-                }
-              >
-                <h5 className=" underline font-bold">Банковские реквизиты</h5>
-              </AccordionSummary>
-              <AccordionDetails className=" p-4 flex flex-col gap-2">
-                {arrFieldBankRequisites.map((item, index) => (
-                  <TextField
-                    key={index}
-                    {...styleTextFiled}
-                    defaultValue={item.data.value?.toString()}
-                    disabled={activeField}
-                    fullWidth
-                    multiline
-                    onChange={handlerChange}
-                    placeholder={item.data.title}
-                    name={item.name}
-                    label={item.data.title}
-                  />
-                ))}
-              </AccordionDetails>
-            </Accordion>
-          </ul>
+          <div>
+            <button className=" text-2xl text-highlight_three p-2">
+              <MdDelete />
+            </button>
+
+            <Tooltip
+              className=" text-highlight_three text-2xl p-2"
+              title={srcRequisites !== NotData.notFile ? formatBytes(srcRequisites?.size) : ""}
+            >
+              <a href={srcRequisites !== NotData.notFile ? srcRequisites?.FullPath : ""} download>
+                <FaDownload />
+              </a>
+            </Tooltip>
+          </div>
         )}
-      </fieldset>
-    );
-  }
+      </ul>
+    </fieldset>
+  );
+  // }
 }
 
 /**

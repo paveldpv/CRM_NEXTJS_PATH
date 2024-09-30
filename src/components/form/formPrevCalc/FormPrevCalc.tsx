@@ -1,13 +1,9 @@
 "use client";
-import {
-  TInitialValuesFormPrevCalc,
-  TRequestPrevCalc,
-  TResponseUploadFiles,
-  TSketchDetail,
-} from "@/Types/Types";
+import { TResponseUploadFiles } from "@/Types/Types";
 import { typeDialog } from "@/Types/enums";
 
 import { motion } from "framer-motion";
+import { styleTextFiled } from "../../../../config/muiCustomStyle/textField";
 
 import { useFormik } from "formik";
 import { useState, useEffect } from "react";
@@ -26,6 +22,7 @@ import SketchDetail from "@/components/konava/SketchDetail/SketchDetail";
 
 import validateSchemaPrevCalc from "./validateSchemaPrevCalc";
 import { useProcessLoader } from "../../../../store/storeProcessLoader";
+import { TInitialValuesFormPrevCalc, TRequestPrevCalc, TSketchDetail } from "@/Types/subtypes/TRequestPrevCalc";
 
 export default function FormPrevCalc({ INN }: { INN: number }) {
   const [setOpenDialogWindow, setDispatchFn] = useDialogWindow((state) => [
@@ -72,7 +69,7 @@ export default function FormPrevCalc({ INN }: { INN: number }) {
       }
 
       setStatusProgressLader("Отправка формы...");
-      const dataPrevCalc: TRequestPrevCalc = {
+      const dataPrevCalc: Omit<TRequestPrevCalc,'safeDeleted'> = {
         dataClient: { ...values, files: responseUploadFile },
         dataSketch: dataSketchDetail,
       };
@@ -100,7 +97,7 @@ export default function FormPrevCalc({ INN }: { INN: number }) {
     } else {
       setVisibleProgressLoader({ visible: true, step: 1 });
       setStatusProgressLader("Отправка формы...");
-      const dataPrevCalc: TRequestPrevCalc = {
+      const dataPrevCalc: Omit<TRequestPrevCalc,'safeDeleted'> = {
         dataClient: values,
         dataSketch: dataSketchDetail,
       };
@@ -176,16 +173,7 @@ export default function FormPrevCalc({ INN }: { INN: number }) {
         <div className="flex flex-col gap-2  ">
           {fieldDataPrevCalc.map((item, index) => (
             <TextField
-              InputLabelProps={{
-                style: { color: "#4F5162" },
-              }}
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  "&.Mui-focused fieldset": {
-                    borderColor: "#4F5162",
-                  },
-                },
-              }}
+              {...styleTextFiled}
               multiline={item?.multiline}
               label={item.placeholder}
               onChange={handleChange}

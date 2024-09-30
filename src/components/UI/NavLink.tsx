@@ -1,7 +1,7 @@
 "use client";
 import { TLink } from "@/Types/Types";
 import { usePathname } from "next/navigation";
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import Link, { type LinkProps } from "next/link";
 
 import IconNav from "../additional/IconNav";
@@ -12,11 +12,16 @@ type children = {
   children?: React.ReactNode;
   className?: string;
 };
-function NavLink({ className, description = ``, title = ``, id, children, ...props }: TPropsNavLink) {
+function NavLink({ paramsHref = [], className, description = ``, title = ``, id, children, href, ...props }: TPropsNavLink) {
   const pathName = usePathname();
-  const activeLink = pathName.includes(props.href);
-  const INN = pathName.split('/').filter(param=>!!param)[0]
- 
+  const activeLink = pathName.includes(href);
+  const INN = pathName.split("/").filter((param) => !!param)[0];
+  const PHONE = pathName.split("/").filter((param) => !!param)[1];
+
+  let link = `/${INN}/${PHONE}/main/${href}`;
+  if (paramsHref.length != 0) {
+    link += "/" + paramsHref.join("/");
+  }
 
   return (
     <span
@@ -24,7 +29,7 @@ function NavLink({ className, description = ``, title = ``, id, children, ...pro
         activeLink ? "bg-color_header  text-menu_color" : "bg-menu_color text-list_menu_even  "
       } `}
     >
-      <Link  className="flex  gap-2 items-center    mx-auto my-0  " href={`/${INN}/main/${props.href}`}>
+      <Link className="flex  gap-2 items-center    mx-auto my-0  " href={link}>
         <span className=" text-2xl ">{id && <IconNav id={id} />}</span>
         <span className=" truncate text-xs  ">{title}</span>
       </Link>

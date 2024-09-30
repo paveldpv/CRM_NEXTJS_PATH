@@ -16,6 +16,10 @@ export const geoLocationSchema = new Schema<TGeoLocation>({
     type: Date,
     required: true,
   },
+  descriptionProcess:{
+    type:String,
+    required:false
+  },
   process: {
     type: String,
     required: true,

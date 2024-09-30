@@ -22,14 +22,15 @@ export type TTelegramParams = {
   idTelegramBot: string;
   hrefChat: string;
 };
+export type TNameOrganization = {
+  abbreviated: string;
+    fullName: string;
+}
 
 export type TDataOrganization = {
   INN: number | string;
   dateRegistration: Date;
-  nameOrganization: {
-    abbreviated: string;
-    fullName: string;
-  };
+  nameOrganization:TNameOrganization
   // requisites: TRequisites;
   paramsEmailNewsletter: TEmai;
   seal: TResponseUploadFiles | "NOT_FOUND";

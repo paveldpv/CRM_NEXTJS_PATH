@@ -1,63 +1,101 @@
-import { connect } from "mongoose";
-import modelPrevCalc from "../SCHEMAS/PrevCalcSchema";
-import { TAnswerUpdateDB } from "@/Types/Types";
-import { TRequestPrevCalc } from "@/Types/subtypes/TRequestPrevCalc";
+import { TRequestPrevCalc } from '@/Types/subtypes/TRequestPrevCalc'
+import { connect } from 'mongoose'
+import ContextOrganization from '../../classes/contextOrganization'
+import modelPrevCalc from '../SCHEMAS/PrevCalcSchema'
 
-const saveRequest = async (INN: number, dataPrevCalc: TRequestPrevCalc): Promise<TAnswerUpdateDB> => {
-  await connect(`${process.env.DB_URL}${INN}`);
+export default class ControllerDBPRevCalcApplication extends ContextOrganization {
+	constructor(INN: string) {
+		super(INN)
+	}
 
-  const prevRequest = new modelPrevCalc(dataPrevCalc);
-  await prevRequest.save();
-  // connectDB.connection.close();
-  return {
-    success: true,
-  };
-};
+	public async saveRequest(dataPrevCalc: TRequestPrevCalc): Promise<void> {
+		await connect(`${process.env.DB_URL}${this.INN}`)
+		const prevRequest = new modelPrevCalc(dataPrevCalc)
+		await prevRequest.save()
+	}
 
-const deleteRequest = async (INN: number, idRequest: string): Promise<TAnswerUpdateDB> => {
-  await connect(`${process.env.DB_URL}${INN}`);
-  const safeDelete = await modelPrevCalc.findOneAndUpdate({ idRequest: idRequest }, { safeDelete: false });
-  
-  return {
-    success: true,
-  };
-};
-const getAllRequest = async (INN: number): Promise<TRequestPrevCalc[] | []> => {
-  await connect(`${process.env.DB_URL}${INN}`);
-  const dataAllRequest = await modelPrevCalc.find();
-  
-  return dataAllRequest;
-};
+	public async deletedRequest(idRequest: string): Promise<void> {
+		await connect(`${process.env.DB_URL}${this.INN}`)
+		await modelPrevCalc.findOneAndUpdate(
+			{ idRequest: idRequest },
+			{ safeDelete: false }
+		)
+	}
+	public async getAllRequest(): Promise<TRequestPrevCalc[] | []> {
+		await connect(`${process.env.DB_URL}${this.INN}`)
+		return await modelPrevCalc.find({}, { safeDeleted: false })
+	}
 
-const getFavoriteRequest = async (INN: number): Promise<TRequestPrevCalc[] | []> => {
-  await connect(`${process.env.DB_URL}${INN}`);
-  const dataFavoritesRequest = await modelPrevCalc.find({ favorites: true });
-  
-  return dataFavoritesRequest;
-};
+	public async getRequestGivenRange(
+		range: number
+	): Promise<TRequestPrevCalc[] | []> {
+		await connect(`${process.env.DB_URL}${this.INN}`)
+		return await modelPrevCalc
+			.find({}, { safeDeleted: false })
+			.find({})
+			.skip(range - 5)
+			.limit(5)
+	}
 
-const setFavoriteRequest = async (
-  INN: number,
-  idRequest: string,
-  isFavorite: boolean
-): Promise<TAnswerUpdateDB> => {
-  await connect(`${process.env.DB_URL}${INN}`);
-  const updateRequest = await modelPrevCalc.findOneAndUpdate(
-    { idRequest: idRequest },
-    { favorites: isFavorite }
-  );
-  
-  return {
-    success: true,
-  };
-};
+	public async getAllRequestWithDeleted(): Promise<TRequestPrevCalc[] | []> {
+		await connect(`${process.env.DB_URL}${this.INN}`)
+		return await modelPrevCalc.find({})
+	}
 
-const ControllerPrevCalDB = {
-  saveRequest,
-  deleteRequest,
-  getAllRequest,
-  setFavoriteRequest,
-  getFavoriteRequest,
-};
-module.exports = ControllerPrevCalDB;
-export default ControllerPrevCalDB;
+	public async getFavoriteRequest(): Promise<TRequestPrevCalc[] | []> {
+		await connect(`${process.env.DB_URL}${this.INN}`)
+		return await modelPrevCalc.find({}, { favorites: true })
+	}
+
+  public async getFavoriteRequestGiveRange(range:number): Promise<TRequestPrevCalc[] | []> {
+		await connect(`${process.env.DB_URL}${this.INN}`)
+		return await modelPrevCalc.find({}, { favorites: true }).find({}, { safeDeleted: false })
+    .find({})
+    .skip(range - 5)
+    .limit(5)
+	}
+
+	public async setFavoriteRequest(
+		idRequest: string,		
+	): Promise<void> {
+		await connect(`${process.env.DB_URL}${this.INN}`)
+		await modelPrevCalc.findOneAndUpdate(
+			{ idRequest: idRequest },
+			{ favorites: true }
+		)
+	}
+  public async disableFavoriteRequest(
+		idRequest: string,		
+	): Promise<void> {
+		await connect(`${process.env.DB_URL}${this.INN}`)
+		await modelPrevCalc.findOneAndUpdate(
+			{ idRequest: idRequest },
+			{ favorites: false }
+		)
+	}
+
+	public async getRequestByINN(INN: string): Promise<TRequestPrevCalc | null> {
+		await connect(`${process.env.DB_URL}${this.INN}`)
+		return await modelPrevCalc.findOne({ 'dataClient.INN': INN })
+	}
+
+	public async getRequestByPhone(
+		phone: string
+	): Promise<TRequestPrevCalc[] | []> {
+		await connect(`${process.env.DB_URL}${this.INN}`)
+		const RegExPhone = new RegExp(phone)
+		return await modelPrevCalc.find({
+			'dataClient.phone': { $regex: RegExPhone, $option: 'i' },
+		})
+	}
+
+	public async getRequestByEmail(
+		email: string
+	): Promise<TRequestPrevCalc[] | []> {
+		await connect(`${process.env.DB_URL}${this.INN}`)
+		const RegExEmail = new RegExp(email)
+		return await modelPrevCalc.find({
+			'dataClient.email': { $regex: RegExEmail, $option: 'i' },
+		})
+	}
+}
