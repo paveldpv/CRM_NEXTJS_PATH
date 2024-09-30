@@ -11,7 +11,7 @@ import { typicalError } from '@/Types/enums'
 
 export default function page({ params }: { params: { INN: string } }) {
 	const dataConfigApp = useConfigApp((state) => state.dataConfigApp)
-	const setLoader =useLoader(state=>state.setVisibleLoader)
+	const setLoader     = useLoader(state=>state.setVisibleLoader)
 	
 
 	const submitConfigApp = async () => {
