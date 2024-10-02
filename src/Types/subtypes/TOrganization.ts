@@ -21,6 +21,7 @@ export type TEmai = {
 export type TTelegramParams = {
   idTelegramBot: string;
   hrefChat: string;
+  botOn:boolean
 };
 export type TNameOrganization = {
   abbreviated: string;

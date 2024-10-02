@@ -1,7 +1,5 @@
 'use client'
 
-import { TDBUser } from '@/Types/Types'
-import InputPicture from '@/components/UI/InputElements/InputPicture/InputPicture'
 import HelpInformerModalWindow from '@/components/additional/HelpInformerModalWindow'
 import { useFormik } from 'formik'
 import { memo, useCallback, useMemo } from 'react'
@@ -19,7 +17,10 @@ import ListAdmins from './ListAdmins'
 import { TApprover } from '@/Types/customType'
 import { TDataOrganization } from '@/Types/subtypes/TOrganization'
 import { TFullDataSettingOrganization } from '@/app/[INN]/[PHONE]/main/setting/settingorganization/page'
+import MiniLoader from '@/components/UI/Loaders/MiniLoader'
+import Fieldset from '@/containers/Fieldset'
 import { useInfoUser } from '../../../../store/storeInfoUser'
+import { useMiniLoader } from '../../../../store/storeMiniLoader'
 
 export type TFieldFormAdminPanel = {
 	activeField: boolean
@@ -34,7 +35,11 @@ export type TFormAdminPanel = {
 
 function FormAdminPanel({ data, INN }: TFormAdminPanel) {
 	const { daDataOrganization, admins, dataOrganization, dataRequisites } = data
-	const dataUser = useInfoUser((state) => state.dataUser) as TDBUser
+	const dataUser = useInfoUser((state) => state.dataUser)
+	const [visibleLoader, setVisibleLoader] = useMiniLoader((state) => [
+		state.visible,
+		state.setVisibleLoader,
+	])
 
 	const setOpenHelpInformer = useHelInformer((state) => state.setOpen)
 
@@ -65,48 +70,63 @@ function FormAdminPanel({ data, INN }: TFormAdminPanel) {
 	const onSubmit = async () => {
 		console.log(values)
 	}
+
 	const { setFieldValue, handleChange, values } = useFormik({
 		initialValues,
 		onSubmit,
 	})
 
-	const openHelpWindow = useCallback(() => setOpenHelpInformer(true, messageInformer),[])
+	const openHelpWindow = useCallback(
+		() => setOpenHelpInformer(true, messageInformer),
+		[]
+	)
 
 	return (
 		<>
-			<fieldset className=' border-2 border-solid border-menu_color p-2 text-2xl  rounded-md '>
-				<legend className='pr-1 pl-1  text-sm '>
-					Настройка Организации
-					<button
-						className='m-2 text  bg-red-50'
-						type='button'
-						onClick={(e) => {
-							e.preventDefault()
-							openHelpWindow()
-						}}
-					>
-						<FaQuestion />
-					</button>
-				</legend>
-				<form className='w-full h-full col-span-3'>
+			<Fieldset		
+			className=' mt-2'	
+				legend={
+					<span className=' text-xs m-0'>
+						<span>Настройка Организации</span>
+						<button
+							className='m-2 text  bg-red-50'
+							type='button'
+							onClick={(e) => {
+								e.preventDefault()
+								openHelpWindow()
+							}}
+						>
+							<FaQuestion />
+						</button>
+					</span>
+				}
+			>
+				<form className='w-full h-full '>
 					<section className='grid grid-cols-4 gap-5'>
 						<ChangeBaseDataOrganization
 							activeField={dataUser.linksAllowed !== 'ADMIN'}
 							defaultData={initialValues.dataOrganization}
 							handlerChange={handleChange}
 						/>
-						<ListAdmins admins={data.admins} />
-						<InputPicture
-							name='seal'
-							imageHeight={0}
-							imageWidth={0}
-							imageAlt={''}
-							handlerChangePicture={function (file: File): void {
-								throw new Error('Function not implemented.')
-							}}
-							visible={false}
-							defaultSrc={''}
-						/>
+						<ListAdmins admins={data.admins}  />
+						{visibleLoader ? (
+							<div className=' flex  justify-center items-center mt-8 mb-10 '>
+								<MiniLoader />
+							</div>
+						) : (
+							<Fieldset>
+								<></>
+								{/* <InputPicture
+											name={''}
+											imageHeight={0}
+											imageWidth={0}
+											imageAlt={''}
+											handlerChangePicture={function (file: File): void {
+												throw new Error('Function not implemented.')
+											}}
+										/> */}
+							</Fieldset>
+						)}
 					</section>
 					<section className=' grid grid-cols-3 gap-5 mt-3'>
 						<ChangeRequisites
@@ -135,7 +155,8 @@ function FormAdminPanel({ data, INN }: TFormAdminPanel) {
 						</button>
 					)}
 				</form>
-			</fieldset>
+			</Fieldset>
+
 			<HelpInformerModalWindow />
 		</>
 	)

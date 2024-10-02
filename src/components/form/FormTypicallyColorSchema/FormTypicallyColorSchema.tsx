@@ -1,5 +1,6 @@
 'use client'
 import Loader from '@/components/UI/Loaders/Loader'
+import Fieldset from '@/containers/Fieldset'
 import { useConfigApp } from '../../../../store/storeConfigApp'
 import { useLoader } from '../../../../store/storeLoader'
 import { dataTypicallyColor } from './dataTypicallyColor'
@@ -13,14 +14,11 @@ export default function FormTypicallyColorSchema() {
 	])
 
 	return (
-		<fieldset className='border-2  border-solid border-menu_color p-2 text-xs  rounded-md '>
-			<legend className='p-2 border-2 border-menu_color   font-bold    rounded-md '>
-				Стандартные схемы
-			</legend>
+		<Fieldset legend='Стандартные оформление'>
 			{visibleLoader ? (
 				<div className='h-80 flex  justify-center items-center mt-8 mb-10'>
-          <Loader />
-        </div>
+					<Loader />
+				</div>
 			) : (
 				<ul className=' grid  grid-cols-2  gap-4 justify-evenly '>
 					{dataTypicallyColor.map((element, index) => (
@@ -36,6 +34,6 @@ export default function FormTypicallyColorSchema() {
 					))}
 				</ul>
 			)}
-		</fieldset>
+		</Fieldset>
 	)
 }

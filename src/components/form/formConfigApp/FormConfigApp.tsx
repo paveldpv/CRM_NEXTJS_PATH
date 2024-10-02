@@ -1,6 +1,7 @@
 'use client'
 import InputSettingColorLayout from '@/components/additional/InputSettingColorLayout'
 import Loader from '@/components/UI/Loaders/Loader'
+import Fieldset from '@/containers/Fieldset'
 import { TConfigLayout } from '@/Types/subtypes/TAppearanceConfigApp'
 import { useMemo, useState } from 'react'
 import { useConfigApp } from '../../../../store/storeConfigApp'
@@ -21,10 +22,7 @@ export default function FormConfigApp() {
 	const [expandPanel, setExpandPanel] = useState<string | boolean>(false)
 
 	return (
-		<fieldset className='border-2  border-solid border-menu_color p-2 text-xs  rounded-md  '>
-			<legend className='p-2  rounded-md font-bold border-2 border-menu_color   text-menu_color  rounded-xs '>
-				Настройки приложения
-			</legend>
+		<Fieldset legend='Настройки приложения'>
 			{visibleLoader ? (
 				<div className='h-80 flex  justify-center items-center mt-8 mb-10'>
 					<Loader />
@@ -46,6 +44,6 @@ export default function FormConfigApp() {
 					))}
 				</ul>
 			)}
-		</fieldset>
+		</Fieldset>
 	)
 }

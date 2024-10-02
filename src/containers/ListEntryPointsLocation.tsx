@@ -3,7 +3,8 @@ import moment from "moment";
 import Image from "next/image";
 import { mapCity } from "../../config/urls";
 import { PURPOSE_USE } from "@/Types/subtypes/TGeoLocation";
-import { TListEntryPointsLocation } from "@/app/[INN]/main/setting/historyEntryLocation/[...FILTER]/page";
+import { TListEntryPointsLocation } from '@/app/[INN]/[PHONE]/main/setting/historyEntryLocation/[...FILTER]/page'
+// import { TListEntryPointsLocation } from "@/app/[INN]/main/setting/historyEntryLocation/[...FILTER]/page";
 
 
 

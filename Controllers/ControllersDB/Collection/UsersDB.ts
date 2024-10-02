@@ -55,7 +55,7 @@ export default class ControllerDBUser extends ContextOrganization {
   
   public async getAdmins():Promise<TDBUser[]|[]>{
     await connect(`${process.env.DB_URL}${this.INN}`)
-    return await modelUSer.find({},{linksAllowed:"ADMIN"})
+    return await modelUSer.find({linksAllowed:"ADMIN"})
   }
 
 }

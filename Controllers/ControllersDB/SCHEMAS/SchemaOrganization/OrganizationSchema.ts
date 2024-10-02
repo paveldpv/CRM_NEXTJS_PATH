@@ -26,8 +26,7 @@ export const organizationSchema = new Schema<TDataOrganization>({
         default: "Не задано",
       },
     },
-  },
-  
+  },  
   paramsEmailNewsletter: {
     type: {
       password: String,
@@ -48,6 +47,10 @@ export const organizationSchema = new Schema<TDataOrganization>({
         required: false,
         default: "не задан",
       },
+      botOn:{
+        type:Boolean,
+        default:false
+      }
     },
     default: {
       hrefChat: "не задан",

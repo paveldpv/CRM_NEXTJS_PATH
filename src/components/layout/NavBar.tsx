@@ -35,12 +35,12 @@ export default function NavBar() {
       initial={{ width: 45 }}
       transition={{ delay: 0.5, duration: 0.3 }}
       whileHover={{ width: 175 }}
-      className=" flex flex-col h-full  gap-3 pt-3 bg-menu_color"
+      className=" flex flex-col h-full  gap-3 pt-3 "
       style={{
         background: configNavMenu?.color?.bgColor,
-        color: configNavMenu?.color?.textColor,
-        borderColor: configNavMenu?.color?.borderColor,
-        fontSize:configNavMenu?.textSize
+				color: configNavMenu?.color?.textColor,
+				borderColor: configNavMenu?.color?.borderColor,
+				fontSize: configNavMenu?.textSize,  
       }}
     >
       <ListLinks listLinks={currentLink} />

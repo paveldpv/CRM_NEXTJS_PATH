@@ -7,8 +7,9 @@ import MenuItem from "@mui/material/MenuItem";
 import { processEntry } from "@/containers/ListEntryPointsLocation";
 import { getAbbreviatedUser } from "../../../../function/getAbbreviatedUser";
 import { usePathname, useRouter } from "next/navigation";
-import { TQueryFilterPageGeoList } from "@/app/[INN]/main/setting/historyEntryLocation/[...FILTER]/page";
+
 import { MdOutlineCancel } from "react-icons/md";
+import { TQueryFilterPageGeoList } from '@/app/[INN]/[PHONE]/main/setting/historyEntryLocation/[...FILTER]/page'
 type TFilterQueryListLocation = {
   listEmployee: TDBUser[];
   filter: TQueryFilterPageGeoList;

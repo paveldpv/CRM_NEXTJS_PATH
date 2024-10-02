@@ -5,6 +5,7 @@ import { useInfoUser } from '../../../../store/storeInfoUser'
 import { useMiniLoader } from '../../../../store/storeMiniLoader'
 import { useProcessLoader } from '../../../../store/storeProcessLoader'
 
+import Fieldset from '@/containers/Fieldset'
 import { typeDialog } from '@/Types/enums'
 import { combineFilesToFormData } from '../../../../function/combineFilesToFormData'
 import { fetchUpdateDataUser } from '../../../../service/fetchDataUser'
@@ -14,11 +15,11 @@ import ChangeDataProfile from './ChangeDataProfile'
 import ChangePhotoProfile from './ChangePhotoProfile'
 
 export default function FormProfile() {
-	const [initialValues, setInfoUser] = useInfoUser((state) => [		
+	const [initialValues, setInfoUser] = useInfoUser((state) => [
 		state.dataUser,
 		state.setInfoUser,
 	])
-	
+
 	const setOpenDialogWindow = useDialogWindow((state) => state.setOpen)
 
 	const [setVisibleLoader, visible] = useMiniLoader((state) => [
@@ -38,12 +39,13 @@ export default function FormProfile() {
 	}, [initialValues])
 	//#region SUBMIT
 	const onSubmit = async () => {
-		setVisibleLoader(true)// лоадер активирую
-    
-		if (!uploadPhoto) { // если нет фота
+		setVisibleLoader(true) // лоадер активирую
+
+		if (!uploadPhoto) {
+			// если нет фота
 			setVisibleProgress({ visible: true, step: 1 }) // модалка - запускаю молодка с одним шагом в загрузке
 			setStatus('Обновление данных') // статус в этой модалке
-			const response = await fetchUpdateDataUser(values) // отправляю данные 
+			const response = await fetchUpdateDataUser(values) // отправляю данные
 			if (response.success) {
 				setInfoUser(values)
 				setVisibleLoader(false)
@@ -63,14 +65,15 @@ export default function FormProfile() {
 				return
 			}
 		}
-		// если фото есть 
+		// если фото есть
 		setVisibleProgress({ visible: true, step: 2 }) // модалка с загрузкой в 2 шага
 		setStatus('Сохранение фотографии') // статус первого шага
 		const fileUploadFormData = combineFilesToFormData([uploadPhoto])
 		const uploadPhotoServer = await fetchUploadFileOrganization(
 			fileUploadFormData
-		)	 // сохраняю фото - работа с файлами отдельный сервис он сохраняет файлы  и возвращает данные по ним
-		if (!uploadPhotoServer) { // если ошибка с сохранением файлов
+		) // сохраняю фото - работа с файлами отдельный сервис он сохраняет файлы  и возвращает данные по ним
+		if (!uploadPhotoServer) {
+			// если ошибка с сохранением файлов
 			setOpenDialogWindow(
 				true,
 				{
@@ -83,8 +86,8 @@ export default function FormProfile() {
 			setVisibleProgress(false)
 			return
 		} else {
-			setStatus('Обновление данных') // второй шаг 
-			const updateDate = { ...values, srcPhoto: uploadPhotoServer[0] } // обновляю данные на те которые прислал сервис для работы с файлами 
+			setStatus('Обновление данных') // второй шаг
+			const updateDate = { ...values, srcPhoto: uploadPhotoServer[0] } // обновляю данные на те которые прислал сервис для работы с файлами
 			const response = await fetchUpdateDataUser(updateDate) // и сохраняб данные
 			if (response.success) {
 				setInfoUser(updateDate)
@@ -116,10 +119,7 @@ export default function FormProfile() {
 	//#endregion userFormik
 
 	return (
-		<fieldset className=' h-full border-2 border-menu_color rounded-xl border-solid  w-full '>
-			<legend className='border-2 border-menu_color rounded-xl border-solid p-2  ml-6 '>
-				Профиль
-			</legend>
+		<Fieldset legend='Профиль'>
 			<form className='w-full p-4'>
 				<div className=' grid grid-cols-3 mt-2 mb-2'>
 					<ChangeDataProfile
@@ -129,7 +129,7 @@ export default function FormProfile() {
 						setFieldValue={setFieldValue}
 					/>
 					<ChangePhotoProfile
-						setFiledValue={setFieldValue}						
+						setFiledValue={setFieldValue}
 						dataUser={values}
 						setVisible={setVisibleLoader}
 						visible={visible}
@@ -148,6 +148,6 @@ export default function FormProfile() {
 					Сохранить
 				</button>
 			</form>
-		</fieldset>
+		</Fieldset>
 	)
 }

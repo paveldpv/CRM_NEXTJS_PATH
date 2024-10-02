@@ -8,7 +8,7 @@ import Wrapper from '@/components/layout/Wrapper'
 import { typicalError } from '@/Types/enums'
 import { TConfigAPP } from '@/Types/subtypes/TAppearanceConfigApp'
 import { TError } from '@/Types/subtypes/TError'
-import { TNameOrganization } from '@/Types/subtypes/TOrganization'
+import { TDataOrganization, TNameOrganization } from '@/Types/subtypes/TOrganization'
 import Link from 'next/link'
 import { ServiceConfigApp } from '../../../../../Controllers/Service/serviceConfigApp'
 import { ServiceRuleOrganization } from '../../../../../Controllers/Service/serviceRuleOrganization'
@@ -30,11 +30,9 @@ const getConfigApp = async (
 	return await serviceConfigApp.getPersonalConfig(idUser)
 }
 
-const getNameOrganization = async (
-	INN: string
-): Promise<TNameOrganization | TError | null> => {
+const getInfoOrganization = async(INN:string):Promise<TDataOrganization|null|TError>=>{
 	const serviceOrganization = new ServiceRuleOrganization(INN)
-	return await serviceOrganization.getNameOrganization()
+	return await serviceOrganization.getParamsOrganization()
 }
 
 export default async function page({
@@ -54,7 +52,8 @@ export default async function page({
 
 	const dataApp = await Promise.all([
 		getConfigApp(INN, userWithoutPas.idUser),
-		getNameOrganization(INN),
+		
+		getInfoOrganization(INN)
 	])
 
 	const er = dataApp.some((el) => el == null || isError(el))
@@ -63,9 +62,9 @@ export default async function page({
 		redirect(`/ERROR/${typicalError.error_DB}`)
 	}
 
-	const [configApp, nameOrganization] = dataApp as [
+	const [configApp,infoOrganization ] = dataApp as [
 		TConfigAPP,
-		TNameOrganization
+		TDataOrganization
 	]
 
 	if (session) {
@@ -73,7 +72,7 @@ export default async function page({
 			<Wrapper
 				dataConfigApp={configApp}
 				dataUser={userWithoutPas}
-				nameOrganization={nameOrganization.abbreviated}
+				infoOrganization={infoOrganization}
 			/>
 		)
 	} else {
