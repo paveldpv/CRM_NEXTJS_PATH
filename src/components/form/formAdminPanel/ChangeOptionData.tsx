@@ -41,44 +41,59 @@ export default function ChangeOptionData({
 		setOpenDialogWindow(true, { title: 'скопировано' })
 		setTimeout(() => setOpenDialogWindow(false), 500)
 	}
+	const changeTelegramBot = async (e: React.MouseEvent) => {
+		e.preventDefault()
+	}
 
 	return (
 		<Fieldset legend='Доп.параметры'>
-			<div className='flex flex-col gap-2'>
-				<TextField
-					disabled
-					placeholder='id телеграм бота'
-					{...styleTextFiled}
-				/>
+			<div className='flex flex-col gap-4'>
+				<div className='flex justify-between gap-2 '>
+					<TextField
+						onChange={handlerChange}
+						label='key телеграм бота'
+						placeholder='key телеграм бота'
+						{...styleTextFiled}
+						name='dataOrganization.telegram.idTelegramBot'
+						fullWidth
+					/>
+					<Tooltip title={telegram?.botOn ? 'Бот активен' : 'Бот отключен'}>
+						<button
+						onClick={changeTelegramBot}
+							className={` text-4xl border-2 ${
+								telegram?.botOn ? ' border-green-500' : 'border-red-500'
+							} `}
+						>
+							<FaPowerOff
+								className={telegram?.botOn ? ' text-green-500' : 'text-red-500'}
+							/>
+						</button>
+					</Tooltip>{' '}
+				</div>
 				{activeField && telegram?.hrefChat !== 'не задан' ? (
-					<div className=' flex' >
+					<div className=' flex'>
 						<a href={telegram?.hrefChat} target='_blank' className=' text-xl'>
 							<FaTelegram />
 						</a>
-						<Tooltip title={telegram?.botOn ? 'Бот активен' : 'Бот отключен'}>
-							<button>
-								<FaPowerOff className=' bg-red-500 text-red-600'/>
-							</button>
-						</Tooltip>
 					</div>
 				) : (
 					<TextField
 						{...styleTextFiled}
 						defaultValue={telegram?.hrefChat}
 						disabled={activeField}
-						name='telegram.hrefChat'
+						name='dataOrganization.telegram.hrefChat'
 						onChange={handlerChange}
 						placeholder='ссылка на профиль телеграмма'
 						label='ссылка на профиль телеграмма'
 					/>
 				)}
-				<hr className=' h-1 bg-menu_color' />
+				<hr className=' h-1 bg-menu_color opacity-20' />
 				<TextField
 					{...styleTextFiled}
 					className=' '
 					defaultValue={paramsEmailNewsletter?.email}
 					disabled={activeField}
-					name='paramsEmailNewsletter.email'
+					name='dataOrganization.paramsEmailNewsletter.email'
 					onChange={handlerChange}
 					placeholder='почта для отправки писем'
 					label='почта для отправки писем'
@@ -87,17 +102,17 @@ export default function ChangeOptionData({
 					{...styleTextFiled}
 					defaultValue={paramsEmailNewsletter?.password}
 					disabled={activeField}
-					name='paramsEmailNewsletter.password'
+					name='dataOrganization.paramsEmailNewsletter.password'
 					onChange={handlerChange}
 					placeholder='пароль от почты'
 					label='пароль от почты'
 				/>
-				<hr className=' h-1 bg-menu_color' />
+				<hr className=' h-1 bg-menu_color opacity-20' />
 				<div className='grid grid-cols-4 gap-3'>
 					<a
 						href={`/${INN}/prevCalc`}
 						target='_blank'
-						className='  col-span-3 text-center text-md text-menu_color style_border p-2   hover:text-color_header  hover:border-color_header duration-75'
+						className='  col-span-3 text-center text-xs text-menu_color style_border p-2   hover:text-color_header  hover:border-color_header duration-75'
 					>
 						страница предварительного расчета
 					</a>

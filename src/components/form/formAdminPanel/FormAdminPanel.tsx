@@ -1,14 +1,10 @@
 'use client'
 
-import HelpInformerModalWindow from '@/components/additional/HelpInformerModalWindow'
 import { useFormik } from 'formik'
 import { memo, useCallback, useMemo } from 'react'
 
 import { FaQuestion } from 'react-icons/fa6'
-import {
-	TDataHelpInformer,
-	useHelInformer,
-} from '../../../../store/storeHelpInformer'
+import { TDataHelpInformer, useHelInformer } from '../../../../store/storeHelpInformer'
 import ChangeBaseDataOrganization from './ChangeBaseDataOrganization'
 import ChangeOptionData from './ChangeOptionData'
 import ChangeRequisites from './ChangeRequisites'
@@ -17,7 +13,7 @@ import ListAdmins from './ListAdmins'
 import { TApprover } from '@/Types/customType'
 import { TDataOrganization } from '@/Types/subtypes/TOrganization'
 import { TFullDataSettingOrganization } from '@/app/[INN]/[PHONE]/main/setting/settingorganization/page'
-import MiniLoader from '@/components/UI/Loaders/MiniLoader'
+import FileUpload from '@/components/UI/InputElements/fileUpload/FileUpload'
 import Fieldset from '@/containers/Fieldset'
 import { useInfoUser } from '../../../../store/storeInfoUser'
 import { useMiniLoader } from '../../../../store/storeMiniLoader'
@@ -36,10 +32,7 @@ export type TFormAdminPanel = {
 function FormAdminPanel({ data, INN }: TFormAdminPanel) {
 	const { daDataOrganization, admins, dataOrganization, dataRequisites } = data
 	const dataUser = useInfoUser((state) => state.dataUser)
-	const [visibleLoader, setVisibleLoader] = useMiniLoader((state) => [
-		state.visible,
-		state.setVisibleLoader,
-	])
+	const [visibleLoader, setVisibleLoader] = useMiniLoader((state) => [state.visible, state.setVisibleLoader])
 
 	const setOpenHelpInformer = useHelInformer((state) => state.setOpen)
 
@@ -76,89 +69,72 @@ function FormAdminPanel({ data, INN }: TFormAdminPanel) {
 		onSubmit,
 	})
 
-	const openHelpWindow = useCallback(
-		() => setOpenHelpInformer(true, messageInformer),
-		[]
-	)
+	const openHelpWindow = useCallback(() => setOpenHelpInformer(true, messageInformer), [])
 
 	return (
-		<>
-			<Fieldset		
-			className=' mt-2'	
-				legend={
-					<span className=' text-xs m-0'>
-						<span>Настройка Организации</span>
-						<button
-							className='m-2 text  bg-red-50'
-							type='button'
-							onClick={(e) => {
-								e.preventDefault()
-								openHelpWindow()
-							}}
-						>
-							<FaQuestion />
-						</button>
-					</span>
-				}
-			>
-				<form className='w-full h-full '>
-					<section className='grid grid-cols-4 gap-5'>
-						<ChangeBaseDataOrganization
-							activeField={dataUser.linksAllowed !== 'ADMIN'}
-							defaultData={initialValues.dataOrganization}
-							handlerChange={handleChange}
+		<Fieldset
+			className=' mt-2'
+			legend={
+				<span className=' text-xs  flex gap-2 items-center'>
+					<span>Настройка Организации</span>
+					<button
+						className='   bg-red-50'
+						type='button'
+						onClick={(e) => {
+							e.preventDefault()
+							openHelpWindow()
+						}}
+					>
+						<FaQuestion />
+					</button>
+				</span>
+			}
+		>
+			<form className='w-full h-full '>
+				<section className='grid grid-cols-4 gap-5'>
+					<ChangeBaseDataOrganization
+						activeField={dataUser.linksAllowed !== 'ADMIN'}
+						defaultData={initialValues.dataOrganization}
+						handlerChange={handleChange}
+					/>
+					<ListAdmins admins={data.admins} />
+					<Fieldset legend="Печать">
+						<FileUpload
+							nameFiled='dataOrganization.seal'
+							set={setFieldValue}
+							preview={{ preview: true, width: 150, height: 150 }}
 						/>
-						<ListAdmins admins={data.admins}  />
-						{visibleLoader ? (
-							<div className=' flex  justify-center items-center mt-8 mb-10 '>
-								<MiniLoader />
-							</div>
-						) : (
-							<Fieldset>
-								<></>
-								{/* <InputPicture
-											name={''}
-											imageHeight={0}
-											imageWidth={0}
-											imageAlt={''}
-											handlerChangePicture={function (file: File): void {
-												throw new Error('Function not implemented.')
-											}}
-										/> */}
-							</Fieldset>
-						)}
-					</section>
-					<section className=' grid grid-cols-3 gap-5 mt-3'>
-						<ChangeRequisites
-							setFieldValue={setFieldValue}
-							activeField={dataUser.linksAllowed !== 'ADMIN'}
-							defaultData={initialValues.dataRequisites}
-							handlerChange={handleChange}
-						/>
-						<ChangeOptionData
-							INN={INN}
-							activeField={dataUser.linksAllowed !== 'ADMIN'}
-							defaultData={initialValues.dataOrganization}
-							handlerChange={handleChange}
-						/>
-					</section>
-					{dataUser.linksAllowed === 'ADMIN' && (
-						<button
-							className=' mt-2 w-full'
-							type='submit'
-							onClick={(e) => {
-								e.preventDefault()
-								onSubmit()
-							}}
-						>
-							Сохранить
-						</button>
-					)}
-				</form>
-			</Fieldset>
-
-			<HelpInformerModalWindow />
-		</>
+					</Fieldset>
+				</section>
+				<section className=' grid grid-cols-3 gap-5 mt-3'>
+					<ChangeRequisites
+						values ={values}
+						setFieldValue={setFieldValue}
+						activeField={dataUser.linksAllowed !== 'ADMIN'}
+						defaultData={initialValues.dataRequisites}
+						handlerChange={handleChange}
+					/>
+					<ChangeOptionData
+						INN={INN}
+						activeField={dataUser.linksAllowed !== 'ADMIN'}
+						defaultData={initialValues.dataOrganization}
+						handlerChange={handleChange}
+					/>
+				</section>
+				{dataUser.linksAllowed === 'ADMIN' && (
+					<button
+						className=' mt-2 w-full'
+						type='submit'
+						onClick={(e) => {
+							e.preventDefault()
+							onSubmit()
+						}}
+					>
+						Сохранить
+					</button>
+				)}
+			</form>
+		</Fieldset>
 	)
 }
 export default memo(FormAdminPanel)

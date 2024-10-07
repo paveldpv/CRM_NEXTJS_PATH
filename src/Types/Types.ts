@@ -84,7 +84,8 @@ export type TResponseUploadFiles = {
   DateTimeUpdateFile: Date;
   Errored: boolean;
   IDFile: string;
-  size?: number;
+  SizeFile?: number;
+  fileFormat?:string 
 };
 
 

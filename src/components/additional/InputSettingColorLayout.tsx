@@ -1,6 +1,6 @@
 'use client'
 import React, { memo, useCallback } from 'react'
-
+import { FaArrowCircleDown } from 'react-icons/fa'
 import { keyColorOption } from '@/Types/enums'
 import {
 	TConfigLayout,
@@ -69,7 +69,7 @@ function InputSettingLayout({
 			<AccordionSummary
 				expandIcon={
 					<span className=' text-2xl text-color_header'>
-						<BsFillArrowUpCircleFill />
+						<FaArrowCircleDown />
 					</span>
 				}
 			>

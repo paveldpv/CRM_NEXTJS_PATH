@@ -49,11 +49,11 @@ export default function ChangeBaseDataOrganization({
 					disabled={activeField}
 					defaultValue={defaultData?.nameOrganization?.fullName}
 					{...styleTextFiled}
-					name='nameOrganization.fullName'
+					name='dataOrganization.nameOrganization.fullName'
 					multiline
 					label='название организации'
 				/>
-				<span className=' pt-2'>
+				<span className=' pt-2 text-xs'>
 					дата регистрации в системе :{' '}
 					{moment(defaultData.dateRegistration).format('D/M/YYYY')}
 				</span>

@@ -13,8 +13,12 @@ import { fetchUploadFileOrganization } from '../../../../service/Server/fetchSer
 import { useDialogWindow } from '../../../../store/storeDialogWindow'
 import ChangeDataProfile from './ChangeDataProfile'
 import ChangePhotoProfile from './ChangePhotoProfile'
+import { useParams } from 'next/navigation'
+import { isError } from '../../../../function/IsError'
+import { TResponseUploadFiles } from '@/Types/Types'
 
 export default function FormProfile() {
+	const {INN }=useParams()
 	const [initialValues, setInfoUser] = useInfoUser((state) => [
 		state.dataUser,
 		state.setInfoUser,
@@ -69,10 +73,10 @@ export default function FormProfile() {
 		setVisibleProgress({ visible: true, step: 2 }) // модалка с загрузкой в 2 шага
 		setStatus('Сохранение фотографии') // статус первого шага
 		const fileUploadFormData = combineFilesToFormData([uploadPhoto])
-		const uploadPhotoServer = await fetchUploadFileOrganization(
+		const uploadPhotoServer = await fetchUploadFileOrganization(INN.toString(),
 			fileUploadFormData
 		) // сохраняю фото - работа с файлами отдельный сервис он сохраняет файлы  и возвращает данные по ним
-		if (!uploadPhotoServer) {
+		if (!uploadPhotoServer && !isError(uploadPhotoServer)) {
 			// если ошибка с сохранением файлов
 			setOpenDialogWindow(
 				true,
@@ -87,6 +91,7 @@ export default function FormProfile() {
 			return
 		} else {
 			setStatus('Обновление данных') // второй шаг
+			
 			const updateDate = { ...values, srcPhoto: uploadPhotoServer[0] } // обновляю данные на те которые прислал сервис для работы с файлами
 			const response = await fetchUpdateDataUser(updateDate) // и сохраняб данные
 			if (response.success) {

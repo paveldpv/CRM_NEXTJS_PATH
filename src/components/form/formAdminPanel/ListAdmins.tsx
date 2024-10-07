@@ -1,8 +1,10 @@
+'use client'
+import {memo} from'react'
 import Fieldset from '@/containers/Fieldset'
 import { TDBUser } from '@/Types/Types'
 
-export default function ListAdmins({ admins }: { admins: TDBUser[] }) {
-	console.log(admins)
+ function ListAdmins({ admins }: { admins: TDBUser[] }) {
+	
 
 	return (
 		<Fieldset
@@ -29,3 +31,5 @@ export default function ListAdmins({ admins }: { admins: TDBUser[] }) {
 		</Fieldset>
 	)
 }
+
+export default memo(ListAdmins)

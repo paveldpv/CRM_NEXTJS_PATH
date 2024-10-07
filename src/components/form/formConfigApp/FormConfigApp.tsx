@@ -10,7 +10,8 @@ import { useLoader } from '../../../../store/storeLoader'
 export default function FormConfigApp() {
 	const visibleLoader = useLoader((state) => state.visible)
 	const dataConfigApp = useConfigApp((state) => state.dataConfigApp)
-
+	console.log("🚀 ~ FormConfigApp ~ taConfigApp:", dataConfigApp)
+	
 	const arrayConfigApp = useMemo(
 		() => [
 			dataConfigApp?.configHeader,

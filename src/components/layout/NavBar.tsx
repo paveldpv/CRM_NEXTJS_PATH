@@ -35,7 +35,7 @@ export default function NavBar() {
       initial={{ width: 45 }}
       transition={{ delay: 0.5, duration: 0.3 }}
       whileHover={{ width: 175 }}
-      className=" flex flex-col h-full  gap-3 pt-3 "
+      className=" flex flex-col h-full  gap-3 pt-3  "
       style={{
         background: configNavMenu?.color?.bgColor,
 				color: configNavMenu?.color?.textColor,

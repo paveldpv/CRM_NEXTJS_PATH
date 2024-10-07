@@ -11,13 +11,13 @@ export const dataLinkSetting: TPropsNavLink[] = [
     id: idLink.setting_app,
     description: "Настройка приложения",
     title: "Настройка приложения",
-    href: `setting/settingapp`,//TODO:
+    href: `setting/settingapp`,
   },
   {
     id: idLink.setting_organization,
     description: "Настройка организации",
     title: "Настройка организации",
-    href: `setting/settingorganization`,
+    href: `setting/settingorganization`,//TODO:
   },
   {
     id: idLink.setting_history_entry_location,

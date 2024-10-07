@@ -4,7 +4,8 @@ import ERROR_PAGE from "@/components/layout/ERROR_PAGE";
 const messageListTypicalError = {
   NOT_GEO: "для регистрации необходимо разрешить доступ к геолокации",
   NOT_VALID_PAS: "не верные данные для  авторизации",
-  ERROR_DB:"ошибка запроса к БД"
+  ERROR_DB:"ошибка запроса к БД",
+  ERROR_SERVER:"ошибка сервиса обработки файлов"
 };
 
 export default function page({ params }: { params: { TYPE_ERROR: typicalError } }) {

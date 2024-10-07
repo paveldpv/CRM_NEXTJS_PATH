@@ -1,51 +1,40 @@
 'use client'
+import React from 'react'
 import { TFieldFormAdminPanel } from './FormAdminPanel'
 
 import { memo, useId, useMemo } from 'react'
 
-import { FaDownload, FaFileUpload } from 'react-icons/fa'
-import { IoIosWarning } from 'react-icons/io'
+import { FaDownload } from 'react-icons/fa'
 import { MdDelete } from 'react-icons/md'
 
 import { NotData } from '@/Types/enums'
 import { TRequisites } from '@/Types/subtypes/TRequisites'
 import { TFullDataSettingOrganization } from '@/app/[INN]/[PHONE]/main/setting/settingorganization/page'
 import Fieldset from '@/containers/Fieldset'
-import {
-	Accordion,
-	AccordionDetails,
-	AccordionSummary,
-	TextField,
-	Tooltip,
-} from '@mui/material'
+import { Accordion, AccordionDetails, AccordionSummary, TextField, Tooltip } from '@mui/material'
 import { FormikErrors } from 'formik'
 import { FaArrowCircleDown } from 'react-icons/fa'
 import { styleTextFiled } from '../../../../config/muiCustomStyle/textField'
 import { formatBytes } from '../../../../function/helpers/formatBytes'
+import LabelRequisites from './LabelRequisites'
+import FileUpload from '@/components/UI/InputElements/fileUpload/FileUpload'
 
 export type TChangeRequisites = {
+	values:Omit<TFullDataSettingOrganization, "admins">
 	defaultData: Partial<TRequisites>
-	setFieldValue: (
-		field: string,
-		value: any,
-		shouldValidate?: boolean
-	) => Promise<FormikErrors<TFullDataSettingOrganization>> | Promise<void>
+	setFieldValue: (field: string, value: any, shouldValidate?: boolean) => Promise<FormikErrors<TFullDataSettingOrganization>> | Promise<void>
 } & Omit<TFieldFormAdminPanel, 'defaultData'>
 
-function ChangeRequisites({
-	activeField,
-	defaultData,
-	handlerChange,
-	setFieldValue,
-}: TChangeRequisites) {
-	const { safeDeleted, srcRequisites, requisitesBank, ...baseRequisites } =
-		defaultData
+function ChangeRequisites({ activeField, defaultData, handlerChange, setFieldValue ,values}: TChangeRequisites) {
+
+	const { safeDeleted, srcRequisites, requisitesBank, ...baseRequisites } = defaultData
+	
 
 	const arrBaseRequisites = useMemo(() => {
 		let arr = []
 		for (const key in baseRequisites) {
 			let objData = {
-				name: `${key}.value`,
+				name: `dataRequisites.${key}.value`,
 				// @ts-ignore: error message
 				title: baseRequisites[key]?.title,
 				// @ts-ignore: error message
@@ -60,7 +49,7 @@ function ChangeRequisites({
 		let arr = []
 		for (const key in requisitesBank) {
 			let objData = {
-				name: `${key}.value`,
+				name: `dataRequisites.requisitesBank.${key}.value`,
 				title: requisitesBank[key].title,
 				value: requisitesBank[key].value?.toString(),
 			}
@@ -68,63 +57,38 @@ function ChangeRequisites({
 		}
 		return arr
 	}, [requisitesBank])
+	
+	
+	const missingSrcRequisites = useMemo(() => {		
+		return values.dataRequisites.srcRequisites === 'NOT_FOUND'
+	}, [values])
+	
+	
 
-	const missingSrcRequisites = useMemo(() => {
-		return srcRequisites === 'NOT_FOUND'
-	}, [srcRequisites])
-
+	
 	const missingDataRequisites = useMemo(() => {
-		const missingBankRequisites = arrBankRequisites.find(
-			(el) => el.value === NotData.notStringData
-		)
+		const missingBankRequisites = arrBankRequisites.find((el) => el.value === NotData.notStringData)
 		if (missingBankRequisites) {
 			return true
 		}
-		const missingBaseRequisites = arrBaseRequisites.find(
-			(el) => el.value === NotData.notStringData
-		)
+		const missingBaseRequisites = arrBaseRequisites.find((el) => el.value === NotData.notStringData)
 		if (missingBaseRequisites) {
 			return true
 		}
+		return false
 	}, [arrBankRequisites, arrBaseRequisites])
 
-	const idInput = useId()
+	
 
 	return (
-		<Fieldset>
-			<ul className=' flex gap-2'>
-				<li>
-					{missingDataRequisites && (
-						<Tooltip
-							title={`отсутствуют  данные`}
-							className='  text-2xl text-red-400 w-9'
-						>
-							<span>
-								<IoIosWarning />
-							</span>
-						</Tooltip>
-					)}
-				</li>
-				<li>
-					{missingSrcRequisites && (
-						<Tooltip
-							title={'не прикреплены реквизиты'}
-							className='  text-2xl text-red-400'
-						>
-							<span>
-								<FaFileUpload />
-							</span>
-						</Tooltip>
-					)}
-				</li>
-			</ul>
+		<Fieldset legend={<LabelRequisites missingDataRequisites={missingDataRequisites} missingSrcRequisites={missingSrcRequisites} />} className=' col-span-2'>
 			<ul className=' flex flex-col gap-2'>
-				<Accordion>
+				<Accordion className='border-2 border-solid border-menu_color p-2  rounded-md'>
 					<AccordionSummary
 						expandIcon={
-							<p className=' text-2xl'>
+							<span className=' text-2xl text-color_header'>
 								<FaArrowCircleDown />
-							</p>
+							</span>
 						}
 					>
 						<h5 className=' underline font-bold'>Реквизиты</h5>
@@ -136,7 +100,7 @@ function ChangeRequisites({
 								key={index}
 								{...styleTextFiled}
 								defaultValue={item.value}
-								disabled={activeField}
+								disabled={activeField || item.title === 'ИНН'}
 								fullWidth
 								multiline
 								onChange={handlerChange}
@@ -148,17 +112,17 @@ function ChangeRequisites({
 					</AccordionDetails>
 				</Accordion>
 				<hr />
-				<Accordion>
+				<Accordion className='border-2 border-solid border-menu_color p-2  rounded-md'>
 					<AccordionSummary
 						expandIcon={
-							<p className=' text-2xl'>
+							<p className=' text-2xl text-color_header'>
 								<FaArrowCircleDown />
 							</p>
 						}
 					>
 						<h5 className=' underline font-bold'>Банковские реквизиты</h5>
 					</AccordionSummary>
-					<AccordionDetails className=' p-4 flex flex-col gap-2 border-b border-menu_color border-2 pb-4'>
+					<AccordionDetails className=' p-4 flex flex-col gap-2  pb-4'>
 						{arrBankRequisites.map((item, index) => (
 							<TextField
 								error={NotData.notStringData === item.value}
@@ -176,35 +140,8 @@ function ChangeRequisites({
 						))}
 					</AccordionDetails>
 				</Accordion>
-				{missingSrcRequisites ? (
-					<></>
-				) : (
-					// <InputFile setFieldValue={setFieldValue} />
-					<div>
-						<button className=' text-2xl text-highlight_three p-2'>
-							<MdDelete />
-						</button>
-						<Tooltip
-							className=' text-highlight_three text-2xl p-2'
-							title={
-								srcRequisites !== NotData.notFile
-									? formatBytes(srcRequisites?.size)
-									: ''
-							}
-						>
-							<a
-								href={
-									srcRequisites !== NotData.notFile
-										? srcRequisites?.FullPath
-										: ''
-								}
-								download
-							>
-								<FaDownload />
-							</a>
-						</Tooltip>
-					</div>
-				)}
+				<FileUpload tooltipTitle='Добавьте реквизиты' set={setFieldValue} src={srcRequisites} nameFiled='dataRequisites.srcRequisites'  />
+				
 			</ul>
 		</Fieldset>
 	)
@@ -216,7 +153,6 @@ function ChangeRequisites({
  *
  * - requisites and requisites bank
  *
- * - auto fill data(drag and drop event)
  *
  * - memo function
  */

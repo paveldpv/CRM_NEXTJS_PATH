@@ -24,10 +24,10 @@ export default function Header() {
 				borderColor: configHeader?.color?.borderColor,
 				fontSize: configHeader?.textSize,
 			}}
-			className={`flex h-24 items-center  pr-7 pl-7 border-2 border-solid  rounded-md`}
+			className={`flex h-20 items-center  pr-7 pl-7 border-2 border-solid  rounded-md`}
 		>
-			<div className='  flex justify-between text-xs  w-full'>
-				<ul className='text-list_menu flex flex-col gap-1 text-xs'>
+			<div className='  flex justify-between text-xs  w-full '>
+				<ul className='text-list_menu flex flex-col gap-1 text-xs '>
 					<li style={{ color: configHeader?.color?.textColor }}>
 						тел. : {dataUser.phone}
 					</li>

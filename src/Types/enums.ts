@@ -40,7 +40,8 @@ export enum typeDialog {
 export enum typicalError {
   not_geo = "NOT_GEO",
   not_valid_password ='NOT_VALID_PAS',
-  error_DB = "ERROR_DB"
+  error_DB = "ERROR_DB",
+  error_sever= 'ERROR_SERVER'
 }
 export enum NotData {
   notStringData = "не задано",

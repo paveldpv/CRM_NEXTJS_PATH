@@ -1,3 +1,4 @@
+'use client'
 import { Modal } from "@mui/material";
 import { useHelInformer } from "../../../store/storeHelpInformer";
 import { FaWindowClose } from "react-icons/fa";
