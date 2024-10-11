@@ -12,7 +12,7 @@ export const fetchSaveConfigApp = async (
 	})
 
 	return {
-		status:response.status,
-		response:await response.json()
+		status: response.status,
+		response: await response.json(),
 	}
 }

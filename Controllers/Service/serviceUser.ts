@@ -1,6 +1,6 @@
 import { TError } from "@/Types/subtypes/TError"
 import { TDBUser } from "@/Types/Types"
-import { fetchDeletedFiles } from "../../service/Server/fetchServer"
+// import { fetchDeletedFiles } from "../../service/Server/FileManager/deletedFile"
 import { Service } from "../classes/Service"
 import ControllerDBUser from "../ControllersDB/Collection/UsersDB"
 
@@ -73,28 +73,28 @@ export class ServiceUsers extends Service {
     }
   }
 
-  public async deletedPhotoUser(idUser: string, fullPathPhoto: string): Promise<void | TError> {
-    try {
-      await new ControllerDBUser(this.INN).deletedPhotToDB(idUser);
-      const deletedPhotoFromServer = await fetchDeletedFiles([fullPathPhoto]);
-      if (deletedPhotoFromServer && deletedPhotoFromServer[0].Errored) {
-        console.log(`deleted photo success ,id user ${idUser}`);
-      } else {
-        const er: TError = {
-          error: true,
-          message: `errored photo success ,id user ${idUser},data response serve :${deletedPhotoFromServer}`,
-        };
-        this.logError(er);
-      }
-    } catch (error) {
-      const er: TError = {
-        error: true,
-        message: `error deleted Photo user, INN :${this.INN} , error :${error} query ${idUser} /n ${fullPathPhoto}`,
-      };
-      this.logError(er);
-      return er;
-    }
-  }
+  // public async deletedPhotoUser(idUser: string, fullPathPhoto: string): Promise<void | TError> {
+  //   try {
+  //     await new ControllerDBUser(this.INN).deletedPhotToDB(idUser);
+  //     const deletedPhotoFromServer = await fetchDeletedFiles([fullPathPhoto]);
+  //     if (deletedPhotoFromServer && deletedPhotoFromServer[0].Errored) {
+  //       console.log(`deleted photo success ,id user ${idUser}`);
+  //     } else {
+  //       const er: TError = {
+  //         error: true,
+  //         message: `errored photo success ,id user ${idUser},data response serve :${deletedPhotoFromServer}`,
+  //       };
+  //       this.logError(er);
+  //     }
+  //   } catch (error) {
+  //     const er: TError = {
+  //       error: true,
+  //       message: `error deleted Photo user, INN :${this.INN} , error :${error} query ${idUser} /n ${fullPathPhoto}`,
+  //     };
+  //     this.logError(er);
+  //     return er;
+  //   }
+  // }
 
   public async updateDataUser(updateDataUser: TDBUser): Promise<void | TError> {
     try {

@@ -87,7 +87,10 @@ export type TResponseUploadFiles = {
   SizeFile?: number;
   fileFormat?:string 
 };
-
+export type TResponseDeletedFile = {
+  Approved:boolean,
+  MessageError?:string
+}
 
 
 

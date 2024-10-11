@@ -24,7 +24,7 @@ export default function Fieldset({ children, legend, ...props }: TFieldset) {
 						borderColor: configMain?.color.borderColor,
 						color: configMain?.color.textColor,
 					}}
-					className={cn('border-2 text-xs border-menu_color rounded-xl border-solid p-2  ml-6',props.className)}
+					className={cn('border-2 text-xs border-menu_color rounded-xl border-solid p-2  ml-6')}
 				>
 					{legend}
 				</legend>

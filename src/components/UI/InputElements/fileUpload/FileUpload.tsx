@@ -4,7 +4,8 @@ import { redirect, useParams } from 'next/navigation'
 import { ChangeEvent, DetailedHTMLProps, HTMLAttributes, useState } from 'react'
 import { combineFilesToFormData } from '../../../../../function/combineFilesToFormData'
 import { isError } from '../../../../../function/IsError'
-import { fetchUploadFileOrganization } from '../../../../../service/Server/fetchServer'
+import { fetchDeletedFile } from '../../../../../service/Server/FileManager/deletedFile'
+import { fetchUploadFileOrganization } from '../../../../../service/Server/FileManager/uploadFile'
 import { useDialogWindow } from '../../../../../store/storeDialogWindow'
 import DownloadFile from './DownloadFile'
 import InputFile from './InputFile'
@@ -12,7 +13,7 @@ import PreviewPictureFile, { TPreviewUploadFile } from './PreviewPictureFile'
 
 type TFileUpload = {
 	nameFiled: string
-	set: (nameField: string, data: TResponseUploadFiles) => void
+	set: (nameField: string, data: 'NOT_FOUND' | TResponseUploadFiles) => void
 	tooltipTitle?: string
 	src?: 'NOT_FOUND' | TResponseUploadFiles
 	preview?: TPreviewUploadFile
@@ -35,10 +36,20 @@ export default function FileUpload({
 	const [file, setFile] = useState(src)
 	const [pending, setPending] = useState(false)
 
-	const deletedFile = async (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+	const deletedFile = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+		setPending(true)
 		e.preventDefault()
 		if (file === 'NOT_FOUND') return
-		console.log(file.FullPath)
+
+		const deletedFile = await fetchDeletedFile(file.FullPath)
+
+		if (isError(deletedFile)) {
+			redirect(`/ERROR/${deletedFile.typeError || ''}`)
+		} else {
+			setFile('NOT_FOUND')
+			set(nameFiled, 'NOT_FOUND')
+			setPending(false)
+		}
 	}
 
 	const uploadFile = async (e: ChangeEvent<HTMLInputElement>) => {

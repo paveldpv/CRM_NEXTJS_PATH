@@ -2,6 +2,7 @@ import { TError } from '@/Types/subtypes/TError'
 import { TGeoLocation } from '@/Types/subtypes/TGeoLocation'
 import { Service } from '../classes/Service'
 import ControllerGeoLocationDB from '../ControllersDB/Collection/GeoLocationDB'
+import moment from 'moment'
 
 export class ServiceGeoLocation extends Service {
 	constructor(INN: string) {
@@ -31,9 +32,14 @@ export class ServiceGeoLocation extends Service {
 		}
 	}
 
-	async setDataLocation(data: TGeoLocation): Promise<void | TError> {
+	async setDataLocation(data: TGeoLocation | Omit<TGeoLocation,'date'>): Promise<void | TError> {
 		try {
-			await new ControllerGeoLocationDB(this.INN).saveGeoLocation(data)
+			if('date' in data){
+				await new ControllerGeoLocationDB(this.INN).saveGeoLocation(data)
+			}
+			else{
+				await new ControllerGeoLocationDB(this.INN).saveGeoLocation({...data,date:moment().toDate()})
+			}
 		} catch (error) {
 			const err: TError = {
 				error: true,

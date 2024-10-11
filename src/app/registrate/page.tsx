@@ -1,3 +1,4 @@
+import React from 'react';
 import FormRegistrate from "@/components/form/registrate/FormRegistrate";
 import { Metadata } from "next";
 import DialogWindow from "@/components/additional/DialogWindow";
