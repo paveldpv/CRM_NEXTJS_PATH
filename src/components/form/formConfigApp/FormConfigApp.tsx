@@ -10,7 +10,7 @@ import { useLoader } from '../../../../store/storeLoader'
 export default function FormConfigApp() {
 	const visibleLoader = useLoader((state) => state.visible)
 	const dataConfigApp = useConfigApp((state) => state.dataConfigApp)
-	console.log("🚀 ~ FormConfigApp ~ taConfigApp:", dataConfigApp)
+	
 	
 	const arrayConfigApp = useMemo(
 		() => [
@@ -21,7 +21,8 @@ export default function FormConfigApp() {
 		[dataConfigApp]
 	) as TConfigLayout[]
 	const [expandPanel, setExpandPanel] = useState<string | boolean>(false)
-
+	console.log(arrayConfigApp);
+	
 	return (
 		<Fieldset legend='Настройки приложения'>
 			{visibleLoader ? (

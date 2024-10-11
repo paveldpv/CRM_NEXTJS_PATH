@@ -1,4 +1,4 @@
-import { TDBUser } from "@/Types/Types";
+import { TDBUser, TWithoutPassUser } from "@/Types/Types";
 import { connect } from "mongoose";
 import modelUSer from "../SCHEMAS/usersSchema";
 import ContextOrganization from "../../classes/contextOrganization";
@@ -38,7 +38,7 @@ export default class ControllerDBUser extends ContextOrganization {
     return dataUser;
   }
   
-  public async updateDataUser(updateDataUser: TDBUser): Promise<void> {
+  public async updateDataUser(updateDataUser: TDBUser|TWithoutPassUser): Promise<void> {
     await connect(`${process.env.DB_URL}${this.INN}`);
     await modelUSer.updateOne({ idUser: updateDataUser.idUser }, updateDataUser);
   }

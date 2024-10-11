@@ -1,7 +1,10 @@
+import { TConfigAPP } from '@/Types/subtypes/TAppearanceConfigApp'
 import { TSelectTypicallyColor } from "./SelectTypicallyColor";
 import { keyConfigLayout, nameSettingLayout } from "@/Types/enums";
+type TTypicalSchema =Omit<TConfigAPP,"idUser"> & {index:number}
 
-export const dataTypicallyColor: TSelectTypicallyColor[] = [
+
+export const dataTypicallyColor: TTypicalSchema[] = [
   {
     index: 0,    
     configHeader: {
@@ -13,7 +16,7 @@ export const dataTypicallyColor: TSelectTypicallyColor[] = [
         borderColor: "#fe6c3a",
       },
       font: "Comfortaa",
-      textSize: "1.5rem",
+      textSize: "1.5rem",      
     },
     configMain: {
       keyConfig: keyConfigLayout.main,
@@ -27,8 +30,8 @@ export const dataTypicallyColor: TSelectTypicallyColor[] = [
       textSize: "1.5rem",
     },
     configNavMenu: {
-      keyConfig: keyConfigLayout.main,
-      name: nameSettingLayout.main,
+      keyConfig: keyConfigLayout.navMenu,
+      name: nameSettingLayout.navMenu,
       color: {
         bgColor: "#2c3039",
         textColor: "#b8c0c7,",
@@ -63,8 +66,8 @@ export const dataTypicallyColor: TSelectTypicallyColor[] = [
       textSize: "1.5rem",
     },
     configNavMenu: {
-      keyConfig: keyConfigLayout.main,
-      name: nameSettingLayout.main,
+      keyConfig: keyConfigLayout.navMenu,
+      name: nameSettingLayout.navMenu,
       color: {
         bgColor: " #241838",
         textColor: "#80679b",
@@ -99,8 +102,8 @@ export const dataTypicallyColor: TSelectTypicallyColor[] = [
       textSize: "1.5rem",
     },
     configNavMenu: {
-      keyConfig: keyConfigLayout.main,
-      name: nameSettingLayout.main,
+      keyConfig: keyConfigLayout.navMenu,
+      name: nameSettingLayout.navMenu,
       color: {
         bgColor: "#000000",
         textColor: "#f1ca28",
@@ -135,8 +138,8 @@ export const dataTypicallyColor: TSelectTypicallyColor[] = [
       textSize: "1.5rem",
     },
     configNavMenu: {
-      keyConfig: keyConfigLayout.main,
-      name: nameSettingLayout.main,
+      keyConfig: keyConfigLayout.navMenu,
+      name: nameSettingLayout.navMenu,
       color: {
         bgColor: "#858692",
         textColor: "#FFFFFF ",
@@ -146,4 +149,5 @@ export const dataTypicallyColor: TSelectTypicallyColor[] = [
       textSize: "1.5rem",
     },
   },
+  
 ];

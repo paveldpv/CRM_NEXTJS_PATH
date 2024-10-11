@@ -30,6 +30,9 @@ export type TSelectTypicallyColor = Omit<TConfigAPP, 'idUser'> & {
 
 	
 	const selectTypicalSchema = () => {
+		console.log(configMain);
+		console.log(configNavMenu);
+		
 		setConfigApp({ configHeader, configMain, configNavMenu })
 	}
 

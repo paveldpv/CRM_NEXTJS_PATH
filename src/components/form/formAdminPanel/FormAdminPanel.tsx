@@ -83,6 +83,7 @@ function FormAdminPanel({ data, INN }: TFormAdminPanel) {
 			if(response.status!==200 && isError(response.response)){
 				redirect(`/ERROR/${typicalError.error_DB}`)
 			}else{
+				//
 				setVisibleProgress(false)
 				
 			}

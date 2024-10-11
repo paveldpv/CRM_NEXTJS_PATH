@@ -1,5 +1,5 @@
 import { TError } from "@/Types/subtypes/TError"
-import { TDBUser } from "@/Types/Types"
+import { TDBUser, TWithoutPassUser } from "@/Types/Types"
 // import { fetchDeletedFiles } from "../../service/Server/FileManager/deletedFile"
 import { Service } from "../classes/Service"
 import ControllerDBUser from "../ControllersDB/Collection/UsersDB"
@@ -96,7 +96,7 @@ export class ServiceUsers extends Service {
   //   }
   // }
 
-  public async updateDataUser(updateDataUser: TDBUser): Promise<void | TError> {
+  public async updateDataUser(updateDataUser: TDBUser|TWithoutPassUser): Promise<void | TError> {
     try {
       await new ControllerDBUser(this.INN).updateDataUser(updateDataUser);
     } catch (error) {
