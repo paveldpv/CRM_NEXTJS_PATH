@@ -14,9 +14,9 @@ export default class ControllerDBUser extends ContextOrganization {
     await newAdmin.save();
   }
 
-  public async getUsers(): Promise<TDBUser[] | []> {
+  public async getUsers(): Promise<TWithoutPassUser[] | []> {
     await connect(`${process.env.DB_URL}${this.INN}`);
-    const dataUSer = await modelUSer.find({}, { safeDeleted: false });
+    const dataUSer = await modelUSer.find({}, { safeDeleted: false,password:0 });
     return dataUSer;
   }
 

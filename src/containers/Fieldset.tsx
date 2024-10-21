@@ -11,16 +11,14 @@ export default function Fieldset({ children, legend, ...props }: TFieldset) {
 	const { configMain } = useConfigApp((state) => state.dataConfigApp)
 	return (
 		<fieldset
-			style={{ borderColor: configMain?.color.borderColor }}
+			style={{ borderColor: configMain?.color.borderColor, background: configMain?.color.bgColor }}
 			{...props}
-			className={cn(
-				'h-full border-2 border-menu_color rounded-xl border-solid  w-full p-4',
-				props.className
-			)}
+			className={cn('h-full border-2 border-menu_color rounded-xl border-solid  w-full p-4', props.className)}
 		>
 			{legend && (
 				<legend
 					style={{
+						background: configMain?.color.bgColor,
 						borderColor: configMain?.color.borderColor,
 						color: configMain?.color.textColor,
 					}}

@@ -10,7 +10,7 @@ import { useState, useEffect } from "react";
 import { useDialogWindow } from "./../../../../store/storeDialogWindow";
 
 import { fetchRequestPrevCalc } from "../../../../service/fetchRequestPrevCalc";
-import { fetchUploadFilePrevCal } from "../../../../service/Server/fetchServer";
+import { fetchUploadFilePrevCal } from "../../../../service/Server/FileManager/uploadFile";
 import { combineFilesToFormData } from "../../../../function/combineFilesToFormData";
 
 import TextField from "@mui/material/TextField";

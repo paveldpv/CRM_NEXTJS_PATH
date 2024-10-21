@@ -1,4 +1,3 @@
-import React from 'react'
 import { TDBUser, TWithoutPassUser } from '@/Types/Types'
 
 import { FormikErrors } from 'formik'
@@ -20,8 +19,6 @@ type TChangeDataProfile = {
 }
 
 export default function ChangeDataProfile({ visible, handlerChange, values, setFieldValue }: TChangeDataProfile) {
-	
-
 	if (visible) {
 		return (
 			<section className=' flex justify-center items-center    col-span-2  '>

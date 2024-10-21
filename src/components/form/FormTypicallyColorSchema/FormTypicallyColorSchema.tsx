@@ -7,6 +7,7 @@ import { dataTypicallyColor } from './dataTypicallyColor'
 import SelectTypicallyColor from './SelectTypicallyColor'
 
 export default function FormTypicallyColorSchema() {
+	
 	const visibleLoader = useLoader((state) => state.visible)
 	const [currentConfigApp, setConfigApp] = useConfigApp((state) => [
 		state.dataConfigApp,

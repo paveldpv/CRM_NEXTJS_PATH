@@ -10,6 +10,7 @@ export type TLink = {
   description: string;
   title: string;
   paramsHref?:string[]
+  readonly?:boolean
 };
 
 export type TDBCollectedUsers = Omit<TDBUser, "password">;

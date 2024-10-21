@@ -47,3 +47,7 @@ export enum NotData {
   notStringData = "не задано",
   notFile = "NOT_FOUND"
 }
+
+export enum employee {
+  new_employee = 'NEW_EMPLOYEE'
+}
