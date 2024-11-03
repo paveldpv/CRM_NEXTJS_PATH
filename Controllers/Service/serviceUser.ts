@@ -1,6 +1,8 @@
 import { TError } from '@/Types/subtypes/TError'
 import { TDBUser, TWithoutPassUser } from '@/Types/Types'
 // import { fetchDeletedFiles } from "../../service/Server/FileManager/deletedFile"
+import bcrypt from 'bcrypt'
+import { SALT_ROUND } from '../../config/RegistrateConfig'
 import { Service } from '../classes/Service'
 import ControllerDBUser from '../ControllersDB/Collection/UsersDB'
 
@@ -9,10 +11,10 @@ export class ServiceUsers extends Service {
 		super(INN)
 	}
 
-  public async getAllEmployeeWithDeleted ():Promise<TDBUser[] | [] | TError>{
-    try {
+	public async getAllEmployeeWithDeleted(): Promise<TDBUser[] | [] | TError> {
+		try {
 			const dataAllEmployee = await new ControllerDBUser(this.INN).getUsersWithDeleted()
-      return this.normalizeDataFromMongoDB(dataAllEmployee)
+			return this.normalizeDataFromMongoDB(dataAllEmployee)
 		} catch (error) {
 			const err = {
 				error: true,
@@ -21,12 +23,12 @@ export class ServiceUsers extends Service {
 			this.logError(err)
 			return err
 		}
-  }
+	}
 
 	public async getAllEmployee(): Promise<TWithoutPassUser[] | [] | TError> {
 		try {
 			const dataAllEmployee = await new ControllerDBUser(this.INN).getUsers()
-      return this.normalizeDataFromMongoDB(dataAllEmployee)
+			return this.normalizeDataFromMongoDB(dataAllEmployee)
 		} catch (error) {
 			const err = {
 				error: true,
@@ -76,7 +78,7 @@ export class ServiceUsers extends Service {
 
 	public async addNewUser(data: TDBUser): Promise<void | TError> {
 		try {
-			await new ControllerDBUser(this.INN).addNewUser(data)
+			await new ControllerDBUser(this.INN).addNewUser(data as TDBUser)
 		} catch (error) {
 			const er: TError = {
 				error: true,
@@ -101,8 +103,6 @@ export class ServiceUsers extends Service {
 		}
 	}
 
-	
-
 	public async updateDataUser(updateDataUser: TDBUser | TWithoutPassUser): Promise<void | TError> {
 		try {
 			await new ControllerDBUser(this.INN).updateDataUser(updateDataUser)
@@ -110,6 +110,22 @@ export class ServiceUsers extends Service {
 			const er: TError = {
 				error: true,
 				message: `error updateData user , error :${error},query :${updateDataUser}`,
+			}
+			this.logError(er)
+			return er
+		}
+	}
+
+	public async updatePas(idEmployee: string, newPas: string): Promise<void | TError> {
+		try {
+			const getSalt = await bcrypt.genSalt(SALT_ROUND)
+			const hashNewPassword = bcrypt.hashSync(newPas, getSalt)
+			const controllerDBUSer = new ControllerDBUser(this.INN)
+			await controllerDBUSer.updatePas(idEmployee, hashNewPassword)
+		} catch (error) {
+			const er: TError = {
+				error: true,
+				message: `error update pas, id employee   :${idEmployee}, INN :${this.INN},error :${error}`,
 			}
 			this.logError(er)
 			return er
@@ -125,6 +141,19 @@ export class ServiceUsers extends Service {
 			const er: TError = {
 				error: true,
 				message: `error get user by phone , phone ${phone},error ${error}`,
+			}
+			this.logError(er)
+			return er
+		}
+	}
+	public async removeUser(idEmployee: string): Promise<void | TError> {
+		try {
+			const controllerDBUSer = new ControllerDBUser(this.INN)
+			await controllerDBUSer.removeUser(idEmployee)
+		} catch (error) {
+			const er: TError = {
+				error: true,
+				message: `error remove employee ,id Employee :${idEmployee},INN :${this.INN}`,
 			}
 			this.logError(er)
 			return er

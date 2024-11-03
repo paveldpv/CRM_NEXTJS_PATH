@@ -21,7 +21,7 @@ export default function FormConfigApp() {
 		[dataConfigApp]
 	) as TConfigLayout[]
 	const [expandPanel, setExpandPanel] = useState<string | boolean>(false)
-	console.log(arrayConfigApp);
+	
 	
 	return (
 		<Fieldset legend='Настройки приложения'>

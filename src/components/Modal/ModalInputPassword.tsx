@@ -1,6 +1,6 @@
 import Fieldset from '@/containers/Fieldset'
 import { InputAdornment, Modal, TextField } from '@mui/material'
-import { Dispatch, SetStateAction, useReducer } from 'react'
+import React, { Dispatch, SetStateAction, useReducer } from 'react'
 import { FaRegSave } from 'react-icons/fa'
 import { IoCloseSharp } from 'react-icons/io5'
 import { styleTextFiled } from '../../../config/muiCustomStyle/textField'
@@ -10,7 +10,7 @@ import CusButton from '../UI/CustomElements/CusButton'
 export type TModalInputPassword = {
 	open: boolean
 	setOpen: (open: boolean) => void
-	submitFunc: () => void
+	submitFunc: (e:React.MouseEvent) => void
 	handleChangePassword: Dispatch<SetStateAction<string>>
 	label?: string
 }
@@ -49,7 +49,10 @@ export default function ModalInputPassword({
 					/>
 				</section>
 				<section>
-					<div className=' flex justify-between' onClick={submitFunc}>
+					<div className=' flex justify-between' onClick={(e)=>{
+						setOpen(false)
+						submitFunc(e)
+					}}>
 						<CusButton className='  text-3xl mt-2'>
 							<FaRegSave />
 						</CusButton>

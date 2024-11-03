@@ -23,7 +23,8 @@ export default function ItemSelectedLink({
 }: TItemSelectedLink) {
 	const { configMain } = useConfigApp((state) => state.dataConfigApp)
 
-	const addLinkedAllowed = () => {
+	const addLinkedAllowed = (e:React.MouseEvent) => {
+		e.preventDefault()
 		if (initialList) {
 			setListLinkedAllowed((state) => ({
 				selectedLinks: [...state.selectedLinks, link],

@@ -8,11 +8,17 @@ export const userSchema = new Schema<TDBUser>({
     default: "NOT_FOUND",
   },
   INN: String,
-  email: String,
+  email: {
+    type:String,
+    default:'не указано'
+  },
   password: String,
   phone: String,
   idUser: String,
-  dateRegistrate: Date,
+  dateRegistrate: {
+    type:Date,
+    default:new Date()
+  },
   lastName: {
     type: String,
     default: "не указано",
@@ -33,11 +39,11 @@ export const userSchema = new Schema<TDBUser>({
     type: Date,
     default: new Date(),
   },
-  linksAllowed: Schema.Types.Mixed,
   safeDeleted:{
     type:Boolean,
     default:false
-  }
+  },
+  linksAllowed: Schema.Types.Mixed,
 })
 
 

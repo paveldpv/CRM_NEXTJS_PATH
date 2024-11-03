@@ -3,16 +3,24 @@ import ItemsEmployee from '@/components/items/ItemsEmployee'
 
 import { TPanelRuleEmployee } from '@/components/rulePanels/PanelRuleEmployee'
 import HorizonLoader from '@/components/UI/Loaders/PropsRuleLoaders/HorizonLoader'
+import { TParamsAllEmployee } from '../../service/user/getEmployee'
 import { TEmployees } from './Employees'
 import Fieldset from './Fieldset'
 
-type TListEmployee = { visibleLoader: boolean } & Pick<TEmployees, 'dataEmployees'> & TPanelRuleEmployee
+type TListEmployee = { visibleLoader: boolean;  } & Pick<
+	TEmployees,
+	'dataEmployees'
+> &
+	TPanelRuleEmployee
 
 export default function ListEmployee({
 	visibleLoader,
 	dataEmployees,
 	setVisibleCardEmployee,
 	setRedactProfile,
+	setVisibleLoader,
+	setEmployee,
+	
 }: TListEmployee) {
 	if (visibleLoader) {
 		return (
@@ -26,20 +34,14 @@ export default function ListEmployee({
 				<div>
 					{dataEmployees.map((employee, index) => (
 						<ItemsEmployee
-						key={index}
+						
+							setEmployee={setEmployee}
+							key={index}
+							setVisibleLoader={setVisibleLoader}
 							setRedactProfile={setRedactProfile}
 							setVisibleCardEmployee={setVisibleCardEmployee}
-							lastName={employee.lastName}
-							surname={employee.surname}
-							name={employee.name}
 							index={index}
-							phone={employee.phone}
-							INN={employee.INN}
-							idUser={employee.idUser}
-							email={employee.email}
-							linksAllowed={employee.linksAllowed}
-							srcPhoto={employee.srcPhoto}
-							safeDeleted={false}
+							{...employee}
 						/>
 					))}
 				</div>

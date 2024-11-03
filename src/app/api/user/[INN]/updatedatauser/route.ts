@@ -6,10 +6,15 @@ import { ServiceGeoLocation } from '../../../../../../Controllers/Service/servic
 import { isError } from '../../../../../../function/IsError'
 
 export async function POST(req: NextRequest, { params }: { params: { INN: string } }, res: NextResponse) {
+  
+  
+  
+  
  const INN                   = params.INN
  const requestData           = await req.json()
  const { dataUser, dataGeo } = requestData as { dataUser: TWithoutPassUser; dataGeo: Omit<TGeoLocation, 'date'> }
  const serviceUser           = new ServiceUsers(INN)
+ 
  const serviceGeo            = new ServiceGeoLocation(INN)
  
  const saveData = await Promise.all([

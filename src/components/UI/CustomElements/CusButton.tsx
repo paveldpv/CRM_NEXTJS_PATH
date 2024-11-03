@@ -9,8 +9,13 @@ const CusButton = React.forwardRef(
 		const { configMain } = useConfigApp((state) => state.dataConfigApp)
 		return (
 			<button
+				
 				ref={ref}
-				style={{ borderColor: configMain?.color.borderColor, backgroundColor: configMain?.color.bgColor,color:configMain?.color.textColor }}
+				style={{
+					borderColor: configMain?.color.borderColor,
+					backgroundColor: configMain?.color.bgColor,
+					color: configMain?.color.textColor,
+				}}
 				{...props}
 			>
 				{children}

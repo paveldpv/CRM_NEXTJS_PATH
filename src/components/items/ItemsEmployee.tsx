@@ -1,29 +1,67 @@
 'use client'
+import { typeDialog, typicalError } from '@/Types/enums'
 import { TWithoutPassUser } from '@/Types/Types'
 import moment from 'moment'
 import Image from 'next/image'
-import { useParams, useRouter } from 'next/navigation'
-import { useMemo } from 'react'
+import Link from 'next/link'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useMemo, useState } from 'react'
 import { FaEdit } from 'react-icons/fa'
 import { GoGraph } from 'react-icons/go'
 import { MdDelete } from 'react-icons/md'
 import { employeeImage } from '../../../config/urls'
+import { useDialogWindow } from '../../../store/storeDialogWindow'
 import { useInfoUser } from '../../../store/storeInfoUser'
 import { TPanelRuleEmployee } from '../rulePanels/PanelRuleEmployee'
+import CusButton from '../UI/CustomElements/CusButton'
+import { fetchRemoveEmployee } from '../../../service/user/removeEmployee'
+import { PURPOSE_USE, TGeoLocation } from '@/Types/subtypes/TGeoLocation'
+import { redirect } from 'next/navigation'
+import { useHelInformer } from '../../../store/storeHelpInformer'
+import { fetchGetEmployee, TParamsAllEmployee } from '../../../service/user/getEmployee'
+import { isError } from '../../../function/IsError'
 
 type TItemEmployee = {
-	index: number
+	index: number,
 } & TWithoutPassUser &
-	TPanelRuleEmployee
+	Omit<TPanelRuleEmployee, 'setVisibleAllEmployee'>
 
 export default function ItemsEmployee({
 	index,
 	setVisibleCardEmployee,
 	setRedactProfile,
+	setVisibleLoader,
+	setEmployee,
+	
 	...dataProfile
 }: TItemEmployee) {
+	const searchParams =useSearchParams()
+
+	useEffect(() => {
+		navigator.geolocation.getCurrentPosition(
+			(data) => {
+				const { latitude, longitude } = data.coords
+				setDataGeo({
+					location: {
+						latitude,
+						longitude,
+					},
+					idEmployee: idUser,
+					process: PURPOSE_USE.redact,
+				})
+			},
+			() => {
+				redirect(`/ERROR/${typicalError.not_geo}`)
+			}
+		)
+	}, [])
+
+	const [dataGeo, setDataGeo] = useState<Omit<TGeoLocation, 'date'> | null>(null)
+	const [setOpenDialogWindow, dispatchFn] = useDialogWindow((state) => [state.setOpen, state.setDispatchFn])
+	
 	const { PHONE } = useParams()
-	const { linksAllowed } = useInfoUser((state) => state.dataUser)
+	const { linksAllowed, idUser, phone, INN } = useInfoUser((state) => state.dataUser)
+
 	const permissionRedact = useMemo(() => {
 		if (linksAllowed === 'ADMIN') {
 			return true
@@ -42,13 +80,44 @@ export default function ItemsEmployee({
 	const goToStatistic = () => {
 		push(`employee/${dataProfile.idUser}/statistic`)
 	}
-	const deletedEmployee = async () => {}
+
+	const deletedEmployee = async () => {
+		
+		setOpenDialogWindow(
+			true,
+			{ title: 'удалить сотрудника ', message: `${dataProfile.surname} ${dataProfile.name}` },
+			typeDialog.dialog
+		)
+		dispatchFn(async () => {
+			setVisibleLoader(true)
+			const {idUser}=dataProfile
+			const response  =await fetchRemoveEmployee(INN,idUser,dataGeo!)
+			if(response.status ===403){				
+				setOpenDialogWindow(true,{title:'отказано в доступе'},typeDialog.error)
+			}else if (response.status!==200){
+				redirect(`/ERROR/${typicalError.error_DB}`)
+			}else{
+				const isListEmployeeWithDeleted = searchParams.get('all')===null?0:Number(searchParams.get('all')) as TParamsAllEmployee
+				const updateListEmployee = await fetchGetEmployee(INN,isListEmployeeWithDeleted)
+				if(isError(updateListEmployee)){
+					redirect(`/ERROR/${typicalError.error_DB}`)
+				}else{					
+					setEmployee(updateListEmployee)
+					setVisibleLoader(false)
+				}
+
+			}
+
+
+
+		})
+	}
 
 	return (
 		<div
 			className={`${index % 2 === 0 ? ' bg-list_menu_even' : ' bg-list_menu'} ${
 				dataProfile.phone === PHONE && 'border-2  border-solid  border-highlight_three'
-			}  rounded-md p-1 grid grid-cols-4  align-middle `}
+			}  rounded-md m-1 grid grid-cols-4  align-middle p-1 `}
 		>
 			<section className=' col-span-2 grid grid-cols-8'>
 				{dataProfile.srcPhoto === 'NOT_FOUND' ? (
@@ -77,15 +146,23 @@ export default function ItemsEmployee({
 				</ul>
 			</section>
 			<section className=' col-span-2 text-xl m-2 flex gap-2'>
-				<button onClick={redactProfile} hidden={!permissionRedact}>
-					<FaEdit />
-				</button>
-				<button onClick={deletedEmployee} hidden={linksAllowed == 'ADMIN' && permissionRedact}>
-					<MdDelete />
-				</button>
-				<button onClick={goToStatistic}>
+				{dataProfile.idUser === idUser ? (
+					<CusButton>
+						<Link href={`/${INN}/${phone}/main/setting/profile`}>
+							<FaEdit />
+						</Link>
+					</CusButton>
+				) : (
+					<CusButton onClick={redactProfile} hidden={!permissionRedact}>
+						<FaEdit />
+					</CusButton>
+				)}
+				<CusButton onClick={goToStatistic}>
 					<GoGraph />
-				</button>
+				</CusButton>
+				<CusButton onClick={deletedEmployee} hidden={dataProfile.linksAllowed == 'ADMIN' && permissionRedact}>
+					<MdDelete />
+				</CusButton>
 			</section>
 			<section className=' col-span-1'></section>
 		</div>

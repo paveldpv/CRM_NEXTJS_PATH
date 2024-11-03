@@ -47,11 +47,10 @@ export default function Header() {
 					)}
 				</ul>
 				<ul
-					style={{
-						borderColor: configHeader?.color?.borderColor,
+					style={{						
 						color: configHeader?.color?.textColor,
 					}}
-					className=' flex gap-1 flex-col text-center border-2  rounded-md p-2'
+					className=' flex gap-1 flex-col text-center   rounded-md p-2'
 				>
 					<li>«{nameOrganization?.abbreviated}»</li>
 					<li className=' underline font-bold '>ИНН ОРГАНИЗАЦИИ : {INN}</li>

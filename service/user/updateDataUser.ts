@@ -6,7 +6,9 @@ export const fetchUpdateDataUser = async (
 	dataUser: TWithoutPassUser,
 	dataGeo: Omit<TGeoLocation, 'date'>,
 	INN: string
-): Promise<TResponse> => {
+): Promise<TResponse> => {		
+	console.log(dataGeo);
+	console.log(dataUser);
 	
 	
 	try {
@@ -14,6 +16,8 @@ export const fetchUpdateDataUser = async (
 			method: 'POST',
 			body: JSON.stringify({ dataUser, dataGeo }),
 		})
+		
+		
 		return {
 			status:response.status,
 			response:await response.json()
