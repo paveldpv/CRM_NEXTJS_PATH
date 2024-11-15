@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 import { TFormRegistrate } from '@/Types/Types'
-import { TGeoLocation } from '@/Types/subtypes/TGeoLocation'
-import { ServiceRegistrated } from '../../../../Controllers/Service/serviceRegistrate'
+import { TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
+import { ServiceRegistrated } from '../../../../Server/Service/serviceRegistrate'
 
 export async function POST(req: NextRequest) {
 	const { data, dataGeo } = (await req.json()) as {
@@ -14,8 +14,7 @@ export async function POST(req: NextRequest) {
 	dataGeo.ip = ip
 
 	const serviceRegistrated = new ServiceRegistrated(data, dataGeo)
-	const resultRegistrated =
-		await serviceRegistrated.registratedNewOrganization()
+	const resultRegistrated = await serviceRegistrated.registratedNewOrganization()
 
 	return NextResponse.json(resultRegistrated || 'OK', { status: 200 })
 }

@@ -1,6 +1,7 @@
 import React,{ Suspense } from 'react'; 
 import type { Metadata } from "next";
-import PrevLoaderSettingApp from '@/components/UI/Loaders/PrevLoaders/PrevLoaderSettingApp'
+import PrevLoaderSettingApp from '@/entities/configApp/ui/PrevLoaderSettingApp'
+
 
 
 

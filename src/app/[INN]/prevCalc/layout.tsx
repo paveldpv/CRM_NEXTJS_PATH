@@ -1,5 +1,6 @@
+import LoaderPrevCalc from '@/entities/prevCalc/ui/LoaderPrevCalc'
 import { Suspense } from "react";
-import LoaderPrevCalc from "@/components/UI/Loaders/LoaderPrevCalc";
+
 
 export default function layout({ children }: { children: React.ReactNode }) {
   return (

@@ -1,31 +1,29 @@
 'use client'
-import FormTypicallyColorSchema from '@/components/form/FormTypicallyColorSchema/FormTypicallyColorSchema'
-import FormConfigApp from '@/components/form/formConfigApp/FormConfigApp'
-import { useConfigApp } from '../../../../../../../store/storeConfigApp'
-import { useLoader } from '../../../../../../../store/storeLoader'
-import { useInfoUser } from '../../../../../../../store/storeInfoUser'
-import { fetchSaveConfigApp } from '../../../../../../../service/serviceFetchConfigApp'
-import { isError } from '../../../../../../../function/IsError'
+
+import { typicalError } from '@/shared/model/types/enums'
 import { redirect } from 'next/navigation'
-import { typicalError } from '@/Types/enums'
+
+import { isError } from '../../../../../../shared/lib/IsError'
+import { useConfigApp } from '../../../../../../shared/model/store/storeConfigApp'
+import { useLoader } from '../../../../../../shared/model/store/storeLoader'
+import { fetchSaveConfigApp } from '@/entities/configApp/api/serviceFetchConfigApp'
+import FormConfigApp from '@/entities/configApp/ui/FormConfigApp'
+import FormTypicallyColorSchema from '@/entities/configApp/ui/FormTypicallyColorSchema'
 
 export default function page({ params }: { params: { INN: string } }) {
 	const dataConfigApp = useConfigApp((state) => state.dataConfigApp)
-	const setLoader     = useLoader(state=>state.setVisibleLoader)
-	
+	const setLoader = useLoader((state) => state.setVisibleLoader)
 
 	const submitConfigApp = async () => {
 		setLoader(true)
-		const {idUser}=dataConfigApp
-		const INN= params.INN
-		const response = await fetchSaveConfigApp(dataConfigApp,INN,idUser!)
-		if(response.status!=200 || isError(response.response)){
+		const { idUser } = dataConfigApp
+		const INN = params.INN
+		const response = await fetchSaveConfigApp(dataConfigApp, INN, idUser!)
+		if (response.status != 200 || isError(response.response)) {
 			redirect(`/ERROR/${typicalError.error_DB}`)
-		}
-		else{
+		} else {
 			setLoader(false)
 		}
-		
 	}
 	return (
 		<div className=' grid  grid-cols-5 gap-1 mt-2'>

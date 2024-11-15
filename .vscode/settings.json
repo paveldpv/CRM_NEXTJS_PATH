@@ -1,4 +1,16 @@
 {
 	"typescript.tsdk": "node_modules\\typescript\\lib",
-	"cSpell.words": ["Registrate", "Registrated"]
+	"cSpell.words": [
+		"datepicker",
+		"Formik",
+		"Konva",
+		"prevcalc",
+		"Registrate",
+		"Registrated",
+		"settingorganization",
+		"Signup",
+		"tailwindcss",
+		"uniqid",
+		"zustand"
+	]
 }

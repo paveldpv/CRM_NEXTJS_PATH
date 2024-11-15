@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import ControllerPrevCalc from '../../../../../../Controllers/Service/servicePrevCalc'
+import ControllerPrevCalc from '../../../../../../Server/Service/servicePrevCalc'
 
 export async function POST(
 	req: NextRequest,

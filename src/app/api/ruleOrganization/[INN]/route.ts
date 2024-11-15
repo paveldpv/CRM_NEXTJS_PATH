@@ -1,12 +1,12 @@
 import { TFullDataSettingOrganization } from '@/app/[INN]/[PHONE]/main/setting/settingorganization/page'
-import { TGeoLocation } from '@/Types/subtypes/TGeoLocation'
-import { TDataOrganization } from '@/Types/subtypes/TOrganization'
+import { TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
+import { TDataOrganization } from '@/shared/model/types/subtypes/TOrganization'
 import { NextRequest, NextResponse } from 'next/server'
-import { ServiceGeoLocation } from '../../../../../Controllers/Service/serviceGeoLocation'
-import { ServiceRequisites } from '../../../../../Controllers/Service/serviceReqisites'
-import { ServiceRuleOrganization } from '../../../../../Controllers/Service/serviceRuleOrganization'
-import { ServiceUsers } from '../../../../../Controllers/Service/serviceUser'
-import { isError } from '../../../../../function/IsError'
+import { ServiceGeoLocation } from '../../../../../Server/Service/serviceGeoLocation'
+import { ServiceRequisites } from '../../../../../Server/Service/serviceReqisites'
+import { ServiceRuleOrganization } from '../../../../../Server/Service/serviceRuleOrganization'
+import { ServiceUsers } from '../../../../../Server/Service/serviceUser'
+import { isError } from '../../../../shared/lib/IsError'
 
 export async function POST(req: NextRequest, { params }: { params: { INN: string } }) {
 	const { INN } = params
@@ -35,7 +35,6 @@ export async function POST(req: NextRequest, { params }: { params: { INN: string
 	])
 
 	const error = saveData.find((req) => isError(req))
-	
 
 	return NextResponse.json(error || 'OK', { status: 200 })
 }

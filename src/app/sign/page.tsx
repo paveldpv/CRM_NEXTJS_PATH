@@ -1,17 +1,18 @@
-import Auth from "@/components/form/auth/Auth";
-import { Metadata } from "next";
-import DialogWindow from "@/components/additional/DialogWindow";
+
+import Auth from '@/entities/auth/ui/Auth'
+import DialogWindow from '@/shared/ui/DialogWindow'
+import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "AUTH",
-  description: "sign MES",
-};
+	title: 'AUTH',
+	description: 'sign MES',
+}
 
 export default function auth() {
-  return (
-    <>
-      <Auth />
-      <DialogWindow/>
-    </>
-  );
+	return (
+		<>
+			<Auth />
+			<DialogWindow />
+		</>
+	)
 }

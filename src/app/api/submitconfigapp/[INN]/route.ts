@@ -1,12 +1,8 @@
-import { TConfigAPP } from '@/Types/subtypes/TAppearanceConfigApp'
+import { TConfigAPP } from '@/shared/model/types/subtypes/TAppearanceConfigApp'
 import { NextRequest, NextResponse } from 'next/server'
-import { ServiceConfigApp } from '../../../../../Controllers/Service/serviceConfigApp'
+import { ServiceConfigApp } from '../../../../../Server/Service/serviceConfigApp'
 
-export async function POST(
-	req: NextRequest,
-	{ params }: { params: { INN: string } },
-	res: NextResponse
-) {
+export async function POST(req: NextRequest, { params }: { params: { INN: string } }, res: NextResponse) {
 	const INN = params.INN
 	const requestData = await req.json()
 	const { dataConfig } = requestData as {

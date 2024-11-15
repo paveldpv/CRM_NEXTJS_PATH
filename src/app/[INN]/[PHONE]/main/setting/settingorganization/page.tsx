@@ -1,30 +1,31 @@
 import { cache } from 'react'
 
-import ProgressLoader from '@/components/UI/Loaders/ProgressLoader'
-import DialogWindow from '@/components/additional/DialogWindow'
-import { typicalError } from '@/Types/enums'
-import { TRequisites } from '@/Types/subtypes/TRequisites'
-import { TDataOrganization } from '@/Types/subtypes/TOrganization'
-import { TApprover } from '@/Types/customType'
-import { TDBUser } from '@/Types/Types'
-import { TError } from '@/Types/subtypes/TError'
-import { TDaDataOrganization } from '@/Types/subtypes/TDaDataOrganization'
 
-import FormAdminPanel from '@/components/form/formAdminPanel/FormAdminPanel'
+import { TApprover } from '@/shared/model/types/customType'
+import { typicalError } from '@/shared/model/types/enums'
+import { TDaDataOrganization } from '@/shared/model/types/subtypes/TDaDataOrganization'
+import { TError } from '@/shared/model/types/subtypes/TError'
+import { TDataOrganization } from '@/shared/model/types/subtypes/TOrganization'
+import { TRequisites } from '@/shared/model/types/subtypes/TRequisites'
+import ProgressLoader from '@/shared/ui/loaders/ProgressLoader'
 
-import { ServiceUsers } from '../../../../../../../Controllers/Service/serviceUser'
-import { ServiceDaDataOrganization } from '../../../../../../../Controllers/Service/serviceDaDataOrganization'
-import { ServiceRequisites } from '../../../../../../../Controllers/Service/serviceReqisites'
-import { ServiceRuleOrganization } from '../../../../../../../Controllers/Service/serviceRuleOrganization'
+
+
+
+import { ServiceDaDataOrganization } from '../../../../../../../Server/Service/serviceDaDataOrganization'
+import { ServiceRequisites } from '../../../../../../../Server/Service/serviceReqisites'
+import { ServiceRuleOrganization } from '../../../../../../../Server/Service/serviceRuleOrganization'
+import { ServiceUsers } from '../../../../../../../Server/Service/serviceUser'
+
 
 import { redirect } from 'next/navigation'
-import { isError } from '../../../../../../../function/IsError'
-import HelpInformerModalWindow from '@/components/additional/HelpInformerModalWindow'
+import { isError } from '../../../../../../shared/lib/IsError'
+import { TDBUser } from '@/shared/model/types/Types'
 
-
-
-
-
+import DialogWindow from '@/shared/ui/DialogWindow'
+import HelpInformerModalWindow from '@/shared/ui/HelpInformerModalWindow'
+import FormAdminPanel from '@/entities/organizationSetting/ui/FormAdminPanel'
+//entities
 export const revalidate = 10
 
 export type TFullDataSettingOrganization = {
@@ -34,31 +35,26 @@ export type TFullDataSettingOrganization = {
 	dataRequisites: TRequisites
 }
 
-export const getDataOrganization = cache(
-	async (INN: string): Promise<TFullDataSettingOrganization | TError> => {
-		const infoOrganization = await Promise.all([
-			new ServiceUsers(INN).getInfoAdmin(),
-			new ServiceRuleOrganization(INN).getParamsOrganization(),
-			new ServiceDaDataOrganization(INN).getDaDataRuleOrganization(),
-			new ServiceRequisites(INN).getRequisitesCurrentOrganization(),
-		])
+export const getDataOrganization = cache(async (INN: string): Promise<TFullDataSettingOrganization | TError> => {
+	const infoOrganization = await Promise.all([
+		new ServiceUsers(INN).getInfoAdmin(),
+		new ServiceRuleOrganization(INN).getParamsOrganization(),
+		new ServiceDaDataOrganization(INN).getDaDataRuleOrganization(),
+		new ServiceRequisites(INN).getRequisitesCurrentOrganization(),
+	])
 
-		const errorData = infoOrganization.find((data) => isError(data))
-		if (errorData) {
-			return errorData
-		}
-
-		return {
-			admins: infoOrganization[0] as TDBUser[],
-			dataOrganization: infoOrganization[1] as TApprover<
-				TDataOrganization,
-				'INN'
-			>,
-			daDataOrganization: infoOrganization[2] as TDaDataOrganization,
-			dataRequisites: infoOrganization[3] as TRequisites,
-		}
+	const errorData = infoOrganization.find((data) => isError(data))
+	if (errorData) {
+		return errorData
 	}
-)
+
+	return {
+		admins: infoOrganization[0] as TDBUser[],
+		dataOrganization: infoOrganization[1] as TApprover<TDataOrganization, 'INN'>,
+		daDataOrganization: infoOrganization[2] as TDaDataOrganization,
+		dataRequisites: infoOrganization[3] as TRequisites,
+	}
+})
 
 export default async function page({ params }: { params: { INN: string } }) {
 	const dataOrganization = await getDataOrganization(params.INN)

@@ -1,11 +1,11 @@
 import { TNewEmployee } from '@/Types/Types'
-import { ROOT_LINK } from '@/Types/enums'
-import { TGeoLocation } from '@/Types/subtypes/TGeoLocation'
+import { ROOT_LINK } from '@/shared/model/types/enums'
+import { TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
 import { NextRequest, NextResponse } from 'next/server'
-import ServicePermissionRedactData from '../../../../../../Controllers/Service/ServicePermissionRedactData'
-import { ServiceEmployee } from '../../../../../../Controllers/Service/serviceEmployee'
-import { ServiceGeoLocation } from '../../../../../../Controllers/Service/serviceGeoLocation'
-import { isError } from '../../../../../../function/IsError'
+import ServicePermissionRedactData from '../../../../../../Server/Service/ServicePermissionRedactData'
+import { ServiceEmployee } from '../../../../../../Server/Service/serviceEmployee'
+import { ServiceGeoLocation } from '../../../../../../Server/Service/serviceGeoLocation'
+import { isError } from '../../../../../shared/lib/IsError'
 
 export async function POST(req: NextRequest, { params }: { params: { INN: string } }, res: NextResponse) {
 	const INN = params.INN
@@ -21,7 +21,6 @@ export async function POST(req: NextRequest, { params }: { params: { INN: string
 	const serviceEmployee = new ServiceEmployee(INN)
 	const serviceGeo = new ServiceGeoLocation(INN)
 	const result = await Promise.all([serviceGeo.setDataLocation(dataGeo), serviceEmployee.addNewEmployee(employee)])
-
 
 	const error = result.find((req) => isError(req))
 	return NextResponse.json(error || 'OK', { status: 200 })

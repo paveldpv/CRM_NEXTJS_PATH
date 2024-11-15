@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import type {  Metadata } from "next";
-import PrevLoaderSettingOrganization from "@/components/UI/Loaders/PrevLoaders/PrevLoaderSettingOrganization";
+import PrevLoaderSettingOrganization from '@/entities/organizationSetting/ui/PrevLoaderSettingOrganization'
+
 
 
 export const metadata: Metadata = {

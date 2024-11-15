@@ -1,12 +1,14 @@
-import HelpInformerModalWindow from '@/components/additional/HelpInformerModalWindow'
-import Employees from '@/containers/Employees'
-import { typicalError } from '@/Types/enums'
-import { TError } from '@/Types/subtypes/TError'
-import { TWithoutPassUser } from '@/Types/Types'
+
+import { typicalError } from '@/shared/model/types/enums'
+import { TError } from '@/shared/model/types/subtypes/TError'
+
 import { redirect } from 'next/navigation'
-import { ServiceUsers } from '../../../../../../Controllers/Service/serviceUser'
-import { isError } from '../../../../../../function/IsError'
-import DialogWindow from '@/components/additional/DialogWindow'
+import { ServiceUsers } from '../../../../../../Server/Service/serviceUser'
+import { isError } from '../../../../../shared/lib/IsError'
+import { TWithoutPassUser } from '@/shared/model/types/Types'
+import DialogWindow from '@/shared/ui/DialogWindow'
+import HelpInformerModalWindow from '@/shared/ui/HelpInformerModalWindow'
+import Employees from '@/entities/employee/ui/Employees'
 
 const getAllEmployee = async (INN: string): Promise<TWithoutPassUser[] | [] | TError> => {
 	const serviceUsers = new ServiceUsers(INN)
@@ -21,8 +23,8 @@ export default async function page({ params }: { params: { INN: string; PHONE: s
 	}
 
 	return (
-		<div>
-			<DialogWindow/>
+		<div >
+			<DialogWindow />
 			<HelpInformerModalWindow />
 			<Employees dataEmployees={allEmployee} />
 		</div>

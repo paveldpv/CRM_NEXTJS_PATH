@@ -1,7 +1,7 @@
 import { TDBUser, TFormLogin } from "@/Types/Types"
 import type { AuthOptions, User } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
-import { ServiceAuth } from '../Controllers/Service/serviceAuth';
+import { ServiceAuth } from '../Server/Service/serviceAuth';
 
 const authConfig: AuthOptions = {
   secret: process.env.NEXTAUTH_SERCRET,

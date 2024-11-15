@@ -1,0 +1,146 @@
+import { typeDialog, typicalError } from '@/shared/model/types/enums'
+import { PURPOSE_USE, TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
+
+import Link from 'next/link'
+import { redirect, useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { FaEdit, FaTrashRestore } from 'react-icons/fa'
+import { GoGraph } from 'react-icons/go'
+import { MdDelete } from 'react-icons/md'
+
+
+import { useInfoUser } from '@/shared/model/store/storeInfoUser'
+import { ImProfile } from "react-icons/im"
+
+import CusButton from '@/shared/ui/CusButton'
+import { TPanelRuleEmployee } from './PanelRuleEmployee'
+import { TWithoutPassUser } from '@/shared/model/types/Types'
+import { useDialogWindow } from '@/shared/model/store/storeDialogWindow'
+import { fetchRemoveEmployee } from '../api/removeEmployee'
+import { fetchGetEmployee, TParamsAllEmployee } from '../api/getEmployee'
+import { isError } from '@/shared/lib/IsError'
+import { fetchRestoreEmployee } from '../api/restoreEmployee'
+
+type PanelEditEmployee = TWithoutPassUser & Omit<TPanelRuleEmployee, 'setVisibleAllEmployee'>
+
+export default function PanelEditEmployee({
+	setVisibleCardEmployee,
+	setRedactProfile,
+	setVisibleLoader,
+	setEmployee,
+
+	...dataProfile
+}: PanelEditEmployee) {
+	const searchParams = useSearchParams()
+	const [setOpenDialogWindow, dispatchFn] = useDialogWindow((state) => [state.setOpen, state.setDispatchFn])
+	const { idUser , phone, INN } = useInfoUser((state) => state.dataUser)
+	const { push } = useRouter()
+	const [dataGeo, setDataGeo] = useState<Omit<TGeoLocation, 'date'> | null>(null)
+	
+	useEffect(() => {
+		navigator.geolocation.getCurrentPosition(
+			(data) => {
+				const { latitude, longitude } = data.coords
+				setDataGeo({
+					location: {
+						latitude,
+						longitude,
+					},
+					idEmployee: idUser,
+					process: PURPOSE_USE.redact,
+				})
+			},
+			() => {
+				redirect(`/ERROR/${typicalError.not_geo}`)
+			}
+		)
+	}, [])
+
+	const deletedEmployee = async () => {
+		setOpenDialogWindow(
+			true,
+			{ title: 'удалить сотрудника ', message: `${dataProfile.surname} ${dataProfile.name}` },
+			typeDialog.dialog
+		)
+		dispatchFn(async () => {
+			setVisibleLoader(true)
+			const { idUser } = dataProfile
+			const response = await fetchRemoveEmployee(INN, dataProfile.idUser, dataGeo!)
+			if (response.status === 403) {
+				setOpenDialogWindow(true, { title: 'отказано в доступе' }, typeDialog.error)
+			} else if (response.status !== 200) {
+				redirect(`/ERROR/${typicalError.error_DB}`)
+			} else {
+				const isListEmployeeWithDeleted =	searchParams!.get('all') === null ? 0 : (Number(searchParams!.get('all')) as TParamsAllEmployee)
+				const updateListEmployee = await fetchGetEmployee(INN, isListEmployeeWithDeleted)
+				if (isError(updateListEmployee)) {
+					redirect(`/ERROR/${typicalError.error_DB}`)
+				} else {
+					setEmployee(updateListEmployee)
+					setVisibleLoader(false)
+				}
+			}
+		})
+	}
+	
+	const restoreEmployee = async () => {
+		setVisibleLoader(true)
+		
+		const response  = await fetchRestoreEmployee(INN,dataProfile.idUser,dataGeo!)
+		if(response.status==403){
+			setOpenDialogWindow(true, { title: 'отказано в доступе' }, typeDialog.error)
+		}else if(response.status!=200){
+			redirect(`/ERROR/${typicalError.error_DB}`)
+		}else{
+			const isListEmployeeWithDeleted =
+					searchParams!.get('all') === null ? 0 : (Number(searchParams!.get('all')) as TParamsAllEmployee)
+					const updateListEmployee = await fetchGetEmployee(INN, isListEmployeeWithDeleted)
+					if (isError(updateListEmployee)) {
+						redirect(`/ERROR/${typicalError.error_DB}`)
+					} else {
+						setEmployee(updateListEmployee)
+						setVisibleLoader(false)
+					}
+		}
+
+
+	}
+
+
+
+	const redactProfile = () => {		
+		setRedactProfile(dataProfile)
+		setVisibleCardEmployee(true)
+	}
+
+	return (
+		<section className=' col-span-2 text-xl m-2 flex gap-2'>
+			{dataProfile.idUser === idUser ? (
+				<CusButton>
+					<Link href={`/${INN}/${phone}/main/setting/profile`}>
+						<FaEdit />
+					</Link>
+				</CusButton>
+			) : (
+				<CusButton onClick={redactProfile}>
+					<FaEdit />
+				</CusButton>
+			)}
+			<CusButton onClick={()=>push(`employee/${dataProfile.idUser}/statistic`)}>
+				<GoGraph />
+			</CusButton>
+			<CusButton onClick={()=>push(`employee/${dataProfile.idUser}/fullProfile`)}>
+				<ImProfile />
+			</CusButton>
+			{dataProfile.safeDeleted ? (
+				<CusButton onClick={restoreEmployee} hidden={dataProfile.linksAllowed == 'ADMIN'}>
+					<FaTrashRestore />
+				</CusButton>
+			) : (
+				<CusButton onClick={deletedEmployee} hidden={dataProfile.linksAllowed == 'ADMIN'}>
+					<MdDelete />
+				</CusButton>
+			)}
+		</section>
+	)
+}

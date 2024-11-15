@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import PrevLoaderHistoryEntryLocation from "@/components/UI/Loaders/PrevLoaders/PrevLoaderHistoryEntryLocation";
+import PrevLoaderHistoryEntryLocation from '@/entities/geoLocation/ui/PrevLoaderHistoryEntryLocation'
+
 
 
 

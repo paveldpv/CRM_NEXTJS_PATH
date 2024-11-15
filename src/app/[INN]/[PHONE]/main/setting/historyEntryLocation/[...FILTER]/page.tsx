@@ -1,21 +1,24 @@
-import ListEntryPointsLocation from '@/containers/ListEntryPointsLocation'
-import { TError } from '@/Types/subtypes/TError'
-import { PURPOSE_USE } from '@/Types/subtypes/TGeoLocation'
+import { TError } from '@/shared/model/types/subtypes/TError'
+import { PURPOSE_USE } from '@/shared/model/types/subtypes/TGeoLocation'
 
-// import { isError } from "../../../../../../../function/IsError";
-// import { unionArrObjViaKey } from "../../../../../../../function/helpers/unionArrObjViaKey";
-import { typicalError } from '@/Types/enums'
+
+
+import { typicalError } from '@/shared/model/types/enums'
 import { redirect } from 'next/navigation'
-// import ServiceUsers from "../../../../../../../Controllers/Service/Users";
-import { TGeoLocation } from '@/Types/subtypes/TGeoLocation'
-import { TDBUser } from '@/Types/Types'
-// import { ServiceGeoLocation } from "../../../../../../../Controllers/Service/serviceGeoLocation";
-import FIlterListGeoLocation from '@/components/form/filterListGeoLocation/FIlterListGeoLocation'
-import NextAndPrevPageNavigator from '@/components/layout/NextAndPrevPageNavigator'
-import { ServiceGeoLocation } from '../../../../../../../../Controllers/Service/serviceGeoLocation'
-import { ServiceUsers } from '../../../../../../../../Controllers/Service/serviceUser'
-import { unionArrObjViaKey } from '../../../../../../../../function/helpers/unionArrObjViaKey'
-import { isError } from '../../../../../../../../function/IsError'
+
+import { TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
+
+
+
+
+import NextAndPrevPageNavigator from '@/shared/ui/NextAndPrevPageNavigator'
+import { ServiceGeoLocation } from '../../../../../../../../Server/Service/serviceGeoLocation'
+import { ServiceUsers } from '../../../../../../../../Server/Service/serviceUser'
+import { isError } from '../../../../../../../shared/lib/IsError'
+import { unionArrObjViaKey } from '../../../../../../../shared/lib/unionArrObjViaKey'
+import { TDBUser } from '@/shared/model/types/Types'
+import FIlterListGeoLocation from '@/entities/geoLocation/ui/FIlterListGeoLocation'
+import ListEntryPointsLocation from '@/entities/geoLocation/ui/ListEntryPointsLocation'
 
 export type TListEntryPointsLocation = {
 	dataEntryUsers: (TDBUser & TGeoLocation)[]
