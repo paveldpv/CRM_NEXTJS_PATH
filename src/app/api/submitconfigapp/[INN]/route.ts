@@ -6,8 +6,9 @@ export async function POST(req: NextRequest, { params }: { params: { INN: string
 	const INN = params.INN
 	const requestData = await req.json()
 	const { dataConfig } = requestData as {
-		dataConfig: TConfigAPP
-	}
+		dataConfig: TConfigAPP,idUser: string	}
+	
+	
 
 	const serviceConfigApp = new ServiceConfigApp(INN)
 

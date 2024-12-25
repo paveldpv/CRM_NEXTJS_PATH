@@ -1,5 +1,6 @@
-import { TLink } from '@/Types/Types'
+
 import { idLink, ROOT_LINK } from '@/shared/model/types/enums'
+import { TLink } from '@/shared/model/types/Types'
 export const adminLinks: TLink[] = [
 	{
 		href: ROOT_LINK.payment,

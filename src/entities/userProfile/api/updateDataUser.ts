@@ -8,8 +8,7 @@ export const fetchUpdateDataUser = async (
 	dataGeo: Omit<TGeoLocation, 'date'>,
 	INN: string
 ): Promise<TResponse> => {
-	console.log(dataGeo)
-	console.log(dataUser)
+	
 
 	try {
 		const response = await fetch(`/api/user/${INN}/updatedatauser`, {

@@ -92,7 +92,7 @@ export default function FormCardEmployee({
 			return
 		}
 		const isListEmployeeWithDeleted =
-			searchParams.get('all') === null ? 0 : (Number(searchParams.get('all')) as TParamsAllEmployee)
+			searchParams!.get('all') === null ? 0 : (Number(searchParams!.get('all')) as TParamsAllEmployee)
 		setVisibleCardEmployee(false)
 		setVisibleLoader(true)
 		const newEmployee = { ...dataEmployee, ...values, password: dataPassword } as TNewEmployee
@@ -118,7 +118,7 @@ export default function FormCardEmployee({
 			return
 		}
 		const isListEmployeeWithDeleted =
-			searchParams.get('all') === null ? 0 : (Number(searchParams.get('all')) as TParamsAllEmployee)
+			searchParams!.get('all') === null ? 0 : (Number(searchParams!.get('all')) as TParamsAllEmployee)
 		setVisibleLoader(true)
 		const updateDataEmployee = { ...dataEmployee, ...values } as TWithoutPassUser
 		const updateUser = await fetchUpdateDataUser(updateDataEmployee, dataGeo!, INN)

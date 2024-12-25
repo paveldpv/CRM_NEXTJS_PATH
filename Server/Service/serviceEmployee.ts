@@ -9,6 +9,10 @@ import { Service } from '../classes/Service'
 import { ServiceConfigApp } from './serviceConfigApp'
 import { ServiceUsers } from './serviceUser'
 import { TDBUser, TNewEmployee } from '@/shared/model/types/Types'
+
+
+
+
 export class ServiceEmployee extends Service {
 	constructor(INN: string) {
 		super(INN)
@@ -58,3 +62,4 @@ export class ServiceEmployee extends Service {
 		return saveNewEmployee.find((res) => isError(res))
 	}
 }
+

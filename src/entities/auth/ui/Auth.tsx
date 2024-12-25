@@ -29,7 +29,7 @@ export default function Auth() {
 	const initialValues: TFormLogin = {
 		password: globalThis?.localStorage?.getItem('mes_password') || ``,
 		phone: globalThis?.localStorage?.getItem('mes_phone') || ``,
-		INN: globalThis?.localStorage?.getItem('mes_INN') || params.get('inn') || ``,
+		INN: globalThis?.localStorage?.getItem('mes_INN') || params!.get('inn') || ``,
 	}
 
 	const onSubmit = async () => {
@@ -41,10 +41,7 @@ export default function Auth() {
 			password: values.password,
 			INN: values.INN,
 			redirect: false,
-		})
-		console.log('=============')
-
-		console.log(res)
+		})		
 		if (!res?.error) {
 			localStorage.setItem('mes_phone', values.phone)
 			localStorage.setItem('mes_INN', `${values.INN}`)

@@ -11,7 +11,8 @@ export enum idLink {
   setting_profile='setting_profile',
   setting_app='setting_app',
   setting_organization ="setting_organization",
-  setting_history_entry_location='setting_history_entry_location'
+  setting_history_entry_location='setting_history_entry_location',
+  table='table'
 
 }
 export enum nameSettingLayout {
@@ -58,6 +59,6 @@ export enum ROOT_LINK {
   taskBoard = 'taskBoard',
   application = 'application',
   statistics= 'statistics',
-  price= 'price',
+  price= 'price/initialPrice',
   setting= 'setting'
 } 

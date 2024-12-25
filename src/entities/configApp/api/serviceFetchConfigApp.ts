@@ -7,6 +7,8 @@ export const fetchSaveConfigApp = async (
 	INN: string,
 	idUser: string
 ): Promise<TResponse> => {
+	
+	
 	const response = await fetch(`/api/submitconfigapp/${INN}`, {
 		method: 'POST',
 		body: JSON.stringify({ idUser, dataConfig }),

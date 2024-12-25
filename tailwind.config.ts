@@ -27,6 +27,7 @@ const config: Config = {
         list_menu: "#FFFFFF ",
         text_list_menu: "#98A5D2 ",
         text_navigate_menu: "#858692",
+        text_alert:'#900020'
       },
     },
     screens:{

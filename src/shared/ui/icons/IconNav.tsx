@@ -8,6 +8,7 @@ import { GoGraph } from "react-icons/go";
 import { LiaTasksSolid } from "react-icons/lia";
 import { IoIosSettings } from "react-icons/io";
 import { PiSignOutBold } from "react-icons/pi";
+import { FaTable } from "react-icons/fa";
 
 import { CgProfile } from "react-icons/cg";
 import { MdDisplaySettings } from "react-icons/md";
@@ -29,6 +30,7 @@ const mapIconsNavLink = {
   setting_app: <MdDisplaySettings />,
   setting_organization: <MdSettings />,
   setting_history_entry_location: <BsGeoAlt />,
+  table:<FaTable />
 };
 
 export default function IconNav({ id }: Pick<TLink, "id">) {

@@ -40,7 +40,7 @@ export default function NavBar() {
 			
 			}}
 		>
-			<ListLinks listLinks={currentLink} />
+			<ListLinks listLinks={currentLink} className='gap-2' />
 			<BottomNavBar />
 		</motion.div>
 	)

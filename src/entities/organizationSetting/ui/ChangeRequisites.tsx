@@ -4,7 +4,7 @@ import { TFieldFormAdminPanel } from './FormAdminPanel'
 import { memo, useMemo } from 'react'
 
 import { TFullDataSettingOrganization } from '@/app/[INN]/[PHONE]/main/setting/settingorganization/page'
-import Fieldset from '@/containers/Fieldset'
+
 import FileUpload from '@/shared/components/fileUpload/ui/FileUpload'
 import { NotData } from '@/shared/model/types/enums'
 import { TRequisites } from '@/shared/model/types/subtypes/TRequisites'
@@ -13,6 +13,7 @@ import { FormikErrors } from 'formik'
 import { FaArrowCircleDown } from 'react-icons/fa'
 import { styleTextFiled } from '../../../../config/muiCustomStyle/textField'
 import LabelRequisites from './LabelRequisites'
+import Fieldset from '@/shared/components/fieldSet/ui/Fieldset'
 
 export type TChangeRequisites = {
 	values: Omit<TFullDataSettingOrganization, 'admins'>

@@ -20,7 +20,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
 				}
 			>
 				<div className='flex gap-1 pb-2 border-b-2 border-menu_color border-solid'>
-					<ListLinks listLinks={dataLinkSetting} />
+					<ListLinks listLinks={dataLinkSetting} className=' flex-row gap-1' />
 				</div>
 				{children}
 			</Suspense>

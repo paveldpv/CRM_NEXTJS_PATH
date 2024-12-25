@@ -62,3 +62,4 @@ button {
 .activeLink{
   @apply bg-color_header  text-menu_color
 }
+

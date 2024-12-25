@@ -1,6 +1,7 @@
+import { TDBUser } from '@/shared/model/types/Types'
 import { Model, Schema, model, models } from "mongoose";
 
-import { TDBUser } from "@/Types/Types";
+
 
 export const userSchema = new Schema<TDBUser>({
   srcPhoto: {

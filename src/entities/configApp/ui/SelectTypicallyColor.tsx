@@ -26,10 +26,8 @@ function SelectTypicallyColor({
 	}, [currentConfigApp])
 
 	const selectTypicalSchema = () => {
-		console.log(configMain)
-		console.log(configNavMenu)
-
-		setConfigApp({ configHeader, configMain, configNavMenu })
+		const {idUser}=currentConfigApp
+		setConfigApp({ configHeader, configMain, configNavMenu,idUser})
 	}
 
 	return (

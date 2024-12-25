@@ -1,3 +1,4 @@
+import { cn } from '../lib/cn'
 import { TPropsNavLink } from './NavLink'
 
 import NavLink from './NavLink'
@@ -9,7 +10,7 @@ type TListLink = {
 
 export default function ListLinks({ listLinks = [], className }: TListLink) {
 	return (
-		<>
+		<div className={cn('flex flex-col',className)}>
 			{listLinks.map((link, index) => (
 				<NavLink
 					paramsHref={link?.paramsHref}
@@ -18,9 +19,9 @@ export default function ListLinks({ listLinks = [], className }: TListLink) {
 					href={link.href}
 					key={index}
 					description={link.description}
-					className={className}
+					
 				/>
 			))}
-		</>
+		</div>
 	)
 }

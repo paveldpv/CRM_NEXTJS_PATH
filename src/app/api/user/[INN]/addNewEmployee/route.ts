@@ -1,4 +1,4 @@
-import { TNewEmployee } from '@/Types/Types'
+
 import { ROOT_LINK } from '@/shared/model/types/enums'
 import { TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
 import { NextRequest, NextResponse } from 'next/server'
@@ -6,6 +6,7 @@ import ServicePermissionRedactData from '../../../../../../Server/Service/Servic
 import { ServiceEmployee } from '../../../../../../Server/Service/serviceEmployee'
 import { ServiceGeoLocation } from '../../../../../../Server/Service/serviceGeoLocation'
 import { isError } from '../../../../../shared/lib/IsError'
+import { TNewEmployee } from '@/shared/model/types/Types'
 
 export async function POST(req: NextRequest, { params }: { params: { INN: string } }, res: NextResponse) {
 	const INN = params.INN

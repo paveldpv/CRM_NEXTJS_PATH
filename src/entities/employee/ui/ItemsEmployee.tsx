@@ -7,6 +7,7 @@ import { useMemo } from 'react'
 
 import { useInfoUser } from '@/shared/model/store/storeInfoUser'
 import { TWithoutPassUser } from '@/shared/model/types/Types'
+import Link from 'next/link'
 import { employeeImage } from '../../../../config/urls'
 import PanelEditEmployee from './PanelEditEmployee'
 import { TPanelRuleEmployee } from './PanelRuleEmployee'
@@ -25,9 +26,8 @@ export default function ItemsEmployee({
 
 	...dataProfile
 }: TItemEmployee) {
-	const { PHONE } = useParams()
+	const { PHONE } = useParams() as { PHONE: string }
 	const { linksAllowed, idUser, phone, INN } = useInfoUser((state) => state.dataUser)
-	
 
 	const permissionRedact = useMemo(() => {
 		if (linksAllowed === 'ADMIN') {
@@ -37,8 +37,7 @@ export default function ItemsEmployee({
 		const permission = linksAllowed.find((link) => link.href === 'employee' && !link.readonly)
 		return !!permission
 	}, [linksAllowed])
-
-	
+	//push(`employee/${dataProfile.idUser}/fullProfile`)
 
 	return (
 		<div
@@ -47,17 +46,25 @@ export default function ItemsEmployee({
 			}  rounded-md m-1 grid grid-cols-4  align-middle p-1  `}
 		>
 			<section className=' col-span-2 grid grid-cols-8'>
-				{dataProfile.srcPhoto === 'NOT_FOUND' ? (
-					<Image src={employeeImage} alt={'no found'} height={50} width={50} className='rounded-xl col-span-1  ' />
-				) : (
-					<Image
-						src={dataProfile.srcPhoto.FullPath}
-						alt={'not found'}
-						height={50}
-						width={50}
-						className=' rounded-xl  col-span-1'
-					/>
-				)}
+				<Link href={permissionRedact ? `employee/${dataProfile.idUser}/fullProfile`:""}>
+					{dataProfile.srcPhoto === 'NOT_FOUND' ? (
+						<Image
+							src={employeeImage}
+							alt={'no found'}
+							height={50}
+							width={50}
+							className='rounded-xl col-span-1  '
+						/>
+					) : (
+						<Image
+							src={dataProfile.srcPhoto.FullPath}
+							alt={'not found'}
+							height={50}
+							width={50}
+							className=' rounded-xl  col-span-1'
+						/>
+					)}
+				</Link>
 				<ul className=' text-xs col-span-2'>
 					<li>{dataProfile.surname}</li>
 					<li>{dataProfile.name}</li>

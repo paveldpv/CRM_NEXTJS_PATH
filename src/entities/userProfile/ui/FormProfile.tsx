@@ -19,7 +19,7 @@ import ChangeDataProfile from './ChangeDataProfile'
 import { TFormProfile } from '../lib/Types'
 
 export default function FormProfile({initialValues,setInfoUser}:TFormProfile) {
-	const { INN } = useParams()
+	const { INN } = useParams() as {INN:string}
 	//const [initialValues, setInfoUser] = useInfoUser((state) => [state.dataUser, state.setInfoUser])
 	const {idUser}=useInfoUser(state=>state.dataUser)
 	const [setVisibleLoader, visible] = useMiniLoader((state) => [state.setVisibleLoader, state.visible])

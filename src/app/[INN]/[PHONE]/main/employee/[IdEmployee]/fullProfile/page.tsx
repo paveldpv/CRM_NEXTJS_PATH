@@ -33,7 +33,7 @@ export default async function page({ params }: { params: { INN: string; PHONE: s
 
 	return (
 		<div className='mt-2'>
-			<FormProfile initialValues={dataProfile}  /> //TODO:			
+			<FormProfile initialValues={dataProfile}  /> 	
 			<DialogWindow />
 		</div>
 	)

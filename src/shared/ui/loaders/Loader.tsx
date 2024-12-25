@@ -8,7 +8,8 @@ const anton = Anton({ subsets: ['latin'], weight: ['400'] })
 
 function Loader() {
 	const [visibleLoader, text]: [boolean, string] = useLoader((state) => [state.visible, state.text])
-
+	console.log("🚀 ~ Loader ~ visibleLoader:", visibleLoader)
+	
 	return (
 		<motion.span
 			animate={{

@@ -14,6 +14,8 @@ export default class ControllerDBConfigApp extends ContextOrganization {
 	}
 
 	public async updatePersonalConfigApp(newDataConfig: TConfigAPP): Promise<void> {
+		console.log(newDataConfig.idUser);
+		
 		await connect(`${process.env.DB_URL}${this.INN}`)
 		await modelConfig.findOneAndUpdate({ idUser: newDataConfig.idUser }, newDataConfig)
 	}

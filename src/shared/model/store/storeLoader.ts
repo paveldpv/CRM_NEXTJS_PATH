@@ -12,8 +12,7 @@ export const useLoader = create<TLoader>((set) => ({
   text: "Загрузка",
   setVisibleLoader: (state) => set({ visible: state }),
   setTextLoader: (value) => {
-    console.log("🚀 ~ useLoader ~ value:", value)
-    console.log();
+    
     
     set({ text: value });
   },

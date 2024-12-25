@@ -26,7 +26,7 @@ export default class ServicePermissionRedactData extends ContextOrganization {
 			return false
 		}
 	}
-	async PermissionByPhone (phone:string):Promise<boolean>{
+	public async PermissionByPhone (phone:string):Promise<boolean>{
 		try {
 			const serviceUser = new ServiceUsers(this.INN)
 			this.employee = await serviceUser.getUserByPhone(phone)
@@ -40,7 +40,7 @@ export default class ServicePermissionRedactData extends ContextOrganization {
 		}
 	}
 
-	async Permission(idEmployee: string): Promise<boolean> {
+	public async Permission(idEmployee: string): Promise<boolean> {
 		try {
 			const serviceUser = new ServiceUsers(this.INN)
 			this.employee = await serviceUser.getUserById(idEmployee)

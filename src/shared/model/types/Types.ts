@@ -58,9 +58,9 @@ export type TNewEmployee = Pick<
 	'name' | 'phone' | 'lastName' | 'nameJobTitle' | 'linksAllowed' | 'surname' | 'password' | 'INN'
 >
 
-export type TResponse = {
+export type TResponse<T=undefined> = {
 	status: number
-	response: TError | 'OK'
+	response: TError | (T extends undefined?'OK':T)
 }
 
 export type TAnswerUpdateDB = {
