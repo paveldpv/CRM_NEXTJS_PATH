@@ -1,6 +1,9 @@
+import TaskBoard from '@/pages/TaskBoard/ui/TaskBoard'
+
+
 
 export default function page() {
   return (
-    <div>task board</div>
+    <div><TaskBoard/></div>
   )
 }

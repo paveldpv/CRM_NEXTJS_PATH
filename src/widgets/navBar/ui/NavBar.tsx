@@ -1,23 +1,20 @@
 'use client'
 
-
 import { motion } from 'framer-motion'
 import { useMemo } from 'react'
 import { adminLinks } from '../../../../config/adminLinks'
-
 
 import ListLinks from '../../../shared/ui/ListLinks'
 
 import { useInfoUser } from '@/shared/model/store/storeInfoUser'
 import { TConfigAPP } from '@/shared/model/types/subtypes/TAppearanceConfigApp'
-import { useConfigApp } from '../../../shared/model/store/storeConfigApp'
 import { TLink } from '@/shared/model/types/Types'
+import { useConfigApp } from '../../../shared/model/store/storeConfigApp'
 import BottomNavBar from './BottomNavBar'
 
 export default function NavBar() {
 	const userData = useInfoUser((store) => store.dataUser)
 	const { configNavMenu } = useConfigApp((store) => store.dataConfigApp) as TConfigAPP
-	// console.log(userData);
 
 	const currentLink: TLink[] = useMemo(() => {
 		if (userData.linksAllowed === 'ADMIN') {
@@ -37,10 +34,13 @@ export default function NavBar() {
 				background: configNavMenu?.color?.bgColor,
 				color: configNavMenu?.color?.textColor,
 				borderColor: configNavMenu?.color?.borderColor,
-			
 			}}
 		>
-			<ListLinks listLinks={currentLink} className='gap-2' />
+			<ListLinks
+				listLinks={currentLink}
+				className='gap-2'
+				styleLinks={{ borderColor: configNavMenu?.color?.borderColor }}
+			/>
 			<BottomNavBar />
 		</motion.div>
 	)

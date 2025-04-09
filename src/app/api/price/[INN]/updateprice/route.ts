@@ -12,9 +12,12 @@ export async function POST(req: NextRequest, { params }: { params: { INN: string
 	const requestData = await req.json()
 	const { data, dataGeo } = requestData as { data: TDataTablePrice; dataGeo: Omit<TGeoLocation, 'date'> }
 	const servicePermission = new ServicePermissionRedactData(INN, ROOT_LINK.price)
+	
+	
 	const solutionRedactPrice = await servicePermission.Permission(dataGeo.idEmployee)
+	
 
-	if (!solutionRedactPrice) return NextResponse.json('refusal', { status: 200 })
+	if (!solutionRedactPrice) return NextResponse.json('refusal', { status: 403 })
 
 	const serviceGeoLocation = new ServiceGeoLocation(INN)
 	const servicePrice = new ServicePrice(INN)

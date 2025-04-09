@@ -1,6 +1,5 @@
 import { getServerSession } from 'next-auth'
 
-
 import { redirect } from 'next/navigation'
 import authConfig from '../../../../../config/authConfig'
 
@@ -9,13 +8,13 @@ import { TConfigAPP } from '@/shared/model/types/subtypes/TAppearanceConfigApp'
 import { TError } from '@/shared/model/types/subtypes/TError'
 import { TDataOrganization } from '@/shared/model/types/subtypes/TOrganization'
 
-import Link from 'next/link'
-import { ServiceConfigApp } from '../../../../../Server/Service/serviceConfigApp'
-import { ServiceRuleOrganization } from '../../../../../Server/Service/serviceRuleOrganization'
-import { ServiceUsers } from '../../../../../Server/Service/serviceUser'
-import { isError } from '../../../../shared/lib/IsError'
 import { TDBUser } from '@/shared/model/types/Types'
 import Wrapper from '@/widgets/wrapper/ui/Wrapper'
+import Link from 'next/link'
+import { ServiceConfigApp } from '../../../../../Server/Service/serviceConfigApp'
+import { ServiceRuleOrganization } from '../../../../../Server/Service/serviceRuleOrganization/serviceRuleOrganization'
+import { ServiceUsers } from '../../../../../Server/Service/serviceUser'
+import { isError } from '../../../../shared/lib/IsError'
 
 const getDataUser = async (INN: string, phone: string): Promise<TDBUser | null | TError> => {
 	const serviceUsers = new ServiceUsers(INN)
@@ -53,7 +52,9 @@ export default async function page({ params }: { params: { INN: string; PHONE: s
 	const [configApp, infoOrganization] = dataApp as [TConfigAPP, TDataOrganization]
 
 	if (session) {
-		return <Wrapper dataConfigApp={configApp} dataUser={userWithoutPas} infoOrganization={infoOrganization} />
+		return (
+			<Wrapper dataConfigApp={configApp} dataUser={userWithoutPas} infoOrganization={infoOrganization} />
+		)
 	} else {
 		;<div className=' bg-slate-600'>
 			<Link className=' text-6xl bg-slate-700' href={'/sign'}>

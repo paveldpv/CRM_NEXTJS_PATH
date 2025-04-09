@@ -3,8 +3,7 @@ import { ServiceUsers } from '../../../../../../Server/Service/serviceUser'
 
 export async function GET(req: NextRequest, { params }: { params: { INN: string } }, res: NextResponse) {
 	const isAllEmployee = req.nextUrl.searchParams.get('all')
-	// console.log("🚀 ~ GET ~ isAllEmployee:", isAllEmployee)
-
+	
 	const serviceUser = new ServiceUsers(params.INN)
 
 	let result =

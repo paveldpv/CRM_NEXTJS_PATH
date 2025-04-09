@@ -1,9 +1,8 @@
 import { typeDialog, typicalError } from '@/shared/model/types/enums'
-import { PURPOSE_USE, TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
+import { PURPOSE_USE } from '@/shared/model/types/subtypes/TGeoLocation'
 
 import Link from 'next/link'
-import { redirect, useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { FaEdit, FaTrashRestore } from 'react-icons/fa'
 import { GoGraph } from 'react-icons/go'
 import { MdDelete } from 'react-icons/md'
@@ -11,6 +10,7 @@ import { MdDelete } from 'react-icons/md'
 import { useInfoUser } from '@/shared/model/store/storeInfoUser'
 
 import { isError } from '@/shared/lib/IsError'
+import useGeo from '@/shared/model/hooks/useGeo'
 import { useDialogWindow } from '@/shared/model/store/storeDialogWindow'
 import { TWithoutPassUser } from '@/shared/model/types/Types'
 import CusButton from '@/shared/ui/CusButton'
@@ -33,26 +33,7 @@ export default function PanelEditEmployee({
 	const [setOpenDialogWindow, dispatchFn] = useDialogWindow((state) => [state.setOpen, state.setDispatchFn])
 	const { idUser, phone, INN } = useInfoUser((state) => state.dataUser)
 	const { push } = useRouter()
-	const [dataGeo, setDataGeo] = useState<Omit<TGeoLocation, 'date'> | null>(null)
-
-	useEffect(() => {
-		navigator.geolocation.getCurrentPosition(
-			(data) => {
-				const { latitude, longitude } = data.coords
-				setDataGeo({
-					location: {
-						latitude,
-						longitude,
-					},
-					idEmployee: idUser,
-					process: PURPOSE_USE.redact,
-				})
-			},
-			() => {
-				redirect(`/ERROR/${typicalError.not_geo}`)
-			}
-		)
-	}, [])
+	const { dataGeo } = useGeo(idUser, PURPOSE_USE.redact)
 
 	const deletedEmployee = async () => {
 		setOpenDialogWindow(
@@ -62,18 +43,18 @@ export default function PanelEditEmployee({
 		)
 		dispatchFn(async () => {
 			setVisibleLoader(true)
-			const { idUser } = dataProfile
+
 			const response = await fetchRemoveEmployee(INN, dataProfile.idUser, dataGeo!)
 			if (response.status === 403) {
 				setOpenDialogWindow(true, { title: 'отказано в доступе' }, typeDialog.error)
 			} else if (response.status !== 200) {
-				redirect(`/ERROR/${typicalError.error_DB}`)
+				push(`/ERROR/${typicalError.error_DB}`)
 			} else {
 				const isListEmployeeWithDeleted =
 					searchParams!.get('all') === null ? 0 : (Number(searchParams!.get('all')) as TParamsAllEmployee)
 				const updateListEmployee = await fetchGetEmployee(INN, isListEmployeeWithDeleted)
 				if (isError(updateListEmployee)) {
-					redirect(`/ERROR/${typicalError.error_DB}`)
+					push(`/ERROR/${typicalError.error_DB}`)
 				} else {
 					setEmployee(updateListEmployee)
 					setVisibleLoader(false)
@@ -89,13 +70,13 @@ export default function PanelEditEmployee({
 		if (response.status == 403) {
 			setOpenDialogWindow(true, { title: 'отказано в доступе' }, typeDialog.error)
 		} else if (response.status != 200) {
-			redirect(`/ERROR/${typicalError.error_DB}`)
+			push(`/ERROR/${typicalError.error_DB}`)
 		} else {
 			const isListEmployeeWithDeleted =
 				searchParams!.get('all') === null ? 0 : (Number(searchParams!.get('all')) as TParamsAllEmployee)
 			const updateListEmployee = await fetchGetEmployee(INN, isListEmployeeWithDeleted)
 			if (isError(updateListEmployee)) {
-				redirect(`/ERROR/${typicalError.error_DB}`)
+				push(`/ERROR/${typicalError.error_DB}`)
 			} else {
 				setEmployee(updateListEmployee)
 				setVisibleLoader(false)
@@ -121,8 +102,8 @@ export default function PanelEditEmployee({
 					<FaEdit />
 				</CusButton>
 			)}
-			<Link href={`employee/${dataProfile.idUser}/statistic`} >
-				<CusButton >
+			<Link href={`employee/${dataProfile.idUser}/statistic`}>
+				<CusButton>
 					<GoGraph />
 				</CusButton>
 			</Link>

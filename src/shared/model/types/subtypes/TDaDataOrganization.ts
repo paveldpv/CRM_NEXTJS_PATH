@@ -26,12 +26,7 @@ export type TDaDataOrganization = {
 			registration_date?: string
 			liquidation_date?: string
 		}
-		// opf: {
-		//   type?: string;
-		//   code?: string;
-		//   full?: string;
-		//   short?: string;
-		// };
+		
 		name: {
 			full_with_opf?: string
 			short_with_opf?: string

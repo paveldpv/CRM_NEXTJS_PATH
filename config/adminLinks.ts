@@ -43,6 +43,7 @@ export const adminLinks: TLink[] = [
 		description: 'Прайс и цены',
 		title: 'Цены',
 		id: idLink.price,
+		paramsHref:['initialPrice']
 	},
 	{
 		href: ROOT_LINK.setting,

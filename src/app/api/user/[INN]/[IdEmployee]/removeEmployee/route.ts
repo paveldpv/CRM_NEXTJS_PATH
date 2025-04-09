@@ -1,7 +1,7 @@
 import { ROOT_LINK } from '@/shared/model/types/enums'
 import { TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
 import { NextRequest, NextResponse } from 'next/server'
-import { ServiceEmployee } from '../../../../../../../Server/Service/serviceEmployee'
+import { ServiceEmployee } from '../../../../../../../Server/Service/serviceEmployee/serviceEmployee'
 import { ServiceGeoLocation } from '../../../../../../../Server/Service/serviceGeoLocation'
 import ServicePermissionRedactData from '../../../../../../../Server/Service/ServicePermissionRedactData'
 import { isError } from '../../../../../../shared/lib/IsError'
@@ -21,7 +21,7 @@ export async function POST(
 	if (!solutionRedactData) {
 		return NextResponse.json('refusal', { status: 403 })
 	}
-	
+
 	const serviceGeoLocation = new ServiceGeoLocation(INN)
 	const serviceEmployee = new ServiceEmployee(INN)
 

@@ -1,7 +1,7 @@
 'use client'
 import React, { memo } from 'react'
 import { useConfigApp } from '../model/store/storeConfigApp'
-
+import { cn } from '../lib/cn'
 
 type TButtonProps = React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>
 
@@ -10,6 +10,8 @@ const CusButton = React.forwardRef(
 		const { configMain } = useConfigApp((state) => state.dataConfigApp)
 		return (
 			<button
+			
+			className={cn(props.className)}
 				ref={ref}
 				style={{
 					borderColor: configMain?.color.borderColor,

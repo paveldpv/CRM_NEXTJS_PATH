@@ -8,7 +8,7 @@ const anton = Anton({ subsets: ['latin'], weight: ['400'] })
 
 function Loader() {
 	const [visibleLoader, text]: [boolean, string] = useLoader((state) => [state.visible, state.text])
-	console.log("🚀 ~ Loader ~ visibleLoader:", visibleLoader)
+	// console.log("🚀 ~ Loader ~ visibleLoader:", visibleLoader)
 	
 	return (
 		<motion.span
@@ -21,6 +21,7 @@ function Loader() {
 			transition={{ repeat: Infinity, duration: 10, delay: 1 }}
 			className={`Loader  ${anton.className} cursor-none text-menu_color   pt-4 pb-4  rounded-md  text-5xl  text-center  font-bold mt-5 mb-4   `}
 			style={visibleLoader ? { display: 'block' } : { display: 'none' }}
+			//hidden ={visibleLoader}
 		>
 			{text}
 		</motion.span>

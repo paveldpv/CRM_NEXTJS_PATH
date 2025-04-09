@@ -5,7 +5,7 @@ export enum idLink {
   tasks = "tasks",  
   application = "application",
   statistic = "statistic",
-  price = "pice",
+  price = "price",
   setting = 'setting',
   out='out',
   setting_profile='setting_profile',
@@ -42,7 +42,8 @@ export enum typicalError {
   not_geo = "NOT_GEO",
   not_valid_password ='NOT_VALID_PAS',
   error_DB = "ERROR_DB",
-  error_sever= 'ERROR_SERVER'
+  error_sever= 'ERROR_SERVER',  
+  error_permission = "ERROR_PERMISSION"
 }
 export enum NotData {
   notStringData = "не задано",
@@ -59,6 +60,6 @@ export enum ROOT_LINK {
   taskBoard = 'taskBoard',
   application = 'application',
   statistics= 'statistics',
-  price= 'price/initialPrice',
+  price= 'price',
   setting= 'setting'
 } 

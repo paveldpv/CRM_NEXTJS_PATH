@@ -1,44 +1,56 @@
-import PanelAddPrice from '@/entities/price/ui/PanelAddPrice'
+import ListPrices from '@/entities/price/ui/ListPrices'
+import PrevLoaderPrice from '@/entities/price/ui/PrevLoaderPrice'
 import { isError } from '@/shared/lib/IsError'
-import { typicalError } from '@/shared/model/types/enums'
-import { TError } from '@/shared/model/types/subtypes/TError'
 import { TLink } from '@/shared/model/types/Types'
+import { ROOT_LINK, typicalError } from '@/shared/model/types/enums'
+import { TError } from '@/shared/model/types/subtypes/TError'
 import ListLinks from '@/shared/ui/ListLinks'
 import { redirect } from 'next/navigation'
 import { Suspense } from 'react'
+import ServicePermissionRedactData from '../../../../../../../Server/Service/ServicePermissionRedactData'
 import { ServicePrice } from '../../../../../../../Server/Service/servicePrice'
 
-export const getListPrice = async (INN: string): Promise<TError | TLink[]> => {
+export const dynamic = 'force-dynamic'
+export const revalidate = 100
+
+export const getListPrice = async (
+	INN: string,
+	phone: string
+): Promise<TError | { bunchOfLinks: TLink[]; readonly: boolean }> => {
 	const servicePrice = new ServicePrice(INN)
-	return await servicePrice.getListInfoPrices()
+	const data = await servicePrice.getListInfoPrices()
+	if (isError(data)) {
+		return data
+	}
+	const permissionRedactPrice = new ServicePermissionRedactData(INN, ROOT_LINK.price)
+	const solution = await permissionRedactPrice.PermissionByPhone(phone)
+	return {
+		bunchOfLinks: data,
+		readonly: !solution,
+	}
 }
 
-export default async function layout({
-	children,
-	params,
-}: {
-	children: React.ReactNode
-	params: { INN: string }
+export default async function layout({	children,	params,}: {	children: React.ReactNode
+	params: { INN: string; PHONE: string }
 }) {
-	const { INN } = params
-	const listLinks = await getListPrice(INN)
+	const { INN, PHONE } = params
+
+	const listLinks = await getListPrice(INN, PHONE)
+	console.log('🚀 ~ listLinks :', listLinks)
 
 	if (isError(listLinks)) {
 		redirect(`/ERROR/${typicalError.error_DB}`)
 	}
+
 	return (
 		<>
-			<Suspense
-				fallback={
-					<div className=' flex justify-center items-center'>
-						<span className='Loader'>Загружаем</span>
-					</div>
-				}
-			>
-				<nav className='flex items-center gap-2 border-b-2 mb-2 pb-2'>
-					<ListLinks listLinks={listLinks} className=' flex-row flex gap-1' />
-					<PanelAddPrice listLinks={listLinks} INN={INN} />
-				</nav>
+			<Suspense fallback={<PrevLoaderPrice />}>
+				{listLinks.readonly ? (
+					<ListLinks listLinks={listLinks.bunchOfLinks} className=' flex-row flex gap-1 mb-1' />
+				) : (
+					<ListPrices listLinks={listLinks.bunchOfLinks} INN={INN} />
+				)}
+
 				{children}
 			</Suspense>
 		</>

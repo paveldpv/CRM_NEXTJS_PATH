@@ -8,6 +8,7 @@ import { FaWindowClose } from 'react-icons/fa'
 
 import { typeDialog } from '@/shared/model/types/enums'
 import { TBodyDialogMessage, useDialogWindow } from '../model/store/storeDialogWindow'
+import CusButton from './CusButton'
 
 const style: React.CSSProperties = {
 	border: 2,
@@ -54,21 +55,21 @@ export default function DialogWindow() {
 			</div>
 			{type === typeDialog.dialog && (
 				<DialogActions>
-					<button
+					<CusButton
 						onClick={() => {
 							setOpen(false)
 						}}
 					>
 						Отмена
-					</button>
-					<button
+					</CusButton>
+					<CusButton
 						onClick={() => {
 							dispatchFn()
 							setOpen(false)
 						}}
 					>
 						Подтвердить
-					</button>
+					</CusButton>
 				</DialogActions>
 			)}
 		</Dialog>

@@ -1,4 +1,5 @@
 
+import React from 'react'
 import { TEntities } from './abstractsType'
 import { idLink } from './enums'
 import { TError } from './subtypes/TError'
@@ -7,7 +8,7 @@ export type TLink = {
 	id: idLink
 	href: string
 	description: string
-	title: string
+	title: string|React.ReactNode
 	paramsHref?: string[]
 	readonly?: boolean
 }
@@ -30,8 +31,7 @@ export type TFormLogin = {
 }
 export type TFormRegistrate = {
 	[key: string]: string | boolean | number | TLink[] | Date
-	idUser: string
-	// INN: number | null;
+	idUser: string	
 	email: string
 } & TFormLogin
 
@@ -97,27 +97,3 @@ export type TErrored = {
 	message?: string
 }
 
-// type T1 = {
-//   field_one:string
-// }
-
-// type T2 = {
-//    [key:string]:string|boolean|number
-//   field_two:number
-// } & T1
-
-// type T3 ={
-//   field_three:boolean
-// } & T2
-
-// const temp_3:T3={
-//   field_two:0,
-//   field_one:"test",
-//   field_three:false
-// }
-
-// type omitType = Omit<T3,"field_three">
-
-// const temp_OMIT:omitType = {
-
-// }

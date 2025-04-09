@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { TFormRegistrate } from '@/Types/Types'
 import { TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
-import { ServiceRegistrated } from '../../../../Server/Service/serviceRegistrate'
+import { ServiceRegistrated } from '../../../../Server/Service/serviceRegistrate/serviceRegistrate'
 
 export async function POST(req: NextRequest) {
 	const { data, dataGeo } = (await req.json()) as {

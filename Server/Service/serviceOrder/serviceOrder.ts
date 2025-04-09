@@ -1,0 +1,144 @@
+import { TError } from '@/shared/model/types/subtypes/TError'
+import { format } from 'date-fns'
+import { ObjectId } from 'mongoose'
+import { Service } from '../../classes/Service'
+import ControllerOrder from './controller/OrderDB.controller'
+import { TNewOrder, TOrder } from './model/types/Types'
+
+export class ServiceOrder extends Service {
+	constructor(INN: string) {
+		super(INN)
+	}
+	private async nextNumberOrder(): Promise<number> {
+		try {
+			const controllerOrder = new ControllerOrder(this.INN)
+			const lastNumberOrder = await controllerOrder.getLastNumberOrder()
+			return lastNumberOrder ? lastNumberOrder + 1 : 1
+		} catch (error) {
+			throw error
+		}
+	}
+
+	public async createOrder(dataNewOrder: TNewOrder): Promise<void | TError> {
+		try {
+			const dataOrder: Omit<TOrder, '_id' | 'safeDeleted' | 'complied'> = {
+				...dataNewOrder,
+				numberOrder: await this.nextNumberOrder(),
+			}
+			const controllerOrder = new ControllerOrder(this.INN)
+			await controllerOrder.addOrder(dataOrder)
+		} catch (error) {
+			return this.createError(
+				`error create new order , data order :${dataNewOrder} ,INN:${this.INN} , error :${error}`
+			)
+		}
+	}
+	public async restoreOrder(idOrder: ObjectId): Promise<void | TError> {
+		try {
+			const controllerOrder = new ControllerOrder(this.INN)
+			await controllerOrder.restoreOrder(idOrder)
+		} catch (error) {
+			return this.createError(
+				` error restore order , ID order :${idOrder}, INN:${this.INN} error ${error}`
+			)
+		}
+	}
+	public async removeOrder(idOrder: ObjectId): Promise<void | TError> {
+		try {
+			const controllerOrder = new ControllerOrder(this.INN)
+			await controllerOrder.removeOrder(idOrder)
+		} catch (error) {
+			return this.createError(
+				`error remove order, id order :${idOrder} INN:${this.INN} , error :${error}`
+			)
+		}
+	}
+
+	public async getOrders(params: {
+		complied: boolean
+		deleted: boolean
+		range?: number
+	}): Promise<TOrder[] | TError | null> {
+		try {
+			const controllerOrder = new ControllerOrder(this.INN)
+			const data = controllerOrder.getOrders(params)
+			return this.normalizeDataFromMongoDB(data)
+		} catch (error) {
+			return this.createError(
+				`error get order , params get order :${params} , INN:${this.INN} ,error :${error}`
+			)
+		}
+	}
+	public async searchOrderByDate(rangeDate: {
+		dateStart: Date
+		dateEndDate: Date
+	}): Promise<TOrder[] | null | TError> {
+		//? return order with counterparty
+
+		try {
+			const controllerOrder = new ControllerOrder(this.INN)
+			const dataOrder = await controllerOrder.searchOrderByDate(rangeDate)
+			return this.normalizeDataFromMongoDB(dataOrder)
+		} catch (error) {
+			return this.createError(
+				`error search order by date , range date :start data : ${format(
+					rangeDate.dateStart,
+					'MM/dd/yyyy'
+				)} end date ${format(rangeDate.dateEndDate, 'MM/dd/yyyy')} , INN:${this.INN} , error :${error}`
+			)
+		}
+	}
+
+	public async updateOrder(data: TOrder): Promise<void | TError> {
+		try {
+			const controllerOrder = new ControllerOrder(this.INN)
+			await controllerOrder.updateOrder(data)
+		} catch (error) {
+			return this.createError(
+				`error update order , INN :${this.INN} , data update order :${data}, error :${error}`
+			)
+		}
+	}
+	public async endOrder(idOrder: ObjectId): Promise<void | TError> {
+		const currentDate = new Date()
+		try {
+			const controllerOrder = new ControllerOrder(this.INN)
+			await controllerOrder.endOrder(currentDate, idOrder)
+		} catch (error) {
+			return this.createError(
+				`error end order , INN :${this.INN} , id order :${idOrder} , error :${error}`
+			)
+		}
+	}
+	public async getOrderByID(idOrder: ObjectId): Promise<TOrder | TError | null> {
+		try {
+			const controllerOrder = new ControllerOrder(this.INN)
+			const data = controllerOrder.getOrderByID(idOrder)
+			return this.normalizeDataFromMongoDB(data)
+		} catch (error) {
+			return this.createError(
+				`error get order by id , INN:${this.INN} , id order :${idOrder}, error :${error}`,
+				error
+			)
+		}
+	}
+	//TODO:
+	public async addDetailByOrder(idOrder: ObjectId, idDetail: ObjectId): Promise<void | TError> {
+		try {
+		} catch (error) {
+			return this.createError(
+				`error add detail  , id detail :${idDetail} , id Order :${idOrder} , INN:${this.INN}`,
+				error
+			)
+		}
+	}
+	public async removeDetailByOrder(idOrder: ObjectId, idDetail: ObjectId) {
+		try {
+		} catch (error) {
+			return this.createError(
+				`error remove detail by order by order INN:${this.INN} id detail :${idDetail} , id Order :${idOrder}`,
+				error
+			)
+		}
+	}
+}

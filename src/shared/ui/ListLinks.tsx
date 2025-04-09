@@ -1,3 +1,4 @@
+import { CSSProperties } from 'react'
 import { cn } from '../lib/cn'
 import { TPropsNavLink } from './NavLink'
 
@@ -6,13 +7,15 @@ import NavLink from './NavLink'
 type TListLink = {
 	listLinks: TPropsNavLink[]
 	className?: string
+	styleLinks?:CSSProperties
 }
 
-export default function ListLinks({ listLinks = [], className }: TListLink) {
+export default function ListLinks({ listLinks = [], className,styleLinks }: TListLink) {
 	return (
 		<div className={cn('flex flex-col',className)}>
 			{listLinks.map((link, index) => (
-				<NavLink
+				<NavLink				
+				styleLinks={styleLinks}	
 					paramsHref={link?.paramsHref}
 					id={link.id}
 					title={link.title}

@@ -23,7 +23,7 @@ const mapIconsNavLink = {
   tasks: <LiaTasksSolid />,
   application: <BiMessageAdd />,
   statistic: <GoGraph />,
-  pice: <MdOutlinePriceChange />,
+  price: <MdOutlinePriceChange />,
   setting: <IoIosSettings />,
   out: <PiSignOutBold />,
   setting_profile: <CgProfile />,

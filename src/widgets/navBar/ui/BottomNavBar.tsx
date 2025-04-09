@@ -6,15 +6,17 @@ import { PiSignOutBold } from 'react-icons/pi'
 
 export default function BottomNavBar() {
 	const { configNavMenu } = useConfigApp((state) => state.dataConfigApp)
+	
 	const out = () => {
 		signOut({ callbackUrl: '/' })
 	}
 	return (
 		<>
 			<br />
-			<div style={{ border: configNavMenu?.color.borderColor }} className=' w-full border-b-2 '></div>
+			<div style={{ borderColor: configNavMenu?.color.borderColor }} className=' w-full border-b-2 '></div>
 			<button
 				style={{
+					
 					background: configNavMenu?.color?.bgColor,
 					color: configNavMenu?.color?.textColor,
 					borderColor: configNavMenu?.color?.borderColor,

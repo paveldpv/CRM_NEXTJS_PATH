@@ -1,27 +1,30 @@
+import { typicalError } from '@/shared/model/types/enums'
 import { TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
 import { TResponse } from '@/shared/model/types/Types'
 import { TDataTablePrice } from '../model/Types'
-import { typicalError } from '@/shared/model/types/enums'
+import { changeResponseStatus } from '@/shared/lib/changeResponseStatus'
+import { goToPageError } from '@/shared/lib/goToPageError'
 
-export const fetchUpdateDataPrice = async(INN:string,data:TDataTablePrice,dataGeo:Omit<TGeoLocation,'date'>):Promise<TResponse> =>{
+
+
+export const fetchUpdateDataPrice = async (
+	INN: string,
+	data: TDataTablePrice,
+	dataGeo: Omit<TGeoLocation, 'date'>
+): Promise<"OK"|undefined> => {
 	try {
-		const response = await fetch(`/api/price/${INN}/updateprice`,{
-			method:"POST",
-			body:JSON.stringify({dataGeo,data})
+		const _response = await fetch(`/api/price/${INN}/updateprice`, {
+			method: 'POST',
+			body: JSON.stringify({ dataGeo, data }), cache: 'no-store', next: { revalidate: 10 } 
 		})
-		return {
-			status:response.status,
-			response:await response.json()
+		const response = {
+			status: _response.status,
+			response: await _response.json(),
 		}
-		
+		return changeResponseStatus(response)!
 	} catch (error) {
-		return {
-			status:400,
-			response:{
-				error:true,message:`error fetch add new price , error client request`,
-				typeError:typicalError.error_sever
-			}
-		}
+		goToPageError(typicalError.error_DB)
 		
 	}
 }
+

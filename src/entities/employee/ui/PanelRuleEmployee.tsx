@@ -50,7 +50,7 @@ export default function PanelRuleEmployee({
 	const changeVisibleAllEmployee = async (e: ChangeEvent<HTMLInputElement>) => {
 		setVisibleLoader(true)
 		const value = e.target.checked
-		const current = new URLSearchParams(Array.from(searchParams.entries()))
+		const current = new URLSearchParams(Array.from(searchParams!.entries()))
 		value ? current.set('all', '1') : current.set('all', '0')
 		const search = current.toString()
 		const query = search ? `?${search}` : ''

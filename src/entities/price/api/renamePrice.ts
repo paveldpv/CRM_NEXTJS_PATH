@@ -1,3 +1,6 @@
+import { revalidate } from '@/app/[INN]/[PHONE]/main/setting/settingorganization/page'
+import { changeResponseStatus } from '@/shared/lib/changeResponseStatus'
+import { goToPageError } from '@/shared/lib/goToPageError'
 import { typicalError } from '@/shared/model/types/enums'
 import { TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
 import { TResponse } from '@/shared/model/types/Types'
@@ -7,29 +10,26 @@ export const fetchRenamePrice = async (
 	newNamePrice: string,
 	idPrice: string,
 	dataGeo: Omit<TGeoLocation, 'date'>
-): Promise<TResponse> => {
+): Promise<"OK"|undefined> => {
 	try {
 		const dataRequest = {
 			newNamePrice,
 			dataGeo,
 			idPrice,
 		}
-		const response = await fetch(`/api/price/${INN}/rename`, {
+		const _response = await fetch(`/api/price/${INN}/rename`, {
 			method: 'POST',
 			body: JSON.stringify(dataRequest),
+			cache:'no-cache'
 		})
-		return {
-			status: response.status,
-			response: await response.json(),
+		const response = {
+			status: _response.status,
+			response: await _response.json()
 		}
+		return changeResponseStatus(response)!
+		
 	} catch (error) {
-		return {
-			status: 400,
-			response: {
-				error: true,
-				message: `error fetch rename price , error client request`,
-				typeError: typicalError.error_sever,
-			},
-		}
+		goToPageError(typicalError.error_DB)
+		
 	}
 }

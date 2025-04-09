@@ -1,8 +1,8 @@
 export type TGeoLocation = {
-  location: TCoordinateLocation
-  date: Date;
   process: PURPOSE_USE;
   idEmployee: string;
+  date: Date;
+  location?: TCoordinateLocation
   ip?: string;
   descriptionProcess?:string//?enums
 };
