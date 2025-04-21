@@ -7,14 +7,13 @@ import { TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
 import moment from 'moment'
 import { isError } from '../../../src/shared/lib/IsError'
 
-
 import { ServiceRequisites } from '../serviceRequisites/serviceReqisites'
-
 
 import { TDaDataOrganization } from '@/shared/model/types/subtypes/TDaDataOrganization'
 import { getAbbreviated } from '../../../src/shared/lib/getAbbreviated'
 import { ServiceDaDataOrganization } from '../serviceDaData/serviceDaDataOrganization'
 import { ServiceGeoLocation } from '../serviceGeoLocation/serviceGeoLocation'
+import ServiceGlobalLIstCompany from '../serviceGlobalListCompany/serviceGlobalListCompany'
 
 export class ServiceRuleOrganization extends Service {
 	constructor(INN: string) {
@@ -97,12 +96,16 @@ export class ServiceRuleOrganization extends Service {
 			return { error, message }
 		}
 
-		const _moment = moment()
-		const currentDate = _moment.toDate()
+		
+		const currentDate = new Date()
 		dataGeo.date = currentDate
 
 		const initialDataOrganization = this.getInitialDataOrganization(daDataOrganization, currentDate)
-
+		
+		const serviceGlobalListCompany = new ServiceGlobalLIstCompany().addNewCompany({
+			INN: this.INN,
+			name: initialDataOrganization.nameOrganization!
+		})
 		const saveGeoLocation = new ServiceGeoLocation(this.INN).setDataLocation(dataGeo)
 
 		const saveInitialDataOrganization = new ControllerRuleOrganizationDB(this.INN).addInfoOrganization(
@@ -112,6 +115,7 @@ export class ServiceRuleOrganization extends Service {
 		const saveRequisites = new ServiceRequisites(this.INN).addNewRequisites(daDataOrganization)
 
 		const asyncSaveData = await Promise.all([
+			serviceGlobalListCompany,
 			saveGeoLocation,
 			saveInitialDataOrganization,
 			saveRequisites,

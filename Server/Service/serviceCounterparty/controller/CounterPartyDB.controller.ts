@@ -1,6 +1,4 @@
-// import { TCounterparty } from '../../Service/serviceCounterparty/models/types/Types'
-// import ControllerDB from '../../classes/ControllerDB'
-// import modelCounterparty from '../SCHEMAS/CounterpartySchema'
+
 
 import ControllerDB from '../../../classes/ControllerDB'
 import modelCounterparty from '../models/schema/CounterpartySchema'
@@ -51,7 +49,7 @@ export default class ControllerCounterpartyDB extends ControllerDB {
 				{ INN: regEx },
 				{ name: regEx },
 				{ email: regEx },
-				{ 'data.description': { regEx } },
+				{ data: {$elemMatch:{'description':RegExp} } },
 			],
 		})
 	}

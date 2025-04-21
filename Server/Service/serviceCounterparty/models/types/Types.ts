@@ -19,3 +19,4 @@ export type TNewDataCounterparty = {
 	INN?: string
 	srcRequisites?: 'NOT_FOUND' | TResponseUploadFiles
 }
+

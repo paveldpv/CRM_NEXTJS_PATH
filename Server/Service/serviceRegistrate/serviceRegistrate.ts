@@ -1,5 +1,4 @@
 import bcrypt from 'bcrypt'
-import moment from 'moment'
 import { isAllowINN } from '../../../src/shared/lib/changeAllowINN'
 
 import { TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
@@ -11,7 +10,6 @@ import { isError } from '../../../src/shared/lib/IsError'
 import { Service } from '../../classes/Service'
 import { ServiceRuleOrganization } from '../serviceRuleOrganization/serviceRuleOrganization'
 import { ServiceUsers } from '../serviceUser/serviceUser'
-import { ServiceConfigApp } from '../serviceConfigApp/serviceConfigApp'
 
 /**
  *  while creating new organization create new data user  with params "linksAllowed " == "ADMIN"
@@ -22,7 +20,7 @@ import { ServiceConfigApp } from '../serviceConfigApp/serviceConfigApp'
 export class ServiceRegistrated extends Service {
 	private dataUser: TFormRegistrate
 	private dataGeo: TGeoLocation
-	private currentDate = moment().toDate()
+	private currentDate = new Date()
 
 	constructor(dataUser: TFormRegistrate, dataGeo: TGeoLocation) {
 		super(dataUser.INN)
@@ -61,12 +59,10 @@ export class ServiceRegistrated extends Service {
 			}
 
 			const serviceOrganization = new ServiceRuleOrganization(this.INN)
-			const serviceConfigApp = new ServiceConfigApp(this.INN)
-
+			
 			const registrated = await Promise.all([
 				serviceUser.addNewUser(dataRegistratedUser),
 				serviceOrganization.createNewRuleOrganization(this.dataGeo),
-				serviceConfigApp.addNewPersonalConfig(dataRegistratedUser.idUser),
 			])
 
 			const resultRegistratedNewRuleOrganization = registrated.find((data) => isError(data))

@@ -1,12 +1,11 @@
 import { TError } from '@/shared/model/types/subtypes/TError'
 
-
 import { TDBUser, TWithoutPassUser } from '@/shared/model/types/Types'
 import bcrypt from 'bcrypt'
 import { SALT_ROUND } from '../../../config/RegistrateConfig'
 import { Service } from '../../classes/Service'
+import { ServiceConfigApp } from '../serviceConfigApp/serviceConfigApp'
 import ControllerDBUser from './controller/UsersDB.controller'
-
 
 export class ServiceUsers extends Service {
 	constructor(INN: string) {
@@ -58,7 +57,11 @@ export class ServiceUsers extends Service {
 
 	public async addNewUser(data: TDBUser): Promise<void | TError> {
 		try {
-			await new ControllerDBUser(this.INN).addNewUser(data as TDBUser)
+			const serviceConfigApp = new ServiceConfigApp(this.INN)
+			const newPersonalConfig = serviceConfigApp.addNewPersonalConfig(data.idUser)
+			const controllerDBUser = new ControllerDBUser(this.INN)
+			const addNewUser = controllerDBUser.addNewUser(data as TDBUser)
+			await Promise.all([newPersonalConfig, addNewUser])
 		} catch (error) {
 			return this.createError(
 				`error add new admin, INN :${this.INN} , error :${error} , query :${data}`,

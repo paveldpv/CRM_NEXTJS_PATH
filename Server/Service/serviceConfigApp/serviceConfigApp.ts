@@ -50,8 +50,7 @@ export class ServiceConfigApp extends Service {
 
 
 	public async addNewPersonalConfig(idUser: string): Promise<void | TError> {
-		try {			
-			
+		try {						
 			const initialConfigApp = this.getInitialConfigApp(idUser)
 			await new ControllerConfigDB(this.INN).addNewPersonalConfigApp(initialConfigApp)
 		} catch (error) {

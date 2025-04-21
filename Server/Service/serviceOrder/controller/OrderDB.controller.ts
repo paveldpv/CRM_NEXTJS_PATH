@@ -49,6 +49,7 @@ export default class ControllerOrder extends ControllerDB {
 			.find({ 'service.deadlines.startDate': { $gte: dateStart, $lte: dateEndDate } })
 			.populate('counterparty')
 	}
+	
 	public async updateOrder(dataOrder: TOrder): Promise<void> {
 		await this.contentDB()
 		await modelOrder.findOneAndUpdate({ _id: dataOrder._id }, dataOrder)
