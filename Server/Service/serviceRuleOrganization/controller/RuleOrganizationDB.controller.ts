@@ -1,11 +1,9 @@
 import { TDataOrganization, TNameOrganization } from '@/shared/model/types/subtypes/TOrganization'
-import { connect } from 'mongoose'
 
-import ContextOrganization from '../../../classes/contextOrganization'
-import modelOrganization from '../model/schema/OrganizationSchema'
 import ControllerDB from '../../../classes/ControllerDB'
+import modelOrganization from '../model/schema/OrganizationSchema'
 
-export default class ControllerDBRuleOrganization extends ControllerDB{
+export default class ControllerDBRuleOrganization extends ControllerDB {
 	constructor(INN: string) {
 		super(INN)
 	}
@@ -17,7 +15,6 @@ export default class ControllerDBRuleOrganization extends ControllerDB{
 
 	public async getInfoOrganization(): Promise<TDataOrganization | null> {
 		await this.contentDB()
-
 		return await modelOrganization.findOne({ INN: this.INN })
 	}
 

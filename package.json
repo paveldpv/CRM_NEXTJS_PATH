@@ -22,6 +22,7 @@
     "bcrypt": "^5.1.1",
     "canvas": "^2.11.2",
     "clsx": "^2.1.1",
+    "crypto-js": "^4.2.0",
     "date-fns": "^4.1.0",
     "eslint": "8.48.0",
     "eslint-config-next": "13.4.19",
@@ -49,6 +50,7 @@
     "zustand": "^4.4.1"
   },
   "devDependencies": {
+    "@types/crypto-js": "^4.2.2",
     "typescript-plugin-css-modules": "^5.1.0"
   }
 }

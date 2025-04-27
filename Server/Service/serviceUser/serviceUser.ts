@@ -7,13 +7,20 @@ import { Service } from '../../classes/Service'
 import { ServiceConfigApp } from '../serviceConfigApp/serviceConfigApp'
 import ControllerDBUser from './controller/UsersDB.controller'
 
-export class ServiceUsers extends Service {
+import applyMixins from '../../function/applyMixinst'
+import EncryptionService from '../../classes/Encryption'
+
+
+
+ export class ServiceUsers extends Service {
+	
 	constructor(INN: string) {
 		super(INN)
 	}
 
 	public async getAllEmployeeWithDeleted(): Promise<TDBUser[] | [] | TError> {
 		try {
+			
 			const dataAllEmployee = await new ControllerDBUser(this.INN).getUsersWithDeleted()
 			return this.normalizeDataFromMongoDB(dataAllEmployee)
 		} catch (error) {
@@ -106,6 +113,7 @@ export class ServiceUsers extends Service {
 
 	public async getUserByPhone(phone: string): Promise<TDBUser | null | TError> {
 		try {
+			
 			const controllerUser = new ControllerDBUser(this.INN)
 			const dataUser = await controllerUser.getUsersByParams({ phone: phone })
 			return this.normalizeDataFromMongoDB(dataUser)
@@ -133,3 +141,4 @@ export class ServiceUsers extends Service {
 		}
 	}
 }
+

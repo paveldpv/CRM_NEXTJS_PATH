@@ -95,7 +95,6 @@ export class ServiceRuleOrganization extends Service {
 			const { error, message } = daDataOrganization
 			return { error, message }
 		}
-
 		
 		const currentDate = new Date()
 		dataGeo.date = currentDate
