@@ -122,9 +122,11 @@ export class ServiceOrder extends Service {
 			)
 		}
 	}
-	//TODO:
+	
 	public async addDetailByOrder(idOrder: ObjectId, idDetail: ObjectId): Promise<void | TError> {
 		try {
+			const controllerOrder = new ControllerOrder(this.INN)
+			await controllerOrder.addDetailByOrder(idOrder,idDetail)
 		} catch (error) {
 			return this.createError(
 				`error add detail  , id detail :${idDetail} , id Order :${idOrder} , INN:${this.INN}`,
@@ -134,6 +136,8 @@ export class ServiceOrder extends Service {
 	}
 	public async removeDetailByOrder(idOrder: ObjectId, idDetail: ObjectId) {
 		try {
+			const controllerOrder = new ControllerOrder(this.INN)
+			await controllerOrder.removeDetailByOrder(idOrder,idDetail)
 		} catch (error) {
 			return this.createError(
 				`error remove detail by order by order INN:${this.INN} id detail :${idDetail} , id Order :${idOrder}`,

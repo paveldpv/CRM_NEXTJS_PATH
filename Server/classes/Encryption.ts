@@ -1,9 +1,14 @@
 import * as CryptoJS from 'crypto-js'
 
+
+
+
 export default class EncryptionService {
 	private key: string
+	
 	constructor() {
 		this.key = process.env.SECRET_KEY || 'default_key'
+		
 	}
 
 	private crypto<T>(data: T): T {
@@ -77,3 +82,5 @@ export default class EncryptionService {
 		}
 	}
 }
+
+

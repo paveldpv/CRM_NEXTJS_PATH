@@ -1,7 +1,8 @@
 import { typicalError } from '@/shared/model/types/enums'
 import { TError } from '@/shared/model/types/subtypes/TError'
-import { TResponseUploadFiles } from '@/Types/Types'
+
 import { SERVER_DOTNET } from '../../../../config/config'
+import { TResponseUploadFiles } from '@/shared/model/types/Types'
 
 export const fetchUploadFilePrevCal = async (formData: FormData): Promise<TResponseUploadFiles[] | undefined> => {
 	try {

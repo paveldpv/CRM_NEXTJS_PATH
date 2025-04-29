@@ -24,8 +24,9 @@ const detailSchema = new Schema<TDetail>({
 		required: false,
 	},
 	files: {
+		required:false,
 		type: Schema.Types.Mixed,
-		default: 'NOT_FOUND',
+		default: [],
 	},
 	price: {
 		required: false,

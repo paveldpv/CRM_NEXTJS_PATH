@@ -11,7 +11,7 @@ export type TDetail = {
 	nameDetail: string
 	dateAddDetail:Date,
 	description?: string[]
-	files?: TResponseUploadFiles[] | 'NOT_FOUND'
+	files?: TResponseUploadFiles[] | []
 	price?: {
 		price: number
 	}	

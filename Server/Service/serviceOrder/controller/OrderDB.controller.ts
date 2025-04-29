@@ -68,9 +68,15 @@ export default class ControllerOrder extends ControllerDB {
 		return await modelOrder.findOne({ _id: idOrder }).populate('counterparty')
 	}
 
-	//TODO:
-	public async addDetailByOrder(idOrder: ObjectId, idDetail: ObjectId): Promise<void> {}
-	public async removeDetailByOrder(idOrder: ObjectId, idDetail: ObjectId): Promise<void> {}
+	
+	public async addDetailByOrder(idOrder: ObjectId, idDetail: ObjectId): Promise<void> {
+		await this.contentDB()
+		modelOrder.findOneAndUpdate({_id:idOrder},{$push:{IDDetails:idDetail}})
+	}
+	public async removeDetailByOrder(idOrder: ObjectId, idDetail: ObjectId): Promise<void> {
+		await this.contentDB()
+		modelOrder.findOneAndUpdate({_id:idOrder},{$pull:{IDDetails:idDetail}})
+	}
 
 	public async getLastNumberOrder(): Promise<number | null> {
 		await this.contentDB()
