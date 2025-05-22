@@ -1,14 +1,16 @@
 import { TError } from '@/shared/model/types/subtypes/TError'
 
-import { TDBUser, TWithoutPassUser } from '@/shared/model/types/Types'
+import { TWithoutPassUser } from '@/shared/model/types/Types'
 import bcrypt from 'bcrypt'
 import { SALT_ROUND } from '../../../config/RegistrateConfig'
 import { Service } from '../../classes/Service'
 import { ServiceConfigApp } from '../serviceConfigApp/serviceConfigApp'
 import ControllerDBUser from './controller/UsersDB.controller'
 
-import applyMixins from '../../function/applyMixinst'
+
 import EncryptionService from '../../classes/Encryption'
+import { TDBUser, TNewUser } from './model/types/Types'
+import { ObjectId } from 'mongoose'
 
 
 
@@ -19,8 +21,7 @@ import EncryptionService from '../../classes/Encryption'
 	}
 
 	public async getAllEmployeeWithDeleted(): Promise<TDBUser[] | [] | TError> {
-		try {
-			
+		try {			
 			const dataAllEmployee = await new ControllerDBUser(this.INN).getUsersWithDeleted()
 			return this.normalizeDataFromMongoDB(dataAllEmployee)
 		} catch (error) {
@@ -46,29 +47,30 @@ import EncryptionService from '../../classes/Encryption'
 		}
 	}
 
-	public async getUserById(idUser: string): Promise<TDBUser | TError> {
+	public async getUserById(_id: ObjectId): Promise<TDBUser | TError> {
 		try {
-			const datUser = await new ControllerDBUser(this.INN).getUserByID(idUser)
+			const datUser = await new ControllerDBUser(this.INN).getUserByID(_id)
 			if (datUser === null) {
-				return this.createError(`data user is null ,bad id ${idUser}`)
+				return this.createError(`data user is null ,bad id ${_id}`)
 			}
 
 			return this.normalizeDataFromMongoDB(datUser)
 		} catch (error) {
 			return this.createError(
-				`error add new admin, INN :${this.INN} , error :${error},query :${idUser}`,
+				`error add new admin, INN :${this.INN} , error :${error},query :${_id}`,
 				error
 			)
 		}
 	}
 
-	public async addNewUser(data: TDBUser): Promise<void | TError> {
+	public async addNewUser(data: TNewUser): Promise<void | TError> {
 		try {
-			const serviceConfigApp = new ServiceConfigApp(this.INN)
-			const newPersonalConfig = serviceConfigApp.addNewPersonalConfig(data.idUser)
 			const controllerDBUser = new ControllerDBUser(this.INN)
-			const addNewUser = controllerDBUser.addNewUser(data as TDBUser)
-			await Promise.all([newPersonalConfig, addNewUser])
+			const addNewUser =await controllerDBUser.addNewUser(data)
+
+			const serviceConfigApp = new ServiceConfigApp(this.INN)
+			const newPersonalConfig =await serviceConfigApp.addNewPersonalConfig(addNewUser._id)
+			
 		} catch (error) {
 			return this.createError(
 				`error add new admin, INN :${this.INN} , error :${error} , query :${data}`,
@@ -76,7 +78,7 @@ import EncryptionService from '../../classes/Encryption'
 			)
 		}
 	}
-	public async getUsersByGroupID(listID: string[]): Promise<TDBUser[] | TError> {
+	public async getUsersByGroupID(listID: ObjectId[]): Promise<TDBUser[] | TError> {
 		try {
 			const groupUsers = await new ControllerDBUser(this.INN).getUsersByGroupID(listID)
 
@@ -97,7 +99,7 @@ import EncryptionService from '../../classes/Encryption'
 		}
 	}
 
-	public async updatePas(idEmployee: string, newPas: string): Promise<void | TError> {
+	public async updatePas(idEmployee: ObjectId, newPas: string): Promise<void | TError> {
 		try {
 			const getSalt = await bcrypt.genSalt(SALT_ROUND)
 			const hashNewPassword = bcrypt.hashSync(newPas, getSalt)
@@ -121,7 +123,7 @@ import EncryptionService from '../../classes/Encryption'
 			return this.createError(`error get user by phone , phone ${phone},error ${error}`, error)
 		}
 	}
-	public async removeUser(idEmployee: string): Promise<void | TError> {
+	public async removeUser(idEmployee: ObjectId): Promise<void | TError> {
 		try {
 			const controllerDBUSer = new ControllerDBUser(this.INN)
 			await controllerDBUSer.removeUser(idEmployee)
@@ -132,7 +134,7 @@ import EncryptionService from '../../classes/Encryption'
 			)
 		}
 	}
-	public async restoreUser(idEmployee: string) {
+	public async restoreUser(idEmployee: ObjectId) {
 		try {
 			const controllerDBUSer = new ControllerDBUser(this.INN)
 			return controllerDBUSer.restoreUser(idEmployee)

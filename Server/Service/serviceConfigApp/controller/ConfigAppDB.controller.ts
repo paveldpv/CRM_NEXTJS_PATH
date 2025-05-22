@@ -1,5 +1,5 @@
 import { TConfigAPP } from '@/shared/model/types/subtypes/TAppearanceConfigApp'
-import { connect } from 'mongoose'
+import { connect, ObjectId } from 'mongoose'
 import ContextOrganization from '../../../classes/contextOrganization'
 import modelConfig from '../model/schema/configAppSchema'
 
@@ -8,7 +8,7 @@ export default class ControllerDBConfigApp extends ContextOrganization {
 		super(INN)
 	}
 
-	public async getPersonalConfigApp(idUser: string): Promise<TConfigAPP | null> {
+	public async getPersonalConfigApp(idUser: ObjectId): Promise<TConfigAPP | null> {
 		await connect(`${process.env.DB_URL}${this.INN}`)
 		return await modelConfig.findOne({ idUser }, { _id: 0 })
 	}

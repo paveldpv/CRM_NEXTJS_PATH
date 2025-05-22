@@ -4,12 +4,13 @@ import { TError } from '@/shared/model/types/subtypes/TError'
 
 import ControllerConfigDB from './controller/ConfigAppDB.controller'
 import { Service } from '../../classes/Service'
+import { ObjectId } from 'mongoose'
 
 export class ServiceConfigApp extends Service {
 	constructor(INN: string) {
 		super(INN)
 	}
-	private getInitialConfigApp(idUser: string): TConfigAPP {
+	private getInitialConfigApp(idUser: ObjectId): TConfigAPP {
 		return {
 			idUser: idUser,
 			configHeader: {
@@ -49,7 +50,7 @@ export class ServiceConfigApp extends Service {
 	}
 
 
-	public async addNewPersonalConfig(idUser: string): Promise<void | TError> {
+	public async addNewPersonalConfig(idUser: ObjectId): Promise<void | TError> {
 		try {						
 			const initialConfigApp = this.getInitialConfigApp(idUser)
 			await new ControllerConfigDB(this.INN).addNewPersonalConfigApp(initialConfigApp)
@@ -59,7 +60,7 @@ export class ServiceConfigApp extends Service {
 		}
 	}
 
-	public async getPersonalConfig(idUser: string): Promise<null | TConfigAPP | TError> {
+	public async getPersonalConfig(idUser: ObjectId): Promise<null | TConfigAPP | TError> {
 		try {
 			const controllerConfigDB = new ControllerConfigDB(this.INN)
 			const dataPersonalConfig = await controllerConfigDB.getPersonalConfigApp(idUser)

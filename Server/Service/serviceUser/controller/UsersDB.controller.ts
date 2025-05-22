@@ -1,26 +1,30 @@
-import { TDBUser, TNewEmployee, TWithoutPassUser } from '@/shared/model/types/Types'
-// import ContextOrganization from '../../classes/contextOrganization'
+import { TNewEmployee, TWithoutPassUser } from '@/shared/model/types/Types'
+import { ObjectId } from 'mongoose'
 import ControllerDB from '../../../classes/ControllerDB'
 import modelUSer from '../model/schema/usersSchema'
+import { TDBUser, TNewUser } from '../model/types/Types'
 
 export default class ControllerDBUser extends ControllerDB {
 	constructor(INN: string) {
 		super(INN)
 	}
-	public async restoreUser(idEmployee: string) {
+	public async restoreUser(idEmployee: ObjectId) {
 		await this.contentDB()
-		await modelUSer.findOneAndUpdate({ idUser: idEmployee }, { $set: { safeDeleted: false } })
+		await modelUSer.findOneAndUpdate({ _id: idEmployee }, { $set: { safeDeleted: false } })
 	}
 
-	public async updatePas(idEmployee: string, newPas: string): Promise<void> {
+	public async updatePas(idEmployee: ObjectId, newPas: string): Promise<void> {
 		await this.contentDB()
-		await modelUSer.findOneAndUpdate({ idUser: idEmployee }, { $set: { password: newPas } })
+		await modelUSer.findOneAndUpdate({ _id: idEmployee }, { $set: { password: newPas } })
 	}
 
-	public async addNewUser(data: TDBUser | TNewEmployee): Promise<void> {
+	public async addNewUser(data: TNewUser | TNewEmployee): Promise<TDBUser> {
 		await this.contentDB()
 		const newAdmin = new modelUSer(data)
-		await newAdmin.save()
+		return await newAdmin.save()//надо сохранить и вернуть то что сохранили
+		
+		
+		//TODO:
 	}
 
 	public async getUsers(): Promise<TWithoutPassUser[] | []> {
@@ -41,33 +45,33 @@ export default class ControllerDBUser extends ControllerDB {
 		return dataUSer
 	}
 
-	public async getUserByID(idEmployee: string): Promise<TDBUser | null> {
+	public async getUserByID(idEmployee: ObjectId): Promise<TDBUser | null> {
 		await this.contentDB()
-		const dataUser = await modelUSer.findOne({ idUser: idEmployee })
+		const dataUser = await modelUSer.findOne({ _id: idEmployee })
 		return dataUser
 	}
 
 	public async updateDataUser(updateDataUser: TDBUser | TWithoutPassUser): Promise<void> {
 		await this.contentDB()
-		await modelUSer.updateOne({ idUser: updateDataUser.idUser }, updateDataUser)
+		await modelUSer.updateOne({ _id: updateDataUser._id }, updateDataUser)
 	}
 
-	public async deletedPhotToDB(idEmployee: string): Promise<void> {
+	public async deletedPhotToDB(idEmployee: ObjectId): Promise<void> {
 		await this.contentDB()
-		await modelUSer.updateOne({ idUser: idEmployee }, { $set: { srcPhoto: 'NOT_FOUND' } })
+		await modelUSer.updateOne({ _id: idEmployee }, { $set: { srcPhoto: 'NOT_FOUND' } })
 	}
 
-	public async getUsersByGroupID(listID: string[]): Promise<TDBUser[] | []> {
+	public async getUsersByGroupID(listID: ObjectId[]): Promise<TDBUser[] | []> {
 		await this.contentDB()
-		return await modelUSer.find({ idUser: { $in: listID } })
+		return await modelUSer.find({ _id: { $in: listID } })
 	}
 
 	public async getAdmins(): Promise<TDBUser[] | []> {
 		await this.contentDB()
 		return await modelUSer.find({ linksAllowed: 'ADMIN' })
 	}
-	public async removeUser(idEmployee: string): Promise<void> {
+	public async removeUser(idEmployee: ObjectId): Promise<void> {
 		await this.contentDB()
-		await modelUSer.findOneAndUpdate({ idUser: idEmployee }, { $set: { safeDeleted: true } })
+		await modelUSer.findOneAndUpdate({ _id: idEmployee }, { $set: { safeDeleted: true } })
 	}
 }

@@ -3,6 +3,7 @@ import React from 'react'
 import { TEntities } from './abstractsType'
 import { idLink } from './enums'
 import { TError } from './subtypes/TError'
+import { TDBUser } from '../../../../Server/Service/serviceUser/model/types/Types'
 
 export type TLink = {
 	id: idLink
@@ -31,25 +32,11 @@ export type TFormLogin = {
 }
 export type TFormRegistrate = {
 	[key: string]: string | boolean | number | TLink[] | Date
-	idUser: string	
+	// idUser: string	
 	email: string
 } & TFormLogin
 
-export type TDBUser = {
-	phone: string
-	password: string
-	INN: string
-	idUser: string
-	email: string
-	dateRegistrate?: Date
-	name?: string
-	surname?: string
-	lastName?: string
-	dateBirthday?: Date
-	nameJobTitle?: string
-	linksAllowed: TLink[] | 'ADMIN'
-	srcPhoto: 'NOT_FOUND' | TResponseUploadFiles
-} & TEntities
+
 
 export type TWithoutPassUser = Omit<TDBUser, 'password'>
 

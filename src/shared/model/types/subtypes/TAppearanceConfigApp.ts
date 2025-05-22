@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongoose'
 import { keyColorOption, keyConfigLayout, nameSettingLayout } from '../enums'
 
 type RGB = `rgb(${number}, ${number}, ${number})`
@@ -11,7 +12,7 @@ export type TColorConfig = {
 }
 
 export type TConfigAPP = {
-	idUser: string
+	idUser: ObjectId
 	configHeader: TConfigLayout
 	configMain: TConfigLayout
 	configNavMenu: TConfigLayout

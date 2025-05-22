@@ -5,11 +5,12 @@ import { TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
 import { SALT_ROUND } from '../../../config/RegistrateConfig'
 
 import { TError } from '@/shared/model/types/subtypes/TError'
-import { TDBUser, TFormRegistrate } from '@/shared/model/types/Types'
+import {  TFormRegistrate } from '@/shared/model/types/Types'
 import { isError } from '../../../src/shared/lib/IsError'
 import { Service } from '../../classes/Service'
 import { ServiceRuleOrganization } from '../serviceRuleOrganization/serviceRuleOrganization'
 import { ServiceUsers } from '../serviceUser/serviceUser'
+import { TDBUser, TNewUser } from '../serviceUser/model/types/Types'
 
 /**
  *  while creating new organization create new data user  with params "linksAllowed " == "ADMIN"
@@ -27,6 +28,7 @@ export class ServiceRegistrated extends Service {
 		this.dataUser = dataUser
 		this.dataGeo = dataGeo
 	}
+
 	async registratedNewOrganization(): Promise<TError | void> {
 		try {
 			const changeAllowINN = isAllowINN(this.dataUser.INN)
@@ -49,7 +51,7 @@ export class ServiceRegistrated extends Service {
 			const genSalt = await bcrypt.genSalt(SALT_ROUND)
 			const password = bcrypt.hashSync(this.dataUser.password, genSalt)
 
-			const dataRegistratedUser: TDBUser = {
+			const dataRegistratedUser: TNewUser = {
 				...this.dataUser,
 				safeDeleted: false,
 				dateRegistrate: this.currentDate,

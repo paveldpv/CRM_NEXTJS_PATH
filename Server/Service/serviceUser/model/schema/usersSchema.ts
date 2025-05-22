@@ -1,5 +1,6 @@
-import { TDBUser } from '@/shared/model/types/Types'
+
 import { Model, Schema, model, models } from "mongoose";
+import { TDBUser } from '../types/Types'
 
 
 
@@ -15,7 +16,7 @@ export const userSchema = new Schema<TDBUser>({
   },
   password: String,
   phone: String,
-  idUser: String,
+  // idUser: String,
   dateRegistrate: {
     type:Date,
     default:new Date()

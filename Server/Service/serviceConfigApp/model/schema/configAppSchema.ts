@@ -2,7 +2,11 @@ import { TConfigAPP } from '@/shared/model/types/subtypes/TAppearanceConfigApp'
 import { Model, Schema, model, models } from 'mongoose'
 
 export const configSchema = new Schema<TConfigAPP>({
-	idUser: String,
+	idUser:{
+		type:Schema.Types.ObjectId,
+		required:true,
+		ref:'users'
+	} ,
 	configHeader: {
 		color: {
 			bgColor: String,

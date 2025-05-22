@@ -7,7 +7,7 @@ export default class EncryptionService {
 	private key: string
 	
 	constructor() {
-		this.key = process.env.SECRET_KEY || 'default_key'
+		this.key = process.env.SECRET_KEY || 'suerpsercretkey'
 		
 	}
 

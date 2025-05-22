@@ -1,8 +1,21 @@
-
+import {  TFormLogin } from '@/shared/model/types/Types'
+import { add } from 'date-fns'
+import { ObjectId } from 'mongoose'
 import type { AuthOptions } from 'next-auth'
+import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { ServiceAuth } from '../Server/Service/serviceAuth/serviceAuth'
-import { TDBUser, TFormLogin } from '@/shared/model/types/Types'
+import { TDBUser } from '../Server/Service/serviceUser/model/types/Types'
+
+declare module 'next-auth' {
+	interface User {
+		_id: ObjectId
+	}
+
+	interface AdapterUser {
+		_id: ObjectId
+	}
+}
 
 const authConfig: AuthOptions = {
 	secret: process.env.NEXTAUTH_SERCRET,
@@ -11,19 +24,18 @@ const authConfig: AuthOptions = {
 	},
 	callbacks: {
 		async session({ session, token, user }) {
-		
-
 			const dataSessionUser = token as TDBUser
-			
+
 			return { ...session, dataSessionUser }
 		},
 
 		async jwt({ token, user, account, profile }) {
 			if (user) {
+				token._id = user._id
+				token.exp = add(new Date(), { weeks: 3 }) 
 				return {
 					...token,
-					dataUser: JSON.parse(JSON.stringify(user)),
-					// dataUser:{...user._doc}
+					//dataUser: JSON.parse(JSON.stringify(user)),
 				}
 			}
 
@@ -48,6 +60,9 @@ const authConfig: AuthOptions = {
 			},
 		}),
 	],
+	session: {
+		strategy: 'jwt',
+	},
 }
 
 export default authConfig

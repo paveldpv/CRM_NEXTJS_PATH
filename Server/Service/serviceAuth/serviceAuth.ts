@@ -1,8 +1,10 @@
-import { TDBUser, TFormLogin } from '@/shared/model/types/Types'
+import {  TFormLogin } from '@/shared/model/types/Types'
 import bcrypt from 'bcrypt'
 import { isError } from '../../../src/shared/lib/IsError'
 import { Service } from '../../classes/Service'
 import { ServiceUsers } from '../serviceUser/serviceUser'
+import { TDBUser } from '../serviceUser/model/types/Types'
+
 
 
 export class ServiceAuth extends Service {
