@@ -1,9 +1,7 @@
-import { model, Model, models, Schema } from 'mongoose'
+import { Schema } from 'mongoose'
+import { TDBRequestPrevCalc } from '../types/Types'
 
-import { TRequestPrevCalc } from '@/shared/model/types/subtypes/TRequestPrevCalc'
-
-export const prevCalcSchema = new Schema<TRequestPrevCalc>({
-	idRequest: String,
+export const prevCalcSchema = new Schema<TDBRequestPrevCalc>({
 	dateRequest: Date,
 	favorites: {
 		required: true,
@@ -67,13 +65,10 @@ export const prevCalcSchema = new Schema<TRequestPrevCalc>({
 			required: false,
 		},
 		files: {
+			default:'NOT_FOUND',
 			required: false,
-			type: [{ FullPath: String, NameFile: String, DateTimeUpdateFile: String, Errored: Boolean, IDFile: String }],
+			type: Schema.Types.Mixed,
 		},
 	},
 })
 
-const modelPrevCalc =
-	(models.prevCalc as Model<TRequestPrevCalc>) || model<TRequestPrevCalc>('prevCalc', prevCalcSchema)
-
-export default modelPrevCalc

@@ -1,20 +1,19 @@
 'use client'
 
-
 import { signIn } from 'next-auth/react'
 
 import { useFormik } from 'formik'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
-import { useDialogWindow } from '../../../shared/model/store/storeDialogWindow'
 import { useMiniLoader } from '../../../shared/model/store/storeMiniLoader'
+import { useDialogWindow } from '../../../shared/ui/dialogWindow/model/storeDialogWindow'
 
 import LoginSchemaForm from '../lib/validateFormAuth'
 
 import { typeDialog, typicalError } from '@/shared/model/types/enums'
+import { TFormLogin } from '@/shared/model/types/Types'
 import MiniLoader from '@/shared/ui/loaders/MiniLoader'
 import Link from 'next/link'
-import { TFormLogin } from '@/shared/model/types/Types'
 
 export default function Auth() {
 	const { push } = useRouter()
@@ -36,20 +35,20 @@ export default function Auth() {
 		setLoader(true)
 
 		if (Object.keys(errors).length) return
+
 		const res = await signIn('credentials', {
 			phone: values.phone,
 			password: values.password,
 			INN: values.INN,
 			redirect: false,
-		})		
+		})
+
 		if (!res?.error) {
 			localStorage.setItem('mes_phone', values.phone)
 			localStorage.setItem('mes_INN', `${values.INN}`)
 			localStorage.setItem('mes_password', values.password)
+
 			push(`/${values.INN}/${values.phone}/main`)
-			//router.push(`/main`);
-			// router.push(`/main?inn=${values.INN}`);
-			// router.push(`/main`);
 		} else {
 			setOpenDialog(true, { title: 'Ошибка' }, typeDialog.error)
 			setTimeout(() => {
@@ -93,7 +92,9 @@ export default function Auth() {
 						onChange={handleChange}
 					/>
 					{!!errors.phone && (
-						<span className=' pt-4 select-none text-xl  text-red-900 mt-4 font-bold '>{errors.phone}</span>
+						<span className=' pt-4 select-none text-xl  text-red-900 mt-4 font-bold '>
+							{errors.phone}
+						</span>
 					)}
 				</li>
 				<li>
@@ -129,7 +130,9 @@ export default function Auth() {
 						onChange={handleChange}
 					/>
 					{!!errors.password && (
-						<span className=' pt-4 select-none text-xl  text-red-900 mt-4 font-bold '>{errors.password}</span>
+						<span className=' pt-4 select-none text-xl  text-red-900 mt-4 font-bold '>
+							{errors.password}
+						</span>
 					)}
 				</li>
 				<button className='buttonSubmit' type='submit' hidden={loader}>

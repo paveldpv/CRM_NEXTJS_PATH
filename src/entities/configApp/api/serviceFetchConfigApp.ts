@@ -1,5 +1,6 @@
-import { TConfigAPP } from '@/shared/model/types/subtypes/TAppearanceConfigApp'
+
 import { TResponse } from '@/shared/model/types/Types'
+import { TConfigAPP } from '../../../../Server/Service/serviceConfigApp/model/types/Type'
 
 
 export const fetchSaveConfigApp = async (

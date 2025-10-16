@@ -2,35 +2,34 @@
 import { typeDialog, typicalError } from '@/shared/model/types/enums'
 import { PURPOSE_USE, TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
 
-
 import { InputAdornment, TextField } from '@mui/material'
-import uniqid from 'uniqid'
 import { fieldData } from '../../registrated/model/FieldData'
 
 import { useFormik } from 'formik'
 import { useRouter } from 'next/navigation'
-import { useDialogWindow } from '../../../shared/model/store/storeDialogWindow'
 import { useMiniLoader } from '../../../shared/model/store/storeMiniLoader'
+import { useDialogWindow } from '../../../shared/ui/dialogWindow/model/storeDialogWindow'
 
 import SignupSchemaFormRegistrate from '../lib/validateFormRegistrate'
 
 import { styleTextFiled } from '../../../../config/muiCustomStyle/textField'
 import { fetchRegistrate } from '../api/fetchRegistrate'
 
-
+import { TFormRegistrate } from '@/shared/model/types/Types'
+import MiniLoader from '@/shared/ui/loaders/MiniLoader'
 import Link from 'next/link'
 import { useEffect, useReducer } from 'react'
 import IconFieldFormRegistrated from './IconFieldFormRegistrated'
-import { TFormRegistrate } from '@/shared/model/types/Types'
-import MiniLoader from '@/shared/ui/loaders/MiniLoader'
 
 export default function FormRegistrate() {
 	const [visiblePas, dispatchVisiblePas] = useReducer((state) => !state, true)
 	const [loader, setLoader] = useMiniLoader((state) => [state.visible, state.setVisibleLoader])
 	const [setOpenDialog] = useDialogWindow((state) => [state.setOpen])
+
 	useEffect(() => {
 		setLoader(false)
 	}, [setLoader])
+
 	const { push } = useRouter()
 
 	const initialValues: TFormRegistrate = {
@@ -38,7 +37,7 @@ export default function FormRegistrate() {
 		password: '',
 		phone: '',
 		INN: '',
-		idUser: uniqid(),
+
 		//INN:null
 	}
 
@@ -50,18 +49,15 @@ export default function FormRegistrate() {
 			async (pos) => {
 				const { latitude, longitude } = pos.coords
 
-				const dataGeo: Omit<TGeoLocation, 'date'> = {
+				const dataGeo: Omit<TGeoLocation, 'date' | 'idEmployee'> = {
 					location: {
 						latitude,
 						longitude,
 					},
 					process: PURPOSE_USE.registrate,
-					idEmployee: values.idUser,
 				}
 
 				const newUser = {
-					// idUser: idNewAdmin,
-					// linksAllowed: "ADMIN",
 					...values,
 				}
 
@@ -131,7 +127,9 @@ export default function FormRegistrate() {
 										onClick={() => field.name === 'password' && dispatchVisiblePas()}
 									>
 										{field.name === 'password' ? (
-											<IconFieldFormRegistrated nameFiled={visiblePas ? 'visiblePassword' : 'password'} />
+											<IconFieldFormRegistrated
+												nameFiled={visiblePas ? 'visiblePassword' : 'password'}
+											/>
 										) : (
 											// @ts-ignore
 											<IconFieldFormRegistrated nameFiled={field.name} />

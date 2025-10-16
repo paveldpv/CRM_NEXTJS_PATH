@@ -1,11 +1,11 @@
 'use client'
 
+import Fieldset from '@/shared/components/fieldSet/ui/Fieldset'
 import { TConfigLayout } from '@/shared/model/types/subtypes/TAppearanceConfigApp'
-import Loader from '@/shared/ui/loaders/Loader'
+import Loader from '@/shared/ui/namedLoader/ui/Loader'
 import { useMemo, useState } from 'react'
 import { useConfigApp } from '../../../shared/model/store/storeConfigApp'
-import { useLoader } from '../../../shared/model/store/storeLoader'
-import Fieldset from '@/shared/components/fieldSet/ui/Fieldset'
+import { useLoader } from '../../../shared/ui/namedLoader/model/storeLoader'
 import InputSettingColorLayout from './InputSettingColorLayout'
 
 export default function FormConfigApp() {

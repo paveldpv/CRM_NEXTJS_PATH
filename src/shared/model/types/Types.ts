@@ -1,20 +1,18 @@
-
 import React from 'react'
-import { TEntities } from './abstractsType'
+
 import { idLink } from './enums'
 import { TError } from './subtypes/TError'
-import { TDBUser } from '../../../../Server/Service/serviceUser/model/types/Types'
 
 export type TLink = {
 	id: idLink
 	href: string
 	description: string
-	title: string|React.ReactNode
+	title: string | React.ReactNode
 	paramsHref?: string[]
 	readonly?: boolean
 }
 
-export type TDBCollectedUsers = Omit<TDBUser, 'password'>
+// export type TDBCollectedUsers = Omit<TDBUser, 'password'>
 
 export type TFieldData = {
 	[key: string | number]: string | boolean | undefined
@@ -32,22 +30,15 @@ export type TFormLogin = {
 }
 export type TFormRegistrate = {
 	[key: string]: string | boolean | number | TLink[] | Date
-	// idUser: string	
+	// idUser: string
 	email: string
 } & TFormLogin
 
 
 
-export type TWithoutPassUser = Omit<TDBUser, 'password'>
-
-export type TNewEmployee = Pick<
-	TDBUser,
-	'name' | 'phone' | 'lastName' | 'nameJobTitle' | 'linksAllowed' | 'surname' | 'password' | 'INN'
->
-
-export type TResponse<T=undefined> = {
+export type TResponse<T = undefined> = {
 	status: number
-	response: TError | (T extends undefined?'OK':T)
+	response: TError | (T extends undefined ? 'OK' : T)
 }
 
 export type TAnswerUpdateDB = {
@@ -83,4 +74,3 @@ export type TErrored = {
 	error: boolean
 	message?: string
 }
-

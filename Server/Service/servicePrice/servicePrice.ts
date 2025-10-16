@@ -1,14 +1,19 @@
-import { TDataTablePrice, TPrice, TValueCell, TValueTablePrice } from '@/entities/price/model/Types'
-import { idLink, ROOT_LINK } from '@/shared/model/types/enums'
+import { idLink } from '@/shared/model/types/enums'
 import { TError } from '@/shared/model/types/subtypes/TError'
 import { TLink } from '@/shared/model/types/Types'
-import uniqid from 'uniqid'
+import {
+	TDataNewTablePrice,
+	TDataTablePrice,
+	TPrice,
+	TValueCell,
+	TValueTablePrice,
+} from './model/types/Types'
+
+import { Types } from 'mongoose'
 import { Service } from '../../classes/Service'
-import ControllerDBPrice from './controller/PricesDB.controller'
+import { ROOT_LINK } from '../servicePermissionRedactData/model/types/Types'
 import ServicePermissionRedactData from '../servicePermissionRedactData/ServicePermissionRedactData'
-// import { Service } from '../classes/Service'
-// import ControllerDBPrice from './../ControllersDB/Collection/PricesDB'
-// import ServicePermissionRedactData from './ServicePermissionRedactData'
+import ControllerDBPrice from './controller/PricesDB.controller'
 
 export class ServicePrice extends Service {
 	constructor(INN: string) {
@@ -19,46 +24,44 @@ export class ServicePrice extends Service {
 		return [newDataRow]
 	}
 
-	private createVoidTable(nameTable = 'прайс', initialPrice?: boolean): TDataTablePrice {
+	private createVoidTable(nameTable = 'прайс'): TDataNewTablePrice {
 		return {
 			data: this.createVoidDataTable(),
 			nameTable,
-			idTable: initialPrice ? 'initialPrice' : uniqid(),
 			optionDescriptionTable: [],
+			safeDeleted: false,
 		}
 	}
 
-	public async getPriceByID(idTable: string, phone?: string): Promise<TError | TPrice> {
+	public async getPriceByID(_id: Types.ObjectId, phone?: string): Promise<TError | TPrice> {
 		try {
 			const controllerDBPrice = new ControllerDBPrice(this.INN)
-
 			const servicePermission = new ServicePermissionRedactData(this.INN, ROOT_LINK.price)
-			const permission =phone? await servicePermission.PermissionByPhone(phone):false
-			
-			const price = await controllerDBPrice.getPriceByID(idTable)
+			const permission = phone ? await servicePermission.PermissionByPhone(phone) : false
+
+			const price = await controllerDBPrice.getPriceByID(_id)
 
 			if (price) {
 				return {
 					price: this.normalizeDataFromMongoDB(price),
 					readonly: !permission,
 				}
-			} else if (!price && idTable === 'initialPrice') {
-				const newInitialPrice = this.createVoidTable('прайс', true)
-				await controllerDBPrice.addNewPrice(newInitialPrice)
+			} else if (!price) {
+				const newInitialPrice = this.createVoidTable('прайс')
+				const newPrice = await controllerDBPrice.addNewPrice(newInitialPrice)
 				return {
-					price: newInitialPrice,
+					price: newPrice,
 					readonly: permission,
 				}
 			} else {
 				const er: TError = {
 					error: true,
-					message: `price not found , id price :${idTable}`,
+					message: `price not found , id price :${_id}`,
 				}
 				return er
 			}
 		} catch (error) {
-			return this.createError(`error get price by id ,idTable : ${idTable}, error :${error}`,error)
-			
+			return this.createError(`error get price by id ,idTable : ${_id}, error :${error}`, error)
 		}
 	}
 
@@ -68,18 +71,17 @@ export class ServicePrice extends Service {
 			const listInfoPrices = await controllerDBPrice.getListInfoPrices()
 			if (!listInfoPrices) {
 				return this.createError(`error get list info prices , list info prices is NULL `)
-				
 			}
+			
 			const normalizeData = this.normalizeDataFromMongoDB(listInfoPrices)
 			return normalizeData.map((el) => ({
-				href: `price/${el.idTable}`,
+				href: `price/${el._id.toString()}`,
 				description: '',
 				title: el.nameTable,
 				id: idLink.table,
 			}))
 		} catch (error) {
-			return this.createError(`error get list info prices , error :${error}`,error)
-			
+			return this.createError(`error get list info prices , error :${error}`, error)
 		}
 	}
 
@@ -87,11 +89,13 @@ export class ServicePrice extends Service {
 		try {
 			const controllerDBPrice = new ControllerDBPrice(this.INN)
 			const newVoidTable = this.createVoidTable(nameTable)
-			await controllerDBPrice.addNewPrice(newVoidTable)
-			return newVoidTable
+			const newPrice = await controllerDBPrice.addNewPrice(newVoidTable)
+			return this.normalizeDataFromMongoDB(newPrice)
 		} catch (error) {
-			return this.createError(`error add new price , name new table : ${nameTable} error  :${error}`,error)
-			
+			return this.createError(
+				`error add new price , name new table : ${nameTable} error  :${error}`,
+				error
+			)
 		}
 	}
 
@@ -100,26 +104,26 @@ export class ServicePrice extends Service {
 			const controllerDBPrice = new ControllerDBPrice(this.INN)
 			await controllerDBPrice.updatePrice(dataTable)
 		} catch (error) {
-			return this.createError(`error update update data table : ${dataTable} error :${error}`,error)
-			
+			return this.createError(`error update update data table : ${dataTable} error :${error}`, error)
 		}
 	}
-	public async deletedPrice(idTable: string): Promise<TError | void> {
+	public async deletedPrice(_id: Types.ObjectId): Promise<TError | void> {
 		try {
 			const controllerDBPrice = new ControllerDBPrice(this.INN)
-			await controllerDBPrice.deletedPrice(idTable)
+			await controllerDBPrice.deletedPrice(_id)
 		} catch (error) {
-			return this.createError(` error deleted price , id removing price ${idTable} error :${error}`,error)
-			
+			return this.createError(` error deleted price , id removing price ${_id} error :${error}`, error)
 		}
 	}
-	public async renamePrice(newNamePrice: string, idPrice: string): Promise<TError | void> {
+	public async renamePrice(newNamePrice: string, _id: Types.ObjectId): Promise<TError | void> {
 		try {
 			const controllerDBPrice = new ControllerDBPrice(this.INN)
-			await controllerDBPrice.renamePrice(newNamePrice, idPrice)
+			await controllerDBPrice.renamePrice(newNamePrice, _id)
 		} catch (error) {
-			return this.createError(`error rename price ,new Name price :${newNamePrice},id price :${idPrice}`,error)
-			
+			return this.createError(
+				`error rename price ,new Name price :${newNamePrice},id price :${_id}`,
+				error
+			)
 		}
 	}
 }

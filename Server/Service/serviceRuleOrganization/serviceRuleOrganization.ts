@@ -1,19 +1,18 @@
 import { TError } from '@/shared/model/types/subtypes/TError'
-import { TDataOrganization, TNameOrganization } from '@/shared/model/types/subtypes/TOrganization'
+
 import { Service } from '../../classes/Service'
 import ControllerRuleOrganizationDB from './controller/RuleOrganizationDB.controller'
 
-import { TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
-import moment from 'moment'
 import { isError } from '../../../src/shared/lib/IsError'
 
 import { ServiceRequisites } from '../serviceRequisites/serviceReqisites'
 
-import { TDaDataOrganization } from '@/shared/model/types/subtypes/TDaDataOrganization'
-import { getAbbreviated } from '../../../src/shared/lib/getAbbreviated'
+
+import { getAbbreviated } from '../../../src/shared/lib/utils/getAbbreviated'
 import { ServiceDaDataOrganization } from '../serviceDaData/serviceDaDataOrganization'
-import { ServiceGeoLocation } from '../serviceGeoLocation/serviceGeoLocation'
 import ServiceGlobalLIstCompany from '../serviceGlobalListCompany/serviceGlobalListCompany'
+import { TDaDataOrganization } from '../serviceDaData/model/types/Type'
+import { TDataOrganization, TDataOrganizationFullInfo, TNameOrganization,TNewRuleOrganization } from './model/types/Types'
 
 export class ServiceRuleOrganization extends Service {
 	constructor(INN: string) {
@@ -23,10 +22,10 @@ export class ServiceRuleOrganization extends Service {
 	private getInitialDataOrganization(
 		daData: TDaDataOrganization,
 		date: Date
-	): Partial<TDataOrganization> {
+	): Omit<TNewRuleOrganization,'requisites'> {
 		const { data, value, unrestricted_value } = daData
 
-		const initialDataOrganization: TDataOrganization = {
+		const initialDataOrganization: Omit<TNewRuleOrganization,'requisites'> = {
 			INN: data.inn!,
 			dateRegistration: date,
 			nameOrganization: {
@@ -67,7 +66,7 @@ export class ServiceRuleOrganization extends Service {
 		}
 	}
 
-	public async getParamsOrganization(): Promise<TDataOrganization | TError> {
+	public async getParamsOrganization(): Promise<TDataOrganizationFullInfo | TError> {
 		try {
 			const dataOrganization = await new ControllerRuleOrganizationDB(this.INN).getInfoOrganization()
 			if (dataOrganization === null) {
@@ -78,6 +77,7 @@ export class ServiceRuleOrganization extends Service {
 			return this.createError(`error get data from DB ,error : ${error}`, error)
 		}
 	}
+
 	public async updateParamsOrganization(data: TDataOrganization): Promise<void | TError> {
 		try {
 			await new ControllerRuleOrganizationDB(this.INN).updateInfoOrganization(data)
@@ -86,7 +86,7 @@ export class ServiceRuleOrganization extends Service {
 		}
 	}
 
-	public async createNewRuleOrganization(dataGeo: TGeoLocation): Promise<void | TError> {
+	public async createNewRuleOrganization(): Promise<void | TError> {
 		const daDataOrganization = await new ServiceDaDataOrganization(this.INN).addDaData({
 			query: this.INN,
 		})
@@ -95,29 +95,27 @@ export class ServiceRuleOrganization extends Service {
 			const { error, message } = daDataOrganization
 			return { error, message }
 		}
-		
-		const currentDate = new Date()
-		dataGeo.date = currentDate
 
-		const initialDataOrganization = this.getInitialDataOrganization(daDataOrganization, currentDate)
-		
-		const serviceGlobalListCompany = new ServiceGlobalLIstCompany().addNewCompany({
-			INN: this.INN,
-			name: initialDataOrganization.nameOrganization!
-		})
-		const saveGeoLocation = new ServiceGeoLocation(this.INN).setDataLocation(dataGeo)
+		const initialDataOrganization  = this.getInitialDataOrganization(daDataOrganization, new Date())
+		const serviceGlobalListCompany = new ServiceGlobalLIstCompany(this.INN)
+		const saveRequisites           = await new ServiceRequisites(this.INN).addNewRequisites(daDataOrganization)
+		if(isError(saveRequisites)){
+			throw new Error('error save requisites rule company')
+		}
 
 		const saveInitialDataOrganization = new ControllerRuleOrganizationDB(this.INN).addInfoOrganization(
-			initialDataOrganization
+			{...initialDataOrganization,requisites:saveRequisites._id}
 		)
 
-		const saveRequisites = new ServiceRequisites(this.INN).addNewRequisites(daDataOrganization)
 
 		const asyncSaveData = await Promise.all([
-			serviceGlobalListCompany,
-			saveGeoLocation,
+			serviceGlobalListCompany.addNewCompany({
+				INN: this.INN,
+				name: initialDataOrganization.nameOrganization!,
+				globalVisible: true,
+			}),
 			saveInitialDataOrganization,
-			saveRequisites,
+			
 		])
 
 		const err = asyncSaveData.find((data) => isError(data))

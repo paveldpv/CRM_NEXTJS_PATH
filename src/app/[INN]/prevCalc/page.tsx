@@ -1,7 +1,6 @@
-
 import FormPrevCalc from '@/entities/prevCalc/ui/FormPrevCalc'
 import DialogWindow from '@/shared/ui/DialogWindow'
-import ProgressLoader from '@/shared/ui/loaders/ProgressLoader'
+import ProgressLoader from '@/shared/ui/ProgressLoader/ui/ProgressLoader'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {

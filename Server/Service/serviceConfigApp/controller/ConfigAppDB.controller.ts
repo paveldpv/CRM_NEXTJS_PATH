@@ -1,27 +1,39 @@
-import { TConfigAPP } from '@/shared/model/types/subtypes/TAppearanceConfigApp'
-import { connect, ObjectId } from 'mongoose'
-import ContextOrganization from '../../../classes/contextOrganization'
-import modelConfig from '../model/schema/configAppSchema'
+import { Model, Types } from 'mongoose'
+import ControllerDB from '../../../classes/ControllerDB'
+import { configSchema } from '../model/schema/configAppSchema'
+import { TConfigAPP, TNewTConfigApp } from '../model/types/Type'
 
-export default class ControllerDBConfigApp extends ContextOrganization {
+export default class ControllerDBConfigApp extends ControllerDB {
 	constructor(INN: string) {
 		super(INN)
 	}
 
-	public async getPersonalConfigApp(idUser: ObjectId): Promise<TConfigAPP | null> {
-		await connect(`${process.env.DB_URL}${this.INN}`)
-		return await modelConfig.findOne({ idUser }, { _id: 0 })
+	private configAppModel: Model<TConfigAPP> | null = null
+
+	private async initModel() {
+		await this.connectDB()
+		if (!this.dbConnection) throw new Error(`error init model config app from INN :${this.INN}`)
+
+		this.configAppModel = this.dbConnection.model<TConfigAPP>('configSchema', configSchema)
+	}
+
+	private async changeReadinessModel() {
+		if (!this.configAppModel) await this.initModel()
+	}
+
+	public async getPersonalConfigApp(idUser: Types.ObjectId): Promise<TConfigAPP | null> {
+		await this.changeReadinessModel()
+		return await this.configAppModel!.findOne({ idUser })
 	}
 
 	public async updatePersonalConfigApp(newDataConfig: TConfigAPP): Promise<void> {
-		
-		await connect(`${process.env.DB_URL}${this.INN}`)
-		await modelConfig.findOneAndUpdate({ idUser: newDataConfig.idUser }, newDataConfig)
+		await this.changeReadinessModel()
+		await this.configAppModel!.findOneAndUpdate({ _id: newDataConfig._id }, newDataConfig)
 	}
 
-	public async addNewPersonalConfigApp(newDataConfig: TConfigAPP): Promise<void> {
-		await connect(`${process.env.DB_URL}${this.INN}`)
-		const dataConfig = new modelConfig(newDataConfig)
+	public async addNewPersonalConfigApp(newDataConfig: TNewTConfigApp): Promise<void> {
+		await this.changeReadinessModel()
+		const dataConfig = new this.configAppModel!(newDataConfig)
 		await dataConfig.save()
 	}
 }

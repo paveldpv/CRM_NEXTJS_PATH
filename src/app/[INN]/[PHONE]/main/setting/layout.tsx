@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
 
-import ListLinks from '@/shared/ui/ListLinks'
+import ListLinks from '@/shared/ui/listLInks/ui/ListLinks'
 import { dataLinkSetting } from './dataLinksSetting'
 
 export const metadata: Metadata = {

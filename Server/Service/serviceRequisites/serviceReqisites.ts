@@ -1,21 +1,22 @@
 import { NotData } from '@/shared/model/types/enums'
-import { TDaDataOrganization } from '@/shared/model/types/subtypes/TDaDataOrganization'
-import { TError } from '@/shared/model/types/subtypes/TError'
-import { TRequisites } from '@/shared/model/types/subtypes/TRequisites'
-import { Service } from '../../classes/Service'
-import ControllerDBRequisites from './controller/RequisitesDB.controller'
 
+import { TError } from '@/shared/model/types/subtypes/TError'
+
+import { Service } from '../../classes/Service'
+import { TDaDataOrganization } from '../serviceDaData/model/types/Type'
+import ControllerDBRequisites from './controller/RequisitesDB.controller'
+import { TNewRequisites, TRequisites } from './model/types/Type'
 
 export class ServiceRequisites extends Service {
 	constructor(INN: string) {
 		super(INN)
 	}
 
-	private getInitialDataRequisites(daData: TDaDataOrganization): Partial<TRequisites> {
+	private getInitialDataRequisites(daData: TDaDataOrganization): Partial<TNewRequisites> {
 		const { data, unrestricted_value, value } = daData
 		const { management, name, state, address, ...otherData } = data
 
-		const dataRequisites: TRequisites = {
+		const dataRequisites: TNewRequisites = {
 			safeDeleted: false,
 			INN: {
 				title: 'ИНН',
@@ -121,10 +122,13 @@ export class ServiceRequisites extends Service {
 		}
 	}
 
-	public async addNewRequisites(daData: TDaDataOrganization): Promise<void | TError> {
+	public async addNewRequisites(daData: TDaDataOrganization): Promise<TRequisites | TError> {
 		try {
 			const initialDataRequisites = this.getInitialDataRequisites(daData)
-			await new ControllerDBRequisites(this.INN).addNewRequisites(initialDataRequisites)
+			const saveRequisites = await new ControllerDBRequisites(this.INN).addNewRequisites(
+				initialDataRequisites
+			)
+			return saveRequisites
 		} catch (error) {
 			return this.createError(`error service requisites - update requisites ,error :${error}`, error)
 		}

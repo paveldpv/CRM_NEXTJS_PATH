@@ -1,16 +1,18 @@
 import bcrypt from 'bcrypt'
 import { isAllowINN } from '../../../src/shared/lib/changeAllowINN'
 
-import { TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
+
 import { SALT_ROUND } from '../../../config/RegistrateConfig'
 
 import { TError } from '@/shared/model/types/subtypes/TError'
-import {  TFormRegistrate } from '@/shared/model/types/Types'
+import { TFormRegistrate } from '@/shared/model/types/Types'
 import { isError } from '../../../src/shared/lib/IsError'
 import { Service } from '../../classes/Service'
+import { ServiceGeoLocation } from '../serviceGeoLocation/serviceGeoLocation'
 import { ServiceRuleOrganization } from '../serviceRuleOrganization/serviceRuleOrganization'
+import { TNewUser } from '../serviceUser/model/types/Types'
 import { ServiceUsers } from '../serviceUser/serviceUser'
-import { TDBUser, TNewUser } from '../serviceUser/model/types/Types'
+import { TGeoLocation } from '../serviceGeoLocation/model/types/type'
 
 /**
  *  while creating new organization create new data user  with params "linksAllowed " == "ADMIN"
@@ -20,10 +22,10 @@ import { TDBUser, TNewUser } from '../serviceUser/model/types/Types'
 
 export class ServiceRegistrated extends Service {
 	private dataUser: TFormRegistrate
-	private dataGeo: TGeoLocation
+	private dataGeo: Omit<TGeoLocation, 'date' | 'idEmployee'>
 	private currentDate = new Date()
 
-	constructor(dataUser: TFormRegistrate, dataGeo: TGeoLocation) {
+	constructor(dataUser: TFormRegistrate, dataGeo: Omit<TGeoLocation, 'date' | 'idEmployee'>) {
 		super(dataUser.INN)
 		this.dataUser = dataUser
 		this.dataGeo = dataGeo
@@ -40,6 +42,7 @@ export class ServiceRegistrated extends Service {
 
 			const serviceUser = new ServiceUsers(this.INN)
 			const changeOrganization = await serviceUser.getInfoAdmin()
+
 			if (isError(changeOrganization)) {
 				return this.createError(changeOrganization.message)
 			}
@@ -60,18 +63,23 @@ export class ServiceRegistrated extends Service {
 				srcPhoto: 'NOT_FOUND',
 			}
 
-			const serviceOrganization = new ServiceRuleOrganization(this.INN)
-			
-			const registrated = await Promise.all([
-				serviceUser.addNewUser(dataRegistratedUser),
-				serviceOrganization.createNewRuleOrganization(this.dataGeo),
-			])
+			const newUser = await serviceUser.addNewUser(dataRegistratedUser)
+			if (isError(newUser)) throw newUser
 
-			const resultRegistratedNewRuleOrganization = registrated.find((data) => isError(data))
-			if (resultRegistratedNewRuleOrganization) {
-				return this.createError(resultRegistratedNewRuleOrganization.message)
+			const serviceRuleOrganization = new ServiceRuleOrganization(this.INN)
+			const serviceGeoLocation = new ServiceGeoLocation(this.INN)
+			const newDataGeo: TGeoLocation = { ...this.dataGeo, idEmployee: newUser._id, date: new Date() }
+
+			const setGeoLocation = serviceGeoLocation.setDataLocation(newDataGeo)
+			const resultRegistratedNewRuleOrganization = serviceRuleOrganization.createNewRuleOrganization()
+			
+			const registrated = await Promise.all([setGeoLocation, resultRegistratedNewRuleOrganization])
+			const error = registrated.find((data) => isError(data))
+			if (error) {
+				return error
+			} else {
+				return
 			}
-			return
 		} catch (error) {
 			return this.createError(
 				`error registrated new organization,data user :${this.dataUser},data geo location :${this.dataGeo}`,

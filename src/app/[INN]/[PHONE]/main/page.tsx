@@ -4,28 +4,31 @@ import { redirect } from 'next/navigation'
 import authConfig from '../../../../../config/authConfig'
 
 import { typicalError } from '@/shared/model/types/enums'
-import { TConfigAPP } from '@/shared/model/types/subtypes/TAppearanceConfigApp'
+
 import { TError } from '@/shared/model/types/subtypes/TError'
 import { TDataOrganization } from '@/shared/model/types/subtypes/TOrganization'
 
-import { TDBUser } from '@/shared/model/types/Types'
 import Wrapper from '@/widgets/wrapper/ui/Wrapper'
-import Link from 'next/link'
-import { ServiceConfigApp } from '../../../../../Server/Service/serviceConfigApp'
+
 import { ServiceRuleOrganization } from '../../../../../Server/Service/serviceRuleOrganization/serviceRuleOrganization'
-import { ServiceUsers } from '../../../../../Server/Service/serviceUser'
+
 import { isError } from '../../../../shared/lib/IsError'
 
-const getDataUser = async (INN: string, phone: string): Promise<TDBUser | null | TError> => {
-	const serviceUsers = new ServiceUsers(INN)
-	return await serviceUsers.getUserByPhone(phone)
-}
-const getConfigApp = async (INN: string, idUser: string): Promise<TConfigAPP | TError | null> => {
+import { ObjectId, Types } from 'mongoose'
+import { ServiceConfigApp } from '../../../../../Server/Service/serviceConfigApp/serviceConfigApp'
+import { TDBUserWithoutPas } from '../../../../../Server/Service/serviceUser/model/types/Types'
+import { TConfigAPP } from '../../../../../Server/Service/serviceConfigApp/model/types/Type'
+
+const initializationConfigApp = async (
+	INN: string,
+	idUser?: Types.ObjectId
+): Promise<TConfigAPP | TError | null> => {
+	if (!idUser) return null
 	const serviceConfigApp = new ServiceConfigApp(INN)
 	return await serviceConfigApp.getPersonalConfig(idUser)
 }
 
-const getInfoOrganization = async (INN: string): Promise<TDataOrganization | null | TError> => {
+const initializationOrganization = async (INN: string): Promise<TDataOrganization | null | TError> => {
 	const serviceOrganization = new ServiceRuleOrganization(INN)
 	return await serviceOrganization.getParamsOrganization()
 }
@@ -33,33 +36,31 @@ const getInfoOrganization = async (INN: string): Promise<TDataOrganization | nul
 export default async function page({ params }: { params: { INN: string; PHONE: string } }) {
 	const { PHONE, INN } = params
 	const session = await getServerSession(authConfig)
-	let dataUser = await getDataUser(INN, PHONE)
+	const dataUser = session?.user as TDBUserWithoutPas
+	const jwt = session?.jwt
+	const refreshToken = session?.refreshToken
 
-	if (dataUser == null || isError(dataUser)) {
-		redirect(`/ERROR/${typicalError.error_DB}`)
-	}
-
-	const { password, ...userWithoutPas } = dataUser
-
-	const dataApp = await Promise.all([getConfigApp(INN, userWithoutPas.idUser), getInfoOrganization(INN)])
-
-	const er = dataApp.some((el) => el == null || isError(el))
+	const dataApp = await Promise.all([
+		initializationConfigApp(INN, dataUser._id),
+		initializationOrganization(INN),
+	])
+	console.log(`data app test from page`,dataApp[0]);
+	
+	const er = dataApp.some((el) => isError(el))
 
 	if (er) {
 		redirect(`/ERROR/${typicalError.error_DB}`)
 	}
 
-	const [configApp, infoOrganization] = dataApp as [TConfigAPP, TDataOrganization]
+	const [configApp, infoOrganization] = dataApp as [TConfigAPP | null, TDataOrganization]
 
-	if (session) {
-		return (
-			<Wrapper dataConfigApp={configApp} dataUser={userWithoutPas} infoOrganization={infoOrganization} />
-		)
-	} else {
-		;<div className=' bg-slate-600'>
-			<Link className=' text-6xl bg-slate-700' href={'/sign'}>
-				вход не выполнен
-			</Link>
-		</div>
-	}
+	return (
+		<Wrapper
+			phone={PHONE}
+			dataConfigApp={configApp}
+			dataUser={dataUser}
+			infoOrganization={infoOrganization}
+			tokens={{ jwt, refreshToken }}
+		/>
+	)
 }

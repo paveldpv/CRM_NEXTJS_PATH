@@ -6,12 +6,12 @@ import { fetchDeletedFile } from '../../../api/file_manager/deletedFile'
 import { fetchUploadFileOrganization } from '../../../api/file_manager/uploadFile'
 import { combineFilesToFormData } from '../../../lib/combineFilesToFormData'
 import { isError } from '../../../lib/IsError'
-import { useDialogWindow } from '../../../model/store/storeDialogWindow'
+import { useDialogWindow } from '../../../ui/dialogWindow/model/storeDialogWindow'
 
+import { TResponseUploadFiles } from '@/shared/model/types/Types'
 import DownloadFile from './DownloadFile'
 import InputFile from './InputFile'
 import PreviewPictureFile, { TPreviewUploadFile } from './PreviewPictureFile'
-import { TResponseUploadFiles } from '@/shared/model/types/Types'
 
 type TFileUpload = {
 	nameFiled: string
@@ -72,7 +72,11 @@ export default function FileUpload({
 		}
 	}
 
-	if (file !== 'NOT_FOUND' && preview?.preview && IMAGE_FORMAT.some((format) => format === file.fileFormat)) {
+	if (
+		file !== 'NOT_FOUND' &&
+		preview?.preview &&
+		IMAGE_FORMAT.some((format) => format === file.fileFormat)
+	) {
 		return (
 			<PreviewPictureFile
 				height={preview.height}

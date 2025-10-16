@@ -8,7 +8,7 @@ import { styleTextFiled } from '../../../../config/muiCustomStyle/textField'
 
 import Fieldset from '@/shared/components/fieldSet/ui/Fieldset'
 import React from 'react'
-import { useDialogWindow } from '../../../shared/model/store/storeDialogWindow'
+import { useDialogWindow } from '../../../shared/ui/dialogWindow/model/storeDialogWindow'
 
 export type TChangeOptionData = { INN: string } & TFieldFormAdminPanel
 
@@ -22,7 +22,12 @@ export type TChangeOptionData = { INN: string } & TFieldFormAdminPanel
  * - href prev calc page
  */
 
-export default function ChangeOptionData({ activeField, defaultData, handlerChange, INN }: TChangeOptionData) {
+export default function ChangeOptionData({
+	activeField,
+	defaultData,
+	handlerChange,
+	INN,
+}: TChangeOptionData) {
 	const { telegram, paramsEmailNewsletter, ...otherOption } = defaultData
 	const [setOpenDialogWindow] = useDialogWindow((state) => [state.setOpen])
 
@@ -55,7 +60,9 @@ export default function ChangeOptionData({ activeField, defaultData, handlerChan
 					<Tooltip title={telegram?.botOn ? 'Бот активен' : 'Бот отключен'}>
 						<button
 							onClick={changeTelegramBot}
-							className={` text-4xl border-2 ${telegram?.botOn ? ' border-green-500' : 'border-red-500'} `}
+							className={` text-4xl border-2 ${
+								telegram?.botOn ? ' border-green-500' : 'border-red-500'
+							} `}
 						>
 							<FaPowerOff className={telegram?.botOn ? ' text-green-500' : 'text-red-500'} />
 						</button>

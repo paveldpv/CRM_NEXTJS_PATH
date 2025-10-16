@@ -1,4 +1,4 @@
-import { TDataHelpInformer } from '../../../shared/model/store/storeHelpInformer'
+import { TDataHelpInformer } from '../../../shared/ui/HelpInformerModalWindow/model/storeHelpInformer'
 
 export const dataHelperForFormPrevCalc: TDataHelpInformer = {
 	listMessage: [

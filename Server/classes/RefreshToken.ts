@@ -1,7 +1,7 @@
 import { add, isBefore } from 'date-fns'
 import jwt from 'jsonwebtoken'
 
-export class RefreshToken {
+export class Token {
 	private decoded(token: string) {
 		try {
 			return jwt.verify(token, process.env.NEXTAUTH_SERCRET || 'suerpsercretkey') as {
@@ -12,9 +12,9 @@ export class RefreshToken {
 		}
 	}
 
-	static generate() {
+	static generate(weeks?:number) {
 		const salt = process.env.NEXTAUTH_SERCRET || 'suerpsercretkey'
-		const expiriesInDate = add(new Date(), { weeks: 25 })
+		const expiriesInDate = add(new Date(), { weeks:weeks||25 })
 		return jwt.sign({ expiriesInDate }, salt)
 	}
 

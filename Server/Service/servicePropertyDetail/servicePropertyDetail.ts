@@ -2,6 +2,7 @@ import { TError } from '@/shared/model/types/subtypes/TError'
 import { Service } from '../../classes/Service'
 import ControllerPropertyDetail from './controller/PropertyDetailDB.controller'
 import { TPropertyDetail } from './model/types/Types'
+import { Types } from 'mongoose'
 
 export class ServicePropertyDetail extends Service {
 	constructor(INN: string) {
@@ -16,7 +17,8 @@ export class ServicePropertyDetail extends Service {
 			return this.createError(`error add new property, INN :${this.INN}, error :${error}`, error)
 		}
 	}
-	public async removeAddPropertyDetail(idProperty: string): Promise<void | TError> {
+
+	public async removeAddPropertyDetail(idProperty: Types.ObjectId): Promise<void | TError> {
 		try {
 			const controllerPropertyDetail = new ControllerPropertyDetail(this.INN)
 			await controllerPropertyDetail.removeProperty(idProperty)
@@ -36,6 +38,7 @@ export class ServicePropertyDetail extends Service {
 			return this.createError(`error get Property detail , INN:${this.INN} error :${error}`, error)
 		}
 	}
+	
 	public async searchProperty(dataSearch: string): Promise<TError | null | TPropertyDetail[]> {
 		const regEx = new RegExp(dataSearch.trim(), 'i')
 		try {

@@ -2,11 +2,12 @@
 
 import { TError } from '@/shared/model/types/subtypes/TError'
 import { TResponseUploadFiles } from '@/shared/model/types/Types'
-import { ObjectId } from 'mongoose'
+
 import { Service } from '../../classes/Service'
 import { ServiceOrder } from '../serviceOrder/serviceOrder'
 import { ControllerDetail } from './controller/detailsDB.controller'
-import { TDetail, TNewDetail } from './model/types/Types'
+import { TDetail, TFullInfoTDetail, TNewDetail } from './model/types/Types'
+import { Types } from 'mongoose'
 
 export class ServiceDetails extends Service {
 	constructor(INN: string) {
@@ -22,7 +23,7 @@ export class ServiceDetails extends Service {
 		}
 	}
 
-	public async removeDetailFromOrder(idOrder: ObjectId, idDetail: ObjectId): Promise<void | TError> {
+	public async removeDetailFromOrder(idOrder: Types.ObjectId, idDetail: Types.ObjectId): Promise<void | TError> {
 		try {
 			const controllerDetail = new ControllerDetail(this.INN)
 			const serviceOrder = new ServiceOrder(this.INN)
@@ -39,7 +40,7 @@ export class ServiceDetails extends Service {
 	}
 
 	public async getDetailFromOrderWithDeleted(
-		idOrder: ObjectId
+		idOrder: Types.ObjectId
 	): Promise<null | [] | TError | TDetail[]> {
 		try {
 			const controllerDetail = new ControllerDetail(this.INN)
@@ -53,7 +54,7 @@ export class ServiceDetails extends Service {
 		}
 	}
 
-	public async restoreDetail(idDetail: ObjectId, idOrder: ObjectId): Promise<void | TError> {
+	public async restoreDetail(idDetail: Types.ObjectId, idOrder: Types.ObjectId): Promise<void | TError> {
 		try {
 			const controllerDetail = new ControllerDetail(this.INN)
 			const serviceOrder = new ServiceOrder(this.INN)
@@ -66,21 +67,21 @@ export class ServiceDetails extends Service {
 		}
 	}
 
-	public async searchDetail(req: string, idOrder?: ObjectId): Promise<null | TError | [] | TDetail[]> {
+	public async searchDetail(req: string): Promise<null | TError | TFullInfoTDetail[]> {
 		const regex = new RegExp(req, 'i')
 		try {
 			const controllerDetail = new ControllerDetail(this.INN)
-			const data = controllerDetail.searchDetail(regex, idOrder)
+			const data =await controllerDetail.searchDetail(regex)
 			return this.normalizeDataFromMongoDB(data)
 		} catch (error) {
 			return this.createError(
-				`error search detail request :${req}, id order ${idOrder} , INN:${this.INN}`,
+				`error search detail request :${req} , INN:${this.INN}`,
 				error
 			)
 		}
 	}
 
-	public async updateDataFromDetail(idDetail: ObjectId, data: TDetail): Promise<void | TError> {
+	public async updateDataFromDetail(idDetail: Types.ObjectId, data: TDetail): Promise<void | TError> {
 		try {
 			const controllerDetail = new ControllerDetail(this.INN)
 			await controllerDetail.updateDataForDetail(idDetail, data)
@@ -93,7 +94,7 @@ export class ServiceDetails extends Service {
 	}
 
 	public async addFilesFromDetail(
-		idDetail: ObjectId,
+		idDetail: Types.ObjectId,
 		files: TResponseUploadFiles[]
 	): Promise<void | TError> {
 		try {
@@ -107,7 +108,7 @@ export class ServiceDetails extends Service {
 		}
 	}
 
-	public async removeFileFromDetail(idDetail: ObjectId, FullPath: string): Promise<void | TError> {
+	public async removeFileFromDetail(idDetail: Types.ObjectId, FullPath: string): Promise<void | TError> {
 		try {
 			const controllerDetail = new ControllerDetail(this.INN)
 			await controllerDetail.removeFileFromDetail(idDetail, FullPath)

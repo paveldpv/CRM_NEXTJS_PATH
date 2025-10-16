@@ -11,9 +11,9 @@ import { useInfoUser } from '@/shared/model/store/storeInfoUser'
 
 import { isError } from '@/shared/lib/IsError'
 import useGeo from '@/shared/model/hooks/useGeo'
-import { useDialogWindow } from '@/shared/model/store/storeDialogWindow'
 import { TWithoutPassUser } from '@/shared/model/types/Types'
 import CusButton from '@/shared/ui/CusButton'
+import { useDialogWindow } from '@/shared/ui/dialogWindow/model/storeDialogWindow'
 import { fetchGetEmployee, TParamsAllEmployee } from '../api/getEmployee'
 import { fetchRemoveEmployee } from '../api/removeEmployee'
 import { fetchRestoreEmployee } from '../api/restoreEmployee'
@@ -30,7 +30,10 @@ export default function PanelEditEmployee({
 	...dataProfile
 }: PanelEditEmployee) {
 	const searchParams = useSearchParams()
-	const [setOpenDialogWindow, dispatchFn] = useDialogWindow((state) => [state.setOpen, state.setDispatchFn])
+	const [setOpenDialogWindow, dispatchFn] = useDialogWindow((state) => [
+		state.setOpen,
+		state.setDispatchFn,
+	])
 	const { idUser, phone, INN } = useInfoUser((state) => state.dataUser)
 	const { push } = useRouter()
 	const { dataGeo } = useGeo(idUser, PURPOSE_USE.redact)
@@ -51,7 +54,9 @@ export default function PanelEditEmployee({
 				push(`/ERROR/${typicalError.error_DB}`)
 			} else {
 				const isListEmployeeWithDeleted =
-					searchParams!.get('all') === null ? 0 : (Number(searchParams!.get('all')) as TParamsAllEmployee)
+					searchParams!.get('all') === null
+						? 0
+						: (Number(searchParams!.get('all')) as TParamsAllEmployee)
 				const updateListEmployee = await fetchGetEmployee(INN, isListEmployeeWithDeleted)
 				if (isError(updateListEmployee)) {
 					push(`/ERROR/${typicalError.error_DB}`)

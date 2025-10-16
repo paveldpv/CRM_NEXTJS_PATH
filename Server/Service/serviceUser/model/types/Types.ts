@@ -1,13 +1,10 @@
 import { TEntities } from '@/shared/model/types/abstractsType'
 import { TLink, TResponseUploadFiles } from '@/shared/model/types/Types'
-import { ObjectId } from 'mongoose'
 
 export type TDBUser = {
-	_id:ObjectId,
 	phone: string
 	password: string
 	INN: string
-	// idUser: string
 	email: string
 	dateRegistrate?: Date
 	name?: string
@@ -19,4 +16,15 @@ export type TDBUser = {
 	srcPhoto: 'NOT_FOUND' | TResponseUploadFiles
 } & TEntities
 
-export type TNewUser = Omit<TDBUser,'_id'>
+export type TDBUserWithoutPas = Omit<TDBUser, 'password'>
+
+export type TBirthdayDate = { startDay: Date; endDay: Date }
+export type TNewUser = Omit<TDBUser, '_id'>
+
+
+export type TUserDTO = Omit<TDBUser,'_id'> & {_id:string}
+
+
+export type TUserDTOWithoutPas  = Omit<TUserDTO,"password">
+
+export type TUserDTOByBirthday = Pick<TUserDTOWithoutPas, 'name' | 'lastName' | 'surname' | 'phone'>

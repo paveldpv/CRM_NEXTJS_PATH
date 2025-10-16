@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { useMemo } from 'react'
 import { adminLinks } from '../../../../config/adminLinks'
 
-import ListLinks from '../../../shared/ui/ListLinks'
+import ListLinks from '../../../shared/ui/listLInks/ui/ListLinks'
 
 import { useInfoUser } from '@/shared/model/store/storeInfoUser'
 import { TConfigAPP } from '@/shared/model/types/subtypes/TAppearanceConfigApp'
@@ -16,11 +16,12 @@ export default function NavBar() {
 	const userData = useInfoUser((store) => store.dataUser)
 	const { configNavMenu } = useConfigApp((store) => store.dataConfigApp) as TConfigAPP
 
-	const currentLink: TLink[] = useMemo(() => {
-		if (userData.linksAllowed === 'ADMIN') {
+	const currentLink: TLink[] | null = useMemo(() => {
+		if (!userData) return null
+		if (userData?.linksAllowed === 'ADMIN') {
 			return adminLinks
 		} else {
-			return userData.linksAllowed
+			return userData?.linksAllowed
 		}
 	}, [userData])
 
@@ -36,11 +37,13 @@ export default function NavBar() {
 				borderColor: configNavMenu?.color?.borderColor,
 			}}
 		>
-			<ListLinks
-				listLinks={currentLink}
-				className='gap-2'
-				styleLinks={{ borderColor: configNavMenu?.color?.borderColor }}
-			/>
+			{currentLink && (
+				<ListLinks
+					listLinks={currentLink}
+					className='gap-2'
+					styleLinks={{ borderColor: configNavMenu?.color?.borderColor }}
+				/>
+			)}
 			<BottomNavBar />
 		</motion.div>
 	)

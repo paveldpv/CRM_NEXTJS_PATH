@@ -1,10 +1,13 @@
 import { TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
 import { NextRequest, NextResponse } from 'next/server'
-import ServicePermissionRedactData from '../../../../../../Server/Service/ServicePermissionRedactData'
-import { ROOT_LINK } from '@/shared/model/types/enums'
-import { ServicePrice } from '../../../../../../Server/Service/servicePrice'
-import { ServiceGeoLocation } from '../../../../../../Server/Service/serviceGeoLocation'
+
+
+
 import { isError } from '@/shared/lib/IsError'
+import ServicePermissionRedactData from '../../../../../../Server/Service/servicePermissionRedactData/ServicePermissionRedactData'
+import { ServicePrice } from '../../../../../../Server/Service/servicePrice/servicePrice'
+import { ServiceGeoLocation } from '../../../../../../Server/Service/serviceGeoLocation/serviceGeoLocation'
+import { ROOT_LINK } from '../../../../../../Server/Service/servicePermissionRedactData/model/types/Types'
 
 export async function POST(req: NextRequest, { params }: { params: { INN: string } }) {
 	const { INN } = params

@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
-import ControllerPrevCalc from '../../../../../../Server/Service/servicePrevCalc'
+import { ServicePrevCalc } from '../../../../../../Server/Service/servicePrevCacl/servicePrevCalc'
+
 
 export async function GET(
 	req: NextRequest,
-	{ params }: { params: { INN: number } },
+	{ params }: { params: { INN: string } },
 	res: NextResponse
 ) {
 	const INN = params.INN
-	const dataResponse = await ControllerPrevCalc.getAllRequest(INN)
+	const servicePrevCalc =  new ServicePrevCalc(INN)
+	const dataResponse = await servicePrevCalc.getRequestPrevCalc()
 	return NextResponse.json(dataResponse)
 }

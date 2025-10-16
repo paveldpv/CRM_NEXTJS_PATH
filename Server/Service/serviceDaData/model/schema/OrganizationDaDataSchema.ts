@@ -1,5 +1,6 @@
-import { TDaDataOrganization } from '@/shared/model/types/subtypes/TDaDataOrganization'
-import { Model, Schema, model, models } from 'mongoose'
+
+import { Schema } from 'mongoose'
+import { TDaDataOrganization } from '../types/Type'
 
 export const DaDataOrganizationSchema = new Schema<TDaDataOrganization>({
 	dataRegistrateFormApp: {
@@ -80,7 +81,7 @@ export const DaDataOrganizationSchema = new Schema<TDaDataOrganization>({
 					},
 				},
 			},
-			
+
 			name: {
 				type: {
 					full_with_opf: {
@@ -196,8 +197,8 @@ export const DaDataOrganizationSchema = new Schema<TDaDataOrganization>({
 	},
 })
 
-const modelDaDataOrganization =
-	(models.DaDataOrganizationSchema as Model<TDaDataOrganization>) ||
-	model<TDaDataOrganization>('DaDataOrganizationSchema', DaDataOrganizationSchema)
+// const modelDaDataOrganization =
+// 	(models.DaDataOrganizationSchema as Model<TDaDataOrganization>) ||
+// 	model<TDaDataOrganization>('DaDataOrganizationSchema', DaDataOrganizationSchema)
 
-export default modelDaDataOrganization
+// export default modelDaDataOrganization

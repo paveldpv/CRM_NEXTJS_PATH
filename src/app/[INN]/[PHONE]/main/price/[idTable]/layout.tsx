@@ -4,7 +4,7 @@ import { isError } from '@/shared/lib/IsError'
 import { TLink } from '@/shared/model/types/Types'
 import { ROOT_LINK, typicalError } from '@/shared/model/types/enums'
 import { TError } from '@/shared/model/types/subtypes/TError'
-import ListLinks from '@/shared/ui/ListLinks'
+import ListLinks from '@/shared/ui/listLInks/ui/ListLinks'
 import { redirect } from 'next/navigation'
 import { Suspense } from 'react'
 import ServicePermissionRedactData from '../../../../../../../Server/Service/ServicePermissionRedactData'
@@ -30,7 +30,11 @@ export const getListPrice = async (
 	}
 }
 
-export default async function layout({	children,	params,}: {	children: React.ReactNode
+export default async function layout({
+	children,
+	params,
+}: {
+	children: React.ReactNode
 	params: { INN: string; PHONE: string }
 }) {
 	const { INN, PHONE } = params

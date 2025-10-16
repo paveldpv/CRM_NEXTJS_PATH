@@ -17,7 +17,7 @@ import { useInfoUser } from '@/shared/model/store/storeInfoUser'
 import { TNewEmployee, TWithoutPassUser } from '@/shared/model/types/Types'
 import CusButton from '@/shared/ui/CusButton'
 import { isError } from '../../../shared/lib/IsError'
-import { useDialogWindow } from '../../../shared/model/store/storeDialogWindow'
+import { useDialogWindow } from '../../../shared/ui/dialogWindow/model/storeDialogWindow'
 import { fetchUpdateDataUser } from '../../userProfile/api/updateDataUser'
 import { fetchAddNewEmployee } from '../api/addNewEmployee'
 import { fetchGetEmployee, TParamsAllEmployee } from '../api/getEmployee'
@@ -41,14 +41,12 @@ export default function FormCardEmployee({
 
 	setVisibleLoader,
 }: TCardEmployee) {
-	
-
 	const [openModal, setOpenModal] = useState(false)
 	const [dataGeo, setDataGeo] = useState<Omit<TGeoLocation, 'date'> | null>(null)
 	const [dataPassword, setDataPassword] = useState('')
 	const { idUser, INN } = useInfoUser((state) => state.dataUser)
 	const setOpenDialogWindow = useDialogWindow((state) => state.setOpen)
-	
+
 	const searchParams = useSearchParams()
 	useEffect(() => {
 		navigator.geolocation.getCurrentPosition(
@@ -144,7 +142,7 @@ export default function FormCardEmployee({
 		setOpenModal(true)
 	}
 
-	const initialValues: TNewEmployee = useMemo(()=>{
+	const initialValues: TNewEmployee = useMemo(() => {
 		return {
 			name: dataEmployee?.name || '',
 			surname: dataEmployee?.surname || '',
@@ -155,20 +153,22 @@ export default function FormCardEmployee({
 			password: '',
 			INN: INN,
 		}
-	},[dataEmployee])
+	}, [dataEmployee])
 
 	const { values, handleChange, errors, touched, setFieldValue } = useFormik({
 		initialValues,
 		onSubmit,
 		validationSchema: NewEmployeeSchemaForm,
 	})
-console.log(values);
+	console.log(values)
 
 	return (
 		<div>
 			<Fieldset
 				className=' opacity-95'
-				legend={!dataEmployee ? 'Добавить нового сотрудника' : `${dataEmployee?.surname} ${dataEmployee?.name}`}
+				legend={
+					!dataEmployee ? 'Добавить нового сотрудника' : `${dataEmployee?.surname} ${dataEmployee?.name}`
+				}
 			>
 				<form
 					className=' relative'
@@ -193,7 +193,6 @@ console.log(values);
 							{...styleTextFiled}
 						/>
 						<TextField
-						
 							onChange={handleChange}
 							value={values.name}
 							size='small'

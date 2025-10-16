@@ -1,21 +1,31 @@
 import { TEntities } from '@/shared/model/types/abstractsType'
-import { ObjectId } from 'mongoose'
+import { Types } from 'mongoose'
+import { TCounterparty, TCounterpartyDTO } from '../../../serviceCounterparty/models/types/Types'
 
-export type TNewOrder = Omit<TOrder, '_id' | 'safeDeleted'|'numberOrder'|'complied'>
+export type TNewOrder = Omit<TOrder, '_id' | 'safeDeleted' | 'numberOrder' | 'complied'>
 
 export type TOrder = {
-	_id: ObjectId
-	idCounterParty: ObjectId
-	complied:boolean,
+	CounterParty: Types.ObjectId
+	complied: boolean
 	numberOrder: number
-	acceptedOfCargoEmployeeId: string|ObjectId
-	IDDetails: ObjectId[]|[]
+	acceptedOfCargoEmployeeId: string | Types.ObjectId
+	details: Types.ObjectId[] | []
 	service: TServiceOrder
 	optionsDescription?: string[]
 } & TEntities
 
+export type TOrderFullInfo = Omit<TOrder, 'CounterParty'> & { CounterParty: TCounterparty }
+
+export type TOrderDTO = Omit<TOrder, '_id'> & { _id: string }
+export type TOrderFullInfoDTO = Omit<TOrderFullInfo, 'CounterParty' | '_id'> & {
+	CounterParty: TCounterpartyDTO
+	_id: string
+}
+
+//#region service type Order
+
 export type TServiceOrder = {
-	acceptedOfCargoEmployeeId: string|ObjectId
+	acceptedOfCargoEmployeeId: string | Types.ObjectId
 	deadlines: {
 		startDate: Date
 		endDate?: Date
@@ -44,7 +54,8 @@ export type TPaymentOrder = {
 	paymentStatus: TPaymentStatus
 }
 
-export type TPaymentStatus = {
+export type TPaymentStatus =
+	| {
 			prepayment: number
 	  }
 	| boolean
@@ -54,3 +65,4 @@ export enum type_payment {
 	no_vat = 'NO_VAT',
 	vat = 'VAT',
 }
+//#endregion

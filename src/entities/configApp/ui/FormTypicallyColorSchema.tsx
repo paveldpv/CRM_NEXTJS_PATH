@@ -1,15 +1,18 @@
 'use client'
 
-import Loader from '@/shared/ui/loaders/Loader'
-import { useConfigApp } from '../../../shared/model/store/storeConfigApp'
-import { useLoader } from '../../../shared/model/store/storeLoader'
-import SelectTypicallyColor from './SelectTypicallyColor'
 import Fieldset from '@/shared/components/fieldSet/ui/Fieldset'
+import Loader from '@/shared/ui/namedLoader/ui/Loader'
+import { useConfigApp } from '../../../shared/model/store/storeConfigApp'
+import { useLoader } from '../../../shared/ui/namedLoader/model/storeLoader'
 import { dataTypicallyColor } from '../model/dataTypicallyColor'
+import SelectTypicallyColor from './SelectTypicallyColor'
 
 export default function FormTypicallyColorSchema() {
 	const visibleLoader = useLoader((state) => state.visible)
-	const [currentConfigApp, setConfigApp] = useConfigApp((state) => [state.dataConfigApp, state.setDataConfigApp])
+	const [currentConfigApp, setConfigApp] = useConfigApp((state) => [
+		state.dataConfigApp,
+		state.setDataConfigApp,
+	])
 
 	return (
 		<Fieldset legend='Стандартные оформление'>

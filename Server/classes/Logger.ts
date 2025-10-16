@@ -16,7 +16,12 @@ export default class Logger {
 			name:error.stack,
 			message:error.message
 		}
-		console.table(er)
+		console.group('ERROR_GROUP')
+		console.error(`cause:${error.cause}`)
+		console.error(`stack:${error.stack}`)
+		console.error(`name:${error.stack}`)
+		console.error(`message:${error.message}`)
+		console.groupEnd()
 	}
 
 	protected createError(message:string,error?:unknown):TError{

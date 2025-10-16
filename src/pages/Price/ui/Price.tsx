@@ -5,17 +5,19 @@ import ListDescriptionTable from '@/entities/price/ui/ListDescriptionTable'
 import PanelRulePrice from '@/entities/price/ui/PanelRulePrice'
 import TablePrice from '@/entities/price/ui/TablePrice'
 
-import { useLoader } from '@/shared/model/store/storeLoader'
 import DialogWindow from '@/shared/ui/DialogWindow'
-import FieldDialog from '@/shared/ui/FieldDialog'
-import Loader from '@/shared/ui/loaders/Loader'
-import { useParams, useRouter } from 'next/navigation'
+import FieldDialog from '@/shared/ui/FieldDialog/ui/FieldDialog'
+import { useLoader } from '@/shared/ui/namedLoader/model/storeLoader'
+import Loader from '@/shared/ui/namedLoader/ui/Loader'
+import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export default function Price({ price, readonly }: TPrice) {
 	const [table, setTable] = useState(price?.data)
 	const [visibleLoader, setVisibleLoader] = useLoader((state) => [state.visible, state.setVisibleLoader])
-	const [listDescriptionTable, setListDescriptionTable] = useState<string[]>(price.optionDescriptionTable)
+	const [listDescriptionTable, setListDescriptionTable] = useState<string[]>(
+		price.optionDescriptionTable
+	)
 	const { INN, idTable, PHONE } = useParams() as { INN: string; idTable: string; PHONE: string }
 
 	useEffect(() => {
@@ -23,9 +25,8 @@ export default function Price({ price, readonly }: TPrice) {
 
 		setVisibleLoader(true)
 		fetchGetDataPrice(INN, idTable, PHONE).then((res) => {
-			
 			if (!res) return
-			
+
 			setTable(res.price.data)
 			setVisibleLoader(false)
 		})

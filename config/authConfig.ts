@@ -1,19 +1,28 @@
-import {  TFormLogin } from '@/shared/model/types/Types'
-import { add } from 'date-fns'
-import { ObjectId } from 'mongoose'
+import { TFormLogin } from '@/shared/model/types/Types'
 import type { AuthOptions } from 'next-auth'
-import NextAuth from 'next-auth'
+
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { ServiceAuth } from '../Server/Service/serviceAuth/serviceAuth'
-import { TDBUser } from '../Server/Service/serviceUser/model/types/Types'
+import { TTokens } from '../Server/Service/serviceSession/model/types/Type'
+import { TDBUserWithoutPas } from '../Server/Service/serviceUser/model/types/Types'
+
+declare module 'next-auth' {
+	interface Session {
+		jwt: string // Позволяет session.jwt
+		refreshToken: string
+		dataSessionUser?: any // Если используется
+	}
+}
 
 declare module 'next-auth' {
 	interface User {
-		_id: ObjectId
+		dataUser: TDBUserWithoutPas
+		token: TTokens
 	}
 
 	interface AdapterUser {
-		_id: ObjectId
+		dataUser: TDBUserWithoutPas
+		token: TTokens
 	}
 }
 
@@ -24,18 +33,21 @@ const authConfig: AuthOptions = {
 	},
 	callbacks: {
 		async session({ session, token, user }) {
-			const dataSessionUser = token as TDBUser
+			session.jwt = token.jwt as string
+			session.refreshToken = token.refreshToken as string
+			session.user = token.dataUser as TDBUserWithoutPas
 
-			return { ...session, dataSessionUser }
+			return { ...session }
 		},
 
 		async jwt({ token, user, account, profile }) {
 			if (user) {
-				token._id = user._id
-				token.exp = add(new Date(), { weeks: 3 }) 
+				token.jwt = user.token.jwt
+				token.refreshToken = user.token.refreshToken
+				user.dataUser = user.dataUser as TDBUserWithoutPas
 				return {
 					...token,
-					//dataUser: JSON.parse(JSON.stringify(user)),
+					...user,
 				}
 			}
 
@@ -55,7 +67,7 @@ const authConfig: AuthOptions = {
 				const serviceAuth = new ServiceAuth(credentials as TFormLogin)
 				const resultAuth = await serviceAuth.auth()
 
-				if (resultAuth) return resultAuth as any
+				if (resultAuth?.dataUser) return resultAuth as any
 				return null
 			},
 		}),

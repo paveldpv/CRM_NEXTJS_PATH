@@ -1,15 +1,20 @@
 import { TError } from '@/shared/model/types/subtypes/TError'
-import { ServiceGlobal } from '../../classes/ServiceGlobal'
-import ControllerGlobalListCompany from './controller/globalListCompany.controller'
-import { TGlobalListCompanyWithoutID } from './model/types/Type'
 
-export default class ServiceGlobalLIstCompany extends ServiceGlobal {
-	public async getListCompany(range?: number, searchParams?: string) {
-		const regEx = searchParams ? new RegExp(searchParams, 'i') : undefined
+
+import { TGlobalListCompany, TGlobalListCompanyWithoutID } from './model/types/Type'
+import { Service } from '../../classes/Service'
+import { ControllerGlobalListCompany } from './api/globalListCompany.api'
+
+export default class ServiceGlobalLIstCompany extends Service {
+
+
+
+	public async getListCompany(range?: number, searchParams?: string):Promise<TGlobalListCompany[]|TError> {
+		
 		try {
 			const controllerGlobalListCompany = new ControllerGlobalListCompany()
-			const data = await controllerGlobalListCompany.getListCompany(range, regEx)
-			return this.normalizeDataFromMongoDB(data)
+			const data = await controllerGlobalListCompany.getListCompany(searchParams,range)
+			return data
 		} catch (error) {
 			return this.createError(
 				`error get list company ,range :${range},search params :${searchParams}`,
@@ -19,11 +24,11 @@ export default class ServiceGlobalLIstCompany extends ServiceGlobal {
 	}
 
 	public async addNewCompany(data: TGlobalListCompanyWithoutID): Promise<void | TError> {
-		try {
+		try {			
 			const controllerGlobalListCompany = new ControllerGlobalListCompany()
 			await controllerGlobalListCompany.addNewCompany(data)
 		} catch (error) {
-			return this.createError(`error add new company ,INN organization :${data.INN}`, error)
+			return this.createError(`error add new company to global list ,INN organization :${data.INN}`, error)
 		}
 	}
 
@@ -49,4 +54,34 @@ export default class ServiceGlobalLIstCompany extends ServiceGlobal {
 			)
 		}
 	}
+
+	public async getCountDocGlobalListCompany():Promise<number|TError>{
+		try {
+			const controllerGlobalListCompany = new ControllerGlobalListCompany()
+			const countDoc = await controllerGlobalListCompany.getCountDocGlobalListCompany()
+			return countDoc
+		} catch (error) {
+			return this.createError('error get count list global list company ',error)
+		}
+	}
+
+	public async getAllListCompany ():Promise<TGlobalListCompany[]|TError>{
+		try {
+			const controllerGlobalListCompany = new ControllerGlobalListCompany()
+			const data = await controllerGlobalListCompany.getALlListCompany()
+			return data
+		} catch (error) {
+			return this.createError('error get all list company ',error)
+		}
+	}
+	public async removeCompany(INN:string):Promise<void|TError>{
+		try {
+			const controllerGlobalListCompany = new ControllerGlobalListCompany()
+			await controllerGlobalListCompany.removeCompany(INN)
+		} catch (error) {
+			return this.createError(`error remove company INN :${INN}`,error)
+		}
+	}
+
+
 }

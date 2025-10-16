@@ -1,18 +1,19 @@
 import { TEntities } from '@/shared/model/types/abstractsType'
-import {ObjectId} from 'mongoose'
+import { Types } from 'mongoose'
+
 
 export type TNewTask = Omit<TTask,'_id'|'service'|'safeDeleted'>
 
 export type TTask = {
-	_id: ObjectId
-	idAssignEmployees: ObjectId[]	
-	idDetail?: ObjectId
+	
+	idAssignEmployees: Types.ObjectId[]	
+	idDetail?: Types.ObjectId
 	service: TServiceTask
 	salary?: TSalary[]
 } & TEntities
 
 export type TSalary = {
-	idEmployee: ObjectId
+	idEmployee: Types.ObjectId
 	payment: number
 }
 

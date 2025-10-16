@@ -3,22 +3,22 @@
 import { typicalError } from '@/shared/model/types/enums'
 import { redirect } from 'next/navigation'
 
-import { isError } from '../../../../../../shared/lib/IsError'
-import { useConfigApp } from '../../../../../../shared/model/store/storeConfigApp'
-import { useLoader } from '../../../../../../shared/model/store/storeLoader'
 import { fetchSaveConfigApp } from '@/entities/configApp/api/serviceFetchConfigApp'
 import FormConfigApp from '@/entities/configApp/ui/FormConfigApp'
 import FormTypicallyColorSchema from '@/entities/configApp/ui/FormTypicallyColorSchema'
 import { useInfoUser } from '@/shared/model/store/storeInfoUser'
+import { isError } from '../../../../../../shared/lib/IsError'
+import { useConfigApp } from '../../../../../../shared/model/store/storeConfigApp'
+import { useLoader } from '../../../../../../shared/ui/namedLoader/model/storeLoader'
 
 export default function page({ params }: { params: { INN: string } }) {
 	const dataConfigApp = useConfigApp((state) => state.dataConfigApp)
-	const {idUser} = useInfoUser(state=>state.dataUser)
+	const { idUser } = useInfoUser((state) => state.dataUser)
 	const setLoader = useLoader((state) => state.setVisibleLoader)
 
 	const submitConfigApp = async () => {
-		setLoader(true)	
-		
+		setLoader(true)
+
 		const INN = params.INN
 		const response = await fetchSaveConfigApp(dataConfigApp, INN, idUser)
 		if (response.status != 200 || isError(response.response)) {

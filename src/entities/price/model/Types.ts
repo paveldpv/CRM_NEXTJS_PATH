@@ -1,45 +1,23 @@
 import { Dispatch, SetStateAction } from 'react'
-
-export type TPrice = {
-	price: TDataTablePrice
-	readonly: boolean
-}
-
-
-export type TDataTablePrice = {
-	data: TValueTablePrice
-	nameTable: string
-	idTable: string
-	optionDescriptionTable: string[]
-}
-
-
-export type TValueTablePrice = TValueCell[][]
-
-export type TValueCell ={
-	value :string
-}
+import { TValueCell, TValueTablePrice } from '../../../../Server/Service/servicePrice/model/types/types'
 
 export type TTablePrice = {
 	table: TValueTablePrice
-	nameTable:string	
+	nameTable: string
 	setDataTable?: Dispatch<SetStateAction<TValueTablePrice>>
 }
 
-
-export  type TPanelRulePrice  = {
-	setListDescriptionTable:Dispatch<SetStateAction<string[]>>
-	listDescriptionTable:string[]
-} 
+export type TPanelRulePrice = {
+	setListDescriptionTable: Dispatch<SetStateAction<string[]>>
+	listDescriptionTable: string[]
+}
 
 export type TModalDescriptionTable = TPanelRulePrice & {
 	setOpenModal: Dispatch<SetStateAction<boolean>>
-	openModal:boolean
+	openModal: boolean
 }
 
-
 export type TCellTablePrice = {
-	
 	setDataTable?: Dispatch<SetStateAction<TValueTablePrice>>
 	indexCell: TIndexCell
 } & TValueCell

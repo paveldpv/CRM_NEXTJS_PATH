@@ -32,10 +32,10 @@ export const counterpartySchema = new Schema<TCounterparty>({
 		type: Boolean,
 		default: false,
 		required: true,
-	},
+	}
 })
-const modelCounterparty =
-	(models.counterparty as Model<TCounterparty>) ||
-	model<TCounterparty>('counterparty', counterpartySchema)
+// const modelCounterparty =
+// 	(models.counterparty as Model<TCounterparty>) ||
+// 	model<TCounterparty>('counterparty', counterpartySchema)
 
-export default modelCounterparty
+// export default modelCounterparty

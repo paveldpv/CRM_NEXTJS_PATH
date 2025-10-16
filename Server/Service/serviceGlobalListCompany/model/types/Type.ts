@@ -1,16 +1,23 @@
-import { TNameOrganization } from '@/shared/model/types/subtypes/TOrganization'
-import { ObjectId } from 'mongoose'
+
+import { TNameOrganization } from '../../../serviceRuleOrganization/model/types/Types'
 
 export type TGlobalListCompany = {
-	_id:ObjectId
-	INN:string,
-	name:TNameOrganization
-	globalVisible?:boolean,
-	description?:string[]
+	_id: string
+	INN: string
+	name: TNameOrganization
+	globalVisible?: boolean
+	description?: string[]
 }
-export type TGlobalListCompanyWithoutID = Omit<TGlobalListCompany,'_id'>
+export type TGlobalListCompanyWithoutID = Omit<TGlobalListCompany, '_id'>
 
-export const globalCompany = 'GLOBAL_COMPANY' as const;  
+export const listApi = {
+	getListCompany: 'getGLobalListCompany', //+
+	addNewCompany: 'addNewCompany', //+
+	setVisibleCompany: 'setVisibleCompany"', //+
+	updateDescriptionCompany: 'updateDescription', //+
+	getAllGlobalListCompany: 'getAllGLobalListCompany', //+
+	getCountDocGlobalListCompany: 'getCountDocGlobalListCompany', //+
+	removeCompany: 'removeCompany', //+
+}
 
-
-
+export type TListAPIGlobalListCompany = (typeof listApi)[keyof typeof listApi]

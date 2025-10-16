@@ -6,7 +6,7 @@ import { TDaDataOrganization } from '@/shared/model/types/subtypes/TDaDataOrgani
 import { TError } from '@/shared/model/types/subtypes/TError'
 import { TDataOrganization } from '@/shared/model/types/subtypes/TOrganization'
 import { TRequisites } from '@/shared/model/types/subtypes/TRequisites'
-import ProgressLoader from '@/shared/ui/loaders/ProgressLoader'
+import ProgressLoader from '@/shared/ui/ProgressLoader/ui/ProgressLoader'
 
 import { ServiceDaDataOrganization } from '../../../../../../../Server/Service/serviceDaDataOrganization'
 import { ServiceRequisites } from '../../../../../../../Server/Service/serviceRequisites/serviceReqisites'
@@ -19,7 +19,7 @@ import { isError } from '../../../../../../shared/lib/IsError'
 
 import FormAdminPanel from '@/entities/organizationSetting/ui/FormAdminPanel'
 import DialogWindow from '@/shared/ui/DialogWindow'
-import HelpInformerModalWindow from '@/shared/ui/HelpInformerModalWindow'
+import HelpInformerModalWindow from '@/shared/ui/HelpInformerModalWindow/ui/HelpInformerModalWindow'
 //entities
 export const revalidate = 10
 

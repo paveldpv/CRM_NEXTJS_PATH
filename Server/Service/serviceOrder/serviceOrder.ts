@@ -1,9 +1,11 @@
 import { TError } from '@/shared/model/types/subtypes/TError'
 import { format } from 'date-fns'
-import { ObjectId } from 'mongoose'
+
+import { TOptionQuery } from '@/shared/model/types/optionQuery'
+import { Types } from 'mongoose'
 import { Service } from '../../classes/Service'
 import ControllerOrder from './controller/OrderDB.controller'
-import { TNewOrder, TOrder } from './model/types/Types'
+import { TNewOrder, TOrder, TOrderFullInfo } from './model/types/Types'
 
 export class ServiceOrder extends Service {
 	constructor(INN: string) {
@@ -33,7 +35,7 @@ export class ServiceOrder extends Service {
 			)
 		}
 	}
-	public async restoreOrder(idOrder: ObjectId): Promise<void | TError> {
+	public async restoreOrder(idOrder: Types.ObjectId): Promise<void | TError> {
 		try {
 			const controllerOrder = new ControllerOrder(this.INN)
 			await controllerOrder.restoreOrder(idOrder)
@@ -43,7 +45,7 @@ export class ServiceOrder extends Service {
 			)
 		}
 	}
-	public async removeOrder(idOrder: ObjectId): Promise<void | TError> {
+	public async removeOrder(idOrder: Types.ObjectId): Promise<void | TError> {
 		try {
 			const controllerOrder = new ControllerOrder(this.INN)
 			await controllerOrder.removeOrder(idOrder)
@@ -57,11 +59,11 @@ export class ServiceOrder extends Service {
 	public async getOrders(params: {
 		complied: boolean
 		deleted: boolean
-		range?: number
-	}): Promise<TOrder[] | TError | null> {
+		option: TOptionQuery<TOrder>
+	}): Promise<TOrderFullInfo[] | TError | null> {
 		try {
 			const controllerOrder = new ControllerOrder(this.INN)
-			const data = controllerOrder.getOrders(params)
+			const data = await controllerOrder.getOrders(params)
 			return this.normalizeDataFromMongoDB(data)
 		} catch (error) {
 			return this.createError(
@@ -69,10 +71,11 @@ export class ServiceOrder extends Service {
 			)
 		}
 	}
+
 	public async searchOrderByDate(rangeDate: {
 		dateStart: Date
 		dateEndDate: Date
-	}): Promise<TOrder[] | null | TError> {
+	}): Promise<TOrderFullInfo[] | null | TError> {
 		//? return order with counterparty
 
 		try {
@@ -99,7 +102,7 @@ export class ServiceOrder extends Service {
 			)
 		}
 	}
-	public async endOrder(idOrder: ObjectId): Promise<void | TError> {
+	public async endOrder(idOrder: Types.ObjectId): Promise<void | TError> {
 		const currentDate = new Date()
 		try {
 			const controllerOrder = new ControllerOrder(this.INN)
@@ -110,7 +113,7 @@ export class ServiceOrder extends Service {
 			)
 		}
 	}
-	public async getOrderByID(idOrder: ObjectId): Promise<TOrder | TError | null> {
+	public async getOrderByID(idOrder: Types.ObjectId): Promise<TOrder | TError | null> {
 		try {
 			const controllerOrder = new ControllerOrder(this.INN)
 			const data = controllerOrder.getOrderByID(idOrder)
@@ -122,11 +125,14 @@ export class ServiceOrder extends Service {
 			)
 		}
 	}
-	
-	public async addDetailByOrder(idOrder: ObjectId, idDetail: ObjectId): Promise<void | TError> {
+
+	public async addDetailByOrder(
+		idOrder: Types.ObjectId,
+		idDetail: Types.ObjectId
+	): Promise<void | TError> {
 		try {
 			const controllerOrder = new ControllerOrder(this.INN)
-			await controllerOrder.addDetailByOrder(idOrder,idDetail)
+			await controllerOrder.addDetailByOrder(idOrder, idDetail)
 		} catch (error) {
 			return this.createError(
 				`error add detail  , id detail :${idDetail} , id Order :${idOrder} , INN:${this.INN}`,
@@ -134,10 +140,10 @@ export class ServiceOrder extends Service {
 			)
 		}
 	}
-	public async removeDetailByOrder(idOrder: ObjectId, idDetail: ObjectId) {
+	public async removeDetailByOrder(idOrder: Types.ObjectId, idDetail: Types.ObjectId) {
 		try {
 			const controllerOrder = new ControllerOrder(this.INN)
-			await controllerOrder.removeDetailByOrder(idOrder,idDetail)
+			await controllerOrder.removeDetailByOrder(idOrder, idDetail)
 		} catch (error) {
 			return this.createError(
 				`error remove detail by order by order INN:${this.INN} id detail :${idDetail} , id Order :${idOrder}`,

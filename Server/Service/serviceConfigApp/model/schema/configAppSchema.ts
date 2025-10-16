@@ -1,12 +1,12 @@
-import { TConfigAPP } from '@/shared/model/types/subtypes/TAppearanceConfigApp'
-import { Model, Schema, model, models } from 'mongoose'
+import { Schema } from 'mongoose'
+import { TConfigAPP } from '../types/Type'
 
 export const configSchema = new Schema<TConfigAPP>({
-	idUser:{
-		type:Schema.Types.ObjectId,
-		required:true,
-		ref:'users'
-	} ,
+	idUser: {
+		type: Schema.Types.ObjectId,
+		required: true,
+		// ref: 'users',
+	},
 	configHeader: {
 		color: {
 			bgColor: String,
@@ -40,6 +40,9 @@ export const configSchema = new Schema<TConfigAPP>({
 		name: String,
 		keyConfig: String,
 	},
+	safeDeleted:{
+		type:Boolean,required:true,default:false
+	}
 })
-const modelConfig = (models.configSchema as Model<TConfigAPP>) || model<TConfigAPP>('configSchema', configSchema)
-export default modelConfig
+// const modelConfig = (models.configSchema as Model<TConfigAPP>) || model<TConfigAPP>('configSchema', configSchema)
+// export default modelConfig

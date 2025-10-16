@@ -7,7 +7,7 @@ import { styleTextFiled } from '../../../../config/muiCustomStyle/textField'
 
 import { useFormik } from 'formik'
 import { useState } from 'react'
-import { useDialogWindow } from '../../../shared/model/store/storeDialogWindow'
+import { useDialogWindow } from '../../../shared/ui/dialogWindow/model/storeDialogWindow'
 
 import { fetchUploadFilePrevCal } from '../../../shared/api/file_manager/uploadFile'
 import { combineFilesToFormData } from '../../../shared/lib/combineFilesToFormData'
@@ -15,24 +15,23 @@ import { fetchRequestPrevCalc } from '../api/fetchRequestPrevCalc'
 
 import TextField from '@mui/material/TextField'
 
-
-
-
-
 import {
 	TInitialValuesFormPrevCalc,
 	TRequestPrevCalc,
 	TSketchDetail,
 } from '@/shared/model/types/subtypes/TRequestPrevCalc'
-import { useProcessLoader } from '../../../shared/model/store/storeProcessLoader'
 import { TResponseUploadFiles } from '@/shared/model/types/Types'
-import validateSchemaPrevCalc from '../lib/validateSchemaPrevCalc'
+import { useProcessLoader } from '../../../shared/ui/ProgressLoader/model/storeProcessLoader'
 import SketchDetail from '../lib/konva/SketchDetail/SketchDetail'
+import validateSchemaPrevCalc from '../lib/validateSchemaPrevCalc'
 import { fieldDataPrevCalc } from '../model/_DataFiledPrevCalc'
 import InputFile from './InputFiles/InputFile'
 
 export default function FormPrevCalc({ INN }: { INN: number }) {
-	const [setOpenDialogWindow, setDispatchFn] = useDialogWindow((state) => [state.setOpen, state.setDispatchFn])
+	const [setOpenDialogWindow, setDispatchFn] = useDialogWindow((state) => [
+		state.setOpen,
+		state.setDispatchFn,
+	])
 	const [dataSketchDetail, setDataSketchDetail] = useState<TSketchDetail[]>()
 	const [pendingForm, setPendingForm] = useState(false)
 	const [setVisibleProgressLoader, setStatusProgressLader] = useProcessLoader((state) => [

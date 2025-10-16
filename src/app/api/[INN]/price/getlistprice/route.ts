@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { ServicePrice } from '../../../../../../Server/Service/servicePrice'
+import { ServicePrice } from '../../../../../../Server/Service/servicePrice/servicePrice'
+
 
 export async function GET(req:NextRequest,{params}:{params:{INN:string}}){
 	const {INN}=params

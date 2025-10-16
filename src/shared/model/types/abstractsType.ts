@@ -1,4 +1,7 @@
+import { Types } from 'mongoose'
+
 export type TEntities ={
+   _id: Types.ObjectId
    safeDeleted:boolean
 }
 

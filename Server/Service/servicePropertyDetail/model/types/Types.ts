@@ -1,6 +1,7 @@
-import { ObjectId } from 'mongoose'
+import { TEntities } from '@/shared/model/types/abstractsType'
 
-export type TPropertyDetail =  {
-	_id:ObjectId,
-	property:string
-}
+export type TPropertyDetail = {
+	property: string
+} & TEntities
+
+export type TPropertyDetailDTO = Omit<TPropertyDetail,'_id'>&{_id:string}

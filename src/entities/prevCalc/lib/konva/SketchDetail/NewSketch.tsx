@@ -5,7 +5,6 @@ import { Dispatch, memo, SetStateAction, useCallback, useEffect, useRef, useStat
 
 import uniqid from 'uniqid'
 
-
 import { AiFillCheckCircle } from 'react-icons/ai'
 import { FaWindowClose } from 'react-icons/fa'
 import { FaQuestion } from 'react-icons/fa6'
@@ -13,16 +12,14 @@ import { MdCancel } from 'react-icons/md'
 
 import { TextField, Tooltip } from '@mui/material'
 
-
 import InputAdornment from '@mui/material/InputAdornment'
 import dynamic from 'next/dynamic'
 const Scene = dynamic(() => import('./Scene/Scene'), { ssr: false })
 
-
-import { TLine, TParamsSegment, TSketchDetail } from '@/shared/model/types/subtypes/TRequestPrevCalc'
-import { useHelInformer } from '@/shared/model/store/storeHelpInformer'
 import { dataHelperForFormPrevCalc } from '@/entities/prevCalc/model/_DataHelperInfo'
-import HelpInformerModalWindow from '@/shared/ui/HelpInformerModalWindow'
+import { TLine, TParamsSegment, TSketchDetail } from '@/shared/model/types/subtypes/TRequestPrevCalc'
+import { useHelInformer } from '@/shared/ui/HelpInformerModalWindow/model/storeHelpInformer'
+import HelpInformerModalWindow from '@/shared/ui/HelpInformerModalWindow/ui/HelpInformerModalWindow'
 
 export type TNewSketch = {
 	setDataSketchDetail: Dispatch<SetStateAction<TSketchDetail[] | undefined>>
@@ -30,7 +27,14 @@ export type TNewSketch = {
 	setIdRedactSketch?: Dispatch<SetStateAction<string | undefined>>
 } & Partial<TSketchDetail>
 
-function NewSketch({ setDataSketchDetail, idSketch, lines, params, setOpen, setIdRedactSketch }: TNewSketch) {
+function NewSketch({
+	setDataSketchDetail,
+	idSketch,
+	lines,
+	params,
+	setOpen,
+	setIdRedactSketch,
+}: TNewSketch) {
 	const setOpenHelpWindow = useHelInformer((state) => state.setOpen)
 	const initialParams: TParamsSegment[] = [
 		{ mark: 'name', description: 'название детали', value: '', idLine: 'nameDetail' },
@@ -126,7 +130,10 @@ function NewSketch({ setDataSketchDetail, idSketch, lines, params, setOpen, setI
 					</button>
 				)}
 				<div className=' grid grid-cols-9   h-5/6 '>
-					<div ref={refContainerScene} className=' col-span-6 border-r-2 border-solid p-4 overflow-hidden'>
+					<div
+						ref={refContainerScene}
+						className=' col-span-6 border-r-2 border-solid p-4 overflow-hidden'
+					>
 						<Scene
 							setCurrentLines={setCurrentLines}
 							setCurrentParams={setCurrentParams}

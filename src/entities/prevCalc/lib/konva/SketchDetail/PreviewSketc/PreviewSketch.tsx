@@ -1,8 +1,6 @@
-
-
 import dynamic from 'next/dynamic'
 import { Dispatch, memo, SetStateAction, useCallback } from 'react'
-import { useDialogWindow } from '../../../../../../shared/model/store/storeDialogWindow'
+import { useDialogWindow } from '../../../../../../shared/ui/dialogWindow/model/storeDialogWindow'
 
 const Scene = dynamic(() => import('../Scene/Scene'), { ssr: false })
 
@@ -10,8 +8,8 @@ import { AiOutlineDelete } from 'react-icons/ai'
 import { MdOutlineCreate } from 'react-icons/md'
 
 import { typeDialog } from '@/shared/model/types/enums'
-import { Tooltip } from '@mui/material'
 import { TSketchDetail } from '@/shared/model/types/TRequestPrevCalc'
+import { Tooltip } from '@mui/material'
 
 type TPreviewSketch = {
 	setOpen: Dispatch<SetStateAction<boolean>>
@@ -39,7 +37,8 @@ function PreviewSketch({
 
 		setOpenDialog(true, { title: 'Удалить?' }, typeDialog.dialog)
 		setDispatchFn(() => {
-			setDataSketchDetail && setDataSketchDetail((prev) => prev?.filter((sketch) => sketch.idSketch !== idSketch))
+			setDataSketchDetail &&
+				setDataSketchDetail((prev) => prev?.filter((sketch) => sketch.idSketch !== idSketch))
 		})
 	}, [idSketch])
 

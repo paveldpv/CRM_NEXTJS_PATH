@@ -1,10 +1,12 @@
 import { typicalError } from '@/shared/model/types/enums'
-import { TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
-import { TResponse, TWithoutPassUser } from '@/shared/model/types/Types'
+
+import { TResponse,  } from '@/shared/model/types/Types'
+import { TGeoLocation } from '../../../../Server/Service/serviceGeoLocation/model/types/type'
+import { TDBUserWithoutPas } from '../../../../Server/Service/serviceUser/model/types/Types'
 
 
 export const fetchUpdateDataUser = async (
-	dataUser: TWithoutPassUser,
+	dataUser: TDBUserWithoutPas,
 	dataGeo: Omit<TGeoLocation, 'date'>,
 	INN: string
 ): Promise<TResponse> => {

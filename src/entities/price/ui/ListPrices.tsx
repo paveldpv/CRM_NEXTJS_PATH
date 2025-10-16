@@ -1,16 +1,16 @@
 'use client'
 import ContextMenu from '@/shared/components/contextMenu/ui/ContextMenu'
 import useGeo from '@/shared/model/hooks/useGeo'
-import { useDialogWindow } from '@/shared/model/store/storeDialogWindow'
-import { useFieldDialog } from '@/shared/model/store/storeFiledDialog'
 import { useInfoUser } from '@/shared/model/store/storeInfoUser'
-import { useLoader } from '@/shared/model/store/storeLoader'
 import { typeDialog } from '@/shared/model/types/enums'
 import { PURPOSE_USE } from '@/shared/model/types/subtypes/TGeoLocation'
 import { TLink } from '@/shared/model/types/Types'
 import CusButton from '@/shared/ui/CusButton'
-import ListLinks from '@/shared/ui/ListLinks'
-import NavLink from '@/shared/ui/NavLink'
+import { useDialogWindow } from '@/shared/ui/dialogWindow/model/storeDialogWindow'
+import { useFieldDialog } from '@/shared/ui/FieldDialog/model/storeFiledDialog'
+import ListLinks from '@/shared/ui/listLInks/ui/ListLinks'
+import { useLoader } from '@/shared/ui/namedLoader/model/storeLoader'
+import NavLink from '@/shared/ui/navLink/ui/NavLink'
 import { useParams, useRouter } from 'next/navigation'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { FaPlus } from 'react-icons/fa'
@@ -22,26 +22,27 @@ import { fetchRenamePrice } from '../api/renamePrice'
 function ListPrices({ INN, listLinks }: { INN: string; listLinks: TLink[] }) {
 	const params = useParams() as { INN: string; PHONE: string; idTable: string }
 	const setOpenFieldDialog = useFieldDialog((state) => state.setOpen)
-	const [setOpenDialogWindow, dispatchFn] = useDialogWindow((state) => [state.setOpen, state.setDispatchFn])
+	const [setOpenDialogWindow, dispatchFn] = useDialogWindow((state) => [
+		state.setOpen,
+		state.setDispatchFn,
+	])
 	const setVisibleLoader = useLoader((state) => state.setVisibleLoader)
 	const { idUser } = useInfoUser((state) => state.dataUser)
 	const { dataGeo } = useGeo(idUser, PURPOSE_USE.redact)
 	const { push } = useRouter()
 	const [listPrices, setListPrices] = useState(listLinks)
-	
-	useEffect(()=>{
+
+	useEffect(() => {
 		setVisibleLoader(true)
-		fetchGetListPrice(INN).then(res=>{
-			if(!res)return
+		fetchGetListPrice(INN).then((res) => {
+			if (!res) return
 			setListPrices(res)
 		})
-		
-	},[])
+	}, [])
 
 	if (listLinks?.length > 10) {
 		return <ListLinks listLinks={listLinks} className=' flex-row flex gap-1' />
 	}
-	
 
 	const renamePrice = useCallback(
 		async (newName?: string) => {
@@ -49,8 +50,7 @@ function ListPrices({ INN, listLinks }: { INN: string; listLinks: TLink[] }) {
 			setVisibleLoader(true)
 			await fetchRenamePrice(INN, newName, params.idTable, dataGeo)
 			const updateDataListPrices = await fetchGetListPrice(INN)
-			
-			
+
 			setListPrices(updateDataListPrices!)
 			setOpenFieldDialog(false)
 			setVisibleLoader(false)
@@ -116,7 +116,7 @@ function ListPrices({ INN, listLinks }: { INN: string; listLinks: TLink[] }) {
 	return (
 		<div className='flex items-center gap-2 border-b-2 mb-4 pb-2'>
 			<nav className='flex gap-2'>
-				{listPrices.map((link,index) => {
+				{listPrices.map((link, index) => {
 					const currentPagePrice = new RegExp(params.idTable).test(link.href)
 					return (
 						<div className=' flex' key={index}>

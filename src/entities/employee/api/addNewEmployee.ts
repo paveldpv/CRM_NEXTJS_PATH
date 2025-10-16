@@ -1,11 +1,12 @@
 import { typicalError } from '@/shared/model/types/enums'
 import { TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
-import { TNewEmployee, TResponse } from '@/shared/model/types/Types'
+import {  TResponse } from '@/shared/model/types/Types'
+import { TNewUser } from '../../../../Server/Service/serviceUser/model/types/Types'
 
 
 export const fetchAddNewEmployee = async (
 	INN: string,
-	employee: TNewEmployee,
+	employee: TNewUser,
 	dataGeo: Omit<TGeoLocation, 'date'>
 ): Promise<TResponse> => {
 	try {

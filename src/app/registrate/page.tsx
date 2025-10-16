@@ -1,6 +1,7 @@
 
 import FormRegistrate from '@/entities/registrated/ui/FormRegistrate'
-import DialogWindow from '@/shared/ui/DialogWindow'
+import DialogWindow from '@/shared/ui/dialogWindow/ui/DialogWindow'
+
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {

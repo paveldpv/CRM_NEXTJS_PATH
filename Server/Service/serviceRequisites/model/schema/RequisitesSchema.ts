@@ -1,5 +1,6 @@
-import { TRequisites } from '@/shared/model/types/subtypes/TRequisites'
-import { Model, model, models, Schema } from 'mongoose'
+
+import { Schema } from 'mongoose'
+import { TRequisites } from '../types/Type'
 
 export const requisitesSchema = new Schema<TRequisites>({
 	INN: {
@@ -107,7 +108,3 @@ export const requisitesSchema = new Schema<TRequisites>({
 	},
 })
 
-const modelRequisites =
-	(models.requisitesSchema as Model<TRequisites>) || model<TRequisites>('requisitesSchema', requisitesSchema)
-
-export default modelRequisites

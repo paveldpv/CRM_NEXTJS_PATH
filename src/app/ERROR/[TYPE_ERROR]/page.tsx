@@ -6,7 +6,8 @@ const messageListTypicalError = {
 	NOT_VALID_PAS: 'не верные данные для  авторизации',
 	ERROR_DB: 'ошибка запроса к БД',
 	ERROR_SERVER: 'ошибка сервиса обработки файлов',
-	ERROR_PERMISSION:'отказано в доступе'
+	ERROR_PERMISSION:'отказано в доступе',
+	ERROR_AUTHENTICATE:'требуется повторная авторизация - время токена истекло'
 }
 
 export default function page({ params }: { params: { TYPE_ERROR: typicalError } }) {

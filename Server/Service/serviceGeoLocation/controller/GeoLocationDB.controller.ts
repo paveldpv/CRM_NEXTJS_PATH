@@ -1,26 +1,43 @@
-import { TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
-import { connect } from 'mongoose'
+
 import ControllerDB from '../../../classes/ControllerDB'
-import modelGeoLocation from '../model/schema/geoLocationSchema'
+import { geoLocationSchema } from '../model/schema/geoLocationSchema'
+import { Model } from 'mongoose'
+import { TGeolLocationFullInfo, TGeoLocation } from '../model/types/type'
+import { TOptionQuery } from '@/shared/model/types/optionQuery'
 
 export default class ControllerGeoLocationDB extends ControllerDB {
 	constructor(INN: string) {
 		super(INN)
 	}
+
+	private geoLocationModel :Model<TGeoLocation>|null=null
+
+	private async initModel(){
+		await this.connectDB()
+		if(!this.dbConnection) throw new Error(`error init geo location model from INN ${this.INN}`)
+		
+		this.geoLocationModel = this.dbConnection.model<TGeoLocation>('geoLocation',geoLocationSchema)
+	}
+
+	private async changeReadinessModel(){
+		if(!this.geoLocationModel) await this.initModel()
+	}
+
 	public async saveGeoLocation(dataGeoLocation: TGeoLocation) {
-		await this.contentDB()
-		const resultSaveGeoLocation = new modelGeoLocation(dataGeoLocation)
+		await this.changeReadinessModel()
+		const resultSaveGeoLocation = new this.geoLocationModel!(dataGeoLocation)
 		await resultSaveGeoLocation.save()
 	}
-	public async getAllGeoLocation(): Promise<TGeoLocation[] | []> {
-		await this.contentDB()
-		return await modelGeoLocation.find({})
+
+	public async getAllGeoLocation(): Promise<TGeolLocationFullInfo[] | []> {
+		await this.changeReadinessModel()
+		return await this.geoLocationModel!.find({}).populate({ path: 'user', select: '-password' })
 	}
-	public async getDataLocationGivenRange(range: number): Promise<TGeoLocation[] | []> {
-		await this.contentDB()
-		return await modelGeoLocation
-			.find({})
-			.skip(range - 5)
-			.limit(5)
+	
+	public async getDataLocationGivenRange(option?:TOptionQuery<TGeoLocation>): Promise<TGeolLocationFullInfo[] | []> {
+		await this.changeReadinessModel()
+		const dataGeoLocation = this.geoLocationModel!.find({}).populate({ path: 'user', select: '-password' })
+		return this.applyQueryOptions(dataGeoLocation,option)
+		
 	}
 }

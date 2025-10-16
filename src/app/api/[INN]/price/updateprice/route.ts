@@ -1,11 +1,13 @@
 import { TDataTablePrice } from '@/entities/price/model/Types'
-import { ROOT_LINK } from '@/shared/model/types/enums'
+
 import { TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
 import { NextRequest, NextResponse } from 'next/server'
-import { ServiceGeoLocation } from '../../../../../../Server/Service/serviceGeoLocation'
-import ServicePermissionRedactData from '../../../../../../Server/Service/ServicePermissionRedactData'
-import { ServicePrice } from '../../../../../../Server/Service/servicePrice'
+
 import { isError } from '@/shared/lib/IsError'
+import ServicePermissionRedactData from '../../../../../../Server/Service/servicePermissionRedactData/ServicePermissionRedactData'
+import { ServiceGeoLocation } from '../../../../../../Server/Service/serviceGeoLocation/serviceGeoLocation'
+import { ServicePrice } from '../../../../../../Server/Service/servicePrice/servicePrice'
+import { ROOT_LINK } from '../../../../../../Server/Service/servicePermissionRedactData/model/types/Types'
 
 export async function POST(req: NextRequest, { params }: { params: { INN: string } }) {
 	const { INN } = params

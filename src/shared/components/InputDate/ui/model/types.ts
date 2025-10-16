@@ -1,5 +1,6 @@
-import { TDBUser } from '@/shared/model/types/Types'
+
 import { FormikErrors } from "formik";
+import { TDBUser } from '../../../../../../Server/Service/serviceUser/model/types/Types'
 export type TInputDate = {
   handlerChange?: any;
   title?: string;

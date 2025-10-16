@@ -55,8 +55,8 @@ const serviceOptionOrder = new Schema<TServiceOrder>({
 	},
 })
 
-const orderSchema = new Schema<TOrder>({
-	idCounterParty: {
+export const orderSchema = new Schema<TOrder>({
+	CounterParty: {
 		type: Schema.Types.ObjectId,
 		required: true,
 		ref: 'counterparty',
@@ -65,7 +65,7 @@ const orderSchema = new Schema<TOrder>({
 		type: Number,
 		required: true,
 	},
-	IDDetails: {
+	details: {
 		type: [Schema.Types.ObjectId],
 		required: false,
 		default: [],
@@ -86,5 +86,5 @@ const orderSchema = new Schema<TOrder>({
 	},
 })
 
-const modelOrder = (models.order as Model<TOrder>) || model<TOrder>('order', orderSchema)
-export default modelOrder
+// const modelOrder = (models.order as Model<TOrder>) || model<TOrder>('order', orderSchema)
+// export default modelOrder

@@ -1,11 +1,19 @@
-import { Model, Schema, model, models } from 'mongoose'
-
-import { TDataOrganization } from '@/shared/model/types/subtypes/TOrganization'
+import { Schema } from 'mongoose'
+import { TDataOrganization } from '../types/Types'
 
 export const organizationSchema = new Schema<TDataOrganization>({
 	INN: {
-		type: Number,
+		type: String,
 		required: false,
+	},
+	requisites: {
+		type: Schema.Types.ObjectId,
+		required: true,
+		ref: 'requisites',
+	},
+	safeDeleted: {
+		required: true,
+		default: false,
 	},
 	dateRegistration: {
 		type: Date,
@@ -75,9 +83,3 @@ export const organizationSchema = new Schema<TDataOrganization>({
 		},
 	},
 })
-
-const modelOrganization =
-	(models.organizationSchema as Model<TDataOrganization>) ||
-	model<TDataOrganization>('organizationSchema', organizationSchema)
-
-export default modelOrganization

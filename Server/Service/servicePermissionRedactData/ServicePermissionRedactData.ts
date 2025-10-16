@@ -1,13 +1,14 @@
-import { ROOT_LINK } from '@/shared/model/types/enums'
+
 import { TError } from '@/shared/model/types/subtypes/TError'
 
-import { TDBUser } from '@/shared/model/types/Types'
+
 import ContextOrganization from '../../classes/contextOrganization'
 import { isError } from '@/shared/lib/IsError'
 import { ServiceUsers } from '../serviceUser/serviceUser'
-// import { isError } from '../../src/shared/lib/IsError'
-// import ContextOrganization from '../classes/contextOrganization'
-// import { ServiceUsers } from './serviceUser'
+
+import { TDBUser } from '../serviceUser/model/types/Types'
+import { ROOT_LINK } from './model/types/Types'
+import { Types } from 'mongoose'
 
 export default class ServicePermissionRedactData extends ContextOrganization {
 	private rootLink: ROOT_LINK
@@ -29,6 +30,7 @@ export default class ServicePermissionRedactData extends ContextOrganization {
 			return false
 		}
 	}
+	
 	public async PermissionByPhone(phone: string): Promise<boolean> {
 		try {
 			const serviceUser = new ServiceUsers(this.INN)
@@ -42,7 +44,7 @@ export default class ServicePermissionRedactData extends ContextOrganization {
 		}
 	}
 
-	public async Permission(idEmployee: string): Promise<boolean> {
+	public async Permission(idEmployee:Types.ObjectId): Promise<boolean> {
 		try {
 			const serviceUser = new ServiceUsers(this.INN)
 			this.employee = await serviceUser.getUserById(idEmployee)

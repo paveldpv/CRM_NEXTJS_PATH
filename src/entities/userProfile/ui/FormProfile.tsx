@@ -3,7 +3,7 @@ import { useFormik } from 'formik'
 import { useEffect } from 'react'
 
 import { useMiniLoader } from '../../../shared/model/store/storeMiniLoader'
-import { useProcessLoader } from '../../../shared/model/store/storeProcessLoader'
+import { useProcessLoader } from '../../../shared/ui/ProgressLoader/model/storeProcessLoader'
 
 import { typicalError } from '@/shared/model/types/enums'
 import { fetchUpdateDataUser } from '../api/updateDataUser'
@@ -15,16 +15,19 @@ import { PURPOSE_USE, TGeoLocation } from '@/shared/model/types/subtypes/TGeoLoc
 import { redirect, useParams } from 'next/navigation'
 import { employeeImage } from '../../../../config/urls'
 import { isError } from '../../../shared/lib/IsError'
-import ChangeDataProfile from './ChangeDataProfile'
 import { TFormProfile } from '../lib/Types'
+import ChangeDataProfile from './ChangeDataProfile'
 
-export default function FormProfile({initialValues,setInfoUser}:TFormProfile) {
-	const { INN } = useParams() as {INN:string}
+export default function FormProfile({ initialValues, setInfoUser }: TFormProfile) {
+	const { INN } = useParams() as { INN: string }
 	//const [initialValues, setInfoUser] = useInfoUser((state) => [state.dataUser, state.setInfoUser])
-	const {idUser}=useInfoUser(state=>state.dataUser)
+	const { idUser } = useInfoUser((state) => state.dataUser)
 	const [setVisibleLoader, visible] = useMiniLoader((state) => [state.setVisibleLoader, state.visible])
 
-	const [setVisibleProgress, setStatusProgress] = useProcessLoader((state) => [state.setVisible, state.setStatus])
+	const [setVisibleProgress, setStatusProgress] = useProcessLoader((state) => [
+		state.setVisible,
+		state.setStatus,
+	])
 
 	useEffect(() => {
 		setVisibleLoader(false)

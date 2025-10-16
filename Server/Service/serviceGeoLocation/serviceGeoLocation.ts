@@ -1,17 +1,19 @@
 import { TError } from '@/shared/model/types/subtypes/TError'
-import { TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
+
+import { TOptionQuery } from '@/shared/model/types/optionQuery'
 import { Service } from '../../classes/Service'
 import ControllerGeoLocationDB from './controller/GeoLocationDB.controller'
+import { TGeolLocationFullInfo, TGeoLocation } from './model/types/type'
 
 export class ServiceGeoLocation extends Service {
 	constructor(INN: string) {
 		super(INN)
 	}
 
-	async getDataLocation(range?: number): Promise<TGeoLocation[] | TError> {
+	async getDataLocation(option?: TOptionQuery<TGeoLocation>): Promise<TGeolLocationFullInfo[] | TError> {
 		try {
-			if (range) {
-				const data = await new ControllerGeoLocationDB(this.INN).getDataLocationGivenRange(range)
+			if (option) {
+				const data = await new ControllerGeoLocationDB(this.INN).getDataLocationGivenRange(option)
 				return this.normalizeDataFromMongoDB(data)
 			}
 			const data = await new ControllerGeoLocationDB(this.INN).getAllGeoLocation()
@@ -21,13 +23,9 @@ export class ServiceGeoLocation extends Service {
 		}
 	}
 
-	async setDataLocation(data: TGeoLocation | Omit<TGeoLocation, 'date'>): Promise<void | TError> {
+	async setDataLocation(data: Omit<TGeoLocation, 'date'>): Promise<void | TError> {
 		try {
-			if ('date' in data) {
-				await new ControllerGeoLocationDB(this.INN).saveGeoLocation(data)
-			} else {
-				await new ControllerGeoLocationDB(this.INN).saveGeoLocation({ ...data, date: new Date() })
-			}
+			await new ControllerGeoLocationDB(this.INN).saveGeoLocation({ ...data, date: new Date() })
 		} catch (error) {
 			return this.createError(`error set Data Location,  data :${data},error :${error}`, error)
 		}

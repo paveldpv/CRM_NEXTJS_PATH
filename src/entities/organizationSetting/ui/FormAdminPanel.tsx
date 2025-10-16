@@ -4,7 +4,10 @@ import { useFormik } from 'formik'
 import { memo, useCallback, useMemo } from 'react'
 
 import { FaQuestion } from 'react-icons/fa6'
-import { TDataHelpInformer, useHelInformer } from '../../../shared/model/store/storeHelpInformer'
+import {
+	TDataHelpInformer,
+	useHelInformer,
+} from '../../../shared/ui/HelpInformerModalWindow/model/storeHelpInformer'
 import ChangeBaseDataOrganization from './ChangeBaseDataOrganization'
 import ChangeOptionData from './ChangeOptionData'
 import ChangeRequisites from './ChangeRequisites'
@@ -19,11 +22,11 @@ import { PURPOSE_USE, TGeoLocation } from '@/shared/model/types/subtypes/TGeoLoc
 import { TDataOrganization } from '@/shared/model/types/subtypes/TOrganization'
 import { redirect } from 'next/navigation'
 
-import { fetchUpdateInfoOrganization } from '../api/updateInfoRuleOrganization'
-import { isError } from '../../../shared/lib/IsError'
-import { useProcessLoader } from '../../../shared/model/store/storeProcessLoader'
-import { useInfoUser } from '@/shared/model/store/storeInfoUser'
 import Fieldset from '@/shared/components/fieldSet/ui/Fieldset'
+import { useInfoUser } from '@/shared/model/store/storeInfoUser'
+import { isError } from '../../../shared/lib/IsError'
+import { useProcessLoader } from '../../../shared/ui/ProgressLoader/model/storeProcessLoader'
+import { fetchUpdateInfoOrganization } from '../api/updateInfoRuleOrganization'
 
 export type TFieldFormAdminPanel = {
 	activeField: boolean
@@ -40,7 +43,10 @@ function FormAdminPanel({ data, INN }: TFormAdminPanel) {
 	const { daDataOrganization, admins, dataOrganization, dataRequisites } = data
 	const dataUser = useInfoUser((state) => state.dataUser)
 
-	const [setVisibleProgress, setStatusProgress] = useProcessLoader((state) => [state.setVisible, state.setStatus])
+	const [setVisibleProgress, setStatusProgress] = useProcessLoader((state) => [
+		state.setVisible,
+		state.setStatus,
+	])
 	const setOpenHelpInformer = useHelInformer((state) => state.setOpen)
 
 	const messageInformer: TDataHelpInformer = useMemo(() => {

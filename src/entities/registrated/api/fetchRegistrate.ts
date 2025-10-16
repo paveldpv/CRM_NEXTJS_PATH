@@ -4,9 +4,9 @@ import { TFormRegistrate, TResponse } from '@/shared/model/types/Types'
 
 export const fetchRegistrate = async (
 	data: TFormRegistrate,
-	dataGeo: Omit<TGeoLocation, 'date'>
+	dataGeo: Omit<TGeoLocation, 'date'|'idEmployee'>
 ): Promise<TResponse> => {
-	const response = await fetch('api/registrate', {
+	const response = await fetch(`api/${data.INN}/registrate`, {
 		method: 'POST',
 		body: JSON.stringify({ data, dataGeo }),
 	})

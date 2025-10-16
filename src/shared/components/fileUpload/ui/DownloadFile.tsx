@@ -4,7 +4,7 @@ import { FaDownload } from 'react-icons/fa6'
 import { MdDelete } from 'react-icons/md'
 import { SERVER_DOTNET } from '../../../../../config/config'
 import { cn } from '../../../lib/cn'
-import { formatBytes } from '../../../lib/formatBytes'
+import { formatBytes } from '../../../lib/utils/formatBytes'
 import { TResponseUploadFiles } from '@/shared/model/types/Types'
 
 export type TDownloaderFile = {

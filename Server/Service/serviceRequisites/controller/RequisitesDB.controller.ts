@@ -1,28 +1,43 @@
-import { TRequisites } from '@/shared/model/types/subtypes/TRequisites'
-import { connect } from 'mongoose'
+
+import { Model } from 'mongoose'
 import ControllerDB from '../../../classes/ControllerDB'
-// import ContextOrganization from '../../classes/contextOrganization'
- import modelRequisites from '../model/schema/RequisitesSchema'
+
+import { requisitesSchema } from '../model/schema/RequisitesSchema'
+import { TNewRequisites, TRequisites } from '../model/types/Type'
 
 export default class ControllerDBRequisites extends ControllerDB {
 	constructor(INN: string) {
 		super(INN)
 	}
 
-	public async addNewRequisites(dataNewRequisites: Partial<TRequisites>) {
-		await this.contentDB()
-		const newRequisites = new modelRequisites(dataNewRequisites)
-		await newRequisites.save()
+	private modelRequisites: Model<TRequisites> | null = null
+
+	private async initModel() {
+		await this.connectDB()
+		if (!this.dbConnection) throw new Error(`error init model requisite from INN :${this.INN}`)
+
+		this.modelRequisites = this.dbConnection.model<TRequisites>('requisite', requisitesSchema)
+	}
+
+	private async changeReadinessModel(){
+		if(!this.modelRequisites) await this.initModel()
+	}
+
+	public async addNewRequisites(dataNewRequisites: Partial<TNewRequisites>):Promise<TRequisites> {
+		await this.changeReadinessModel()
+		const newRequisites = new this.modelRequisites!(dataNewRequisites)
+		const saveRequisites = await newRequisites.save()
+		return saveRequisites
 	}
 
 	public async updateRequisites(data: Partial<TRequisites>) {
-		await this.contentDB()
-		await modelRequisites.updateOne({ INN: data.INN }, data)
+		await this.changeReadinessModel()
+		await this.modelRequisites!.updateOne({ INN: data.INN }, data)
 	}
 
 	public async deleteRequisites(INN: string) {
-		await this.contentDB()
-		await modelRequisites.updateOne(
+		await this.changeReadinessModel()
+		await this.modelRequisites!.updateOne(
 			{ INN: INN },
 			{
 				$set: {
@@ -33,18 +48,21 @@ export default class ControllerDBRequisites extends ControllerDB {
 	}
 
 	public async getRequisiteByParams(params: TRequisites): Promise<TRequisites | null> {
-		await this.contentDB()
-		return await modelRequisites.findOne(params, { safeDeleted: false })
+		await this.changeReadinessModel()
+		return await this.modelRequisites!.findOne(params, { safeDeleted: false })
 	}
 
 	public async getAllRequisites(): Promise<TRequisites[]> {
-		await this.contentDB()
-		return await modelRequisites.find({})
+		await this.changeReadinessModel()
+		return await this.modelRequisites!.find({})
 	}
 
 	public async getRequisitesCurrentOrganization(): Promise<TRequisites> {
-		await this.contentDB()
-
-		return (await modelRequisites.findOne({ 'INN.value': this.INN }, { _id: 0, __v: 0 }).exec()) as TRequisites
+		await this.changeReadinessModel()
+		const data = (await this.modelRequisites!.findOne(
+			{ 'INN.value': this.INN },
+			{ _id: 0, __v: 0 }
+		).exec()) as TRequisites
+		return data
 	}
 }

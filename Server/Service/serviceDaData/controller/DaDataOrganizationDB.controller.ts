@@ -1,46 +1,65 @@
-import { TDaDataOrganization } from '@/shared/model/types/subtypes/TDaDataOrganization'
-import { connect } from 'mongoose'
-import ContextOrganization from '../../../classes/contextOrganization'
-import modelDaDataOrganization from '../model/schema/OrganizationDaDataSchema'
+import { Model, Types } from 'mongoose'
+import ControllerDB from '../../../classes/ControllerDB'
+import { DaDataOrganizationSchema } from '../model/schema/OrganizationDaDataSchema'
+import { TDaDataOrganization } from '../model/types/Type'
 
-export default class ControllerDaDataOrganizationDB extends ContextOrganization {
+export default class ControllerDaDataOrganizationDB extends ControllerDB {
 	constructor(INN: string) {
 		super(INN)
 	}
 
+	private daDataOrganizationModel: Model<TDaDataOrganization> | null = null
+
+	private async initModel() {
+		await this.connectDB()
+		if (!this.dbConnection) throw new Error('error init model daData organization')
+
+		this.daDataOrganizationModel = this.dbConnection.model<TDaDataOrganization>(
+			'daDataOrganization',
+			DaDataOrganizationSchema
+		)
+	}
+
+	private async changeReadinessModel() {
+		if (!this.daDataOrganizationModel) await this.initModel()
+	}
+
 	public async addDaData(data: Partial<TDaDataOrganization>) {
-		await connect(`${process.env.DB_URL}${this.INN}`)
-		const newOrganization = new modelDaDataOrganization(data)
+		await this.changeReadinessModel()
+		const newOrganization = new this.daDataOrganizationModel!(data)
 		await newOrganization.save()
 	}
 
 	public async getDaDataByINN(INN: string): Promise<TDaDataOrganization | null> {
-		await connect(`${process.env.DB_URL}${this.INN}`)
-		const daData = modelDaDataOrganization.findOne({ 'data.inn': INN }, { _id: 0 })
+		await this.changeReadinessModel()
+		const daData = await this.daDataOrganizationModel!.findOne({ 'data.inn': INN }, { _id: 0 })
 		return daData
 	}
 
 	public async getAllDaData(): Promise<TDaDataOrganization[] | []> {
-		await connect(`${process.env.DB_URL}${this.INN}`)
-		return modelDaDataOrganization.find({}, { safeDeleted: false })
+		await this.changeReadinessModel()
+		return await this.daDataOrganizationModel!.find({}, { safeDeleted: false })
 	}
 
 	public async deletedDaDataByINN(INN: string): Promise<void> {
-		await connect(`${process.env.DB_URL}${this.INN}`)
-		await modelDaDataOrganization.findOneAndUpdate({ 'data.inn': INN }, { $set: { safeDeleted: false } })
+		await this.changeReadinessModel()
+		await this.daDataOrganizationModel!.findOneAndUpdate(
+			{ 'data.inn': INN },
+			{ $set: { safeDeleted: false } }
+		)
 	}
 
-	public async updateDaDataByINN(newDaData: TDaDataOrganization): Promise<void> {
-		await connect(`${process.env.DB_URL}${this.INN}`)
-		await modelDaDataOrganization.findOneAndUpdate({ 'data.inn': newDaData.data.inn }, newDaData)
+	public async updateDaDataByINN(idCurrentDaData:Types.ObjectId,newDaData: TDaDataOrganization): Promise<void> {
+		await this.changeReadinessModel()
+		await this.daDataOrganizationModel!.findOneAndUpdate({ _id:idCurrentDaData }, newDaData)
 	}
 	public async getDataRuleOrganization(): Promise<TDaDataOrganization | null> {
-		await connect(`${process.env.DB_URL}${this.INN}`)
-		return modelDaDataOrganization.findOne({ 'data.inn': this.INN })
+		await this.changeReadinessModel()
+		return this.daDataOrganizationModel!.findOne({ 'data.inn': this.INN })
 	}
 
 	public async getAllDaDataWithDeleted(): Promise<TDaDataOrganization[] | []> {
-		await connect(`${process.env.DB_URL}${this.INN}`)
-		return modelDaDataOrganization.find({}, { _id: 0 })
+		await this.changeReadinessModel()
+		return this.daDataOrganizationModel!.find({})
 	}
 }

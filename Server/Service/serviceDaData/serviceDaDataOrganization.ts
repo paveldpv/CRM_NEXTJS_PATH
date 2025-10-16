@@ -1,14 +1,13 @@
-import { TDaDataOrganization } from '@/shared/model/types/subtypes/TDaDataOrganization'
+
 import { TError } from '@/shared/model/types/subtypes/TError'
-import { TQueryGetDaDataOrganization } from '@/shared/model/types/subtypes/TQueryGetDaDataOrganization'
+
 import { Service } from '../../classes/Service'
 import { apiKey } from '../../../config/DaDataConfig'
 import { isError } from '@/shared/lib/IsError'
 import ControllerDaDataOrganizationDB from './controller/DaDataOrganizationDB.controller'
-// import { apiKey } from '../../config/DaDataConfig'
-// import { isError } from '../../src/shared/lib/IsError'
-// import { Service } from '../classes/Service'
-// import ControllerDaDataOrganizationDB from '../ControllersDB/Collection/DaDataOrganizationDB'
+import { TDaDataOrganization, TQueryGetDaDataOrganization } from './model/types/Type'
+import { Types } from 'mongoose'
+
 
 export class ServiceDaDataOrganization extends Service {
 	private URL_DA_DATA: string
@@ -82,12 +81,18 @@ export class ServiceDaDataOrganization extends Service {
 			return this.createError(`error deleted da data by INN INN:${INN},error :${error}`,error)
 		}
 	}
-	public async updateDaDataByINN(newDaData: TDaDataOrganization): Promise<void | TError> {
+
+	public async updateDaDataByINN(idCurrentDaData:Types.ObjectId,INN:string): Promise<TDaDataOrganization | TError> {
 		try {
-			await new ControllerDaDataOrganizationDB(this.INN).updateDaDataByINN(newDaData)
+			const newDaData = await this.fetchDaDataOrganization({query:INN})
+			if(isError(newDaData)){
+				throw new Error(newDaData.message)
+			}
+			await new ControllerDaDataOrganizationDB(this.INN).updateDaDataByINN(idCurrentDaData,newDaData)
+			return newDaData
 		} catch (error) {
 			
-			return this.createError(`error update da data by INN ,new data :${newDaData},error ${error}`,error)
+			return this.createError(`error update da data by INN ,INN query :${INN},error ${error}`,error)
 		}
 	}
 	public async getDaDataRuleOrganization(): Promise<TDaDataOrganization | null | TError> {
@@ -99,6 +104,7 @@ export class ServiceDaDataOrganization extends Service {
 			return this.createError(`error get da data current organization error : ${error}`,error)
 		}
 	}
+	
 	public async getAllDaDataWithDeleted(): Promise<TDaDataOrganization[] | [] | TError> {
 		try {
 			const data = await new ControllerDaDataOrganizationDB(this.INN).getAllDaDataWithDeleted()

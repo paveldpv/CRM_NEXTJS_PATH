@@ -6,11 +6,11 @@ export const propertyDetailSchema = new Schema<TPropertyDetail>({
 	property: {
 		type: String,
 		required: false,
+		
 	},
+	safeDeleted:{
+		type:Boolean,
+		default:false
+	}
 })
 
-const modelPropertyDetail =
-	(models.propertydetail as Model<TPropertyDetail>) ||
-	model<TPropertyDetail>('propertydetail', propertyDetailSchema)
-
-export default modelPropertyDetail

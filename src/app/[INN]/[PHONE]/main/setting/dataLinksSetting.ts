@@ -1,5 +1,5 @@
 import { idLink } from '@/shared/model/types/enums'
-import { TPropsNavLink } from '@/shared/ui/NavLink'
+import { TPropsNavLink } from '@/shared/ui/navLink/ui/NavLink'
 export const dataLinkSetting: TPropsNavLink[] = [
 	{
 		id: idLink.setting_profile,

@@ -1,8 +1,8 @@
-import { Model, Schema, model, models } from 'mongoose'
+import { Schema } from 'mongoose'
 import { TDetail } from '../types/Types'
 
-const detailSchema = new Schema<TDetail>({
-	idOrder: {
+export const detailSchema = new Schema<TDetail>({
+	order: {
 		type: Schema.Types.ObjectId,
 		required: true,
 		ref: 'order',
@@ -24,7 +24,7 @@ const detailSchema = new Schema<TDetail>({
 		required: false,
 	},
 	files: {
-		required:false,
+		required: false,
 		type: Schema.Types.Mixed,
 		default: [],
 	},
@@ -40,8 +40,12 @@ const detailSchema = new Schema<TDetail>({
 		type: Schema.Types.Mixed,
 		required: false,
 	},
+	amount: {
+		type: Number,
+		default: 1,
+	},
 })
 
-const modelDetail =
-	(models.detailSchema as Model<TDetail>) || model<TDetail>('detailSchema', detailSchema)
-export default modelDetail
+// const modelDetail =
+// 	(models.detailSchema as Model<TDetail>) || model<TDetail>('detailSchema', detailSchema)
+// export default modelDetail

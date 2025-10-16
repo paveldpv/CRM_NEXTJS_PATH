@@ -1,77 +1,115 @@
-import { TNewEmployee, TWithoutPassUser } from '@/shared/model/types/Types'
-import { ObjectId } from 'mongoose'
+
+
+import { TOptionQuery } from '@/shared/model/types/optionQuery'
+import { Model, Query, Types } from 'mongoose'
 import ControllerDB from '../../../classes/ControllerDB'
-import modelUSer from '../model/schema/usersSchema'
-import { TDBUser, TNewUser } from '../model/types/Types'
+import { userSchema } from '../model/schema/usersSchema'
+import { TBirthdayDate, TDBUser, TDBUserWithoutPas, TNewUser } from '../model/types/Types'
 
 export default class ControllerDBUser extends ControllerDB {
 	constructor(INN: string) {
 		super(INN)
 	}
-	public async restoreUser(idEmployee: ObjectId) {
-		await this.contentDB()
-		await modelUSer.findOneAndUpdate({ _id: idEmployee }, { $set: { safeDeleted: false } })
+
+	private modelUser: Model<TDBUser> | null = null
+
+	private async initModel() {
+		await this.connectDB()
+		if (!this.dbConnection) throw new Error(`error init model user from INN:${this.INN}`)
+
+		this.modelUser = this.dbConnection.model<TDBUser>('user', userSchema)
 	}
 
-	public async updatePas(idEmployee: ObjectId, newPas: string): Promise<void> {
-		await this.contentDB()
-		await modelUSer.findOneAndUpdate({ _id: idEmployee }, { $set: { password: newPas } })
+	private async changeReadinessModel() {
+		if (!this.modelUser) await this.initModel()
 	}
-
-	public async addNewUser(data: TNewUser | TNewEmployee): Promise<TDBUser> {
-		await this.contentDB()
-		const newAdmin = new modelUSer(data)
-		return await newAdmin.save()//надо сохранить и вернуть то что сохранили
+	// private getQueryWithOption (data:Query<,TDBUser>,option?:TOptionQuery<TDBUser>){
 		
-		
-		//TODO:
+	// }
+	
+
+	public async restoreUser(idEmployee: Types.ObjectId): Promise<void> {
+		await this.changeReadinessModel()
+		await this.modelUser!.findOneAndUpdate({ _id: idEmployee }, { $set: { safeDeleted: false } })
 	}
 
-	public async getUsers(): Promise<TWithoutPassUser[] | []> {
-		await this.contentDB()
-		const dataUSer = await modelUSer.find({ safeDeleted: false }, { password: 0 })
-		return dataUSer
+	public async updatePas(idEmployee: Types.ObjectId, newPas: string): Promise<void> {
+		await this.changeReadinessModel()
+		await this.modelUser!.findOneAndUpdate({ _id: idEmployee }, { $set: { password: newPas } })
 	}
 
-	public async getUsersWithDeleted(): Promise<TDBUser[] | []> {
-		await this.contentDB()
-		const dataUSer = await modelUSer.find({})
-		return dataUSer
+	public async addNewUser(data: TNewUser | TDBUserWithoutPas): Promise<TDBUser> {
+		await this.changeReadinessModel()
+		const newAdmin = new this.modelUser!(data)
+		return await newAdmin.save() //надо сохранить и вернуть то что сохранили
 	}
 
-	public async getUsersByParams(params: Partial<TDBUser>): Promise<TDBUser | null> {
-		await this.contentDB()
-		const dataUSer = await modelUSer.findOne(params)
-		return dataUSer
+	public async getUsers(option?:TOptionQuery<TDBUser>): Promise<TDBUserWithoutPas[] | []> {
+		await this.changeReadinessModel()
+		const dataUSer =  this.modelUser!.find({ safeDeleted: false }, { password: 0 })
+		return this.applyQueryOptions(dataUSer,option).exec()
 	}
 
-	public async getUserByID(idEmployee: ObjectId): Promise<TDBUser | null> {
-		await this.contentDB()
-		const dataUser = await modelUSer.findOne({ _id: idEmployee })
+	public async getUsersWithDeleted(option?:TOptionQuery<TDBUser>): Promise<TDBUser[] | []> {
+		await this.changeReadinessModel()
+		const dataUser = this.modelUser!.find({})
+		return this.applyQueryOptions(dataUser,option).exec()
+	}
+
+	public async getUsersByParams(params: Partial<TDBUser>,option?:TOptionQuery<TDBUser>): Promise<TDBUser | null> {
+		await this.changeReadinessModel()
+		const dataUSer = this.modelUser!.findOne(params)
+		return this.applyQueryOptions(dataUSer,option)
+	}
+
+	public async getUserByID(idEmployee: Types.ObjectId): Promise<TDBUser | null> {
+		await this.changeReadinessModel()
+		const dataUser = await this.modelUser!.findOne({ _id: idEmployee })
 		return dataUser
 	}
 
-	public async updateDataUser(updateDataUser: TDBUser | TWithoutPassUser): Promise<void> {
-		await this.contentDB()
-		await modelUSer.updateOne({ _id: updateDataUser._id }, updateDataUser)
+	public async updateDataUser(updateDataUser: TDBUser | TDBUserWithoutPas): Promise<void> {
+		await this.changeReadinessModel()
+		await this.modelUser!.updateOne({ _id: updateDataUser._id }, updateDataUser)
 	}
 
-	public async deletedPhotToDB(idEmployee: ObjectId): Promise<void> {
-		await this.contentDB()
-		await modelUSer.updateOne({ _id: idEmployee }, { $set: { srcPhoto: 'NOT_FOUND' } })
+	public async deletedPhotToDB(idEmployee: Types.ObjectId): Promise<void> {
+		await this.changeReadinessModel()
+		await this.modelUser!.updateOne({ _id: idEmployee }, { $set: { srcPhoto: 'NOT_FOUND' } })
 	}
 
-	public async getUsersByGroupID(listID: ObjectId[]): Promise<TDBUser[] | []> {
-		await this.contentDB()
-		return await modelUSer.find({ _id: { $in: listID } })
+	public async getUsersByGroupID(listID: Types.ObjectId[],option?:TOptionQuery<TDBUser>): Promise<TDBUser[] | []> {
+		await this.changeReadinessModel()
+		const dataUsers=  this.modelUser!.find({ _id: { $in: listID } })
+		return this.applyQueryOptions(dataUsers,option).exec()
 	}
 
 	public async getAdmins(): Promise<TDBUser[] | []> {
-		await this.contentDB()
-		return await modelUSer.find({ linksAllowed: 'ADMIN' })
+		await this.changeReadinessModel()
+
+		return await this.modelUser!.find({ linksAllowed: 'ADMIN' })
 	}
-	public async removeUser(idEmployee: ObjectId): Promise<void> {
-		await this.contentDB()
-		await modelUSer.findOneAndUpdate({ _id: idEmployee }, { $set: { safeDeleted: true } })
+	public async removeUser(idEmployee: Types.ObjectId): Promise<void> {
+		await this.changeReadinessModel()
+		await this.modelUser!.findOneAndUpdate({ _id: idEmployee }, { $set: { safeDeleted: true } })
 	}
+
+	public async getUsersWithBirthdayToday(
+		{ startDay, endDay }: TBirthdayDate,
+		option?: TOptionQuery<TDBUser>
+	): Promise<TDBUserWithoutPas[] | []> {
+		await this.changeReadinessModel()
+		let data =  this.modelUser!.find({			
+				dateBirthday: {
+					$gte: startDay,
+					$lte: endDay,
+				},
+			
+		}).select('-password')
+		
+		return  this.applyQueryOptions(data,option).exec()
+		
+		
+	}
+	
 }

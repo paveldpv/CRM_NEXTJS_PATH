@@ -15,24 +15,7 @@ export enum idLink {
   table='table'
 
 }
-export enum nameSettingLayout {
-  header = "Настройка Шапки",
-  navMenu = "Настройка Меню навигации",
-  bottom = "Настройка Подвала",
-  main = "Настройка осн.Окна",
-}
 
-export enum keyConfigLayout {
-  header = "configHeader",
-  navMenu = "configNavMenu",
-  bottom = "configBottom",
-  main = "configMain",
-}
-export enum keyColorOption {
-  bgColor = "bgColor",
-  borderColor = "borderColor",
-  textColor = "textColor",
-}
 export enum typeDialog {
   error = "ERROR",
   default = "DEFAULT",
@@ -43,7 +26,8 @@ export enum typicalError {
   not_valid_password ='NOT_VALID_PAS',
   error_DB = "ERROR_DB",
   error_sever= 'ERROR_SERVER',  
-  error_permission = "ERROR_PERMISSION"
+  error_permission = "ERROR_PERMISSION",
+  error_authenticate = 'ERROR_AUTHENTICATE'
 }
 export enum NotData {
   notStringData = "не задано",
@@ -53,13 +37,3 @@ export enum NotData {
 export enum employee {
   new_employee = 'NEW_EMPLOYEE'
 }
-export enum ROOT_LINK {
-  payment = "payment",
-  shipment="shipment",
-  employee = 'employee',
-  taskBoard = 'taskBoard',
-  application = 'application',
-  statistics= 'statistics',
-  price= 'price',
-  setting= 'setting'
-} 

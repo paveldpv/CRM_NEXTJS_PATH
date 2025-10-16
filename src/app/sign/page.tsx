@@ -1,6 +1,7 @@
 
 import Auth from '@/entities/auth/ui/Auth'
-import DialogWindow from '@/shared/ui/DialogWindow'
+import DialogWindow from '@/shared/ui/dialogWindow/ui/DialogWindow'
+
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {

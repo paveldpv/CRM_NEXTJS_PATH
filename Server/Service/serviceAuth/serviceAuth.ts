@@ -1,11 +1,11 @@
-import {  TFormLogin } from '@/shared/model/types/Types'
+import { TFormLogin } from '@/shared/model/types/Types'
 import bcrypt from 'bcrypt'
 import { isError } from '../../../src/shared/lib/IsError'
 import { Service } from '../../classes/Service'
+import { TTokens } from '../serviceSession/model/types/Type'
+import { ServiceSession } from '../serviceSession/serviceSession'
+import { TDBUserWithoutPas } from '../serviceUser/model/types/Types'
 import { ServiceUsers } from '../serviceUser/serviceUser'
-import { TDBUser } from '../serviceUser/model/types/Types'
-
-
 
 export class ServiceAuth extends Service {
 	private phone: string
@@ -15,7 +15,8 @@ export class ServiceAuth extends Service {
 		this.phone = dataFormLogin.phone
 		this.password = dataFormLogin.password
 	}
-	async auth(): Promise<TDBUser | null> {
+
+	async auth(): Promise<{ dataUser: TDBUserWithoutPas; token: TTokens } | null> {
 		const serviceUser = new ServiceUsers(this.INN)
 		const candidateAuth = await serviceUser.getUserByPhone(this.phone)
 
@@ -29,7 +30,14 @@ export class ServiceAuth extends Service {
 		const isCorrectedPassword = await bcrypt.compare(this.password, candidateAuth.password)
 
 		if (isCorrectedPassword) {
-			return candidateAuth
+			const serviceSession = new ServiceSession(this.INN)
+			const token = await serviceSession.addSession(candidateAuth._id)
+			if (isError(token)) {
+				this.createError(`error create new session , data user :${candidateAuth}`)
+				return null
+			}
+			const { password, ...dataUser } = candidateAuth
+			return { dataUser, token }
 		} else {
 			this.createError(`error auth ,invalid password phone user:${this.phone},inn  :${this.INN}`)
 			return null
