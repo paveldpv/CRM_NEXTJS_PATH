@@ -5,7 +5,7 @@ import { TDetail, TDetailDTO, TFullInfoTDetail, TFullInfoTDetailDTO } from './mo
 
 export class ServiceDetailDTO extends DTO {
 	static createDetailDTO(data: TDetail): TDetailDTO {
-		return { ...data, _id: this.objectIDToString(data._id) }
+		return { ...data, _id: this.objectIDToString(data._id), order: this.objectIDToString(data.order) }
 	}
 
 	static createListDetailDTO(data: TDetail[]): TDetailDTO[] {

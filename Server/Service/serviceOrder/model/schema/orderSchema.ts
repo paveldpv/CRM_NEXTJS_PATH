@@ -33,10 +33,7 @@ const deliveredSchema = new Schema<TDelivered>({
 })
 
 const serviceOptionOrder = new Schema<TServiceOrder>({
-	acceptedOfCargoEmployeeId: {
-		type: String,
-		required: true,
-	},
+	
 	deadlines: {
 		type: {
 			startDate: {
@@ -65,11 +62,16 @@ export const orderSchema = new Schema<TOrder>({
 		type: Number,
 		required: true,
 	},
+	acceptedOfCargoEmployeeId:{
+		type: Schema.Types.ObjectId,
+		required: true,
+		ref: 'user',
+	},
 	details: {
 		type: [Schema.Types.ObjectId],
 		required: false,
 		default: [],
-		ref: 'detailSchema',
+		ref: 'detail',
 	},
 	complied: {
 		type: Boolean,

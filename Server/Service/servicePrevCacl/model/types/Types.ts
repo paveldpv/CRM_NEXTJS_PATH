@@ -1,6 +1,5 @@
-import { TEntities } from '@/shared/model/types/abstractsType'
-import { TResponseUploadFiles } from '@/shared/model/types/Types'
-
+import { TEntities } from '@/shared/model/types/subtypes/abstractsType'
+import { TResponseUploadFiles } from '@/shared/model/types/subtypes/Types'
 
 //#region type prev calc request
 export type TSketchDetail = {
@@ -55,12 +54,11 @@ export type TRequestPrevCalc = {
 	dataClient: TInitialValuesFormPrevCalc
 	dataSketch: TSketchDetail[] | undefined
 	dateRequest?: Date
-	verified?: boolean	
+	verified?: boolean
 	favorites?: boolean
-	
-} 
+}
 
 export type TDBRequestPrevCalc = TRequestPrevCalc & TEntities
 
-export type TDBRequestPrevCalcDTO = Omit<TDBRequestPrevCalc,'_id'> &{_id:string}
+export type TDBRequestPrevCalcDTO = Omit<TDBRequestPrevCalc, '_id'> & { _id: string }
 //#endregion

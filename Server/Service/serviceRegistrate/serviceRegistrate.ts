@@ -1,18 +1,17 @@
 import bcrypt from 'bcrypt'
 import { isAllowINN } from '../../../src/shared/lib/changeAllowINN'
 
-
 import { SALT_ROUND } from '../../../config/RegistrateConfig'
 
 import { TError } from '@/shared/model/types/subtypes/TError'
-import { TFormRegistrate } from '@/shared/model/types/Types'
+import { TFormRegistrate } from '@/shared/model/types/subtypes/Types'
 import { isError } from '../../../src/shared/lib/IsError'
 import { Service } from '../../classes/Service'
+import { TGeoLocation } from '../serviceGeoLocation/model/types/type'
 import { ServiceGeoLocation } from '../serviceGeoLocation/serviceGeoLocation'
 import { ServiceRuleOrganization } from '../serviceRuleOrganization/serviceRuleOrganization'
 import { TNewUser } from '../serviceUser/model/types/Types'
 import { ServiceUsers } from '../serviceUser/serviceUser'
-import { TGeoLocation } from '../serviceGeoLocation/model/types/type'
 
 /**
  *  while creating new organization create new data user  with params "linksAllowed " == "ADMIN"
@@ -68,11 +67,11 @@ export class ServiceRegistrated extends Service {
 
 			const serviceRuleOrganization = new ServiceRuleOrganization(this.INN)
 			const serviceGeoLocation = new ServiceGeoLocation(this.INN)
-			const newDataGeo: TGeoLocation = { ...this.dataGeo, idEmployee: newUser._id, date: new Date() }
+			const newDataGeo: TGeoLocation = { ...this.dataGeo, user: newUser._id, date: new Date() }
 
 			const setGeoLocation = serviceGeoLocation.setDataLocation(newDataGeo)
 			const resultRegistratedNewRuleOrganization = serviceRuleOrganization.createNewRuleOrganization()
-			
+
 			const registrated = await Promise.all([setGeoLocation, resultRegistratedNewRuleOrganization])
 			const error = registrated.find((data) => isError(data))
 			if (error) {

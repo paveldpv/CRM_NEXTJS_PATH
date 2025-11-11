@@ -1,7 +1,5 @@
-import { NotData } from '@/shared/model/types/enums'
-
+import { NotData } from '@/shared/model/types/subtypes/enums'
 import { TError } from '@/shared/model/types/subtypes/TError'
-
 import { Service } from '../../classes/Service'
 import { TDaDataOrganization } from '../serviceDaData/model/types/Type'
 import ControllerDBRequisites from './controller/RequisitesDB.controller'
@@ -82,10 +80,7 @@ export class ServiceRequisites extends Service {
 			const data = await new ControllerDBRequisites(this.INN).getRequisitesCurrentOrganization()
 			return this.normalizeDataFromMongoDB(data)
 		} catch (error) {
-			return this.createError(
-				`error get requisites current organization , INN:${this.INN},error:${error}`,
-				error
-			)
+			return this.createError(`error get requisites current organization , INN:${this.INN},error:${error}`, error)
 		}
 	}
 	public async getAllRequisites(): Promise<TRequisites[] | TError | []> {
@@ -108,10 +103,7 @@ export class ServiceRequisites extends Service {
 			const requisites = await new ControllerDBRequisites(this.INN).getRequisiteByParams(params)
 			return this.normalizeDataFromMongoDB(requisites)
 		} catch (error) {
-			return this.createError(
-				`error service requisites - get Requisites by params ,error :${error}`,
-				error
-			)
+			return this.createError(`error service requisites - get Requisites by params ,error :${error}`, error)
 		}
 	}
 	public async updateRequisites(dataUpdateRequites: TRequisites): Promise<void | TError> {
@@ -125,9 +117,7 @@ export class ServiceRequisites extends Service {
 	public async addNewRequisites(daData: TDaDataOrganization): Promise<TRequisites | TError> {
 		try {
 			const initialDataRequisites = this.getInitialDataRequisites(daData)
-			const saveRequisites = await new ControllerDBRequisites(this.INN).addNewRequisites(
-				initialDataRequisites
-			)
+			const saveRequisites = await new ControllerDBRequisites(this.INN).addNewRequisites(initialDataRequisites)
 			return saveRequisites
 		} catch (error) {
 			return this.createError(`error service requisites - update requisites ,error :${error}`, error)

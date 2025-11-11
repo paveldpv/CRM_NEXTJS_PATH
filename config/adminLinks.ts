@@ -1,6 +1,6 @@
 
-import { idLink } from '@/shared/model/types/enums'
-import { TLink } from '@/shared/model/types/Types'
+import { idLink } from '@/shared/model/types/subtypes/enums'
+import { TLink } from '@/shared/model/types/subtypes/Types'
 import { ROOT_LINK } from '../Server/Service/servicePermissionRedactData/model/types/Types'
 export const adminLinks: TLink[] = [
 	{

@@ -1,4 +1,4 @@
-import { TEntities } from '@/shared/model/types/abstractsType'
+import { TEntities } from '@/shared/model/types/subtypes/abstractsType'
 
 export type TPrice = {
 	price: TDataTablePrice
@@ -23,4 +23,3 @@ export type TPriceDTO = {
 	price: TDataTablePriceDTO
 	readonly: boolean
 }
-

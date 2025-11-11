@@ -1,5 +1,5 @@
-import { TEntities } from '@/shared/model/types/abstractsType'
-import { TLink, TResponseUploadFiles } from '@/shared/model/types/Types'
+import { TEntities } from '@/shared/model/types/subtypes/abstractsType'
+import { TLink, TResponseUploadFiles } from '@/shared/model/types/subtypes/Types'
 
 export type TDBUser = {
 	phone: string
@@ -21,10 +21,8 @@ export type TDBUserWithoutPas = Omit<TDBUser, 'password'>
 export type TBirthdayDate = { startDay: Date; endDay: Date }
 export type TNewUser = Omit<TDBUser, '_id'>
 
+export type TUserDTO = Omit<TDBUser, '_id'> & { _id: string }
 
-export type TUserDTO = Omit<TDBUser,'_id'> & {_id:string}
-
-
-export type TUserDTOWithoutPas  = Omit<TUserDTO,"password">
+export type TUserDTOWithoutPas = Omit<TUserDTO, 'password'>
 
 export type TUserDTOByBirthday = Pick<TUserDTOWithoutPas, 'name' | 'lastName' | 'surname' | 'phone'>

@@ -1,4 +1,4 @@
-import { TEntities } from '@/shared/model/types/abstractsType'
+import { TEntities } from '@/shared/model/types/subtypes/abstractsType'
 import { Types } from 'mongoose'
 import { TDBUserWithoutPas, TUserDTOWithoutPas } from '../../../serviceUser/model/types/Types'
 

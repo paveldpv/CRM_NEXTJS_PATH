@@ -1,17 +1,17 @@
 import { fetchDeletedFile } from '@/shared/api/file_manager/deletedFile'
 import { isError } from '@/shared/lib/IsError'
 import { getAbbreviated } from '@/shared/lib/utils/getAbbreviated'
-import { TResponseUploadFiles } from '@/shared/model/types/Types'
 import { TError } from '@/shared/model/types/subtypes/TError'
+import { TResponseUploadFiles } from '@/shared/model/types/subtypes/Types'
 
 import { Service } from '../../classes/Service'
 
+import { TOptionQuery } from '@/shared/model/types/optionQuery'
+import { Types } from 'mongoose'
 import { ServiceDaDataOrganization } from '../serviceDaData/serviceDaDataOrganization'
 import { ServiceRequisites } from '../serviceRequisites/serviceReqisites'
 import ControllerCounterpartyDB from './controller/CounterPartyDB.controller'
 import { TCounterparty, TNewDataCounterparty } from './models/types/Types'
-import { Types } from 'mongoose'
-import { TOptionQuery } from '@/shared/model/types/optionQuery'
 
 export class ServiceCounterparty extends Service {
 	constructor(INN: string) {
@@ -43,10 +43,7 @@ export class ServiceCounterparty extends Service {
 					newDataCounterParty = {
 						...newDataCounterParty,
 						email: emailOrganization,
-						data: [
-							...(newDataCounterParty.data || []),
-							{ description: getAbbreviated(nameOrganization) },
-						],
+						data: [...(newDataCounterParty.data || []), { description: getAbbreviated(nameOrganization) }],
 					}
 				}
 			}
@@ -90,7 +87,7 @@ export class ServiceCounterparty extends Service {
 			return this.createError(`error get counterparty by id ,id${_id},error :${error}`, error)
 		}
 	}
-	public async getAllCounterparty(option?:TOptionQuery<TCounterparty>): Promise<TError | TCounterparty[]> {
+	public async getAllCounterparty(option?: TOptionQuery<TCounterparty>): Promise<TError | TCounterparty[]> {
 		try {
 			const controllerCounterpartyDB = new ControllerCounterpartyDB(this.INN)
 			const data = await controllerCounterpartyDB.getAllCounterparty(option)
@@ -99,7 +96,7 @@ export class ServiceCounterparty extends Service {
 			return this.createError(`error get all counterparty, error ${error}`)
 		}
 	}
-	public async getAllCounterpartyWithDeleted(option?:TOptionQuery<TCounterparty>): Promise<TError | TCounterparty[]> {
+	public async getAllCounterpartyWithDeleted(option?: TOptionQuery<TCounterparty>): Promise<TError | TCounterparty[]> {
 		try {
 			const controllerCounterpartyDB = new ControllerCounterpartyDB(this.INN)
 			const data = await controllerCounterpartyDB.getAllCounterpartyWithDeleted(option)
@@ -108,16 +105,10 @@ export class ServiceCounterparty extends Service {
 			return this.createError(`error get all counterparty, error ${error}`)
 		}
 	}
-	public async deletedFileRequitesCounterparty(
-		_id: Types.ObjectId,
-		fileInfo: TResponseUploadFiles
-	): Promise<void | TError> {
+	public async deletedFileRequitesCounterparty(_id: Types.ObjectId, fileInfo: TResponseUploadFiles): Promise<void | TError> {
 		try {
 			const controllerCounterpartyDB = new ControllerCounterpartyDB(this.INN)
-			await Promise.all([
-				fetchDeletedFile(fileInfo.FullPath),
-				controllerCounterpartyDB.deletedRequisites(_id),
-			])
+			await Promise.all([fetchDeletedFile(fileInfo.FullPath), controllerCounterpartyDB.deletedRequisites(_id)])
 		} catch (error) {
 			return this.createError(
 				`error deleted file requites from counterparty ,id ${_id} ,file info ${fileInfo}, error ${error}`,
@@ -125,24 +116,23 @@ export class ServiceCounterparty extends Service {
 			)
 		}
 	}
-	public async searchCounterparty(query: string,withDeleted:boolean): Promise<TCounterparty[] | null | TError> {
+	public async searchCounterparty(query: string, withDeleted: boolean): Promise<TCounterparty[] | null | TError> {
 		try {
 			const searchRegEx = new RegExp(query, 'i')
 			const controllerCounterpartyDB = new ControllerCounterpartyDB(this.INN)
-			const searchData = await controllerCounterpartyDB.searchCounterparty(searchRegEx,withDeleted)
+			const searchData = await controllerCounterpartyDB.searchCounterparty(searchRegEx, withDeleted)
 			return this.normalizeDataFromMongoDB(searchData)
 		} catch (error) {
 			return this.createError(`error search counterparty ,INN:${this.INN} , query :${query} `, error)
 		}
 	}
-	public async getCounterpartyByListID (_ids:Types.ObjectId[]):Promise<TCounterparty[]|TError>{
+	public async getCounterpartyByListID(_ids: Types.ObjectId[]): Promise<TCounterparty[] | TError> {
 		try {
 			const controllerCounterpartyDB = new ControllerCounterpartyDB(this.INN)
 			const data = await controllerCounterpartyDB.getCounterpartyByListID(_ids)
 			return this.normalizeDataFromMongoDB(data)
 		} catch (error) {
-				return this.createError(`error get counterparty by list id ids ${_ids}, INN:${this.INN}`)
+			return this.createError(`error get counterparty by list id ids ${_ids}, INN:${this.INN}`)
 		}
-
 	}
 }

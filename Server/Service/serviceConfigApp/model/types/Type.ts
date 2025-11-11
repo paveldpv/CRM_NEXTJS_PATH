@@ -1,4 +1,4 @@
-import { TEntities } from '@/shared/model/types/abstractsType'
+import { TEntities } from '@/shared/model/types/subtypes/abstractsType'
 import { Types } from 'mongoose'
 import { keyColorOption, keyConfigLayout, nameSettingLayout } from './Enums'
 
@@ -36,6 +36,6 @@ export type TUpdateStateConfigApp = {
 	keyColorOption: keyColorOption
 }
 
-export type TConfigAPP_DTO = Omit<TConfigAPP, '_id'|"idUser"> & { _id: string,idUser:string }
+export type TConfigAPP_DTO = Omit<TConfigAPP, '_id' | 'idUser'> & { _id: string; idUser: string }
 
 //#endregion

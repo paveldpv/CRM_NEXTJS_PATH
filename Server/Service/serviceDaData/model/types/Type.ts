@@ -1,5 +1,4 @@
-import { TEntities } from '@/shared/model/types/abstractsType'
-
+import { TEntities } from '@/shared/model/types/subtypes/abstractsType'
 
 export type TDaDataOrganization = {
 	dataRegistrateFormApp?: Date
@@ -27,7 +26,7 @@ export type TDaDataOrganization = {
 			registration_date?: string
 			liquidation_date?: string
 		}
-		
+
 		name: {
 			full_with_opf?: string
 			short_with_opf?: string
@@ -62,13 +61,13 @@ export type TDaDataOrganization = {
 	}
 } & TEntities
 
-export type TDaDataOrganizationDTO = Omit<TDaDataOrganization,'_id'>&{_id:string}
+export type TDaDataOrganizationDTO = Omit<TDaDataOrganization, '_id'> & { _id: string }
 
 export type TQueryGetDaDataOrganization = {
-   query:string,
-   count?:number,
-   kpp?:string,
-   branch_type?:string,
-   type?:string,
-   status?:string[]
+	query: string
+	count?: number
+	kpp?: string
+	branch_type?: string
+	type?: string
+	status?: string[]
 }

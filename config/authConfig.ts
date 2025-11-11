@@ -1,4 +1,4 @@
-import { TFormLogin } from '@/shared/model/types/Types'
+import { TFormLogin } from '@/shared/model/types/subtypes/Types'
 import type { AuthOptions } from 'next-auth'
 
 import CredentialsProvider from 'next-auth/providers/credentials'

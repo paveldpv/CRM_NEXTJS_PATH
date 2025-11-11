@@ -1,6 +1,7 @@
-import { TEntities } from '@/shared/model/types/abstractsType'
+import { TEntities } from '@/shared/model/types/subtypes/abstractsType'
 import { Types } from 'mongoose'
 import { TCounterparty, TCounterpartyDTO } from '../../../serviceCounterparty/models/types/Types'
+import { TDBUserWithoutPas, TUserDTOWithoutPas } from '../../../serviceUser/model/types/Types'
 
 export type TNewOrder = Omit<TOrder, '_id' | 'safeDeleted' | 'numberOrder' | 'complied'>
 
@@ -8,24 +9,28 @@ export type TOrder = {
 	CounterParty: Types.ObjectId
 	complied: boolean
 	numberOrder: number
-	acceptedOfCargoEmployeeId: string | Types.ObjectId
+	acceptedOfCargoEmployeeId: Types.ObjectId
 	details: Types.ObjectId[] | []
 	service: TServiceOrder
 	optionsDescription?: string[]
+	processCompleted?: number
 } & TEntities
 
-export type TOrderFullInfo = Omit<TOrder, 'CounterParty'> & { CounterParty: TCounterparty }
+export type TOrderFullInfo = Omit<TOrder, 'CounterParty'> & {
+	CounterParty: TCounterparty
+	acceptedOfCargoEmployeeId: TDBUserWithoutPas
+}
 
 export type TOrderDTO = Omit<TOrder, '_id'> & { _id: string }
-export type TOrderFullInfoDTO = Omit<TOrderFullInfo, 'CounterParty' | '_id'> & {
+export type TOrderFullInfoDTO = Omit<TOrderFullInfo, 'CounterParty' | '_id' | 'details' | 'acceptedOfCargoEmployeeId'> & {
 	CounterParty: TCounterpartyDTO
+	details: string[]
 	_id: string
+	acceptedOfCargoEmployeeId: TUserDTOWithoutPas
 }
 
 //#region service type Order
-
 export type TServiceOrder = {
-	acceptedOfCargoEmployeeId: string | Types.ObjectId
 	deadlines: {
 		startDate: Date
 		endDate?: Date

@@ -1,5 +1,5 @@
-import { TResponseUploadFiles } from '@/shared/model/types/Types'
-import { TEntities } from '@/shared/model/types/abstractsType'
+import { TResponseUploadFiles } from '@/shared/model/types/subtypes/Types'
+import { TEntities } from '@/shared/model/types/subtypes/abstractsType'
 
 export type TCounterparty = {
 	dateCreate: Date

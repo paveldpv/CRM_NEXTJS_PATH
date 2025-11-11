@@ -1,9 +1,9 @@
 import { TError } from '@/shared/model/types/subtypes/TError'
 
-import { TOptionQuery } from '@/shared/model/types/optionQuery'
 import { Service } from '../../classes/Service'
 import ControllerGeoLocationDB from './controller/GeoLocationDB.controller'
 import { TGeolLocationFullInfo, TGeoLocation } from './model/types/type'
+import { TOptionQuery } from '@/shared/model/types/subtypes/optionQuery'
 
 export class ServiceGeoLocation extends Service {
 	constructor(INN: string) {

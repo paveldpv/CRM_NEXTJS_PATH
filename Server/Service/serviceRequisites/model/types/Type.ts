@@ -1,6 +1,6 @@
-import { TEntities, TValueFiled } from '@/shared/model/types/abstractsType'
-import { NotData } from '@/shared/model/types/enums'
-import { TResponseUploadFiles } from '@/shared/model/types/Types'
+import { TEntities, TValueFiled } from '@/shared/model/types/subtypes/abstractsType'
+import { NotData } from '@/shared/model/types/subtypes/enums'
+import { TResponseUploadFiles } from '@/shared/model/types/subtypes/Types'
 
 export type TRequisitesBank = {
 	[key: string]: TValueFiled<string | number>

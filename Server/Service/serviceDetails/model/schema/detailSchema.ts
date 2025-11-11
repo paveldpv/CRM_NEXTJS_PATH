@@ -1,5 +1,39 @@
 import { Schema } from 'mongoose'
-import { TDetail } from '../types/Types'
+import { TDetail, TPropertyStep } from '../types/Types'
+
+const PropertyStepSchema = new Schema<TPropertyStep>(
+	{
+		name: {
+			type: String,
+			required: true,
+			trim: true,
+		},
+		completed: {
+			type: Boolean,
+			default: false,
+		},
+		employeeId: {
+			type: Schema.Types.ObjectId,
+			required: true,
+			ref: 'user',
+		},
+		createBy: { type: Schema.Types.ObjectId, required: true, ref: 'user' },
+		dateCompleted: {
+			type: Date,
+			default: null,
+			required: false,
+		},
+		dateCreateStep: {
+			type: Date,
+			default: new Date(),
+			required: false,
+		},
+	},
+	{
+		_id: false, // если не нужны отдельные id для каждого шага
+		timestamps: false,
+	}
+)
 
 export const detailSchema = new Schema<TDetail>({
 	order: {
@@ -40,9 +74,14 @@ export const detailSchema = new Schema<TDetail>({
 		type: Schema.Types.Mixed,
 		required: false,
 	},
-	amount: {
-		type: Number,
-		default: 1,
+	completed: {
+		type: Boolean,
+		required: false,
+		default: false,
+	},
+	step: {
+		type: [PropertyStepSchema],
+		default: [],
 	},
 })
 

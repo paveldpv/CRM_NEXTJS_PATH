@@ -7,8 +7,6 @@ import { ControllerGlobalListCompany } from './api/globalListCompany.api'
 
 export default class ServiceGlobalLIstCompany extends Service {
 
-
-
 	public async getListCompany(range?: number, searchParams?: string):Promise<TGlobalListCompany[]|TError> {
 		
 		try {

@@ -1,6 +1,6 @@
-import { idLink } from '@/shared/model/types/enums'
+import { idLink } from '@/shared/model/types/subtypes/enums'
 import { TError } from '@/shared/model/types/subtypes/TError'
-import { TLink } from '@/shared/model/types/Types'
+import { TLink } from '@/shared/model/types/subtypes/Types'
 import {
 	TDataNewTablePrice,
 	TDataTablePrice,

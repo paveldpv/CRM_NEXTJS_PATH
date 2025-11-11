@@ -151,4 +151,22 @@ export class ServiceOrder extends Service {
 			)
 		}
 	}
+
+	public async updateProcessOrder(idOrder:Types.ObjectId):Promise<void|TError>{
+		try {
+			const controllerOrder = new ControllerOrder(this.INN)
+			await controllerOrder.updateProcessOrder(idOrder)
+		} catch (error) {
+			return this.createError(`error update process order ,id order :${idOrder.toString()}, INN :${this.INN}`,error)
+		}
+	}
+
+	public async completedOrder(idOrder:Types.ObjectId){
+		try {
+			const controllerOrder = new ControllerOrder(this.INN)
+			await controllerOrder.completedOrder(idOrder)
+		} catch (error) {
+			return this.createError(`error update process order ,id order :${idOrder.toString()}, INN :${this.INN}`,error)
+		}
+	}
 }

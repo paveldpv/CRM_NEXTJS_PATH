@@ -1,4 +1,4 @@
-import { TFormLogin } from '@/shared/model/types/Types'
+import { TFormLogin } from '@/shared/model/types/subtypes/Types'
 import bcrypt from 'bcrypt'
 import { isError } from '../../../src/shared/lib/IsError'
 import { Service } from '../../classes/Service'
