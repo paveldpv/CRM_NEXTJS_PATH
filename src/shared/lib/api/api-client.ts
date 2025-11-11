@@ -1,13 +1,7 @@
-import {
-	getJWTToken,
-	getRefreshToken,
-	resetTokens,
-	setJWTToken,
-	setRefreshToken,
-} from '@/shared/lib/authToken'
+import { getJWTToken, getRefreshToken, resetTokens, setJWTToken, setRefreshToken } from '@/shared/lib/authToken'
 import { URL_REFRESH_TOKEN } from '../../../../config/urls'
 import { TTokens } from '../../../../Server/Service/serviceSession/model/types/Type'
-import { typicalError } from '../../model/types/enums'
+import { typicalError } from '../../model/types/subtypes/enums'
 
 let refreshPromise: Promise<void> | null = null
 
@@ -144,8 +138,7 @@ export class ApiClient {
 
 		const finalBody = isPlainObjectBody && !(typeof body === 'string') ? JSON.stringify(body) : body
 
-		const runFetch = () =>
-			this.doFetchWithTimeout(this.baseURL + url, { ...payload, headers, body: finalBody }, timeoutMs)
+		const runFetch = () => this.doFetchWithTimeout(this.baseURL + url, { ...payload, headers, body: finalBody }, timeoutMs)
 
 		let res = await runFetch()
 

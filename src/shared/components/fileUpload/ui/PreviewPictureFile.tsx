@@ -1,12 +1,10 @@
-
 import { cn } from '@/shared/lib/cn'
-import { TResponseUploadFiles } from '@/shared/model/types/Types'
+import { TResponseUploadFiles } from '@/shared/model/types/subtypes/Types'
 import Image from 'next/image'
 import { DetailedHTMLProps, HTMLAttributes } from 'react'
 import { MdDelete } from 'react-icons/md'
 import { SERVER_DOTNET } from '../../../../../config/config'
 import { NOT_FOUND_PICTURE } from '../../../../../config/urls'
-
 
 export type TPreviewUploadFile = {
 	preview: boolean

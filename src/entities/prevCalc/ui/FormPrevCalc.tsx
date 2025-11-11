@@ -1,6 +1,6 @@
 'use client'
 
-import { typeDialog } from '@/shared/model/types/enums'
+import { typeDialog } from '@/shared/model/types/subtypes/enums'
 
 import { motion } from 'framer-motion'
 import { styleTextFiled } from '../../../../config/muiCustomStyle/textField'
@@ -20,7 +20,7 @@ import {
 	TRequestPrevCalc,
 	TSketchDetail,
 } from '@/shared/model/types/subtypes/TRequestPrevCalc'
-import { TResponseUploadFiles } from '@/shared/model/types/Types'
+import { TResponseUploadFiles } from '@/shared/model/types/subtypes/Types'
 import { useProcessLoader } from '../../../shared/ui/ProgressLoader/model/storeProcessLoader'
 import SketchDetail from '../lib/konva/SketchDetail/SketchDetail'
 import validateSchemaPrevCalc from '../lib/validateSchemaPrevCalc'

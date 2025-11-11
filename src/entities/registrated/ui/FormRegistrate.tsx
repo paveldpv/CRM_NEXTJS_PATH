@@ -1,5 +1,5 @@
 'use client'
-import { typeDialog, typicalError } from '@/shared/model/types/enums'
+import { typeDialog, typicalError } from '@/shared/model/types/subtypes/enums'
 import { PURPOSE_USE, TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
 
 import { InputAdornment, TextField } from '@mui/material'
@@ -15,7 +15,7 @@ import SignupSchemaFormRegistrate from '../lib/validateFormRegistrate'
 import { styleTextFiled } from '../../../../config/muiCustomStyle/textField'
 import { fetchRegistrate } from '../api/fetchRegistrate'
 
-import { TFormRegistrate } from '@/shared/model/types/Types'
+import { TFormRegistrate } from '@/shared/model/types/subtypes/Types'
 import MiniLoader from '@/shared/ui/loaders/MiniLoader'
 import Link from 'next/link'
 import { useEffect, useReducer } from 'react'

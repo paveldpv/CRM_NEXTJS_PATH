@@ -6,7 +6,7 @@ import { useParams } from 'next/navigation'
 import { useMemo } from 'react'
 
 import { useInfoUser } from '@/shared/model/store/storeInfoUser'
-import { TWithoutPassUser } from '@/shared/model/types/Types'
+import { TWithoutPassUser } from '@/shared/model/types/subtypes/Types'
 import Link from 'next/link'
 import { employeeImage } from '../../../../config/urls'
 import PanelEditEmployee from './PanelEditEmployee'
@@ -46,15 +46,9 @@ export default function ItemsEmployee({
 			}  rounded-md m-1 grid grid-cols-4  align-middle p-1  `}
 		>
 			<section className=' col-span-2 grid grid-cols-8'>
-				<Link href={permissionRedact ? `employee/${dataProfile.idUser}/fullProfile`:""}>
+				<Link href={permissionRedact ? `employee/${dataProfile.idUser}/fullProfile` : ''}>
 					{dataProfile.srcPhoto === 'NOT_FOUND' ? (
-						<Image
-							src={employeeImage}
-							alt={'no found'}
-							height={50}
-							width={50}
-							className='rounded-xl col-span-1  '
-						/>
+						<Image src={employeeImage} alt={'no found'} height={50} width={50} className='rounded-xl col-span-1  ' />
 					) : (
 						<Image
 							src={dataProfile.srcPhoto.FullPath}

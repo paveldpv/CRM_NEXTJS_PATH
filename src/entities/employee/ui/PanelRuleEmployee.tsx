@@ -1,9 +1,8 @@
 'use client'
-import Fieldset from '@/shared/components/fieldSet/ui/Fieldset'
 import { isError } from '@/shared/lib/IsError'
 import { useConfigApp } from '@/shared/model/store/storeConfigApp'
 import { useInfoUser } from '@/shared/model/store/storeInfoUser'
-import { TWithoutPassUser } from '@/shared/model/types/Types'
+import { TWithoutPassUser } from '@/shared/model/types/subtypes/Types'
 import CusButton from '@/shared/ui/CusButton'
 import { TextField } from '@mui/material'
 import Checkbox from '@mui/material/Checkbox'
@@ -56,7 +55,6 @@ export default function PanelRuleEmployee({
 		const query = search ? `?${search}` : ''
 		router.push(`${pathname}${query}`)
 
-		
 		const updateListEmployee = await fetchGetEmployee(INN, value ? 1 : 0)
 		if (isError(updateListEmployee)) {
 			redirect(`/ERROR/${updateListEmployee.typeError}`)
@@ -81,26 +79,20 @@ export default function PanelRuleEmployee({
 	}
 
 	return (
-		<div className=' flex gap-4 border-b-2 pb-2 py-2  sticky top-0  overflow-hidden w-full  bg-white  z-50  ' >
+		<div className=' flex gap-4 border-b-2 pb-2 py-2  sticky top-0  overflow-hidden w-full  bg-white  z-50  '>
 			<CusButton className=' text-2xl  ' disabled={!permissionRedact} onClick={addNewEmployee}>
-					<IoPersonAdd />
-				</CusButton>
-			<section style={{ borderColor: configMain?.color.borderColor }} className=' flex gap-5  items-baseline' >
-			
-				<div
-					style={{ borderColor: configMain?.color.borderColor }}
-					className=' border-2 border-solid pr-2 pl-2 rounded-md '
-				>
+				<IoPersonAdd />
+			</CusButton>
+			<section style={{ borderColor: configMain?.color.borderColor }} className=' flex gap-5  items-baseline'>
+				<div style={{ borderColor: configMain?.color.borderColor }} className=' border-2 border-solid pr-2 pl-2 rounded-md '>
 					<label htmlFor='' className=' text-xs'>
 						показать всех
 					</label>
 					<Checkbox {...styleTextFiled} onChange={changeVisibleAllEmployee} />
 				</div>
 
-				<TextField {...styleTextFiled} onChange={searchEmployee} label='поиск'  placeholder='тел|имя|фамилия' />
-					
+				<TextField {...styleTextFiled} onChange={searchEmployee} label='поиск' placeholder='тел|имя|фамилия' />
 			</section>
-		
 		</div>
 	)
 }

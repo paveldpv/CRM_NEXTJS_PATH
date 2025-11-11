@@ -6,11 +6,10 @@ import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import { FaWindowClose } from 'react-icons/fa'
 
-import { typeDialog } from '@/shared/model/types/enums'
+import { typeDialog } from '@/shared/model/types/subtypes/enums'
 
 import CusButton from '../../CusButton'
 import { TBodyDialogMessage, useDialogWindow } from '../model/storeDialogWindow'
-
 
 const style: React.CSSProperties = {
 	border: 2,

@@ -1,19 +1,10 @@
 import { serverClient } from '@/shared/lib/api/serverClient'
-import { TOptionQuery } from '@/shared/model/types/optionQuery'
-import { TGeolLocationDTO } from '../../../../Server/Service/serviceGeoLocation/model/types/type'
-import {
-	TNewUser,
-	TUserDTOByBirthday,
-	TUserDTOWithoutPas,
-} from '../../../../Server/Service/serviceUser/model/types/Types'
+import { TUserDTOWithoutPas, TNewUser, TGeolLocationDTO, TUserDTOByBirthday } from '@/shared/model/types'
 
-
+import { TOptionQuery } from '@/shared/model/types/subtypes/optionQuery'
 
 export class FetchUser {
-	static async getAllUsers(
-		INN: string,
-		optionQuery: TOptionQuery<TUserDTOWithoutPas>
-	): Promise<TUserDTOWithoutPas[] | []> {
+	static async getAllUsers(INN: string, optionQuery: TOptionQuery<TUserDTOWithoutPas>): Promise<TUserDTOWithoutPas[] | []> {
 		const fetch = await serverClient.api<TUserDTOWithoutPas[] | []>(`${INN}/users/all`, {
 			method: 'POST',
 			body: JSON.stringify(optionQuery),
@@ -25,7 +16,7 @@ export class FetchUser {
 		INN: string,
 		optionQuery: TOptionQuery<TUserDTOWithoutPas>
 	): Promise<TUserDTOWithoutPas[]> {
-		const fetch = await serverClient.api<TUserDTOWithoutPas[] >(`${INN}/users/withoutDeleted`, {
+		const fetch = await serverClient.api<TUserDTOWithoutPas[]>(`${INN}/users/withoutDeleted`, {
 			method: 'POST',
 			body: JSON.stringify(optionQuery),
 		})
@@ -38,7 +29,7 @@ export class FetchUser {
 	}
 
 	static async getUserById(INN: string, _id: string): Promise<TUserDTOWithoutPas> {
-		const fetch = await serverClient.api<TUserDTOWithoutPas>(`${INN}/user/id?id=${_id}`,{method:"GET"})
+		const fetch = await serverClient.api<TUserDTOWithoutPas>(`${INN}/user/id?id=${_id}`, { method: 'GET' })
 		return fetch
 	}
 
@@ -47,6 +38,7 @@ export class FetchUser {
 			newUser,
 			dataGeo,
 		}
+
 		const fetch = await serverClient.api<TUserDTOWithoutPas>(`${INN}/user/newUser`, {
 			method: 'POST',
 			body: JSON.stringify(dataBody),
@@ -63,12 +55,7 @@ export class FetchUser {
 		return fetch
 	}
 
-	public async updateDataUser(
-		INN: string,
-		newDataUser: TUserDTOWithoutPas,
-		dataGeo: TGeolLocationDTO
-	): Promise<void> {
-		
+	public async updateDataUser(INN: string, newDataUser: TUserDTOWithoutPas, dataGeo: TGeolLocationDTO): Promise<void> {
 		const dataBody = { newDataUser, dataGeo }
 
 		const fetch = await serverClient.api<void>(`${INN}/user/update/data`, {
@@ -119,7 +106,7 @@ export class FetchUser {
 	}
 
 	public async getUsersWithBirthdayToday(INN: string): Promise<TUserDTOByBirthday[]> {
-		const fetch = await serverClient.api<TUserDTOByBirthday[]>(`${INN}/users/batch/birthday`,{method:"GET"})
+		const fetch = await serverClient.api<TUserDTOByBirthday[]>(`${INN}/users/batch/birthday`, { method: 'GET' })
 		return fetch
 	}
 }

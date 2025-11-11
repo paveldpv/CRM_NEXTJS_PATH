@@ -1,13 +1,10 @@
-
-
 import { FormikErrors } from 'formik'
 
 import InputDate from '@/shared/components/InputDate/ui/InputDate'
 
-
-import TextField from '@mui/material/TextField'
+import { TDBUser, TWithoutPassUser } from '@/shared/model/types/subtypes/Types'
 import MiniLoader from '@/shared/ui/loaders/MiniLoader'
-import { TDBUser, TWithoutPassUser } from '@/shared/model/types/Types'
+import TextField from '@mui/material/TextField'
 
 type TChangeDataProfile = {
 	visible: boolean

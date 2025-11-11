@@ -1,4 +1,4 @@
-import { typeDialog } from '@/shared/model/types/enums'
+import { typeDialog } from '@/shared/model/types/subtypes/enums'
 import { create } from 'zustand'
 
 export type TBodyDialogMessage = {
@@ -8,7 +8,7 @@ export type TBodyDialogMessage = {
 
 type TDialogWindow = {
 	open: boolean
-	type: typeDialog	
+	type: typeDialog
 	setOpen: (state: boolean, dataDialog?: TBodyDialogMessage, type?: typeDialog) => void
 	// setResponse: (state: boolean) => void;
 	dataDialog?: TBodyDialogMessage

@@ -1,7 +1,7 @@
 import { changeResponseStatus } from '@/shared/lib/changeResponseStatus'
 import { goToPageError } from '@/shared/lib/goToPageError'
-import { typicalError } from '@/shared/model/types/enums'
-import { TResponse } from '@/shared/model/types/Types'
+import { typicalError } from '@/shared/model/types/subtypes/enums'
+import { TResponse } from '@/shared/model/types/subtypes/Types'
 import { TPrice } from '../model/Types'
 
 export const fetchGetDataPrice = async (

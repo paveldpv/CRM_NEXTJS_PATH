@@ -1,4 +1,4 @@
-import { TWithoutPassUser } from '@/shared/model/types/Types'
+import { TWithoutPassUser } from '@/shared/model/types/subtypes/Types'
 import { Dispatch, SetStateAction } from 'react'
 import { TCounterparty } from '../../../../Server/Service/serviceCounterparty/models/types/Types'
 import { TDetail } from '../../../../Server/Service/serviceDetails/model/types/Types'

@@ -1,4 +1,4 @@
-import { TLink } from '@/shared/model/types/Types'
+import { TLink } from '@/shared/model/types/subtypes/Types'
 
 import { type LinkProps } from 'next/link'
 import { CSSProperties } from 'react'

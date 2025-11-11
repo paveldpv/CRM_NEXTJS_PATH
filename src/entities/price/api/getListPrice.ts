@@ -1,9 +1,8 @@
 import { changeResponseStatus } from '@/shared/lib/changeResponseStatus'
 import { goToPageError } from '@/shared/lib/goToPageError'
-import { typicalError } from '@/shared/model/types/enums'
-import { TError } from '@/shared/model/types/subtypes/TError'
+import { typicalError } from '@/shared/model/types/subtypes/enums'
 import { TLink, TResponse } from '@/shared/model/types/Types'
-
+@/shared/model/types/subtypes/Types
 export const fetchGetListPrice = async(INN:string):Promise<TLink[]|undefined> =>{
 	try {
 		const _response  = await fetch(`/api/price/${INN}/getlistprice`,{

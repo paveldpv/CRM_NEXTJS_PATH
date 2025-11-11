@@ -1,6 +1,6 @@
 'use client'
 
-import { typicalError } from '@/shared/model/types/enums'
+import { typicalError } from '@/shared/model/types/subtypes/enums'
 import { redirect } from 'next/navigation'
 
 import { fetchSaveConfigApp } from '@/entities/configApp/api/serviceFetchConfigApp'

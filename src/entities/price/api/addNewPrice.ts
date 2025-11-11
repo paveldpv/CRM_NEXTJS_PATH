@@ -1,8 +1,8 @@
 import { changeResponseStatus } from '@/shared/lib/changeResponseStatus'
 import { goToPageError } from '@/shared/lib/goToPageError'
-import { typicalError } from '@/shared/model/types/enums'
+import { typicalError } from '@/shared/model/types/subtypes/enums'
 
-import { TResponse } from '@/shared/model/types/Types'
+import { TResponse } from '@/shared/model/types/subtypes/Types'
 import { TGeoLocation } from '../../../../Server/Service/serviceGeoLocation/model/types/type'
 
 export const fetchAddNewPrice = async (

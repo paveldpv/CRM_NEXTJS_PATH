@@ -1,4 +1,4 @@
-import { keyConfigLayout, nameSettingLayout } from '@/shared/model/types/enums'
+import { keyConfigLayout, nameSettingLayout } from '@/shared/model/types/subtypes/enums'
 import { TConfigAPP } from '@/shared/model/types/subtypes/TAppearanceConfigApp'
 type TTypicalSchema = Omit<TConfigAPP, 'idUser'> & { index: number }
 

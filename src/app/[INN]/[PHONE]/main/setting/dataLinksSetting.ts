@@ -1,4 +1,4 @@
-import { idLink } from '@/shared/model/types/enums'
+import { idLink } from '@/shared/model/types/subtypes/enums'
 import { TPropsNavLink } from '@/shared/ui/navLink/ui/NavLink'
 export const dataLinkSetting: TPropsNavLink[] = [
 	{

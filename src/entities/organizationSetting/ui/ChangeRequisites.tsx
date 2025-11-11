@@ -5,15 +5,15 @@ import { memo, useMemo } from 'react'
 
 import { TFullDataSettingOrganization } from '@/app/[INN]/[PHONE]/main/setting/settingorganization/page'
 
+import Fieldset from '@/shared/components/fieldSet/ui/Fieldset'
 import FileUpload from '@/shared/components/fileUpload/ui/FileUpload'
-import { NotData } from '@/shared/model/types/enums'
+import { NotData } from '@/shared/model/types/subtypes/enums'
 import { TRequisites } from '@/shared/model/types/subtypes/TRequisites'
 import { Accordion, AccordionDetails, AccordionSummary, TextField } from '@mui/material'
 import { FormikErrors } from 'formik'
 import { FaArrowCircleDown } from 'react-icons/fa'
 import { styleTextFiled } from '../../../../config/muiCustomStyle/textField'
 import LabelRequisites from './LabelRequisites'
-import Fieldset from '@/shared/components/fieldSet/ui/Fieldset'
 
 export type TChangeRequisites = {
 	values: Omit<TFullDataSettingOrganization, 'admins'>
@@ -74,12 +74,7 @@ function ChangeRequisites({ activeField, defaultData, handlerChange, setFieldVal
 
 	return (
 		<Fieldset
-			legend={
-				<LabelRequisites
-					missingDataRequisites={missingDataRequisites}
-					missingSrcRequisites={missingSrcRequisites}
-				/>
-			}
+			legend={<LabelRequisites missingDataRequisites={missingDataRequisites} missingSrcRequisites={missingSrcRequisites} />}
 			className=' col-span-2'
 		>
 			<ul className=' flex flex-col gap-2'>

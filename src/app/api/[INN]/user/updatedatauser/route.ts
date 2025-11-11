@@ -2,10 +2,10 @@ import { TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
 
 import { NextRequest, NextResponse } from 'next/server'
 
-import { isError } from '../../../../../shared/lib/IsError'
-import { TWithoutPassUser } from '@/shared/model/types/Types'
-import { ServiceUsers } from '../../../../../../Server/Service/serviceUser/serviceUser'
+import { TWithoutPassUser } from '@/shared/model/types/subtypes/Types'
 import { ServiceGeoLocation } from '../../../../../../Server/Service/serviceGeoLocation/serviceGeoLocation'
+import { ServiceUsers } from '../../../../../../Server/Service/serviceUser/serviceUser'
+import { isError } from '../../../../../shared/lib/IsError'
 
 export async function POST(req: NextRequest, { params }: { params: { INN: string } }, res: NextResponse) {
 	const INN = params.INN

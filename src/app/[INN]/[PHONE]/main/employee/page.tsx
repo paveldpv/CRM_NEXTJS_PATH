@@ -1,8 +1,8 @@
-import { typicalError } from '@/shared/model/types/enums'
+import { typicalError } from '@/shared/model/types/subtypes/enums'
 import { TError } from '@/shared/model/types/subtypes/TError'
 
 import Employees from '@/entities/employee/ui/Employees'
-import { TWithoutPassUser } from '@/shared/model/types/Types'
+import { TWithoutPassUser } from '@/shared/model/types/subtypes/Types'
 import DialogWindow from '@/shared/ui/DialogWindow'
 import HelpInformerModalWindow from '@/shared/ui/HelpInformerModalWindow/ui/HelpInformerModalWindow'
 import { redirect } from 'next/navigation'

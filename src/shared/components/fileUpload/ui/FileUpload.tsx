@@ -1,4 +1,4 @@
-import { typeDialog } from '@/shared/model/types/enums'
+import { typeDialog } from '@/shared/model/types/subtypes/enums'
 
 import { redirect, useParams } from 'next/navigation'
 import { ChangeEvent, DetailedHTMLProps, HTMLAttributes, useState } from 'react'
@@ -8,7 +8,7 @@ import { combineFilesToFormData } from '../../../lib/combineFilesToFormData'
 import { isError } from '../../../lib/IsError'
 import { useDialogWindow } from '../../../ui/dialogWindow/model/storeDialogWindow'
 
-import { TResponseUploadFiles } from '@/shared/model/types/Types'
+import { TResponseUploadFiles } from '@/shared/model/types/subtypes/Types'
 import DownloadFile from './DownloadFile'
 import InputFile from './InputFile'
 import PreviewPictureFile, { TPreviewUploadFile } from './PreviewPictureFile'

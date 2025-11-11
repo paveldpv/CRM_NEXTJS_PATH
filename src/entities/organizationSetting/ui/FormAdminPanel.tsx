@@ -4,10 +4,7 @@ import { useFormik } from 'formik'
 import { memo, useCallback, useMemo } from 'react'
 
 import { FaQuestion } from 'react-icons/fa6'
-import {
-	TDataHelpInformer,
-	useHelInformer,
-} from '../../../shared/ui/HelpInformerModalWindow/model/storeHelpInformer'
+import { TDataHelpInformer, useHelInformer } from '../../../shared/ui/HelpInformerModalWindow/model/storeHelpInformer'
 import ChangeBaseDataOrganization from './ChangeBaseDataOrganization'
 import ChangeOptionData from './ChangeOptionData'
 import ChangeRequisites from './ChangeRequisites'
@@ -16,8 +13,8 @@ import ListAdmins from './ListAdmins'
 import { TFullDataSettingOrganization } from '@/app/[INN]/[PHONE]/main/setting/settingorganization/page'
 
 import FileUpload from '@/shared/components/fileUpload/ui/FileUpload'
-import { TApprover } from '@/shared/model/types/customType'
-import { typicalError } from '@/shared/model/types/enums'
+import { TApprover } from '@/shared/model/types/subtypes/customType'
+import { typicalError } from '@/shared/model/types/subtypes/enums'
 import { PURPOSE_USE, TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
 import { TDataOrganization } from '@/shared/model/types/subtypes/TOrganization'
 import { redirect } from 'next/navigation'
@@ -43,10 +40,7 @@ function FormAdminPanel({ data, INN }: TFormAdminPanel) {
 	const { daDataOrganization, admins, dataOrganization, dataRequisites } = data
 	const dataUser = useInfoUser((state) => state.dataUser)
 
-	const [setVisibleProgress, setStatusProgress] = useProcessLoader((state) => [
-		state.setVisible,
-		state.setStatus,
-	])
+	const [setVisibleProgress, setStatusProgress] = useProcessLoader((state) => [state.setVisible, state.setStatus])
 	const setOpenHelpInformer = useHelInformer((state) => state.setOpen)
 
 	const messageInformer: TDataHelpInformer = useMemo(() => {

@@ -1,4 +1,4 @@
-import { typicalError } from '../enums'
+import { typicalError } from './enums'
 
 export type TError = {
 	message: string

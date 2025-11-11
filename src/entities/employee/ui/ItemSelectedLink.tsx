@@ -1,11 +1,10 @@
-
+import { TLink } from '@/shared/model/types/subtypes/Types'
 import { Tooltip } from '@mui/material'
 import { motion } from 'framer-motion'
 import { ChangeEvent, Dispatch, SetStateAction } from 'react'
 import { FaMinus, FaPlus } from 'react-icons/fa6'
 import { useConfigApp } from '../../../shared/model/store/storeConfigApp'
 import { TListLinkedAllowed } from './SelectedLinkedAllowed'
-import { TLink } from '@/shared/model/types/Types'
 
 export type TItemSelectedLink = {
 	initialList?: true
@@ -65,12 +64,7 @@ export default function ItemSelectedLink({
 		>
 			{!initialList && (
 				<Tooltip title='разрешить редактирование'>
-					<input
-						onChange={changePermission}
-						type='checkbox'
-						className=' ml-1 mr-1 cursor-pointer '
-						defaultChecked
-					/>
+					<input onChange={changePermission} type='checkbox' className=' ml-1 mr-1 cursor-pointer ' defaultChecked />
 				</Tooltip>
 			)}
 			<Tooltip title={link.description} className=' cursor-help'>

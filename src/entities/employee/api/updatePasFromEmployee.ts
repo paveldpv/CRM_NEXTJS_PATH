@@ -1,6 +1,5 @@
 import { TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
-import { TResponse } from '@/shared/model/types/Types'
-
+import { TResponse } from '@/shared/model/types/subtypes/Types'
 
 export const fetchUpdatePasEmployee = async (
 	INN: string,

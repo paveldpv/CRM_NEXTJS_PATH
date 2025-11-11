@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 
-import { TWithoutPassUser } from '@/shared/model/types/Types'
+import { TWithoutPassUser } from '@/shared/model/types/subtypes/Types'
 import LeftSlider from '../../../shared/components/leftSlider/ui/LeftSlider'
 import FormCardEmployee from './FormCardEmployee'
 import ListEmployee from './ListEmployee'

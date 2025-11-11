@@ -1,6 +1,6 @@
-import { typicalError } from '@/shared/model/types/enums'
+import { typicalError } from '@/shared/model/types/subtypes/enums'
 import { TError } from '@/shared/model/types/subtypes/TError'
-import { TWithoutPassUser } from '@/shared/model/types/Types'
+import { TWithoutPassUser } from '@/shared/model/types/subtypes/Types'
 
 
 export type TParamsAllEmployee = 1 | 0

@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { idLink } from './enums'
-import { TError } from './subtypes/TError'
+import { TError } from './TError'
 
 export type TLink = {
 	id: idLink
@@ -33,8 +33,6 @@ export type TFormRegistrate = {
 	// idUser: string
 	email: string
 } & TFormLogin
-
-
 
 export type TResponse<T = undefined> = {
 	status: number

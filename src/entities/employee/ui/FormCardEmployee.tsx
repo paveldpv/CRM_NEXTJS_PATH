@@ -1,6 +1,6 @@
 'use client'
 
-import { typeDialog, typicalError } from '@/shared/model/types/enums'
+import { typeDialog, typicalError } from '@/shared/model/types/subtypes/enums'
 import { PURPOSE_USE, TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
 
 import { TextField, Tooltip } from '@mui/material'
@@ -14,7 +14,7 @@ import { styleTextFiled } from '../../../../config/muiCustomStyle/textField'
 
 import Fieldset from '@/shared/components/fieldSet/ui/Fieldset'
 import { useInfoUser } from '@/shared/model/store/storeInfoUser'
-import { TNewEmployee, TWithoutPassUser } from '@/shared/model/types/Types'
+import { TNewEmployee, TWithoutPassUser } from '@/shared/model/types/subtypes/Types'
 import CusButton from '@/shared/ui/CusButton'
 import { isError } from '../../../shared/lib/IsError'
 import { useDialogWindow } from '../../../shared/ui/dialogWindow/model/storeDialogWindow'

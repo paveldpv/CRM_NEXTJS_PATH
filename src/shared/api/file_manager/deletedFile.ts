@@ -1,8 +1,8 @@
-import { typicalError } from '@/shared/model/types/enums'
+import { typicalError } from '@/shared/model/types/subtypes/enums'
 import { TError } from '@/shared/model/types/subtypes/TError'
 
+import { TResponseDeletedFile } from '@/shared/model/types/subtypes/Types'
 import { SERVER_DOTNET } from '../../../../config/config'
-import { TResponseDeletedFile } from '@/shared/model/types/Types'
 
 export const fetchDeletedFile = async (path: string): Promise<TResponseDeletedFile | TError> => {
 	try {

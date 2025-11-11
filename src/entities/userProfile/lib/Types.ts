@@ -1,7 +1,6 @@
-import { TWithoutPassUser } from '@/shared/model/types/Types'
+import { TWithoutPassUser } from '@/shared/model/types/subtypes/Types'
 
 export type TFormProfile = {
-	initialValues:TWithoutPassUser,
-	setInfoUser?:(state:TWithoutPassUser)=>void,
-	
+	initialValues: TWithoutPassUser
+	setInfoUser?: (state: TWithoutPassUser) => void
 }

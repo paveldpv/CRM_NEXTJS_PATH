@@ -1,7 +1,7 @@
 import CusAccordion from '@/shared/components/CusAccordion/CusAccordion'
 import CustomTabPanel from '@/shared/components/CustomTabPanel/CustomTabPanel'
 import { useMiniLoader } from '@/shared/model/store/storeMiniLoader'
-import { TWithoutPassUser } from '@/shared/model/types/Types'
+import { TWithoutPassUser } from '@/shared/model/types/subtypes/Types'
 import CusButton from '@/shared/ui/CusButton'
 import MiniLoader from '@/shared/ui/loaders/MiniLoader'
 import { Tab, Tabs } from '@mui/material'
@@ -22,10 +22,7 @@ export default function CardOrder({ data, counterParty }: TOrders) {
 	const [valueTab, setValueTab] = useState(0)
 	const [details, setDetails] = useState<TDetail[]>([])
 	const [employees, setEmployees] = useState<TWithoutPassUser[]>([])
-	const [visibleLoader, setVisibleLoader] = useMiniLoader((state) => [
-		state.visible,
-		state.setVisibleLoader,
-	])
+	const [visibleLoader, setVisibleLoader] = useMiniLoader((state) => [state.visible, state.setVisibleLoader])
 
 	const handlerChangeTabs = useCallback((event: React.SyntheticEvent, newValue: number) => {
 		setValueTab(newValue)

@@ -2,7 +2,7 @@
 import { addPercent } from '@/shared/lib/utils/addPercent'
 import useGeo from '@/shared/model/hooks/useGeo'
 import { useInfoUser } from '@/shared/model/store/storeInfoUser'
-import { typeDialog } from '@/shared/model/types/enums'
+import { typeDialog } from '@/shared/model/types/subtypes/enums'
 import { PURPOSE_USE } from '@/shared/model/types/subtypes/TGeoLocation'
 import CusButton from '@/shared/ui/CusButton'
 import { useDialogWindow } from '@/shared/ui/dialogWindow/model/storeDialogWindow'
@@ -27,10 +27,7 @@ export default function PanelRuleOptionsTable({
 	const { INN, idTable } = params
 	const setVisibleLoader = useLoader((state) => state.setVisibleLoader)
 	const setOpenFieldDialog = useFieldDialog((state) => state.setOpen)
-	const [setOpenDialogWindow, dispatchFn] = useDialogWindow((state) => [
-		state.setOpen,
-		state.setDispatchFn,
-	])
+	const [setOpenDialogWindow, dispatchFn] = useDialogWindow((state) => [state.setOpen, state.setDispatchFn])
 
 	const { idUser } = useInfoUser((state) => state.dataUser)
 	const { dataGeo } = useGeo(idUser, PURPOSE_USE.redact)
@@ -53,9 +50,7 @@ export default function PanelRuleOptionsTable({
 		const _percent = Number.parseInt(`${percent}`)
 		setDataTable &&
 			setDataTable((state) =>
-				state.map((elTable) =>
-					elTable.map((elCell) => ({ ...elCell, value: addPercent(elCell.value, _percent) }))
-				)
+				state.map((elTable) => elTable.map((elCell) => ({ ...elCell, value: addPercent(elCell.value, _percent) })))
 			)
 
 		setOpenFieldDialog(false)

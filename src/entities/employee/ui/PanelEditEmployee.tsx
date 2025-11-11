@@ -1,4 +1,4 @@
-import { typeDialog, typicalError } from '@/shared/model/types/enums'
+import { typeDialog, typicalError } from '@/shared/model/types/subtypes/enums'
 import { PURPOSE_USE } from '@/shared/model/types/subtypes/TGeoLocation'
 
 import Link from 'next/link'
@@ -11,7 +11,7 @@ import { useInfoUser } from '@/shared/model/store/storeInfoUser'
 
 import { isError } from '@/shared/lib/IsError'
 import useGeo from '@/shared/model/hooks/useGeo'
-import { TWithoutPassUser } from '@/shared/model/types/Types'
+import { TWithoutPassUser } from '@/shared/model/types/subtypes/Types'
 import CusButton from '@/shared/ui/CusButton'
 import { useDialogWindow } from '@/shared/ui/dialogWindow/model/storeDialogWindow'
 import { fetchGetEmployee, TParamsAllEmployee } from '../api/getEmployee'

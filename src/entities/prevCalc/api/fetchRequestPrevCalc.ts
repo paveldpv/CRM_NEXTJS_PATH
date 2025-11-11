@@ -1,6 +1,5 @@
 import { TRequestPrevCalc } from '@/shared/model/types/subtypes/TRequestPrevCalc'
-import { TAnswerUpdateDB, TResponseService } from '@/shared/model/types/Types'
-
+import { TAnswerUpdateDB, TResponseService } from '@/shared/model/types/subtypes/Types'
 
 export const fetchRequestPrevCalc = async (
 	INN: number,
@@ -20,7 +19,6 @@ export const fetchRequestPrevCalc = async (
 	} else {
 		return {
 			success: false,
-			
 		}
 	}
 }
@@ -58,11 +56,7 @@ export const fetchGetFavoriteRequest = async (INN: number): Promise<TRequestPrev
 	}
 }
 
-export const setFavoriteRequest = async (
-	INN: number,
-	idRequest: string,
-	isFavorite: boolean
-): Promise<TAnswerUpdateDB> => {
+export const setFavoriteRequest = async (INN: number, idRequest: string, isFavorite: boolean): Promise<TAnswerUpdateDB> => {
 	try {
 		const response = await fetch(`/api/prevcalc/${INN}/setFavoriteRequest`, {
 			method: 'POST',

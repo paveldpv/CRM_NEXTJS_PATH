@@ -1,9 +1,9 @@
-import { goToPageError } from '@/shared/lib/goToPageError'
-import { typicalError } from '@/shared/model/types/enums'
-import { ObjectId } from 'mongoose'
-import { TInitialValuesFormPrevCalc } from '../../../../Server/Service/servicePrevCacl/model/types/Types'
-import { TResponse } from '@/shared/model/types/Types'
 import { changeResponseStatus } from '@/shared/lib/changeResponseStatus'
+import { goToPageError } from '@/shared/lib/goToPageError'
+import { typicalError } from '@/shared/model/types/subtypes/enums'
+import { TResponse } from '@/shared/model/types/Types'
+import { ObjectId } from 'm@/shared/model/types/subtypes/Types
+import { TInitialValuesFormPrevCalc } from '../../../../Server/Service/servicePrevCacl/model/types/Types'
 
 export const fetchGetDataNewPrevCalc= async(INN:string,idUser:ObjectId,phone:string):Promise<TInitialValuesFormPrevCalc[]| null>=>{
 	const jwt = localStorage.getItem(`${phone}-jwt`)

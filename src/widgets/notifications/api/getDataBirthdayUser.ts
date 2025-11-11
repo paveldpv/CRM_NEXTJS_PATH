@@ -1,9 +1,9 @@
-import { goToPageError } from '@/shared/lib/goToPageError'
-import { typicalError } from '@/shared/model/types/enums'
-import { ObjectId } from 'mongoose'
-import { TDBUser } from '../../../../Server/Service/serviceUser/model/types/Types'
-import { TResponse } from '@/shared/model/types/Types'
 import { changeResponseStatus } from '@/shared/lib/changeResponseStatus'
+import { goToPageError } from '@/shared/lib/goToPageError'
+import { typicalError } from '@/shared/model/types/subtypes/enums'
+import { TResponse } from '@/shared/model/types/Types'
+import { ObjectId } from 'm@/shared/model/types/subtypes/Types
+import { TDBUser } from '../../../../Server/Service/serviceUser/model/types/Types'
 
 export const fetchGetBirthdayUser = async (INN: string, idUser: ObjectId, phone: string):Promise<Pick<TDBUser,'name'|'surname'|'lastName'>[]|null> => {
 	const jwt = localStorage.getItem(`${phone}-jwt`)

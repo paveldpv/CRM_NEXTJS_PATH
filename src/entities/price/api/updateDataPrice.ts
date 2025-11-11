@@ -1,9 +1,8 @@
-import { typicalError } from '@/shared/model/types/enums'
-import { TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
-import { TResponse } from '@/shared/model/types/Types'
-import { TDataTablePrice } from '../model/Types'
 import { changeResponseStatus } from '@/shared/lib/changeResponseStatus'
 import { goToPageError } from '@/shared/lib/goToPageError'
+import { typicalError } fro@/shared/model/types/subtypes/Typesbtypes/enums'
+import { TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
+import { TDataTablePrice } from '../model/Types'
 
 
 

@@ -10,8 +10,8 @@ import { useDialogWindow } from '../../../shared/ui/dialogWindow/model/storeDial
 
 import LoginSchemaForm from '../lib/validateFormAuth'
 
-import { typeDialog, typicalError } from '@/shared/model/types/enums'
-import { TFormLogin } from '@/shared/model/types/Types'
+import { typeDialog, typicalError } from '@/shared/model/types/subtypes/enums'
+import { TFormLogin } from '@/shared/model/types/subtypes/Types'
 import MiniLoader from '@/shared/ui/loaders/MiniLoader'
 import Link from 'next/link'
 

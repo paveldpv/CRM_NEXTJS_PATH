@@ -1,8 +1,8 @@
 import { changeResponseStatus } from '@/shared/lib/changeResponseStatus'
 import { goToPageError } from '@/shared/lib/goToPageError'
-import { typicalError } from '@/shared/model/types/enums'
+import { typicalError } from '@/shared/model/types/subtypes/enums'
 import { TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
-import { TResponse } from '@/shared/model/types/Types'
+import { TResponse } from '@/shared/model/types/subtypes/Types'
 
 export const fetchRemovePrice = async (
 	INN: string,

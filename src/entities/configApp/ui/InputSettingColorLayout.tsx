@@ -1,5 +1,5 @@
 'use client'
-import { keyColorOption } from '@/shared/model/types/enums'
+import { keyColorOption } from '@/shared/model/types/subtypes/enums'
 import { TConfigLayout, TUpdateStateConfigApp } from '@/shared/model/types/subtypes/TAppearanceConfigApp'
 import { Accordion, Tooltip } from '@mui/material'
 import AccordionSummary from '@mui/material/AccordionSummary'
@@ -16,16 +16,7 @@ type TInputSettingLayout = {
 	indexPanel: number
 } & TConfigLayout
 
-function InputSettingLayout({
-	color,
-	textSize,
-	font,
-	name,
-	keyConfig,
-	expand,
-	setExpand,
-	indexPanel,
-}: TInputSettingLayout) {
+function InputSettingLayout({ color, textSize, font, name, keyConfig, expand, setExpand, indexPanel }: TInputSettingLayout) {
 	const [updateColor, updateTextSize] = useConfigApp((state) => [state.updateColor, state.updateTextSize])
 
 	const handlerChangeColor = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -37,8 +28,7 @@ function InputSettingLayout({
 		}
 		updateColor(newColor)
 	}, [])
-	const handlerChangeTextSize = useCallback((event: Event, value: number | number[], activeThumb: number) => {},
-	[])
+	const handlerChangeTextSize = useCallback((event: Event, value: number | number[], activeThumb: number) => {}, [])
 
 	const onChangeAccordion = useCallback(() => {
 		if (expand === `panel${indexPanel}`) {

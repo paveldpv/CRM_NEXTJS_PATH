@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import { useMiniLoader } from '../../../shared/model/store/storeMiniLoader'
 import { useProcessLoader } from '../../../shared/ui/ProgressLoader/model/storeProcessLoader'
 
-import { typicalError } from '@/shared/model/types/enums'
+import { typicalError } from '@/shared/model/types/subtypes/enums'
 import { fetchUpdateDataUser } from '../api/updateDataUser'
 
 import Fieldset from '@/shared/components/fieldSet/ui/Fieldset'
@@ -24,10 +24,7 @@ export default function FormProfile({ initialValues, setInfoUser }: TFormProfile
 	const { idUser } = useInfoUser((state) => state.dataUser)
 	const [setVisibleLoader, visible] = useMiniLoader((state) => [state.setVisibleLoader, state.visible])
 
-	const [setVisibleProgress, setStatusProgress] = useProcessLoader((state) => [
-		state.setVisible,
-		state.setStatus,
-	])
+	const [setVisibleProgress, setStatusProgress] = useProcessLoader((state) => [state.setVisible, state.setStatus])
 
 	useEffect(() => {
 		setVisibleLoader(false)
@@ -68,12 +65,7 @@ export default function FormProfile({ initialValues, setInfoUser }: TFormProfile
 		<Fieldset legend='Профиль'>
 			<form className='w-full p-4'>
 				<div className=' grid grid-cols-3 mt-2 mb-2'>
-					<ChangeDataProfile
-						values={values}
-						handlerChange={handleChange}
-						visible={visible}
-						setFieldValue={setFieldValue}
-					/>
+					<ChangeDataProfile values={values} handlerChange={handleChange} visible={visible} setFieldValue={setFieldValue} />
 					<FileUpload
 						src={values.srcPhoto}
 						set={setFieldValue}

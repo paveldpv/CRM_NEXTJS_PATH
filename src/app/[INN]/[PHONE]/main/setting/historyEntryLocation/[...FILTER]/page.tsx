@@ -3,7 +3,7 @@ import { PURPOSE_USE } from '@/shared/model/types/subtypes/TGeoLocation'
 
 
 
-import { typicalError } from '@/shared/model/types/enums'
+import { typicalError } from '@/shared/model/types/subtypes/enums'
 import { redirect } from 'next/navigation'
 
 import { TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
@@ -11,14 +11,14 @@ import { TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
 
 
 
-import NextAndPrevPageNavigator from '@/shared/ui/NextAndPrevPageNavigator'
-import { ServiceGeoLocation } from '../../../../../../../../Server/Service/serviceGeoLocation'
-import { ServiceUsers } from '../../../../../../../../Server/Service/serviceUser'
-import { isError } from '../../../../../../../shared/lib/IsError'
-import { unionArrObjViaKey } from '../../../../../../../shared/lib/unionArrObjViaKey'
-import { TDBUser } from '@/shared/model/types/Types'
 import FIlterListGeoLocation from '@/entities/geoLocation/ui/FIlterListGeoLocation'
 import ListEntryPointsLocation from '@/entities/geoLocation/ui/ListEntryPointsLocation'
+import { TDBUser } from '@/shared/model/types/Types'
+import NextAndPrevPageNavigator from '@/shared/ui/NextAndPrevPageNavigator'
+import { ServiceGeoLocation } from '../../../../../../../../Server/Service/serviceGeoLocation'
+import { ServiceUsers } f@/shared/model/types/subtypes/Types../Server/Service/serviceUser'
+import { isError } from '../../../../../../../shared/lib/IsError'
+import { unionArrObjViaKey } from '../../../../../../../shared/lib/unionArrObjViaKey'
 
 export type TListEntryPointsLocation = {
 	dataEntryUsers: (TDBUser & TGeoLocation)[]

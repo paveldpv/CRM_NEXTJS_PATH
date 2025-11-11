@@ -1,11 +1,10 @@
-
+import { TResponseUploadFiles } from '@/shared/model/types/subtypes/Types'
 import { DetailedHTMLProps, HTMLAttributes } from 'react'
 import { FaDownload } from 'react-icons/fa6'
 import { MdDelete } from 'react-icons/md'
 import { SERVER_DOTNET } from '../../../../../config/config'
 import { cn } from '../../../lib/cn'
 import { formatBytes } from '../../../lib/utils/formatBytes'
-import { TResponseUploadFiles } from '@/shared/model/types/Types'
 
 export type TDownloaderFile = {
 	deletedFile: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
@@ -29,12 +28,7 @@ export default function DownloadFile({
 				props.className
 			)}
 		>
-			<a
-				target='_blank'
-				href={`${SERVER_DOTNET}/${FullPath}`}
-				download={NameFile}
-				className=' cursor-pointer pl-3'
-			>
+			<a target='_blank' href={`${SERVER_DOTNET}/${FullPath}`} download={NameFile} className=' cursor-pointer pl-3'>
 				<span className=' text-2xl text-highlight_three'>
 					<FaDownload />
 				</span>

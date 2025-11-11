@@ -7,7 +7,7 @@ const Scene = dynamic(() => import('../Scene/Scene'), { ssr: false })
 import { AiOutlineDelete } from 'react-icons/ai'
 import { MdOutlineCreate } from 'react-icons/md'
 
-import { typeDialog } from '@/shared/model/types/enums'
+import { typeDialog } from '@/shared/model/types/subtypes/enums'
 import { TSketchDetail } from '@/shared/model/types/TRequestPrevCalc'
 import { Tooltip } from '@mui/material'
 
@@ -37,8 +37,7 @@ function PreviewSketch({
 
 		setOpenDialog(true, { title: 'Удалить?' }, typeDialog.dialog)
 		setDispatchFn(() => {
-			setDataSketchDetail &&
-				setDataSketchDetail((prev) => prev?.filter((sketch) => sketch.idSketch !== idSketch))
+			setDataSketchDetail && setDataSketchDetail((prev) => prev?.filter((sketch) => sketch.idSketch !== idSketch))
 		})
 	}, [idSketch])
 
@@ -50,21 +49,13 @@ function PreviewSketch({
 			<div className='flex gap-2 border-opacity-40 pl-1 justify-around flex-col border-l-2 border-solid border-menu_color '>
 				{setDataSketchDetail && (
 					<Tooltip title='удалить эскиз'>
-						<button
-							onClick={deleteSketch}
-							type='button'
-							className=' text-xl flex justify-center content-center p-1 '
-						>
+						<button onClick={deleteSketch} type='button' className=' text-xl flex justify-center content-center p-1 '>
 							<AiOutlineDelete />
 						</button>
 					</Tooltip>
 				)}
 				<Tooltip title='редактировать'>
-					<button
-						onClick={redactionSketch}
-						type='button'
-						className=' text-xl flex justify-center content-center p-1 '
-					>
+					<button onClick={redactionSketch} type='button' className=' text-xl flex justify-center content-center p-1 '>
 						<MdOutlineCreate />
 					</button>
 				</Tooltip>

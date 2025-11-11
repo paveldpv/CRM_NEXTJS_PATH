@@ -1,7 +1,6 @@
 'use client'
 import { PURPOSE_USE } from '@/shared/model/types/subtypes/TGeoLocation'
 
-
 import MenuItem from '@mui/material/MenuItem'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import { usePathname, useRouter } from 'next/navigation'
@@ -9,9 +8,9 @@ import { memo, useCallback } from 'react'
 import { getAbbreviatedUser } from '../../../shared/lib/getAbbreviatedUser'
 
 import { TQueryFilterPageGeoList } from '@/app/[INN]/[PHONE]/main/setting/historyEntryLocation/[...FILTER]/page'
+import { TDBUser } from '@/shared/model/types/subtypes/Types'
 import { MdOutlineCancel } from 'react-icons/md'
 import { processEntry } from '../model/processEntry'
-import { TDBUser } from '@/shared/model/types/Types'
 type TFilterQueryListLocation = {
 	listEmployee: TDBUser[]
 	filter: TQueryFilterPageGeoList
@@ -72,10 +71,7 @@ function FIlterListGeoLocation({ listEmployee, filter, initialRangeGroup }: TFil
 					))}
 				</Select>
 				{SELECTED_ID_EMPLOYEE != 'null' && (
-					<button
-						className=' text-4xl grid-cols-1 flex  items-center  content-center'
-						onClick={restSearchEmployee}
-					>
+					<button className=' text-4xl grid-cols-1 flex  items-center  content-center' onClick={restSearchEmployee}>
 						<MdOutlineCancel />
 					</button>
 				)}
@@ -98,10 +94,7 @@ function FIlterListGeoLocation({ listEmployee, filter, initialRangeGroup }: TFil
 					<MenuItem value={PURPOSE_USE.registrate}>{processEntry[PURPOSE_USE.registrate].title}</MenuItem>
 				</Select>
 				{SELECTED_PURPOSE_USE != 'null' && (
-					<button
-						className=' text-4xl grid-cols-1 flex content-center items-center'
-						onClick={resetSearchPurposeUse}
-					>
+					<button className=' text-4xl grid-cols-1 flex content-center items-center' onClick={resetSearchPurposeUse}>
 						<MdOutlineCancel />
 					</button>
 				)}
