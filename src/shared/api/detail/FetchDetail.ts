@@ -3,9 +3,10 @@ import { TNewDetailDTO, TNewDataGeoLocationDTO, TDetailDTO, TFullInfoTDetailDTO 
 import { TResponseUploadFiles } from '@/shared/model/types/subtypes/Types'
 
 export class FetchDetail {
-	static async addDetailForOrder(INN: string, data: TNewDetailDTO, dataGeo: TNewDataGeoLocationDTO): Promise<void> {
+	
+	static async addDetailForOrder(INN: string, data: TNewDetailDTO, dataGeo: TNewDataGeoLocationDTO): Promise<TDetailDTO> {
 		const dataBody = { data, dataGeo }
-		const fetch = await serverClient.api<void>(`${INN}/detail/new`, { method: 'POST', body: JSON.stringify(dataBody) })
+		const fetch = await serverClient.api<TDetailDTO>(`${INN}/detail/new`, { method: 'POST', body: JSON.stringify(dataBody) })
 		return fetch
 	}
 

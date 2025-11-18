@@ -1,5 +1,5 @@
 import { Model, Schema, model, models } from 'mongoose'
-import { TDelivered, TOrder, TServiceOrder } from '../types/Types'
+import { TDelivered, TOrder, TPaymentOrder, TServiceOrder } from '../types/Types'
 
 const deliveredSchema = new Schema<TDelivered>({
 	dateDelivered: {
@@ -52,6 +52,28 @@ const serviceOptionOrder = new Schema<TServiceOrder>({
 	},
 })
 
+const payment = new Schema<TPaymentOrder>({
+	type:{
+		type:String,
+		required:false
+	},
+	price:{
+		type:Number,
+		required:false,
+		
+	},
+	paymentStatus:{
+		type:Boolean,
+		required:true,
+		default:false
+	},
+	payment:{
+		type:Number,
+		required:true,
+		default:0
+	}
+})
+
 export const orderSchema = new Schema<TOrder>({
 	CounterParty: {
 		type: Schema.Types.ObjectId,
@@ -86,6 +108,7 @@ export const orderSchema = new Schema<TOrder>({
 		type: [String],
 		required: false,
 	},
+	payment:payment
 })
 
 // const modelOrder = (models.order as Model<TOrder>) || model<TOrder>('order', orderSchema)

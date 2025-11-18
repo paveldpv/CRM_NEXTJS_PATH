@@ -1,4 +1,3 @@
-//TODO:  все общие типы из сервисов и DTO типы
 import { TConfigAPP_DTO } from '../../../../Server/Service/serviceConfigApp/model/types/Type'
 import {
 	TCounterparty,
@@ -6,7 +5,11 @@ import {
 	TNewDataCounterparty,
 } from '../../../../Server/Service/serviceCounterparty/models/types/Types'
 import { TDaDataOrganizationDTO } from '../../../../Server/Service/serviceDaData/model/types/Type'
-import { TDetailDTO, TFullInfoTDetailDTO, TNewDetailDTO } from '../../../../Server/Service/serviceDetails/model/types/Types'
+import {
+	TDetailDTO,
+	TFullInfoTDetailDTO,
+	TNewDetailDTO,
+} from '../../../../Server/Service/serviceDetails/model/types/Types'
 import {
 	TGeolLocationDTO,
 	TGeolLocationFullInfoDTO,
@@ -14,9 +17,17 @@ import {
 	TNewDataGeoLocationDTO,
 } from '../../../../Server/Service/serviceGeoLocation/model/types/type'
 import { TGlobalListCompany } from '../../../../Server/Service/serviceGlobalListCompany/model/types/Type'
-import { TNewUser, TUserDTOByBirthday, TUserDTOWithoutPas } from '../../../../Server/Service/serviceUser/model/types/Types'
-
-
+import {
+	TNewOrderDTO,
+	TOrder,
+	TOrderDTO,
+	TOrderFullInfoDTO,
+} from '../../../../Server/Service/serviceOrder/model/types/Types'
+import {
+	TNewUser,
+	TUserDTOByBirthday,
+	TUserDTOWithoutPas,
+} from '../../../../Server/Service/serviceUser/model/types/Types'
 
 export type {
 	TConfigAPP_DTO,
@@ -32,7 +43,11 @@ export type {
 	TNewDataCounterparty,
 	TNewDataGeoLocationDTO,
 	TNewDetailDTO,
+	TNewOrderDTO,
 	TNewUser,
+	TOrder,
+	TOrderDTO,
+	TOrderFullInfoDTO,
 	TUserDTOByBirthday,
 	TUserDTOWithoutPas,
 }

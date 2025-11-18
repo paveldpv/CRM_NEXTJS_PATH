@@ -8,15 +8,20 @@ import { ServiceOrder } from '../serviceOrder/serviceOrder'
 import { ControllerDetail } from './controller/detailsDB.controller'
 import { TDetail, TFullInfoTDetail, TNewDetail, TNewStep } from './model/types/Types'
 
+
+
+
 export class ServiceDetails extends Service {
+	
 	constructor(INN: string) {
 		super(INN)
 	}
 
-	public async addDetailForOrder(newDetail: TNewDetail): Promise<void | TError> {
-		try {
+	public async addDetailForOrder(newDetail: TNewDetail): Promise<TDetail| TError> {
+		try {			
 			const controllerDetail = new ControllerDetail(this.INN)
-			await controllerDetail.addDetailForOrder(newDetail)
+			const result = await controllerDetail.addDetailForOrder(newDetail)
+			return result
 		} catch (error) {
 			return this.createError(`error add detail , data new detail :${newDetail}, INN:${this.INN}`, error)
 		}

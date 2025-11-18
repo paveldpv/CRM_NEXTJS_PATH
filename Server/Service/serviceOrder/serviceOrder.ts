@@ -1,7 +1,7 @@
 import { TError } from '@/shared/model/types/subtypes/TError'
 import { format } from 'date-fns'
 
-import { TOptionQuery } from '@/shared/model/types/optionQuery'
+import { TOptionQuery } from '@/shared/model/types/subtypes/optionQuery'
 import { Types } from 'mongoose'
 import { Service } from '../../classes/Service'
 import ControllerOrder from './controller/OrderDB.controller'
@@ -21,18 +21,17 @@ export class ServiceOrder extends Service {
 		}
 	}
 
-	public async createOrder(dataNewOrder: TNewOrder): Promise<void | TError> {
+	public async createOrder(dataNewOrder: TNewOrder): Promise<TOrder | TError> {
 		try {
 			const dataOrder: Omit<TOrder, '_id' | 'safeDeleted' | 'complied'> = {
 				...dataNewOrder,
 				numberOrder: await this.nextNumberOrder(),
 			}
 			const controllerOrder = new ControllerOrder(this.INN)
-			await controllerOrder.addOrder(dataOrder)
+			const saveOrder = await controllerOrder.addOrder(dataOrder)
+			return this.normalizeDataFromMongoDB(saveOrder)
 		} catch (error) {
-			return this.createError(
-				`error create new order , data order :${dataNewOrder} ,INN:${this.INN} , error :${error}`
-			)
+			return this.createError(`error create new order , data order :${dataNewOrder} ,INN:${this.INN} , error :${error}`)
 		}
 	}
 	public async restoreOrder(idOrder: Types.ObjectId): Promise<void | TError> {
@@ -40,9 +39,7 @@ export class ServiceOrder extends Service {
 			const controllerOrder = new ControllerOrder(this.INN)
 			await controllerOrder.restoreOrder(idOrder)
 		} catch (error) {
-			return this.createError(
-				` error restore order , ID order :${idOrder}, INN:${this.INN} error ${error}`
-			)
+			return this.createError(` error restore order , ID order :${idOrder}, INN:${this.INN} error ${error}`)
 		}
 	}
 	public async removeOrder(idOrder: Types.ObjectId): Promise<void | TError> {
@@ -50,9 +47,7 @@ export class ServiceOrder extends Service {
 			const controllerOrder = new ControllerOrder(this.INN)
 			await controllerOrder.removeOrder(idOrder)
 		} catch (error) {
-			return this.createError(
-				`error remove order, id order :${idOrder} INN:${this.INN} , error :${error}`
-			)
+			return this.createError(`error remove order, id order :${idOrder} INN:${this.INN} , error :${error}`)
 		}
 	}
 
@@ -66,9 +61,7 @@ export class ServiceOrder extends Service {
 			const data = await controllerOrder.getOrders(params)
 			return this.normalizeDataFromMongoDB(data)
 		} catch (error) {
-			return this.createError(
-				`error get order , params get order :${params} , INN:${this.INN} ,error :${error}`
-			)
+			return this.createError(`error get order , params get order :${params} , INN:${this.INN} ,error :${error}`)
 		}
 	}
 
@@ -76,7 +69,7 @@ export class ServiceOrder extends Service {
 		dateStart: Date
 		dateEndDate: Date
 	}): Promise<TOrderFullInfo[] | null | TError> {
-		//? return order with counterparty
+		
 
 		try {
 			const controllerOrder = new ControllerOrder(this.INN)
@@ -97,39 +90,21 @@ export class ServiceOrder extends Service {
 			const controllerOrder = new ControllerOrder(this.INN)
 			await controllerOrder.updateOrder(data)
 		} catch (error) {
-			return this.createError(
-				`error update order , INN :${this.INN} , data update order :${data}, error :${error}`
-			)
+			return this.createError(`error update order , INN :${this.INN} , data update order :${data}, error :${error}`)
 		}
 	}
-	public async endOrder(idOrder: Types.ObjectId): Promise<void | TError> {
-		const currentDate = new Date()
-		try {
-			const controllerOrder = new ControllerOrder(this.INN)
-			await controllerOrder.endOrder(currentDate, idOrder)
-		} catch (error) {
-			return this.createError(
-				`error end order , INN :${this.INN} , id order :${idOrder} , error :${error}`
-			)
-		}
-	}
+
 	public async getOrderByID(idOrder: Types.ObjectId): Promise<TOrder | TError | null> {
 		try {
 			const controllerOrder = new ControllerOrder(this.INN)
 			const data = controllerOrder.getOrderByID(idOrder)
 			return this.normalizeDataFromMongoDB(data)
 		} catch (error) {
-			return this.createError(
-				`error get order by id , INN:${this.INN} , id order :${idOrder}, error :${error}`,
-				error
-			)
+			return this.createError(`error get order by id , INN:${this.INN} , id order :${idOrder}, error :${error}`, error)
 		}
 	}
 
-	public async addDetailByOrder(
-		idOrder: Types.ObjectId,
-		idDetail: Types.ObjectId
-	): Promise<void | TError> {
+	public async addDetailByOrder(idOrder: Types.ObjectId, idDetail: Types.ObjectId): Promise<void | TError> {
 		try {
 			const controllerOrder = new ControllerOrder(this.INN)
 			await controllerOrder.addDetailByOrder(idOrder, idDetail)
@@ -140,7 +115,7 @@ export class ServiceOrder extends Service {
 			)
 		}
 	}
-	public async removeDetailByOrder(idOrder: Types.ObjectId, idDetail: Types.ObjectId) {
+	public async removeDetailByOrder(idOrder: Types.ObjectId, idDetail: Types.ObjectId):Promise<void|TError> {
 		try {
 			const controllerOrder = new ControllerOrder(this.INN)
 			await controllerOrder.removeDetailByOrder(idOrder, idDetail)
@@ -152,21 +127,22 @@ export class ServiceOrder extends Service {
 		}
 	}
 
-	public async updateProcessOrder(idOrder:Types.ObjectId):Promise<void|TError>{
+	public async updateProcessOrder(idOrder: Types.ObjectId): Promise<void | TError> {
 		try {
 			const controllerOrder = new ControllerOrder(this.INN)
 			await controllerOrder.updateProcessOrder(idOrder)
 		} catch (error) {
-			return this.createError(`error update process order ,id order :${idOrder.toString()}, INN :${this.INN}`,error)
+			return this.createError(`error update process order ,id order :${idOrder.toString()}, INN :${this.INN}`, error)
 		}
 	}
 
-	public async completedOrder(idOrder:Types.ObjectId){
+	public async completedOrder(idOrder: Types.ObjectId) {
+		const date = new Date()
 		try {
 			const controllerOrder = new ControllerOrder(this.INN)
-			await controllerOrder.completedOrder(idOrder)
+			await controllerOrder.completedOrder(idOrder, date)
 		} catch (error) {
-			return this.createError(`error update process order ,id order :${idOrder.toString()}, INN :${this.INN}`,error)
+			return this.createError(`error update process order ,id order :${idOrder.toString()}, INN :${this.INN}`, error)
 		}
 	}
 }

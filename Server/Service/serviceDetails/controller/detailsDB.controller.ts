@@ -21,10 +21,11 @@ export class ControllerDetail extends ControllerDB {
 		if (!this.detailModel) await this.initModel()
 	}
 
-	public async addDetailForOrder(newDetail: TNewDetail): Promise<void> {
+	public async addDetailForOrder(newDetail: TNewDetail): Promise<TDetail> {
 		await this.changeReadinessModel()
 		const _newDetail = new this.detailModel!(newDetail)
-		await _newDetail.save()
+		const result = await _newDetail.save()
+		return result
 	}
 	public async removeDetailFromOrder(idDetail: Types.ObjectId): Promise<void> {
 		await this.changeReadinessModel()

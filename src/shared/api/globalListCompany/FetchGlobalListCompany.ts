@@ -1,12 +1,17 @@
 import { serverClient } from '@/shared/lib/api/serverClient'
 import { TGlobalListCompany, TNewDataGeoLocationDTO } from '@/shared/model/types'
 
+
+
 export class FetchGlobalListCompany {
 	static async getListCompany(range?: number, searchParams?: string): Promise<TGlobalListCompany[]> {
 		const fetch = await serverClient.api<TGlobalListCompany[]>(
 			`globalListCompany/get/params?range=${range}&searchParams=${searchParams}`,
 			{ method: 'GET' }
 		)
+
+		
+		
 		return fetch
 	}
 	static async setVisible(INN: string, visible: boolean, dataGeo: TNewDataGeoLocationDTO): Promise<void> {

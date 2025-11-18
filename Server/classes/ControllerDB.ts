@@ -1,6 +1,6 @@
-import { TOptionQuery } from '@/shared/model/types/optionQuery'
 import mongoose, { Connection } from 'mongoose'
 import ContextOrganization from './contextOrganization'
+import { TOptionQuery } from '@/shared/model/types/subtypes/optionQuery'
 
 export type TProjectionType<T> = {
 	[K in keyof T]?: 0 | 1
@@ -33,10 +33,7 @@ export default class ControllerDB extends ContextOrganization {
 		}
 	}
 
-	protected applyQueryOptions<T>(
-		query: mongoose.Query<any, T>,
-		options?: TOptionQuery<T>
-	): mongoose.Query<any, T> {
+	protected applyQueryOptions<T>(query: mongoose.Query<any, T>, options?: TOptionQuery<T>): mongoose.Query<any, T> {
 		let modifiedQuery = query
 
 		if (options?.pagination) {
@@ -44,7 +41,7 @@ export default class ControllerDB extends ContextOrganization {
 			modifiedQuery = modifiedQuery.skip(offset).limit(limit)
 		}
 
-		if (options?.sort) {			
+		if (options?.sort) {
 			modifiedQuery = modifiedQuery.sort({
 				[options.sort]: 1 as mongoose.SortOrder,
 			})

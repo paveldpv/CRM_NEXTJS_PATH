@@ -4,6 +4,10 @@ import { TCounterparty, TCounterpartyDTO } from '../../../serviceCounterparty/mo
 import { TDBUserWithoutPas, TUserDTOWithoutPas } from '../../../serviceUser/model/types/Types'
 
 export type TNewOrder = Omit<TOrder, '_id' | 'safeDeleted' | 'numberOrder' | 'complied'>
+export type TNewOrderDTO = Omit<TNewOrder, 'CounterParty' | 'acceptedOfCargoEmployeeId' | 'details'> & {
+	CounterParty: string
+	acceptedOfCargoEmployeeId: string,details:string[]|[],
+}
 
 export type TOrder = {
 	CounterParty: Types.ObjectId
@@ -12,6 +16,7 @@ export type TOrder = {
 	acceptedOfCargoEmployeeId: Types.ObjectId
 	details: Types.ObjectId[] | []
 	service: TServiceOrder
+	payment?:TPaymentOrder
 	optionsDescription?: string[]
 	processCompleted?: number
 } & TEntities
@@ -22,12 +27,32 @@ export type TOrderFullInfo = Omit<TOrder, 'CounterParty'> & {
 }
 
 export type TOrderDTO = Omit<TOrder, '_id'> & { _id: string }
-export type TOrderFullInfoDTO = Omit<TOrderFullInfo, 'CounterParty' | '_id' | 'details' | 'acceptedOfCargoEmployeeId'> & {
+export type TOrderFullInfoDTO = Omit<
+	TOrderFullInfo,
+	'CounterParty' | '_id' | 'details' | 'acceptedOfCargoEmployeeId'
+> & {
 	CounterParty: TCounterpartyDTO
 	details: string[]
 	_id: string
 	acceptedOfCargoEmployeeId: TUserDTOWithoutPas
 }
+
+//#region payment
+export type TPaymentOrder = {
+	type: type_payment
+	price: number
+	paymentStatus: boolean
+	payment:number
+}
+
+
+
+export enum type_payment {
+	cash = 'CASH',
+	no_vat = 'NO_VAT',
+	vat = 'VAT',
+}
+//#endregion 
 
 //#region service type Order
 export type TServiceOrder = {
@@ -53,21 +78,5 @@ export type TDriver = {
 	phone?: string
 }
 
-export type TPaymentOrder = {
-	type: type_payment
-	price: number
-	paymentStatus: TPaymentStatus
-}
 
-export type TPaymentStatus =
-	| {
-			prepayment: number
-	  }
-	| boolean
-
-export enum type_payment {
-	cash = 'CASH',
-	no_vat = 'NO_VAT',
-	vat = 'VAT',
-}
 //#endregion
