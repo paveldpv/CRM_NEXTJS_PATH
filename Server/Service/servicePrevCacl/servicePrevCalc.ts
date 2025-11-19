@@ -1,10 +1,10 @@
 import { TError } from '@/shared/model/types/subtypes/TError'
 
-import { TOptionQuery } from '@/shared/model/types/optionQuery'
 import { Types } from 'mongoose'
 import { Service } from '../../classes/Service'
 import ControllerPrevCalDB from './controller/PrevCalcDB.controller'
 import { TDBRequestPrevCalc, TRequestPrevCalc } from './model/types/Types'
+import { TOptionQuery } from '@/shared/model/types/subtypes/optionQuery'
 
 export class ServicePrevCalc extends Service {
 	constructor(INN: string) {
@@ -23,9 +23,7 @@ export class ServicePrevCalc extends Service {
 		try {
 			await new ControllerPrevCalDB(this.INN).deletedRequest(idRequest)
 		} catch (error) {
-			this.createError(
-				`error deleted request , INN :${this.INN},idRequest  :${idRequest},error : ${error}`
-			)
+			this.createError(`error deleted request , INN :${this.INN},idRequest  :${idRequest},error : ${error}`)
 		}
 	}
 
@@ -61,10 +59,7 @@ export class ServicePrevCalc extends Service {
 		}
 	}
 
-	public async setFavoriteRequest(
-		idRequest: Types.ObjectId,
-		isFavorite: boolean
-	): Promise<void | TError> {
+	public async setFavoriteRequest(idRequest: Types.ObjectId, isFavorite: boolean): Promise<void | TError> {
 		try {
 			if (isFavorite) {
 				await new ControllerPrevCalDB(this.INN).setFavoriteRequest(idRequest)
@@ -85,12 +80,18 @@ export class ServicePrevCalc extends Service {
 			const data = await controllerPrevCalDB.getAllRequestWithDeleted()
 			return this.normalizeDataFromMongoDB(data)
 		} catch (error) {
-			return this.createError(
-				`error get request with deleted , INN :${this.INN},error = ${error}`,
-				error
-			)
+			return this.createError(`error get request with deleted , INN :${this.INN},error = ${error}`, error)
 		}
 	}
+	
+	public async restoreRequest(idRequest: Types.ObjectId){
+		try {
+			await new ControllerPrevCalDB(this.INN).restoreRequest(idRequest)
+		} catch (error) {
+			this.createError(`error deleted request , INN :${this.INN},idRequest  :${idRequest},error : ${error}`)
+		}
+	}
+
 
 	public async getNewRequestPrevCalc(): Promise<TDBRequestPrevCalc[] | TError> {
 		try {
@@ -98,10 +99,7 @@ export class ServicePrevCalc extends Service {
 			const data = await controllerPrevCalDB.getGetVerifiedRequest()
 			return this.normalizeDataFromMongoDB(data)
 		} catch (error) {
-			return this.createError(
-				`error get get new request prev calc , INN :${this.INN},error = ${error}`,
-				error
-			)
+			return this.createError(`error get get new request prev calc , INN :${this.INN},error = ${error}`, error)
 		}
 	}
 
@@ -117,4 +115,13 @@ export class ServicePrevCalc extends Service {
 			)
 		}
 	}
+	public async  setVerifiedRequestMany(ids:Types.ObjectId[]){
+		try {
+			const controllerPrevCalDB = new ControllerPrevCalDB(this.INN)
+			await controllerPrevCalDB.setVerifiedRequestMany(ids)
+		} catch (error) {
+			return this.createError(`error set verified request many ,INN:${this.INN},id :${ids}`,error)
+		}
+	}
+	
 }

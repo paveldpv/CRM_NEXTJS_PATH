@@ -1,8 +1,8 @@
-import { TOptionQuery } from '@/shared/model/types/optionQuery'
-import { Model, set, Types } from 'mongoose'
+import { Model, Types } from 'mongoose'
 import ControllerDB from '../../../classes/ControllerDB'
 import { prevCalcSchema } from '../model/schema/PrevCalcSchema'
 import { TDBRequestPrevCalc, TRequestPrevCalc } from '../model/types/Types'
+import { TOptionQuery } from '@/shared/model/types/subtypes/optionQuery'
 
 export default class ControllerPrevCalDB extends ControllerDB {
 	constructor(INN: string) {
@@ -30,17 +30,20 @@ export default class ControllerPrevCalDB extends ControllerDB {
 
 	public async deletedRequest(idRequest: Types.ObjectId): Promise<void> {
 		await this.changeReadinessModel()
+		await this.modelPrevCalc!.findOneAndUpdate({ _id: idRequest }, { safeDelete: true })
+	}
+	public async restoreRequest(idRequest: Types.ObjectId): Promise<void> {
+		await this.changeReadinessModel()
 		await this.modelPrevCalc!.findOneAndUpdate({ _id: idRequest }, { safeDelete: false })
 	}
 
+	
 	public async getAllRequest(): Promise<TDBRequestPrevCalc[] | []> {
 		await this.changeReadinessModel()
 		return await this.modelPrevCalc!.find({}, { safeDeleted: false })
 	}
 
-	public async getRequestGivenRange(
-		option?: TOptionQuery<TRequestPrevCalc>
-	): Promise<TDBRequestPrevCalc[] | []> {
+	public async getRequestGivenRange(option?: TOptionQuery<TRequestPrevCalc>): Promise<TDBRequestPrevCalc[] | []> {
 		await this.changeReadinessModel()
 		const data = this.modelPrevCalc!.find({})
 		return this.applyQueryOptions(data, option)
@@ -48,7 +51,7 @@ export default class ControllerPrevCalDB extends ControllerDB {
 
 	public async getAllRequestWithDeleted(): Promise<TDBRequestPrevCalc[]> {
 		await this.changeReadinessModel()
-		return await this.modelPrevCalc!.find({safeDeleted:true})
+		return await this.modelPrevCalc!.find({ safeDeleted: true })
 	}
 
 	public async getFavoriteRequest(): Promise<TDBRequestPrevCalc[] | []> {
@@ -96,12 +99,20 @@ export default class ControllerPrevCalDB extends ControllerDB {
 
 	public async getGetVerifiedRequest(): Promise<TDBRequestPrevCalc[]> {
 		await this.changeReadinessModel()
-		return await this.modelPrevCalc!.find({safeDeleted:true,verified:false})
+		return await this.modelPrevCalc!.find({ safeDeleted: true, verified: false })
 	}
 
-	public async setVerifiedRequest(_id:Types.ObjectId):Promise<void>{
+	public async setVerifiedRequest(_id: Types.ObjectId): Promise<void> {
 		await this.changeReadinessModel()
-		await this.modelPrevCalc!.findOneAndUpdate({_id},{$set:{verified:true}})
+		await this.modelPrevCalc!.findOneAndUpdate({ _id }, { $set: { verified: true } })
 		return
 	}
+
+	public async setVerifiedRequestMany(ids: Types.ObjectId[]): Promise<void> {
+    await this.changeReadinessModel();
+    await this.modelPrevCalc!.updateMany(
+        { _id: { $in: ids } },
+        { $set: { verified: true } }
+    );
+}
 }
