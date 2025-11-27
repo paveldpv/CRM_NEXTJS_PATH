@@ -6,9 +6,10 @@ import { FetchGeoLocation } from './geoLocation/FetchGeoLocation'
 import { FetchGlobalListCompany } from './globalListCompany/FetchGlobalListCompany'
 import { FetchUser } from './user/FetchUser '
 import { FetchOrder } from './order/FetchOrder'
+import { FetchPrevCalc } from './prevCalc/FetchPrevCalc'
 //TODO: и сюда все классы fetch для cruds данных на сервер
 
-export {
+export {FetchPrevCalc,
 	FetchOrder,
 	FetchConfigApp,
 	FetchCounterparty,

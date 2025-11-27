@@ -69,15 +69,19 @@ export class FetchOrder {
 
 	static async updateOrder(INN: string, data: TOrderFullInfoDTO, dataGeo: TNewDataGeoLocationDTO): Promise<void> {
 		const dataBody = {
-			data,dataGeo
+			data,
+			dataGeo,
 		}
-		const fetch = await serverClient.api<void>(`${INN}/order/update`,{method:'PUT',body:JSON.stringify(dataBody)})
+		const fetch = await serverClient.api<void>(`${INN}/order/update`, { method: 'PUT', body: JSON.stringify(dataBody) })
 		return fetch
 	}
 
 	static async completedOrder(INN: string, idOrder: string, dataGeo: TNewDataGeoLocationDTO): Promise<void> {
-		const dataBody = {idOrder,dataGeo}
-		const fetch = await serverClient.api<void>(`${INN}/order/competed`,{method:"PUT",body:JSON.stringify(dataBody)})
+		const dataBody = { idOrder, dataGeo }
+		const fetch = await serverClient.api<void>(`${INN}/order/competed`, {
+			method: 'PUT',
+			body: JSON.stringify(dataBody),
+		})
 		return fetch
 	}
 }

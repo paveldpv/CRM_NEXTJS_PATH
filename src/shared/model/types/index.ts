@@ -28,8 +28,9 @@ import {
 	TUserDTOByBirthday,
 	TUserDTOWithoutPas,
 } from '../../../../Server/Service/serviceUser/model/types/Types'
+import { TRequestPrevCalc,TDBRequestPrevCalcDTO } from '../../../../Server/Service/servicePrevCacl/model/types/Types'
 
-export type {
+export type {TRequestPrevCalc,TDBRequestPrevCalcDTO,
 	TConfigAPP_DTO,
 	TCounterparty,
 	TCounterpartyDTO,
