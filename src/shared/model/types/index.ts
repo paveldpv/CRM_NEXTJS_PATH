@@ -23,18 +23,20 @@ import {
 	TOrderDTO,
 	TOrderFullInfoDTO,
 } from '../../../../Server/Service/serviceOrder/model/types/Types'
+import { TDBRequestPrevCalcDTO, TRequestPrevCalc } from '../../../../Server/Service/servicePrevCacl/model/types/Types'
+import { TPropertyDetailDTO } from '../../../../Server/Service/servicePropertyDetail/model/types/Types'
 import {
 	TNewUser,
 	TUserDTOByBirthday,
 	TUserDTOWithoutPas,
 } from '../../../../Server/Service/serviceUser/model/types/Types'
-import { TRequestPrevCalc,TDBRequestPrevCalcDTO } from '../../../../Server/Service/servicePrevCacl/model/types/Types'
 
-export type {TRequestPrevCalc,TDBRequestPrevCalcDTO,
+export type {
 	TConfigAPP_DTO,
 	TCounterparty,
 	TCounterpartyDTO,
 	TDaDataOrganizationDTO,
+	TDBRequestPrevCalcDTO,
 	TDetailDTO,
 	TFullInfoTDetailDTO,
 	TGeolLocationDTO,
@@ -49,6 +51,8 @@ export type {TRequestPrevCalc,TDBRequestPrevCalcDTO,
 	TOrder,
 	TOrderDTO,
 	TOrderFullInfoDTO,
+	TPropertyDetailDTO,
+	TRequestPrevCalc,
 	TUserDTOByBirthday,
 	TUserDTOWithoutPas,
 }
