@@ -42,6 +42,7 @@ export const organizationSchema = new Schema<TDataOrganization>({
 	seal: {
 		type: Schema.Types.Mixed,
 		default: 'NOT_FOUND',
+		required:false
 	},
 	telegram: {
 		type: {

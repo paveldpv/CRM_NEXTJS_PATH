@@ -6,12 +6,12 @@ import { TResponseUploadFiles } from '@/shared/model/types/subtypes/Types'
 
 import { Service } from '../../classes/Service'
 
-import { TOptionQuery } from '@/shared/model/types/optionQuery'
 import { Types } from 'mongoose'
 import { ServiceDaDataOrganization } from '../serviceDaData/serviceDaDataOrganization'
 import { ServiceRequisites } from '../serviceRequisites/serviceReqisites'
 import ControllerCounterpartyDB from './controller/CounterPartyDB.controller'
 import { TCounterparty, TNewDataCounterparty } from './models/types/Types'
+import { TOptionQuery } from '@/shared/model/types/subtypes/optionQuery'
 
 export class ServiceCounterparty extends Service {
 	constructor(INN: string) {
@@ -105,7 +105,10 @@ export class ServiceCounterparty extends Service {
 			return this.createError(`error get all counterparty, error ${error}`)
 		}
 	}
-	public async deletedFileRequitesCounterparty(_id: Types.ObjectId, fileInfo: TResponseUploadFiles): Promise<void | TError> {
+	public async deletedFileRequitesCounterparty(
+		_id: Types.ObjectId,
+		fileInfo: TResponseUploadFiles
+	): Promise<void | TError> {
 		try {
 			const controllerCounterpartyDB = new ControllerCounterpartyDB(this.INN)
 			await Promise.all([fetchDeletedFile(fileInfo.FullPath), controllerCounterpartyDB.deletedRequisites(_id)])

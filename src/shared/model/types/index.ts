@@ -26,13 +26,14 @@ import {
 import { TDBRequestPrevCalcDTO, TRequestPrevCalc } from '../../../../Server/Service/servicePrevCacl/model/types/Types'
 import { TPropertyDetailDTO } from '../../../../Server/Service/servicePropertyDetail/model/types/Types'
 import { TRequisitesDTO } from '../../../../Server/Service/serviceRequisites/model/types/Type'
+import { TDataOrganizationDTO, TDataOrganizationFullInfoDTO } from '../../../../Server/Service/serviceRuleOrganization/model/types/Types'
 import {
 	TNewUser,
 	TUserDTOByBirthday,
 	TUserDTOWithoutPas,
 } from '../../../../Server/Service/serviceUser/model/types/Types'
 
-export type {
+export type {TDataOrganizationFullInfoDTO,TDataOrganizationDTO,
 	TConfigAPP_DTO,
 	TCounterparty,
 	TCounterpartyDTO,
@@ -57,4 +58,5 @@ export type {
 	TRequisitesDTO,
 	TUserDTOByBirthday,
 	TUserDTOWithoutPas,
+	
 }

@@ -1,9 +1,9 @@
 import { TEntities } from '@/shared/model/types/subtypes/abstractsType'
 import { TResponseUploadFiles } from '@/shared/model/types/subtypes/Types'
-import { TRequisites } from '@/shared/model/types/TRequisites'
+
 import { Types } from 'mongoose'
 import { TCoordinateLocation } from '../../../serviceGeoLocation/model/types/type'
-import { TRequisitesDTO } from '../../../serviceRequisites/model/types/Type'
+import { TRequisites, TRequisitesDTO } from '../../../serviceRequisites/model/types/Type'
 
 export type TActualAddress = {
 	location: TCoordinateLocation
