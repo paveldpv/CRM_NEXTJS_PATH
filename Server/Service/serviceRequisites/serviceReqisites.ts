@@ -91,9 +91,9 @@ export class ServiceRequisites extends Service {
 			return this.createError(`error service requisites - all Requisites ,error :${error}`, error)
 		}
 	}
-	public async deletedRequisites(INN: string): Promise<void | TError> {
+	public async deletedRequisites(targetINN: string): Promise<void | TError> {
 		try {
-			await new ControllerDBRequisites(this.INN).deleteRequisites(INN)
+			await new ControllerDBRequisites(this.INN).deleteRequisites(targetINN)
 		} catch (error) {
 			return this.createError(`error service requisites - deleted Requisites ,error :${error}`, error)
 		}

@@ -25,6 +25,7 @@ import {
 } from '../../../../Server/Service/serviceOrder/model/types/Types'
 import { TDBRequestPrevCalcDTO, TRequestPrevCalc } from '../../../../Server/Service/servicePrevCacl/model/types/Types'
 import { TPropertyDetailDTO } from '../../../../Server/Service/servicePropertyDetail/model/types/Types'
+import { TRequisitesDTO } from '../../../../Server/Service/serviceRequisites/model/types/Type'
 import {
 	TNewUser,
 	TUserDTOByBirthday,
@@ -53,6 +54,7 @@ export type {
 	TOrderFullInfoDTO,
 	TPropertyDetailDTO,
 	TRequestPrevCalc,
+	TRequisitesDTO,
 	TUserDTOByBirthday,
 	TUserDTOWithoutPas,
 }

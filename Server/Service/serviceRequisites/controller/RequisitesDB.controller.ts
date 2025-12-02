@@ -30,9 +30,9 @@ export default class ControllerDBRequisites extends ControllerDB {
 		return saveRequisites
 	}
 
-	public async updateRequisites(data: Partial<TRequisites>) {
+	public async updateRequisites(data: TRequisites) {
 		await this.changeReadinessModel()
-		await this.modelRequisites!.updateOne({ INN: data.INN }, data)
+		await this.modelRequisites!.updateOne({ _id:data._id }, data)
 	}
 
 	public async deleteRequisites(INN: string) {

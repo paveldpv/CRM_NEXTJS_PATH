@@ -11,13 +11,13 @@ export type TRequisitesBank = {
 }
 
 export type TRequisites = {
-	[key: string]:
-		| TValueFiled<string | number | string[]>
-		| TRequisitesBank
-		| TResponseUploadFiles
-		| 'NOT_FOUND'
-		| boolean
-		| string
+	// [key: string]:
+	// 	| TValueFiled<string | number | string[]>
+	// 	| TRequisitesBank
+	// 	| TResponseUploadFiles
+	// 	| 'NOT_FOUND'
+	// 	| boolean
+	// 	| string
 	INN: TValueFiled<number | string>
 	KPP: TValueFiled<number>
 	legalAddress: TValueFiled<string>

@@ -7,9 +7,11 @@ import { FetchGlobalListCompany } from './globalListCompany/FetchGlobalListCompa
 import { FetchUser } from './user/FetchUser '
 import { FetchOrder } from './order/FetchOrder'
 import { FetchPrevCalc } from './prevCalc/FetchPrevCalc'
+import { FetchRequisites } from './requisites/fetchRequisites'
 //TODO: и сюда все классы fetch для cruds данных на сервер
 
 export {FetchPrevCalc,
+	FetchRequisites,
 	FetchOrder,
 	FetchConfigApp,
 	FetchCounterparty,
