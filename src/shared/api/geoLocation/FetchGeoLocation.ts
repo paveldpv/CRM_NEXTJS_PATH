@@ -7,7 +7,7 @@ export class FetchGeoLocation {
 		const fetch = await serverClient.api<TGeolLocationFullInfoDTO[]>(`${INN}/geoLocation/get`, { method: 'POST' ,body:JSON.stringify(option)})
 		return fetch
 	}
-	static async setDate(INN: string, data: TNewDataGeoLocationDTO): Promise<void> {
+	static async setData(INN: string, data: TNewDataGeoLocationDTO): Promise<void> {
 		const fetch = await serverClient.api<void>(`${INN}/geoLocation/set`,{method:'POST',body:JSON.stringify(data)})
 		return fetch
 	}

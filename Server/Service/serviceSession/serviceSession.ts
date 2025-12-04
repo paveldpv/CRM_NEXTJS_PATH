@@ -2,26 +2,25 @@ import { TError } from '@/shared/model/types/subtypes/TError'
 import { add } from 'date-fns'
 import jwt from 'jsonwebtoken'
 
+import { Types } from 'mongoose'
 import { Token } from '../../classes/RefreshToken'
 import { Service } from '../../classes/Service'
 import { ControllerSession } from './controller/session.controller'
 import { TSession, TTokens } from './model/types/Type'
-import { Types } from 'mongoose'
 
 export class ServiceSession extends Service {
 	constructor(INN: string) {
 		super(INN)
 	}
-	
 
-	async addSession(idUser: Types.ObjectId): Promise<TError | TTokens> {
+	public async addSession(idUser: Types.ObjectId): Promise<TError | TTokens> {
 		const currentDate = new Date()
-		const newSession: Omit<TSession,'_id'> ={
-			idUser: idUser,
+		const newSession: Omit<TSession, '_id'> = {
+			user: idUser,
 			refreshToken: Token.generate(),
 			online: true,
 			lastAction: currentDate,
-			safeDeleted:false
+			safeDeleted: false,
 		}
 		try {
 			const controllerSession = new ControllerSession(this.INN)
@@ -31,7 +30,7 @@ export class ServiceSession extends Service {
 					controllerSession.addSession(newSession),
 					controllerSession.changeActionSessions(new Date()),
 				])
-			}else{
+			} else {
 				await Promise.all([
 					controllerSession.updateLastAction(idUser),
 					controllerSession.changeActionSessions(new Date()),
@@ -46,7 +45,7 @@ export class ServiceSession extends Service {
 		}
 	}
 
-	async endSession(idUser: Types.ObjectId): Promise<TError | void> {
+	public async endSession(idUser: Types.ObjectId): Promise<TError | void> {
 		try {
 			const controllerSession = new ControllerSession(this.INN)
 			await controllerSession.endSession(idUser)
@@ -56,7 +55,7 @@ export class ServiceSession extends Service {
 		}
 	}
 
-	async getNewJWTToken(idUser: Types.ObjectId, refreshToken: string): Promise<string | TError> {
+	public async getNewJWTToken(idUser: Types.ObjectId, refreshToken: string): Promise<string | TError> {
 		try {
 			const controllerSession = new ControllerSession(this.INN)
 			const changeSession = await controllerSession.getSessionByRefreshToken(refreshToken)
@@ -75,14 +74,11 @@ export class ServiceSession extends Service {
 				process.env.NEXTAUTH_SERCRET || 'suerpsercretkey'
 			)
 		} catch (error) {
-			return this.createError(
-				`error get new jwt token, id user :${idUser},refresh token :${refreshToken}`,
-				error
-			)
+			return this.createError(`error get new jwt token, id user :${idUser},refresh token :${refreshToken}`, error)
 		}
 	}
 
-	async changeActionSessions(inspector: Types.ObjectId): Promise<void | TError> {
+	public async changeActionSessions(inspector: Types.ObjectId): Promise<void | TError> {
 		try {
 			const controllerSession = new ControllerSession(this.INN)
 			await Promise.all([
@@ -94,7 +90,7 @@ export class ServiceSession extends Service {
 		}
 	}
 
-	async getOnlineSession(): Promise<TSession[] | null | TError> {
+	public async getOnlineSession(): Promise<TSession[] | null | TError> {
 		try {
 			const controllerSession = new ControllerSession(this.INN)
 			const data = await controllerSession.getOnlineSession()
