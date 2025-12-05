@@ -25,7 +25,7 @@ export class FetchRequisites {
 			data,
 			dataGeo,
 		}
-		const fetch = await serverClient.api<void>(`${INN}/requisites/update/all`, {
+		const fetch = await serverClient.api<void>(`${INN}/requisites/update`, {
 			method: 'POST',
 			body: JSON.stringify(dataBody),
 		})

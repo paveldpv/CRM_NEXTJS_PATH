@@ -75,6 +75,11 @@ const payment = new Schema<TPaymentOrder>({
 })
 
 export const orderSchema = new Schema<TOrder>({
+	processCompleted:{
+		type:Number,
+		default:0,
+		required:false
+	},
 	CounterParty: {
 		type: Schema.Types.ObjectId,
 		required: true,

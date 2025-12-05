@@ -45,7 +45,7 @@ export default class ControllerOrder extends ControllerDB {
 		await this.changeReadinessModel()
 		const modelOrder = this.modelOrder!.find({ safeDeleted: params.deleted, complied: params.complied })
 			.populate('CounterParty')
-			.populate('acceptedOfCargoEmployeeId:')
+			.populate('acceptedOfCargoEmployeeId')
 
 		return this.applyQueryOptions(modelOrder, params.option)
 	}
@@ -55,7 +55,7 @@ export default class ControllerOrder extends ControllerDB {
 		await this.changeReadinessModel()
 		return await this.modelOrder!.find({ 'service.deadlines.startDate': { $gte: dateStart, $lte: dateEndDate } })
 			.populate('CounterParty')
-			.populate('acceptedOfCargoEmployeeId:')
+			.populate('acceptedOfCargoEmployeeId')
 	}
 
 	public async updateOrder(dataOrder: TOrder): Promise<void> {

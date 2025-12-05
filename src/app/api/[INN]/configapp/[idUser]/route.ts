@@ -1,0 +1,7 @@
+import { NextRequest, NextResponse } from 'next/server'
+
+export async function GET(request: NextRequest, { params }: { params: { INN: string, idUser: string } }) {
+  const { INN, idUser } = params
+  // TODO: Implement with idUser
+  return NextResponse.json({ message: 'Not implemented' }, { status: 501 })
+}
