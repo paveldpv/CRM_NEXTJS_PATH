@@ -21,10 +21,10 @@ import { ServiceUsers } from '../serviceUser/serviceUser'
 
 export class ServiceRegistrated extends Service {
 	private dataUser: TFormRegistrate
-	private dataGeo: Omit<TGeoLocation, 'date' | 'idEmployee'>
+	private dataGeo: Omit<TGeoLocation, 'date' | 'user'>
 	private currentDate = new Date()
 
-	constructor(dataUser: TFormRegistrate, dataGeo: Omit<TGeoLocation, 'date' | 'idEmployee'>) {
+	constructor(dataUser: TFormRegistrate, dataGeo: Omit<TGeoLocation, 'date' | 'user'>) {
 		super(dataUser.INN)
 		this.dataUser = dataUser
 		this.dataGeo = dataGeo
@@ -63,7 +63,7 @@ export class ServiceRegistrated extends Service {
 			}
 
 			const newUser = await serviceUser.addNewUser(dataRegistratedUser)
-			if (isError(newUser)) throw newUser
+			if (isError(newUser)) throw new Error('error create new user')
 
 			const serviceRuleOrganization = new ServiceRuleOrganization(this.INN)
 			const serviceGeoLocation = new ServiceGeoLocation(this.INN)

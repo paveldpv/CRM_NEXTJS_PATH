@@ -1,6 +1,6 @@
 'use client'
 import { typeDialog, typicalError } from '@/shared/model/types/subtypes/enums'
-import { PURPOSE_USE, TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
+
 
 import { InputAdornment, TextField } from '@mui/material'
 import { fieldData } from '../../registrated/model/FieldData'
@@ -13,13 +13,16 @@ import { useDialogWindow } from '../../../shared/ui/dialogWindow/model/storeDial
 import SignupSchemaFormRegistrate from '../lib/validateFormRegistrate'
 
 import { styleTextFiled } from '../../../../config/muiCustomStyle/textField'
-import { fetchRegistrate } from '../api/fetchRegistrate'
+
 
 import { TFormRegistrate } from '@/shared/model/types/subtypes/Types'
 import MiniLoader from '@/shared/ui/loaders/MiniLoader'
 import Link from 'next/link'
 import { useEffect, useReducer } from 'react'
 import IconFieldFormRegistrated from './IconFieldFormRegistrated'
+import { TGeoLocation } from '@/shared/model/types'
+import { PURPOSE_USE } from '../../../../Server/Service/serviceGeoLocation/model/types/type'
+import { FetchRegistrate } from '@/shared/api/registrate/fetchRegistrate'
 
 export default function FormRegistrate() {
 	const [visiblePas, dispatchVisiblePas] = useReducer((state) => !state, true)
@@ -49,22 +52,23 @@ export default function FormRegistrate() {
 			async (pos) => {
 				const { latitude, longitude } = pos.coords
 
-				const dataGeo: Omit<TGeoLocation, 'date' | 'idEmployee'> = {
+				const dataGeo: Omit<TGeoLocation, 'date' | 'user'|'_id'> = {
 					location: {
 						latitude,
 						longitude,
 					},
-					process: PURPOSE_USE.registrate,
+					process: PURPOSE_USE.registrate,			
+					
+					safeDeleted: false
 				}
 
 				const newUser = {
 					...values,
 				}
 
-				const candidateNewAdmin = await fetchRegistrate(newUser, dataGeo)
+			const candidateNewAdmin = await FetchRegistrate.registrateOrganization(newUser, dataGeo)
 
-				if (candidateNewAdmin.status === 200 && candidateNewAdmin.response === 'OK') {
-					localStorage.setItem('mes_phone', newUser.phone)
+				if (candidateNewAdmin.status === 200 && candidateNewAdmin.response === 'OK') {					
 					localStorage.setItem('mes_INN', newUser.INN)
 					localStorage.setItem('mes_password', newUser.password)
 
