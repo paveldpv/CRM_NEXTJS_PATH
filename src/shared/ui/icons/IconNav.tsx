@@ -1,6 +1,6 @@
 import { BiMessageAdd } from 'react-icons/bi'
 import { BsCashCoin, BsFillFileEarmarkPersonFill } from 'react-icons/bs'
-import { FaShippingFast, FaTable } from 'react-icons/fa'
+import { FaMarker, FaShippingFast, FaTable } from 'react-icons/fa'
 import { GoGraph } from 'react-icons/go'
 import { IoIosSettings } from 'react-icons/io'
 import { LiaTasksSolid } from 'react-icons/lia'
@@ -13,6 +13,7 @@ import { CgProfile } from 'react-icons/cg'
 import { MdDisplaySettings, MdSettings } from 'react-icons/md'
 
 const mapIconsNavLink = {
+	order:<FaMarker />,//FIXME:
 	payment: <BsCashCoin />,
 	shipment: <FaShippingFast />,
 	employee: <BsFillFileEarmarkPersonFill />,

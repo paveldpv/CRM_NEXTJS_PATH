@@ -1,4 +1,5 @@
 export enum idLink {
+  order = 'order',
   payment = "payment",
   shipment = "shipment",
   employee = "employee",

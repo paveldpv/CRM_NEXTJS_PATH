@@ -73,6 +73,14 @@ export class ServiceCounterparty extends Service {
 			return this.createError(`error deleted counterparty id: ${_id} error :${error}`, error)
 		}
 	}
+	public async restoreCounterparty(_id: Types.ObjectId) {
+		try {
+			const controllerCounterpartyDB = new ControllerCounterpartyDB(this.INN)
+			await controllerCounterpartyDB.restoreCounterparty(_id)
+		} catch (error) {
+			return this.createError(`error deleted counterparty id: ${_id} error :${error}`, error)
+		}
+	}
 	public async getCounterpartyByID(_id: Types.ObjectId): Promise<TError | TCounterparty> {
 		try {
 			const controllerCounterpartyDB = new ControllerCounterpartyDB(this.INN)

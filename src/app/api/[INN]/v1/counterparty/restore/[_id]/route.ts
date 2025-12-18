@@ -28,7 +28,7 @@ export async function POST(request: NextRequest, { params }: { params: { INN: st
 
 	const result = await Promise.all([
 		serviceGeoLocation.setDataLocation({ ...dataGeo, user: idUser }),
-		serviceCounterparty.deletedCounterparty(idCounterparty),
+		serviceCounterparty.restoreCounterparty(idCounterparty),
 	])
   const error = result.filter(el=>isError(el))
   if(error.length!=0){

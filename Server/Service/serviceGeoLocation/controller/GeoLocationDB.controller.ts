@@ -22,7 +22,7 @@ export default class ControllerGeoLocationDB extends ControllerDB {
 		if (!this.geoLocationModel) await this.initModel()
 	}
 
-	public async saveGeoLocation(dataGeoLocation: TGeoLocation) {
+	public async saveGeoLocation(dataGeoLocation: Omit<TGeoLocation, '_id'>) {
 		await this.changeReadinessModel()
 		const resultSaveGeoLocation = new this.geoLocationModel!(dataGeoLocation)
 		await resultSaveGeoLocation.save()

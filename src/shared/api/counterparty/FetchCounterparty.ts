@@ -35,6 +35,13 @@ export class FetchCounterparty {
 		})
 		return
 	}
+	static async restoreCounterparty(INN: string, _id: string, dataGeo: TGeolLocationDTO): Promise<void> {
+		await serverClient.api<void>(`${INN}/counterparty/restore/${_id}`, {
+			method: 'POST',
+			body: JSON.stringify(dataGeo),
+		})
+		return
+	}
 
 	static async getAllCounterparty(INN: string, option?: TOptionQuery<TCounterparty>): Promise<TCounterpartyDTO[]> {
 		const data = await serverClient.api<TCounterpartyDTO[]>(`${INN}/counterparty/all`, {

@@ -16,14 +16,14 @@ export async function PUT(request: NextRequest, { params }: { params: { INN: str
 	}
 	const { idUser, _id, ...property } = data
 	const { user, ...geoData } = dataGeo
-	const ids = MongoHelpers.stringsToObjectIds(idUser, _id, user)
+	const ids = MongoHelpers.stringsToObjectIdsTuple(idUser, _id, user)
 	if (ids == null) {
 		return NextResponse.json({ message: 'not valid ID user' }, { status: 400 })
 	}
 	const [_idUser, id, userGeoID] = ids
 
 	const dataConfigApp: TConfigAPP = {
-		idUser: _idUser!,
+		idUser: _idUser,
 		_id: id,
 		...property,
 	}

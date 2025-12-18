@@ -1,8 +1,8 @@
-import { TOptionQuery } from '@/shared/model/types/optionQuery'
 import { Model, Types } from 'mongoose'
 import ControllerDB from '../../../classes/ControllerDB'
 import { counterpartySchema } from '../models/schema/CounterpartySchema'
 import { TCounterparty } from '../models/types/Types'
+import { TOptionQuery } from '@/shared/model/types/subtypes/optionQuery'
 
 export default class ControllerCounterpartyDB extends ControllerDB {
 	constructor(INN: string) {

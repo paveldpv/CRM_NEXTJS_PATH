@@ -10,14 +10,15 @@ export class MongoHelpers {
     return new Types.ObjectId(idString)
   }
 
-  static stringsToObjectIds<T extends string[]>(
+  static stringsToObjectIdsTuple<T extends string[]>(
     ...ids: T
   ): { [K in keyof T]: Types.ObjectId } | null {
+
     const result: Types.ObjectId[] = []
     
     for (const id of ids) {
       const objectId = this.stringToObjectId(id)
-      if (!objectId) return null
+      if (objectId==null) return null
       result.push(objectId)
     }
     

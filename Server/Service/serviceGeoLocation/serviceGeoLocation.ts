@@ -10,7 +10,7 @@ export class ServiceGeoLocation extends Service {
 		super(INN)
 	}
 
-	async getDataLocation(option?: TOptionQuery<TGeoLocation>): Promise<TGeolLocationFullInfo[] | TError> {
+	async  getDataLocation(option?: TOptionQuery<TGeoLocation>): Promise<TGeolLocationFullInfo[] | TError> {
 		try {
 			if (option) {
 				const data = await new ControllerGeoLocationDB(this.INN).getDataLocationGivenRange(option)
@@ -23,7 +23,7 @@ export class ServiceGeoLocation extends Service {
 		}
 	}
 
-	async setDataLocation(data: Omit<TGeoLocation, 'date'>): Promise<void | TError> {
+	async setDataLocation(data: Omit<TGeoLocation, 'date'|'_id'>): Promise<void | TError> {
 		try {
 			await new ControllerGeoLocationDB(this.INN).saveGeoLocation({ ...data, date: new Date() })
 		} catch (error) {

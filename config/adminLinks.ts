@@ -2,7 +2,12 @@
 import { idLink } from '@/shared/model/types/subtypes/enums'
 import { TLink } from '@/shared/model/types/subtypes/Types'
 import { ROOT_LINK } from '../Server/Service/servicePermissionRedactData/model/types/Types'
-export const adminLinks: TLink[] = [
+export const adminLinks: TLink[] = [{
+		href: ROOT_LINK.order,
+		description: 'работа с текущими заказами - прием заказов ',
+		title: 'заказы',
+		id: idLink.payment,
+	},
 	{
 		href: ROOT_LINK.payment,
 		description: 'выставление и отслеживание оплаты счетов ,отправка счетов',
