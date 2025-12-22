@@ -73,8 +73,8 @@ export class ServiceDetails extends Service {
 		}
 	}
 
-	public async searchDetail(req: string): Promise<null | TError | TFullInfoTDetail[]> {
-		const regex = new RegExp(req, 'i')
+	public async searchDetail(req?: string): Promise<null | TError | TFullInfoTDetail[]> {
+		const regex = new RegExp(req||'', 'i') 
 		try {
 			const controllerDetail = new ControllerDetail(this.INN)
 			const data = await controllerDetail.searchDetail(regex)

@@ -1,6 +1,51 @@
+import { TDetailDTO, TNewDataGeoLocationDTO } from '@/shared/model/types'
 import { NextRequest, NextResponse } from 'next/server'
+import { MongoHelpers } from '../../../../../../../Server/classes/until/MongoHelpers'
+import { ROOT_LINK } from '../../../../../../../Server/Service/servicePermissionRedactData/model/types/Types'
+import ServicePermissionRedactData from '../../../../../../../Server/Service/servicePermissionRedactData/ServicePermissionRedactData'
+import { ServiceDetails } from '../../../../../../../Server/Service/serviceDetails/serviceDetails'
+import { ServiceGeoLocation } from '../../../../../../../Server/Service/serviceGeoLocation/serviceGeoLocation'
+import { isError } from '@/shared/lib/IsError'
 
 export async function PUT(request: NextRequest, { params }: { params: { INN: string } }) {
-  // TODO: Implement
-  return NextResponse.json({ message: 'Not implemented' }, { status: 501 })
+	const { INN } = params
+	const body = await request.json()
+	const { data, dataGeo } = body as {
+		data: TDetailDTO
+		dataGeo: TNewDataGeoLocationDTO
+	}
+	const ids = MongoHelpers.stringsToObjectIdsTuple(data._id, data.order, dataGeo.user)
+	if (ids == null) {
+		return NextResponse.json({ message: 'Invalid ID format' }, { status: 400 })
+	}
+	const [detailId, orderId, userId] = ids
+	const servicePermission = new ServicePermissionRedactData(INN, ROOT_LINK.order)
+	const permissionUser = await servicePermission.Permission(userId)
+
+	if (!permissionUser) {
+		return NextResponse.json({ message: 'Permission denied' }, { status: 403 })
+	}
+
+	const serviceDetail = new ServiceDetails(INN)
+	const serviceGeoLocation = new ServiceGeoLocation(INN)
+
+  const result = await Promise.all([
+    serviceDetail.updateDataFromDetail({ ...data, _id: detailId, order: orderId }),
+    serviceGeoLocation.setDataLocation({ ...dataGeo, user: userId })
+  ])
+
+  const error = result.filter(el=>isError(el))
+  if(error.length!=0){
+    return NextResponse.json(
+      { message: error[0].message },
+      { status: 500 }
+    )
+  }
+
+  return NextResponse.json(
+    { message: 'OK' },
+    { status: 200 }
+  )
+
+	
 }
