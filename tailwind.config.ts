@@ -5,6 +5,10 @@ const config: Config = {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/entities/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/feature/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/shared/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/widgets/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/tailwind-datepicker-react/dist/**/*.js"
   ],
   theme: {
@@ -23,6 +27,7 @@ const config: Config = {
         list_menu: "#FFFFFF ",
         text_list_menu: "#98A5D2 ",
         text_navigate_menu: "#858692",
+        text_alert:'#900020'
       },
     },
     screens:{
