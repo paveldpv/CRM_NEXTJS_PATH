@@ -24,5 +24,17 @@ export class MongoHelpers {
     
     return result as { [K in keyof T]: Types.ObjectId }
   }
+
+  static stringsToObjectIds(ids: string[]): Types.ObjectId[] | null {
+  const objectIds: Types.ObjectId[] = []
+  
+  for (const id of ids) {
+    const objectId = this.stringToObjectId(id)
+    if (objectId === null) return null
+    objectIds.push(objectId)
+  }
+  
+  return objectIds
+}
   
 }

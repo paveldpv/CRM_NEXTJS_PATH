@@ -54,10 +54,12 @@ export class FetchPrevCalc {
 		})
 		return fetch
 	}
+
 	static async getDeletedRequest(INN: string) {
 		const fetch = await serverClient.api<TDBRequestPrevCalcDTO[]>(`${INN}/prevCalc/get/deleted`, { method: 'GET' })
 		return fetch
 	}
+
 	static async restoreRequest(INN: string, idRequest: string, dataGeo: TNewDataGeoLocationDTO) {
 		const dataBody = { dataGeo, idRequest }
 		const fetch = await serverClient.api<void>(`${INN}/prevCalc/restore`, {
@@ -67,9 +69,10 @@ export class FetchPrevCalc {
 		return fetch
 	}
 	static async getNewRequest(INN: string) {
-		const fetch = await serverClient.api<TDBRequestPrevCalcDTO>(`${INN}/prevCalc/get/new`, { method: 'GET' })
+		const fetch = await serverClient.api<TDBRequestPrevCalcDTO[]>(`${INN}/prevCalc/get/new`, { method: 'GET' })
 		return fetch
 	}
+
 	public async setVerifiedRequest(INN: string, idRequest: string, dataGeo: TNewDataGeoLocationDTO) {
 		const dataBody = { idRequest, dataGeo }
 		const fetch = await serverClient.api<void>(`${INN}/prevCalc/set/verified`, {

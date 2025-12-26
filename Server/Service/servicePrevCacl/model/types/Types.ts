@@ -27,9 +27,9 @@ export type TInitialValuesFormPrevCalc = {
 	email: string
 	phone: string
 	name: string
+	INN?: string
 	surName?: string
 	description?: string
-	INN: string
 	files: 'NOT_FOUND' | TResponseUploadFiles[]
 }
 
