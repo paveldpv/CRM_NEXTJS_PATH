@@ -1,8 +1,8 @@
+import { TOptionQuery } from '@/shared/model/types/subtypes/optionQuery'
 import { Model, Types } from 'mongoose'
 import ControllerDB from '../../../classes/ControllerDB'
 import { orderSchema } from '../model/schema/orderSchema'
 import { TOrder, TOrderFullInfo } from '../model/types/Types'
-import { TOptionQuery } from '@/shared/model/types/subtypes/optionQuery'
 
 export default class ControllerOrder extends ControllerDB {
 	constructor(INN: string) {
@@ -21,11 +21,13 @@ export default class ControllerOrder extends ControllerDB {
 		if (!this.modelOrder) await this.initModel()
 	}
 
-	public async addOrder(data: Omit<TOrder, '_id' | 'safeDeleted' | 'complied'>): Promise<TOrder> {
+	public async addOrder(data: Omit<TOrder, '_id' | 'safeDeleted' | 'complied' | 'details'>): Promise<TOrderFullInfo> {
 		await this.changeReadinessModel()
 		const newOrder = new this.modelOrder!(data)
 		const saveOrder = await newOrder.save()
-		return saveOrder
+		const result =  (await saveOrder.populate(['CounterParty', 'acceptedOfCargoEmployeeId']))
+
+		return result.toObject() as TOrderFullInfo
 	}
 
 	public async restoreOrder(IDOrder: Types.ObjectId): Promise<void> {
@@ -38,12 +40,12 @@ export default class ControllerOrder extends ControllerDB {
 		await this.modelOrder!.findOneAndUpdate({ _id: IDOrder }, { $set: { safeDeleted: true } })
 	}
 	public async getOrders(params: {
-		complied: boolean
+		completed: boolean
 		deleted: boolean
-		option: TOptionQuery<TOrder>
+		option?: TOptionQuery<TOrder>
 	}): Promise<null | TOrderFullInfo[]> {
 		await this.changeReadinessModel()
-		const modelOrder = this.modelOrder!.find({ safeDeleted: params.deleted, complied: params.complied })
+		const modelOrder = this.modelOrder!.find({ safeDeleted: params.deleted, complied: params.completed })
 			.populate('CounterParty')
 			.populate('acceptedOfCargoEmployeeId')
 
@@ -62,7 +64,6 @@ export default class ControllerOrder extends ControllerDB {
 		await this.changeReadinessModel()
 		await this.modelOrder!.findOneAndUpdate({ _id: dataOrder._id }, dataOrder)
 	}
-
 
 	public async getOrderByID(idOrder: Types.ObjectId): Promise<null | TOrder> {
 		await this.changeReadinessModel()
@@ -90,7 +91,7 @@ export default class ControllerOrder extends ControllerDB {
 		await this.modelOrder!.findOneAndUpdate({ _id: idOrder }, { $inc: { processCompleted: 1 } })
 		return
 	}
-	public async completedOrder(idOrder: Types.ObjectId,dateEnd:Date) {
+	public async completedOrder(idOrder: Types.ObjectId, dateEnd: Date) {
 		await this.changeReadinessModel()
 		await this.modelOrder!.findOneAndUpdate(
 			{ _id: idOrder },

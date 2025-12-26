@@ -1,5 +1,5 @@
 import { serverClient } from '@/shared/lib/api/serverClient'
-import { TNewDataGeoLocationDTO, TNewOrderDTO, TOrder, TOrderFullInfoDTO } from '@/shared/model/types'
+import { TNewDataGeoLocationDTO, TNewOrderDTO, TOrder, TOrderDTO, TOrderFullInfoDTO } from '@/shared/model/types'
 import { TOptionQuery } from '@/shared/model/types/subtypes/optionQuery'
 
 export class FetchOrder {
@@ -67,7 +67,7 @@ export class FetchOrder {
 		return fetch
 	}
 
-	static async updateOrder(INN: string, data: TOrderFullInfoDTO, dataGeo: TNewDataGeoLocationDTO): Promise<void> {
+	static async updateOrder(INN: string, data: TOrderDTO, dataGeo: TNewDataGeoLocationDTO): Promise<void> {
 		const dataBody = {
 			data,
 			dataGeo,

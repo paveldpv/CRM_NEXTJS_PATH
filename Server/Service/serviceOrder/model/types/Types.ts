@@ -3,11 +3,12 @@ import { Types } from 'mongoose'
 import { TCounterparty, TCounterpartyDTO } from '../../../serviceCounterparty/models/types/Types'
 import { TDBUserWithoutPas, TUserDTOWithoutPas } from '../../../serviceUser/model/types/Types'
 
-export type TNewOrder = Omit<TOrder, '_id' | 'safeDeleted' | 'numberOrder' | 'complied'>
+export type TNewOrder = Omit<TOrder, '_id' | 'safeDeleted' | 'numberOrder' | 'complied'| 'details'>
 export type TNewOrderDTO = Omit<TNewOrder, 'CounterParty' | 'acceptedOfCargoEmployeeId' | 'details'> & {
 	CounterParty: string
-	acceptedOfCargoEmployeeId: string,details:string[]|[],
+	acceptedOfCargoEmployeeId: string,
 }
+
 
 export type TOrder = {
 	CounterParty: Types.ObjectId
@@ -26,7 +27,9 @@ export type TOrderFullInfo = Omit<TOrder, 'CounterParty'> & {
 	acceptedOfCargoEmployeeId: TDBUserWithoutPas
 }
 
-export type TOrderDTO = Omit<TOrder, '_id'> & { _id: string }
+export type TOrderDTO = Omit<TOrder, '_id'|'CounterParty'|'acceptedOfCargoEmployeeId'|'details'> & { _id: string,CounterParty:string,acceptedOfCargoEmployeeId: string,details:string[] }
+
+
 export type TOrderFullInfoDTO = Omit<
 	TOrderFullInfo,
 	'CounterParty' | '_id' | 'details' | 'acceptedOfCargoEmployeeId'

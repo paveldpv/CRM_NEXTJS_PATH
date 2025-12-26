@@ -21,9 +21,9 @@ export class ServiceOrder extends Service {
 		}
 	}
 
-	public async createOrder(dataNewOrder: TNewOrder): Promise<TOrder | TError> {
+	public async createOrder(dataNewOrder: TNewOrder): Promise<TOrderFullInfo | TError> {
 		try {
-			const dataOrder: Omit<TOrder, '_id' | 'safeDeleted' | 'complied'> = {
+			const dataOrder: Omit<TOrder, '_id' | 'safeDeleted' | 'complied'|'details'> = {
 				...dataNewOrder,
 				numberOrder: await this.nextNumberOrder(),
 			}
@@ -52,9 +52,9 @@ export class ServiceOrder extends Service {
 	}
 
 	public async getOrders(params: {
-		complied: boolean
+		completed: boolean
 		deleted: boolean
-		option: TOptionQuery<TOrder>
+		option?: TOptionQuery<TOrder>
 	}): Promise<TOrderFullInfo[] | TError | null> {
 		try {
 			const controllerOrder = new ControllerOrder(this.INN)
