@@ -33,20 +33,21 @@ export class ServicePrice extends Service {
 		}
 	}
 
-	public async getPriceByID(_id: Types.ObjectId, phone?: string): Promise<TError | TPrice> {
+	public async getPriceByID(_id: Types.ObjectId|null, idUser: Types.ObjectId|null): Promise<TError | TPrice> {
 		try {
 			const controllerDBPrice = new ControllerDBPrice(this.INN)
 			const servicePermission = new ServicePermissionRedactData(this.INN, ROOT_LINK.price)
-			const permission = phone ? await servicePermission.PermissionByPhone(phone) : false
+			const permission = idUser ? await servicePermission.Permission(idUser) : false
 
-			const price = await controllerDBPrice.getPriceByID(_id)
+			
 
-			if (price) {
-				return {
-					price: this.normalizeDataFromMongoDB(price),
+			if (_id) {
+				const currentPrice = await controllerDBPrice.getPriceByID(_id)
+				return {					
+					price: this.normalizeDataFromMongoDB(currentPrice!),
 					readonly: !permission,
 				}
-			} else if (!price) {
+			} else if (!_id) {
 				const newInitialPrice = this.createVoidTable('прайс')
 				const newPrice = await controllerDBPrice.addNewPrice(newInitialPrice)
 				return {

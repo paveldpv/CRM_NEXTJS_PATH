@@ -13,6 +13,7 @@ import { ServiceDaDataOrganization } from '../serviceDaData/serviceDaDataOrganiz
 import ServiceGlobalLIstCompany from '../serviceGlobalListCompany/serviceGlobalListCompany'
 import { TDaDataOrganization } from '../serviceDaData/model/types/Type'
 import { TDataOrganization, TDataOrganizationFullInfo, TNameOrganization,TNewRuleOrganization } from './model/types/Types'
+import { ServicePrice } from '../servicePrice/servicePrice'
 
 export class ServiceRuleOrganization extends Service {
 	constructor(INN: string) {
@@ -95,7 +96,8 @@ export class ServiceRuleOrganization extends Service {
 			const { error, message } = daDataOrganization
 			return { error, message }
 		}
-
+		
+		const servicePrice = new ServicePrice(this.INN)
 		const initialDataOrganization  = this.getInitialDataOrganization(daDataOrganization, new Date())
 		const serviceGlobalListCompany = new ServiceGlobalLIstCompany(this.INN)
 		const saveRequisites           = await new ServiceRequisites(this.INN).addNewRequisites(daDataOrganization)
@@ -115,6 +117,7 @@ export class ServiceRuleOrganization extends Service {
 				globalVisible: true,
 			}),
 			saveInitialDataOrganization,
+			servicePrice.addNewPrice('прайс')
 			
 		])
 

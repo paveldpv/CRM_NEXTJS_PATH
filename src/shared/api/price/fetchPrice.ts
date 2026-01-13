@@ -4,10 +4,10 @@ import { TLink } from '@/shared/model/types/subtypes/Types'
 import { TDataTablePriceDTO, TPriceDTO } from '../../../../Server/Service/servicePrice/model/types/Types'
 
 export class FetchPrice {
-	static async getPriceById(INN: string, _id: string, phone?: string): Promise<TPriceDTO> {
-		const params = new URLSearchParams({ _id })
-		if (phone) params.append('phone', phone)
-
+	static async getPriceById(INN: string, _id?: string, idUser?: string): Promise<TPriceDTO> {
+		const params = new URLSearchParams()
+		if (idUser) params.append('idUser', idUser)
+		if(_id) params.append('_id',_id)
 		const fetch = await serverClient.api<TPriceDTO>(`${INN}/price/get?${params}`, { method: 'GET' })
 		return fetch
 	}
@@ -17,7 +17,7 @@ export class FetchPrice {
 		return fetch
 	}
 
-	static async addNewPrice(
+	static async createNewPrice(
 		INN: string,
 		nameTable: string,
 		dataGeo: TNewDataGeoLocationDTO
