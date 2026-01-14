@@ -1,6 +1,6 @@
 import { BiMessageAdd } from 'react-icons/bi'
 import { BsCashCoin, BsFillFileEarmarkPersonFill } from 'react-icons/bs'
-import { FaMarker, FaShippingFast, FaTable } from 'react-icons/fa'
+import { FaDrawPolygon, FaMarker, FaShippingFast, FaTable } from 'react-icons/fa'
 import { GoGraph } from 'react-icons/go'
 import { IoIosSettings } from 'react-icons/io'
 import { LiaTasksSolid } from 'react-icons/lia'
@@ -28,6 +28,7 @@ const mapIconsNavLink = {
 	setting_organization: <MdSettings />,
 	setting_history_entry_location: <BsGeoAlt />,
 	table: <FaTable />,
+	details:<FaDrawPolygon />,
 }
 
 export default function IconNav({ id }: Pick<TLink, 'id'>) {

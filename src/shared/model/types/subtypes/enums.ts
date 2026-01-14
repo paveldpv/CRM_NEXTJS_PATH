@@ -13,7 +13,8 @@ export enum idLink {
   setting_app='setting_app',
   setting_organization ="setting_organization",
   setting_history_entry_location='setting_history_entry_location',
-  table='table'
+  table='table',
+  details='details'
 
 }
 

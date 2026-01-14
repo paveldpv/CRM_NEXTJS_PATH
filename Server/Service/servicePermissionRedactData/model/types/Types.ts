@@ -7,5 +7,6 @@ export enum ROOT_LINK {
   application = 'application',
   statistics= 'statistics',
   price= 'price',
-  setting= 'setting'
+  setting= 'setting',
+  details='details'
 } 

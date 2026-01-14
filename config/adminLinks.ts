@@ -33,6 +33,12 @@ export const adminLinks: TLink[] = [{
 		id: idLink.tasks,
 	},
 	{
+		href: ROOT_LINK.details,
+		description: 'детали',
+		title: 'детали',
+		id: idLink.details,
+	},
+	{
 		href: ROOT_LINK.application,
 		description: 'заявки на просчет стоимости выполнения работ',
 		title: 'Входящие заявки',

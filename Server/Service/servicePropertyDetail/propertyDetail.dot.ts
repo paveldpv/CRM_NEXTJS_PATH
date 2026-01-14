@@ -5,4 +5,7 @@ export class PropertyDetailDTO extends DTO {
 	static createPropertyDetailDTO(data:TPropertyDetail):TPropertyDetailDTO{
 		return {...data,_id:this.objectIDToString(data._id)}
 	}
+	static createListPropertyDetailDTO(data:TPropertyDetail[]):TPropertyDetailDTO[]{
+		return data.map(el=>this.createPropertyDetailDTO(el))
+	}
 }

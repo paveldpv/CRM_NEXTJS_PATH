@@ -29,7 +29,7 @@ export class ServicePropertyDetail extends Service {
 			)
 		}
 	}
-	public async getProperty(): Promise<TError | TPropertyDetail[] | null> {
+	public async getProperty(): Promise<TError | TPropertyDetail[] > {
 		try {
 			const controllerPropertyDetail = new ControllerPropertyDetail(this.INN)
 			const property = await controllerPropertyDetail.getProperty()
@@ -39,7 +39,7 @@ export class ServicePropertyDetail extends Service {
 		}
 	}
 	
-	public async searchProperty(dataSearch: string): Promise<TError | null | TPropertyDetail[]> {
+	public async searchProperty(dataSearch: string): Promise<TError | TPropertyDetail[]> {
 		const regEx = new RegExp(dataSearch.trim(), 'i')
 		try {
 			const controllerPropertyDetail = new ControllerPropertyDetail(this.INN)

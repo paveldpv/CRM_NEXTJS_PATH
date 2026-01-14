@@ -36,7 +36,7 @@ export default class ControllerPropertyDetail extends ControllerDB {
 		await this.propertyDetailModel!.findOneAndDelete({ _id })
 	}
 
-	public async getProperty():Promise<TPropertyDetail[]|null> {
+	public async getProperty():Promise<TPropertyDetail[]> {
 		await this.changeReadinessModel()
 		return await this.propertyDetailModel!.find({})
 	}
