@@ -9,6 +9,9 @@ export type TSession = {
 	lastAction: Date
 } & TEntities
 
+export type TUserOnline = Types.ObjectId[]
+export type TUserOnlineDTO = string[]
+
 export type TTokens = {
 	jwt: string
 	refreshToken: string

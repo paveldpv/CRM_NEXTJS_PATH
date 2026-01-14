@@ -1,7 +1,7 @@
 import { Model, Types } from 'mongoose'
 import ControllerDB from '../../../classes/ControllerDB'
 import { sessionSchema } from '../model/schema/sessionSchema'
-import { TSession } from '../model/types/Type'
+import { TSession, TUserOnline } from '../model/types/Type'
 
 export class ControllerSession extends ControllerDB {
 	constructor(INN: string) {
@@ -62,8 +62,8 @@ export class ControllerSession extends ControllerDB {
 			}
 		)
 	}
-	public async getOnlineSession(): Promise<TSession[] | null> {
+	public async getOnlineSession(): Promise<TUserOnline > {
 		await this.changeReadinessModel()
-		return await this.modelSession!.find({})
+		return await this.modelSession!.find({},{user:1})
 	}
 }

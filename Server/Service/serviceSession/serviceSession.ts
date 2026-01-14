@@ -6,7 +6,7 @@ import { Types } from 'mongoose'
 import { Token } from '../../classes/RefreshToken'
 import { Service } from '../../classes/Service'
 import { ControllerSession } from './controller/session.controller'
-import { TSession, TTokens } from './model/types/Type'
+import { TSession, TTokens, TUserOnline } from './model/types/Type'
 
 export class ServiceSession extends Service {
 	constructor(INN: string) {
@@ -90,7 +90,7 @@ export class ServiceSession extends Service {
 		}
 	}
 
-	public async getOnlineSession(): Promise<TSession[] | null | TError> {
+	public async getOnlineSession(): Promise<TUserOnline | null | TError> {
 		try {
 			const controllerSession = new ControllerSession(this.INN)
 			const data = await controllerSession.getOnlineSession()

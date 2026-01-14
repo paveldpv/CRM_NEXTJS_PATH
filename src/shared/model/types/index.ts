@@ -32,7 +32,7 @@ import {
 	TDataOrganizationDTO,
 	TDataOrganizationFullInfoDTO,
 } from '../../../../Server/Service/serviceRuleOrganization/model/types/Types'
-import { TSessionFullInfoDTO, TTokens } from '../../../../Server/Service/serviceSession/model/types/Type'
+import { TSessionFullInfoDTO, TTokens, TUserOnlineDTO } from '../../../../Server/Service/serviceSession/model/types/Type'
 import {
 	TNewUser,
 	TUserDTOByBirthday,
@@ -41,7 +41,7 @@ import {
 
 
 
-export type {TSessionFullInfoDTO,TTokens,
+export type {TUserOnlineDTO,TSessionFullInfoDTO,TTokens,
 	TPriceDTO,
 	TConfigAPP_DTO,
 	TCounterparty,

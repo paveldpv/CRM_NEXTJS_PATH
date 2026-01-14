@@ -11,6 +11,7 @@ export class SessionDTO extends DTO {
 	}
 }
 
+
 export class SessionFullInfoDTO extends DTO {
 	static createSessionFullInfoDTO(data: TSessionFullInfo): TSessionFullInfoDTO {
 		const userDTO = ServiceUserDTO.createUserDTO(data.user)
