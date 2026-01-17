@@ -4,7 +4,7 @@ import { TDBUser, TDBUserWithoutPas, TUserDTOWithoutPas } from './model/types/Ty
 export class ServiceUserDTO extends DTO {
 	static createUserDTO(data: TDBUserWithoutPas | TDBUser): TUserDTOWithoutPas {
 		if ('password' in data) {
-			const { password,phone, ...newData } = data
+			const { password, ...newData } = data
 
 			return { ...newData, _id: this.objectIDToString(data._id) }
 		}

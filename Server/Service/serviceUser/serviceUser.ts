@@ -6,11 +6,11 @@ import { Service } from '../../classes/Service'
 import { ServiceConfigApp } from '../serviceConfigApp/serviceConfigApp'
 import ControllerDBUser from './controller/UsersDB.controller'
 
-import { TOptionQuery } from '@/shared/model/types/optionQuery'
 import { idLink } from '@/shared/model/types/subtypes/enums'
 import { Types } from 'mongoose'
 import { ServiceSession } from '../serviceSession/serviceSession'
 import { TDBUser, TDBUserWithoutPas, TNewUser } from './model/types/Types'
+import { TOptionQuery } from '@/shared/model/types/subtypes/optionQuery'
 
 export class ServiceUsers extends Service {
 	constructor(INN: string) {
@@ -23,7 +23,7 @@ export class ServiceUsers extends Service {
 		return user.linksAllowed.some((field) => field.id === idLink.setting)
 	}
 
-	public async getAllEmployeeWithDeleted(option?: TOptionQuery<TDBUser>): Promise<TDBUser[] | [] | TError> {
+	public async getAllUsersWithDeleted(option?: TOptionQuery<TDBUser>): Promise<TDBUser[] | [] | TError> {
 		try {
 			const dataAllEmployee = await new ControllerDBUser(this.INN).getUsersWithDeleted(option)
 			return this.normalizeDataFromMongoDB(dataAllEmployee)
@@ -32,7 +32,7 @@ export class ServiceUsers extends Service {
 		}
 	}
 
-	public async getAllEmployee(option?: TOptionQuery<TDBUser>): Promise<TDBUserWithoutPas[] | [] | TError> {
+	public async getAllUsers(option?: TOptionQuery<TDBUser>): Promise<TDBUserWithoutPas[] | [] | TError> {
 		try {
 			const dataAllEmployee = await new ControllerDBUser(this.INN).getUsers(option)
 			return this.normalizeDataFromMongoDB(dataAllEmployee)
@@ -91,13 +91,16 @@ export class ServiceUsers extends Service {
 		}
 	}
 
-	public async getUsersByGroupID(listID: Types.ObjectId[], option: TOptionQuery<TDBUser>): Promise<TDBUser[] | TError> {
+	public async getUsersByGroupID(listID: Types.ObjectId[], option?: TOptionQuery<TDBUser>): Promise<TDBUser[] | TError> {
 		try {
 			const groupUsers = await new ControllerDBUser(this.INN).getUsersByGroupID(listID, option)
 
 			return this.normalizeDataFromMongoDB(groupUsers)
 		} catch (error) {
-			return this.createError(`error add get users by group ID, INN :${this.INN} , error :${error} ,query ${listID}`, error)
+			return this.createError(
+				`error add get users by group ID, INN :${this.INN} , error :${error} ,query ${listID}`,
+				error
+			)
 		}
 	}
 

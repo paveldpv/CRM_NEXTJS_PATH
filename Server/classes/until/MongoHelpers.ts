@@ -3,7 +3,7 @@ import { Types } from 'mongoose'
 
 export class MongoHelpers {
  
-  static stringToObjectId(idString: string): Types.ObjectId | null {
+  static stringToObjectId(idString?: string): Types.ObjectId | null {
     if (!idString || !Types.ObjectId.isValid(idString)) {
       return null
     }

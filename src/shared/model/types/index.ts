@@ -24,7 +24,7 @@ import {
 	TOrderFullInfoDTO,
 } from '../../../../Server/Service/serviceOrder/model/types/Types'
 import { TDBRequestPrevCalcDTO, TRequestPrevCalc } from '../../../../Server/Service/servicePrevCacl/model/types/Types'
-import { TDataTablePriceDTO,TPriceDTO } from '../../../../Server/Service/servicePrice/model/types/Types'
+import { TDataTablePriceDTO, TPriceDTO } from '../../../../Server/Service/servicePrice/model/types/Types'
 
 import { TPropertyDetailDTO } from '../../../../Server/Service/servicePropertyDetail/model/types/Types'
 import { TRequisitesDTO } from '../../../../Server/Service/serviceRequisites/model/types/Type'
@@ -32,17 +32,19 @@ import {
 	TDataOrganizationDTO,
 	TDataOrganizationFullInfoDTO,
 } from '../../../../Server/Service/serviceRuleOrganization/model/types/Types'
-import { TSessionFullInfoDTO, TTokens, TUserOnlineDTO } from '../../../../Server/Service/serviceSession/model/types/Type'
 import {
+	TSessionFullInfoDTO,
+	TTokens,
+	TUserOnlineDTO,
+} from '../../../../Server/Service/serviceSession/model/types/Type'
+import {
+	TDBUser,
 	TNewUser,
 	TUserDTOByBirthday,
 	TUserDTOWithoutPas,
 } from '../../../../Server/Service/serviceUser/model/types/Types'
 
-
-
-export type {TUserOnlineDTO,TSessionFullInfoDTO,TTokens,
-	TPriceDTO,
+export type {
 	TConfigAPP_DTO,
 	TCounterparty,
 	TCounterpartyDTO,
@@ -51,6 +53,7 @@ export type {TUserOnlineDTO,TSessionFullInfoDTO,TTokens,
 	TDataOrganizationFullInfoDTO,
 	TDataTablePriceDTO,
 	TDBRequestPrevCalcDTO,
+	TDBUser,
 	TDetailDTO,
 	TFullInfoTDetailDTO,
 	TGeolLocationDTO,
@@ -65,9 +68,13 @@ export type {TUserOnlineDTO,TSessionFullInfoDTO,TTokens,
 	TOrder,
 	TOrderDTO,
 	TOrderFullInfoDTO,
+	TPriceDTO,
 	TPropertyDetailDTO,
 	TRequestPrevCalc,
 	TRequisitesDTO,
+	TSessionFullInfoDTO,
+	TTokens,
 	TUserDTOByBirthday,
 	TUserDTOWithoutPas,
+	TUserOnlineDTO,
 }

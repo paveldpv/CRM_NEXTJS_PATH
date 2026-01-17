@@ -23,6 +23,6 @@ export type TNewUser = Omit<TDBUser, '_id'>
 
 export type TUserDTO = Omit<TDBUser, '_id'> & { _id: string }
 
-export type TUserDTOWithoutPas = Omit<TUserDTO, 'password'|'phone'>//152 фз - так должно быть 
+export type TUserDTOWithoutPas = Omit<TUserDTO, 'password'>//152 фз - так должно быть 
 
 export type TUserDTOByBirthday = Pick<TUserDTOWithoutPas, 'name' | 'lastName' | 'surname' >

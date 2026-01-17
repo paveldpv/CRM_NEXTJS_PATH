@@ -1,10 +1,10 @@
 import { serverClient } from '@/shared/lib/api/serverClient'
-import { TUserDTOWithoutPas, TNewUser, TGeolLocationDTO, TUserDTOByBirthday } from '@/shared/model/types'
+import { TUserDTOWithoutPas, TNewUser, TGeolLocationDTO, TUserDTOByBirthday, TDBUser } from '@/shared/model/types'
 
 import { TOptionQuery } from '@/shared/model/types/subtypes/optionQuery'
 
 export class FetchUser {
-	static async getAllUsers(INN: string, optionQuery: TOptionQuery<TUserDTOWithoutPas>): Promise<TUserDTOWithoutPas[] | []> {
+	static async getAllUsers(INN: string, optionQuery: TOptionQuery<TDBUser>): Promise<TUserDTOWithoutPas[] | []> {
 		const fetch = await serverClient.api<TUserDTOWithoutPas[] | []>(`${INN}/users/all`, {
 			method: 'POST',
 			body: JSON.stringify(optionQuery),
@@ -14,7 +14,7 @@ export class FetchUser {
 
 	static async getAllUsersWithoutDeleted(
 		INN: string,
-		optionQuery: TOptionQuery<TUserDTOWithoutPas>
+		optionQuery: TOptionQuery<TDBUser>
 	): Promise<TUserDTOWithoutPas[]> {
 		const fetch = await serverClient.api<TUserDTOWithoutPas[]>(`${INN}/users/withoutDeleted`, {
 			method: 'POST',
