@@ -5,7 +5,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
     <Suspense
       fallback={
         <div className=" flex justify-center items-center">
-          <span className="Loader">Загуржаем</span>
+          <span className="Loader">Загружаем</span>
         </div>
       }
     >

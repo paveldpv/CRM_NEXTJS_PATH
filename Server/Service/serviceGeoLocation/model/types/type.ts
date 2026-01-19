@@ -28,3 +28,5 @@ export type TGeolLocationFullInfo = Omit<TGeoLocation, 'user'> & { user: TDBUser
 
 export type TGeolLocationDTO = Omit<TGeoLocation, 'user' | '_id'> & { user: string; _id: string }
 export type TGeolLocationFullInfoDTO = Omit<TGeolLocationDTO, 'user'> & { user: TUserDTOWithoutPas }
+
+

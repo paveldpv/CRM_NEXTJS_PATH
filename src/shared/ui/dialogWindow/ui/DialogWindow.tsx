@@ -8,7 +8,7 @@ import { FaWindowClose } from 'react-icons/fa'
 
 import { typeDialog } from '@/shared/model/types/subtypes/enums'
 
-import CusButton from '../../CusButton'
+import CusButton from '../../button/ui/CusButton'
 import { TBodyDialogMessage, useDialogWindow } from '../model/storeDialogWindow'
 
 const style: React.CSSProperties = {
