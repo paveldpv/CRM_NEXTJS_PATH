@@ -1,25 +1,22 @@
-import { ObjectId } from 'mongoose'
 import { useEffect, useState } from 'react'
-import { PURPOSE_USE, TGeoLocation } from '../types/subtypes/TGeoLocation'
+import { PURPOSE_USE, TNewDataGeoLocationDTO } from '../types'
 
-export default function useGeo(idEmployee: ObjectId, process: PURPOSE_USE, options?: any) {
-	const [dataGeo, setDataGeo] = useState<Omit<TGeoLocation, 'date'>>({ idEmployee, process })
+export default function useGeo(idEmployee: string, process: PURPOSE_USE, options?: any) {
+	const [dataGeo, setDataGeo] = useState<TNewDataGeoLocationDTO>()
 
 	useEffect(() => {
-		const successHandler = (e: {
-			coords: GeolocationCoordinates
-			timestamp: number
-			toJSON: () => any
-		}) => {
+		const successHandler = (e: { coords: GeolocationCoordinates; timestamp: number; toJSON: () => any }) => {
 			const { longitude, latitude } = e.coords
-			const geolocation: Omit<TGeoLocation, 'date'> = {
+			const geolocation: TNewDataGeoLocationDTO = {
 				location: { longitude, latitude },
-				idEmployee,
+				user: idEmployee,
 				process,
+				safeDeleted: false,
 			}
 
 			setDataGeo(geolocation)
 		}
+
 		const errorHandler = (e: {
 			code: number
 			message: string
@@ -27,10 +24,12 @@ export default function useGeo(idEmployee: ObjectId, process: PURPOSE_USE, optio
 			POSITION_UNAVAILABLE: 2
 			TIMEOUT: 3
 		}) => {
-			const geolocation: Omit<TGeoLocation, 'date'> = {
-				idEmployee,
+			const geolocation: TNewDataGeoLocationDTO = {
+				user: idEmployee,
 				process,
+				safeDeleted: false,
 			}
+			setDataGeo(geolocation)
 			return geolocation
 		}
 		navigator.geolocation.getCurrentPosition(successHandler, errorHandler, options)

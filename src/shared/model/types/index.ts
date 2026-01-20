@@ -11,6 +11,7 @@ import {
 	TNewDetailDTO,
 } from '../../../../Server/Service/serviceDetails/model/types/Types'
 import {
+	PURPOSE_USE,
 	TGeolLocationDTO,
 	TGeolLocationFullInfoDTO,
 	TGeoLocation,
@@ -44,7 +45,7 @@ import {
 	TUserDTOWithoutPas,
 } from '../../../../Server/Service/serviceUser/model/types/Types'
 
-export type {
+export type {PURPOSE_USE,
 	TConfigAPP_DTO,
 	TCounterparty,
 	TCounterpartyDTO,

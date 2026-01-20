@@ -1,5 +1,5 @@
 'use client'
-import { typeDialog, typicalError } from '@/shared/model/types/subtypes/enums'
+import { typicalError } from '@/shared/model/types/subtypes/enums'
 
 import { InputAdornment, TextField } from '@mui/material'
 import { fieldData } from '../../registrated/model/FieldData'
@@ -21,6 +21,7 @@ import Link from 'next/link'
 import { useEffect, useReducer } from 'react'
 import { PURPOSE_USE } from '../../../../Server/Service/serviceGeoLocation/model/types/type'
 import IconFieldFormRegistrated from './IconFieldFormRegistrated'
+import { typeDialog } from '@/shared/ui/dialogWindow/model/Types/Types'
 
 export default function FormRegistrate() {
 	const [visiblePas, dispatchVisiblePas] = useReducer((state) => !state, true)
@@ -38,7 +39,6 @@ export default function FormRegistrate() {
 		password: '',
 		phone: '',
 		INN: '',
-		
 	}
 
 	const onSubmit = async () => {
@@ -58,10 +58,9 @@ export default function FormRegistrate() {
 
 					safeDeleted: false,
 				}
-				
 
 				const candidateNewAdmin = await FetchRegistrate.registrateOrganization(newUser, dataGeo)
-
+				//TODO:
 				if (candidateNewAdmin.status === 200 && candidateNewAdmin.response === 'OK') {
 					localStorage.setItem('mes_INN', newUser.INN)
 					localStorage.setItem('mes_password', newUser.password)
@@ -93,7 +92,13 @@ export default function FormRegistrate() {
 		)
 	}
 
-	const { handleChange, values: newUser, errors, setErrors, initialErrors } = useFormik({
+	const {
+		handleChange,
+		values: newUser,
+		errors,
+		setErrors,
+		initialErrors,
+	} = useFormik({
 		initialValues,
 		onSubmit,
 		validationSchema: SignupSchemaFormRegistrate,
@@ -124,8 +129,7 @@ export default function FormRegistrate() {
 										{field.name === 'password' ? (
 											<IconFieldFormRegistrated nameFiled={visiblePas ? 'visiblePassword' : 'password'} />
 										) : (
-											// @ts-ignore
-											<IconFieldFormRegistrated nameFiled={field.name} />
+											<IconFieldFormRegistrated nameFiled={field.name as any} />
 										)}
 									</span>
 								</InputAdornment>
