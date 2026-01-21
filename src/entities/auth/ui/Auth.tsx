@@ -1,6 +1,6 @@
 'use client'
 
-import { signIn } from 'next-auth/react'
+import { getSession, signIn } from 'next-auth/react'
 
 import { useFormik } from 'formik'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -10,8 +10,9 @@ import { useDialogWindow } from '../../../shared/ui/dialogWindow/model/storeDial
 
 import LoginSchemaForm from '../lib/validateFormAuth'
 
-import { typeDialog, typicalError } from '@/shared/model/types/subtypes/enums'
+import { typicalError } from '@/shared/model/types/subtypes/enums'
 import { TFormLogin } from '@/shared/model/types/subtypes/Types'
+import { typeDialog } from '@/shared/ui/dialogWindow/model/Types/Types'
 import MiniLoader from '@/shared/ui/loaders/MiniLoader'
 import Link from 'next/link'
 
@@ -33,6 +34,7 @@ export default function Auth() {
 
 	const onSubmit = async () => {
 		setLoader(true)
+		
 
 		if (Object.keys(errors).length) return
 
@@ -42,13 +44,18 @@ export default function Auth() {
 			INN: values.INN,
 			redirect: false,
 		})
+		
 
 		if (!res?.error) {
 			localStorage.setItem('mes_phone', values.phone)
 			localStorage.setItem('mes_INN', `${values.INN}`)
 			localStorage.setItem('mes_password', values.password)
+			const session = await getSession() 
+			console.log('🚀 ~ onSubmit ~ session:', session)
+			alert('stop')
+			return
 
-			push(`/${values.INN}/${values.phone}/main`)
+			// push(`/${values.INN}/${values.phone}/main`)
 		} else {
 			setOpenDialog(true, { title: 'Ошибка' }, typeDialog.error)
 			setTimeout(() => {
@@ -91,11 +98,7 @@ export default function Auth() {
 						value={values.phone}
 						onChange={handleChange}
 					/>
-					{!!errors.phone && (
-						<span className=' pt-4 select-none text-xl  text-red-900 mt-4 font-bold '>
-							{errors.phone}
-						</span>
-					)}
+					{!!errors.phone && <span className=' pt-4 select-none text-xl  text-red-900 mt-4 font-bold '>{errors.phone}</span>}
 				</li>
 				<li>
 					<label className='labelForInput' htmlFor='phone'>
@@ -130,9 +133,7 @@ export default function Auth() {
 						onChange={handleChange}
 					/>
 					{!!errors.password && (
-						<span className=' pt-4 select-none text-xl  text-red-900 mt-4 font-bold '>
-							{errors.password}
-						</span>
+						<span className=' pt-4 select-none text-xl  text-red-900 mt-4 font-bold '>{errors.password}</span>
 					)}
 				</li>
 				<button className='buttonSubmit' type='submit' hidden={loader}>
@@ -143,7 +144,7 @@ export default function Auth() {
 					className=' w-44 rounded-xl p-5 bg-highlight_two  font-bold text-4xs hover:underline hover:text-highlight_one'
 					href={'/registrate'}
 				>
-					регистрация
+					Регистрация
 				</Link>
 			</ul>
 		</form>

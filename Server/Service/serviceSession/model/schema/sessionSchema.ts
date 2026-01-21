@@ -25,6 +25,7 @@ export const sessionSchema = new Schema<TSession>(
 			required: true,
 		},
 		safeDeleted:{
+			type:Boolean,
 			default:false,
 			required:true
 		}

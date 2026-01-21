@@ -15,7 +15,8 @@ const style: React.CSSProperties = {
 	borderColor: 'red',
 	borderStyle: 'solid',
 	color: 'red',
-	borderRadius:'2rem'
+	borderRadius:'0.2rem',
+	
 }
 
 export default function DialogWindow() {

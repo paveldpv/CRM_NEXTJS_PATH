@@ -30,6 +30,7 @@ export default function FormRegistrate() {
 
 	useEffect(() => {
 		setLoader(false)
+		
 	}, [setLoader])
 
 	const { push } = useRouter()
@@ -42,6 +43,8 @@ export default function FormRegistrate() {
 	}
 
 	const onSubmit = async () => {
+		
+		
 		setLoader(true)
 		if (Object.keys(errors).length) return
 
@@ -58,9 +61,10 @@ export default function FormRegistrate() {
 
 					safeDeleted: false,
 				}
-
+				
+				
 				const candidateNewAdmin = await FetchRegistrate.registrateOrganization(newUser, dataGeo)
-				//TODO:
+				
 				if (candidateNewAdmin.status === 200 && candidateNewAdmin.response === 'OK') {
 					localStorage.setItem('mes_INN', newUser.INN)
 					localStorage.setItem('mes_password', newUser.password)
@@ -157,7 +161,7 @@ export default function FormRegistrate() {
 					className=' rounded-xl p-5 bg-highlight_two w-24 font-bold text-4xs hover:underline hover:text-highlight_one'
 					href={'/sign'}
 				>
-					Войти
+					Вход
 				</Link>
 			</div>
 		</form>

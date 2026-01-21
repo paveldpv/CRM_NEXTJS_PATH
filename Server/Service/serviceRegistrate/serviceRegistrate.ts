@@ -21,10 +21,10 @@ import { ServiceUsers } from '../serviceUser/serviceUser'
 
 export class ServiceRegistrated extends Service {
 	private dataUser: TFormRegistrate
-	private dataGeo: Omit<TGeoLocation, 'date' | 'user'>
+	private dataGeo: Omit<TGeoLocation, 'date' | 'user' | '_id'>
 	private currentDate = new Date()
 
-	constructor(dataUser: TFormRegistrate, dataGeo: Omit<TGeoLocation, 'date' | 'user'>) {
+	constructor(dataUser: TFormRegistrate, dataGeo: Omit<TGeoLocation, 'date' | 'user' | '_id'>) {
 		super(dataUser.INN)
 		this.dataUser = dataUser
 		this.dataGeo = dataGeo
@@ -67,7 +67,7 @@ export class ServiceRegistrated extends Service {
 
 			const serviceRuleOrganization = new ServiceRuleOrganization(this.INN)
 			const serviceGeoLocation = new ServiceGeoLocation(this.INN)
-			const newDataGeo: TGeoLocation = { ...this.dataGeo, user: newUser._id, date: new Date() }
+			const newDataGeo: Omit<TGeoLocation, 'date' | '_id'> = { ...this.dataGeo, user: newUser._id }
 
 			const setGeoLocation = serviceGeoLocation.setDataLocation(newDataGeo)
 			const resultRegistratedNewRuleOrganization = serviceRuleOrganization.createNewRuleOrganization()

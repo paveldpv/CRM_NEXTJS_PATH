@@ -66,7 +66,8 @@ const authConfig: AuthOptions = {
 			async authorize(credentials, req) {
 				const serviceAuth = new ServiceAuth(credentials as TFormLogin)
 				const resultAuth = await serviceAuth.auth()
-
+				
+				
 				if (resultAuth?.dataUser) return resultAuth as any
 				return null
 			},

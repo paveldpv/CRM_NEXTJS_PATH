@@ -41,7 +41,7 @@ export class ServiceSession extends Service {
 				jwt: Token.generate(1),
 			}
 		} catch (error) {
-			return this.createError(`error add session , data new session : ${newSession}`, error)
+			return this.createError(`error add session , data new session : ${JSON.stringify(newSession)}`, error)
 		}
 	}
 

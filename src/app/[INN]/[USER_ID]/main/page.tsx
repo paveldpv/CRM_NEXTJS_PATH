@@ -6,9 +6,6 @@ import authConfig from '../../../../../config/authConfig'
 import { typicalError } from '@/shared/model/types/subtypes/enums'
 
 import { TError } from '@/shared/model/types/subtypes/TError'
-import { TDataOrganization } from '@/shared/model/types/subtypes/TOrganization'
-
-import Wrapper from '@/widgets/wrapper/ui/Wrapper'
 
 import { ServiceRuleOrganization } from '../../../../../Server/Service/serviceRuleOrganization/serviceRuleOrganization'
 
@@ -18,6 +15,7 @@ import { Types } from 'mongoose'
 import { TConfigAPP } from '../../../../../Server/Service/serviceConfigApp/model/types/Type'
 import { ServiceConfigApp } from '../../../../../Server/Service/serviceConfigApp/serviceConfigApp'
 import { TDBUserWithoutPas } from '../../../../../Server/Service/serviceUser/model/types/Types'
+import { TDataOrganization } from '../../../../../Server/Service/serviceRuleOrganization/model/types/Types'
 
 const initializationConfigApp = async (INN: string, idUser?: Types.ObjectId): Promise<TConfigAPP | TError | null> => {
 	if (!idUser) return null
@@ -25,10 +23,10 @@ const initializationConfigApp = async (INN: string, idUser?: Types.ObjectId): Pr
 	return await serviceConfigApp.getPersonalConfig(idUser)
 }
 
-const initializationOrganization = async (INN: string): Promise<TDataOrganization | null | TError> => {
-	const serviceOrganization = new ServiceRuleOrganization(INN)
-	return await serviceOrganization.getParamsOrganization()
-}
+// const initializationOrganization = async (INN: string): Promise<TDataOrganization | null | TError> => {
+// 	const serviceOrganization = new ServiceRuleOrganization(INN)
+// 	return await serviceOrganization.getParamsOrganization()
+// }
 
 export default async function page({ params }: { params: { INN: string; PHONE: string } }) {
 	const { PHONE, INN } = params
@@ -37,24 +35,25 @@ export default async function page({ params }: { params: { INN: string; PHONE: s
 	const jwt = session?.jwt
 	const refreshToken = session?.refreshToken
 
-	const dataApp = await Promise.all([initializationConfigApp(INN, dataUser._id), initializationOrganization(INN)])
-	console.log(`data app test from page`, dataApp[0])
+	// const dataApp = await Promise.all([initializationConfigApp(INN, dataUser._id), initializationOrganization(INN)])
+	// console.log(`data app test from page`, dataApp[0])
 
-	const er = dataApp.some((el) => isError(el))
+	// const er = dataApp.some((el) => isError(el))
 
-	if (er) {
-		redirect(`/ERROR/${typicalError.error_DB}`)
-	}
+	// if (er) {
+	// 	redirect(`/ERROR/${typicalError.error_DB}`)
+	// }
 
-	const [configApp, infoOrganization] = dataApp as [TConfigAPP | null, TDataOrganization]
+	// const [configApp, infoOrganization] = dataApp as [TConfigAPP | null, TDataOrganization]
 
 	return (
-		<Wrapper
-			phone={PHONE}
-			dataConfigApp={configApp}
-			dataUser={dataUser}
-			infoOrganization={infoOrganization}
-			tokens={{ jwt, refreshToken }}
-		/>
+		<div></div>
+		// <Wrapper
+		// 	phone={PHONE}
+		// 	dataConfigApp={configApp}
+		// 	dataUser={dataUser}
+		// 	infoOrganization={infoOrganization}
+		// 	tokens={{ jwt, refreshToken }}
+		// />
 	)
 }

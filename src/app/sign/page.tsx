@@ -5,7 +5,7 @@ import DialogWindow from '@/shared/ui/dialogWindow/ui/DialogWindow'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-	title: 'AUTH',
+	title: 'авторизация',
 	description: 'sign MES',
 }
 
