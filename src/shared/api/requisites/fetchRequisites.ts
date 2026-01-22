@@ -3,17 +3,17 @@ import { TNewDataGeoLocationDTO, TRequisitesDTO } from '@/shared/model/types'
 
 export class FetchRequisites {
 	static async getCurrentOrganizationRequisites(INN: string): Promise<TRequisitesDTO> {
-		const fetch = await serverClient.api<TRequisitesDTO>(`${INN}/requisites/get/current`, { method: 'GET' })
+		const fetch = await serverClient.api<TRequisitesDTO>(INN,`${INN}/requisites/get/current`, { method: 'GET' })
 		return fetch
 	}
 
 	static async getAllCounterpartyRequisites(INN: string): Promise<TRequisitesDTO[]> {
-		const fetch = await serverClient.api<TRequisitesDTO[]>(`${INN}/requisites/get/all`, { method: 'GET' })
+		const fetch = await serverClient.api<TRequisitesDTO[]>(INN,`${INN}/requisites/get/all`, { method: 'GET' })
 		return fetch
 	}
 
 	static async deleteRequisites(INN: string, targetINN: string, dataGeo: TNewDataGeoLocationDTO): Promise<void> {
-		const fetch = await serverClient.api<void>(`${INN}/requisites/deleted?targetINN=${targetINN}`, {
+		const fetch = await serverClient.api<void>(INN,`${INN}/requisites/deleted?targetINN=${targetINN}`, {
 			method: 'POST',
 			body: JSON.stringify(dataGeo),
 		})
@@ -25,7 +25,7 @@ export class FetchRequisites {
 			data,
 			dataGeo,
 		}
-		const fetch = await serverClient.api<void>(`${INN}/requisites/update`, {
+		const fetch = await serverClient.api<void>(INN,`${INN}/requisites/update`, {
 			method: 'POST',
 			body: JSON.stringify(dataBody),
 		})

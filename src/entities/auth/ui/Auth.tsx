@@ -50,12 +50,8 @@ export default function Auth() {
 			localStorage.setItem('mes_phone', values.phone)
 			localStorage.setItem('mes_INN', `${values.INN}`)
 			localStorage.setItem('mes_password', values.password)
-			const session = await getSession() 
-			console.log('🚀 ~ onSubmit ~ session:', session)
-			alert('stop')
-			return
-
-			// push(`/${values.INN}/${values.phone}/main`)
+			const session = await getSession() //на клиенте можно вызвать 
+			push(`/${values.INN}/${session?.user._id}/main`)
 		} else {
 			setOpenDialog(true, { title: 'Ошибка' }, typeDialog.error)
 			setTimeout(() => {

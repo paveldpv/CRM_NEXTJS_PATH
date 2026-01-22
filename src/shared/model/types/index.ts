@@ -77,5 +77,5 @@ export type {PURPOSE_USE,
 	TTokens,
 	TUserDTOByBirthday,
 	TUserDTOWithoutPas,
-	TUserOnlineDTO,
+	TUserOnlineDTO
 }

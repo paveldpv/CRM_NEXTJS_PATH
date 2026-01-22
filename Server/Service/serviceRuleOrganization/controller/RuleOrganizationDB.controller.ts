@@ -39,6 +39,10 @@ export default class ControllerDBRuleOrganization extends ControllerDB {
 		await this.changeReadinessModel()
 		return await this.modelOrganization!.findOne({ INN: this.INN }).populate('requisites')
 	}
+	public async getInfoOrganizationWithoutRequisites(): Promise<TDataOrganization | null> {
+		await this.changeReadinessModel()
+		return await this.modelOrganization!.findOne({ INN: this.INN })
+	}
 
 	public async updateInfoOrganization(newInfo: TDataOrganization) {
 		await this.changeReadinessModel()

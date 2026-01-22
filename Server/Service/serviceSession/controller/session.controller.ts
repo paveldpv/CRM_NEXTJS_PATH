@@ -38,7 +38,7 @@ export class ControllerSession extends ControllerDB {
 	}
 	public async getPersonalSession(idUser: Types.ObjectId): Promise<TSession | null> {
 		await this.changeReadinessModel()
-		return await this.modelSession!.findOne({ idUser })
+		return await this.modelSession!.findOne({ user:idUser })
 	}
 	public async getSessionByRefreshToken(token: string): Promise<null | TSession> {
 		await this.changeReadinessModel()

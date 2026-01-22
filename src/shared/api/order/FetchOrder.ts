@@ -12,7 +12,7 @@ export class FetchOrder {
 			data,
 			dataGeo,
 		}
-		const fetch = await serverClient.api<TOrderFullInfoDTO>(`${INN}/order/create`, {
+		const fetch = await serverClient.api<TOrderFullInfoDTO>(INN,`${INN}/order/create`, {
 			method: 'POST',
 			body: JSON.stringify(dataBody),
 		})
@@ -21,7 +21,7 @@ export class FetchOrder {
 
 	static async restoreOrder(INN: string, idOrder: string, dataGeo: TNewDataGeoLocationDTO): Promise<void> {
 		const dataBody = { idOrder, dataGeo }
-		const fetch = await serverClient.api<void>(`${INN}/order/restore`, {
+		const fetch = await serverClient.api<void>(INN,`${INN}/order/restore`, {
 			method: 'POST',
 			body: JSON.stringify(dataBody),
 		})
@@ -33,7 +33,7 @@ export class FetchOrder {
 			idOrder,
 			dataGeo,
 		}
-		const fetch = await serverClient.api<void>(`${INN}/order/remove`, {
+		const fetch = await serverClient.api<void>(INN,`${INN}/order/remove`, {
 			method: 'POST',
 			body: JSON.stringify(dataBody),
 		})
@@ -51,7 +51,7 @@ export class FetchOrder {
 			completed,
 			option,
 		}
-		const fetch = await serverClient.api<TOrderFullInfoDTO[]>(`${INN}/order/get`, {
+		const fetch = await serverClient.api<TOrderFullInfoDTO[]>(INN,`${INN}/order/get`, {
 			method: 'POST',
 			body: JSON.stringify(dataBody),
 		})
@@ -63,7 +63,7 @@ export class FetchOrder {
 			dateStart: dateStart.toISOString(),
 			dateEnd: dateEndDate.toISOString(),
 		})
-		const fetch = await serverClient.api<TOrderFullInfoDTO[]>(`${INN}/order/search?${params}`, { method: 'GET' })
+		const fetch = await serverClient.api<TOrderFullInfoDTO[]>(INN,`${INN}/order/search?${params}`, { method: 'GET' })
 		return fetch
 	}
 
@@ -72,13 +72,13 @@ export class FetchOrder {
 			data,
 			dataGeo,
 		}
-		const fetch = await serverClient.api<void>(`${INN}/order/update`, { method: 'PUT', body: JSON.stringify(dataBody) })
+		const fetch = await serverClient.api<void>(INN,`${INN}/order/update`, { method: 'PUT', body: JSON.stringify(dataBody) })
 		return fetch
 	}
 
 	static async completedOrder(INN: string, idOrder: string, dataGeo: TNewDataGeoLocationDTO): Promise<void> {
 		const dataBody = { idOrder, dataGeo }
-		const fetch = await serverClient.api<void>(`${INN}/order/competed`, {
+		const fetch = await serverClient.api<void>(INN,`${INN}/order/competed`, {
 			method: 'PUT',
 			body: JSON.stringify(dataBody),
 		})

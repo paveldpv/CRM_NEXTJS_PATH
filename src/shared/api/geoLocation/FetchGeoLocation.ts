@@ -4,11 +4,11 @@ import { TOptionQuery } from '@/shared/model/types/subtypes/optionQuery'
 
 export class FetchGeoLocation {
 	static async getData(INN: string, option?: TOptionQuery<TGeoLocation>): Promise<TGeolLocationFullInfoDTO[]> {		
-		const fetch = await serverClient.api<TGeolLocationFullInfoDTO[]>(`${INN}/geoLocation/get`, { method: 'POST' ,body:JSON.stringify(option)})
+		const fetch = await serverClient.api<TGeolLocationFullInfoDTO[]>(INN,`${INN}/geoLocation/get`, { method: 'POST' ,body:JSON.stringify(option)})
 		return fetch
 	}
 	static async setData(INN: string, data: TNewDataGeoLocationDTO): Promise<void> {
-		const fetch = await serverClient.api<void>(`${INN}/geoLocation/set`,{method:'POST',body:JSON.stringify(data)})
+		const fetch = await serverClient.api<void>(INN,`${INN}/geoLocation/set`,{method:'POST',body:JSON.stringify(data)})
 		return fetch
 	}
 }

@@ -4,8 +4,11 @@ import { isError } from '../../../src/shared/lib/IsError'
 import { Service } from '../../classes/Service'
 import { TTokens } from '../serviceSession/model/types/Type'
 import { ServiceSession } from '../serviceSession/serviceSession'
-import { TDBUserWithoutPas } from '../serviceUser/model/types/Types'
+
+import { ServiceUserDTO } from '../serviceUser/user.dto'
+import { TUserDTOWithoutPas } from '@/shared/model/types'
 import { ServiceUsers } from '../serviceUser/serviceUser'
+import { MongoHelpers } from '../../classes/until/MongoHelpers'
 
 export class ServiceAuth extends Service {
 	private phone: string
@@ -16,11 +19,11 @@ export class ServiceAuth extends Service {
 		this.password = dataFormLogin.password
 	}
 
-	async auth(): Promise<{ dataUser: TDBUserWithoutPas; token: TTokens } | null> {
+	async auth(): Promise<{ dataUser: TUserDTOWithoutPas; token: TTokens } | null> {
 		const serviceUser = new ServiceUsers(this.INN)
 		const candidateAuth = await serviceUser.getUserByPhone(this.phone)
 
-		if (!candidateAuth) return null
+		if (!candidateAuth || isError(candidateAuth)) return null
 
 		if (isError(candidateAuth)) {
 			this.createError(candidateAuth.message)
@@ -31,13 +34,15 @@ export class ServiceAuth extends Service {
 
 		if (isCorrectedPassword) {
 			const serviceSession = new ServiceSession(this.INN)
-			const token = await serviceSession.addSession(candidateAuth._id)
+			const idCandidate = MongoHelpers.stringToObjectId(candidateAuth._id.toString())
+			const token = await serviceSession.addSession(idCandidate!)
+
 			if (isError(token)) {
 				this.createError(`error create new session , data user :${candidateAuth}`)
 				return null
 			}
-			const { password, ...dataUser } = candidateAuth
-			return { dataUser, token }
+			const userDTO = ServiceUserDTO.createUserDTO(candidateAuth)			
+			return { token, dataUser: userDTO }
 		} else {
 			this.createError(`error auth ,invalid password phone user:${this.phone},inn  :${this.INN}`)
 			return null

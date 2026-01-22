@@ -7,33 +7,38 @@ import { useInfoOrganization } from '@/shared/model/store/storeInfoOrganization'
 import { useInfoUser } from '@/shared/model/store/storeInfoUser'
 
 import { setJWTToken, setRefreshToken } from '@/shared/lib/authToken'
-import { TDataOrganization } from '@/shared/model/types/subtypes/TOrganization'
 import { useLoader } from '@/shared/ui/namedLoader/model/storeLoader'
 import CusSnackbar from '@/shared/ui/snackbar/ui/CusSnackbar'
 import { SessionProvider } from 'next-auth/react'
-import { TConfigAPP } from '../../../../Server/Service/serviceConfigApp/model/types/Type'
-import { TTokens } from '../../../../Server/Service/serviceSession/model/types/Type'
-import { TDBUserWithoutPas } from '../../../../Server/Service/serviceUser/model/types/Types'
-import { fetchInitializationApp } from '../api/InitializationApp'
+
+import { TConfigAPP_DTO, TDataOrganizationDTO, TUserDTOWithoutPas } from '@/shared/model/types'
+import { FetchRuleOrganization } from '@/shared/api/ruleOrganization/fetchRuleOrganization'
+import { useParams } from 'next/navigation'
+import { FetchUser } from '@/shared/api'
+
 
 export type TWrapper = {
-	phone: string
-	infoOrganization: TDataOrganization
-	dataConfigApp: TConfigAPP | null
-	tokens?: Partial<TTokens>
-	dataUser?: TDBUserWithoutPas
+	INN:string
+	idUSer:string,
+	infoOrganization: TDataOrganizationDTO
+	dataConfigApp: TConfigAPP_DTO
+	dataUser: TUserDTOWithoutPas
+	JWT?: string
+	refreshToken?: string
 }
 
-export default function Wrapper({ dataConfigApp, dataUser, infoOrganization, tokens, phone }: TWrapper) {
+export default function Wrapper({idUSer,INN, dataConfigApp, dataUser, infoOrganization,JWT,refreshToken }: TWrapper) {
 	const setInfoUser = useInfoUser((store) => store.setInfoUser)
 	const setConfigApp = useConfigApp((store) => store.setDataConfigApp)
 	const setTextLoader = useLoader((store) => store.setTextLoader)
 	const setInfoOrganization = useInfoOrganization((state) => state.setInfoOrganization)
+	
+	
 
 	useEffect(() => {
-		if (tokens?.jwt && tokens.refreshToken) {
-			setJWTToken(tokens.jwt)
-			setRefreshToken(tokens.refreshToken)
+		if (JWT && refreshToken) {
+			setJWTToken(JWT)
+			setRefreshToken(refreshToken)
 		}
 
 		setInfoOrganization(infoOrganization)
@@ -43,13 +48,14 @@ export default function Wrapper({ dataConfigApp, dataUser, infoOrganization, tok
 		if (dataConfigApp && dataUser) {
 			setInfoUser(dataUser)
 			setConfigApp(dataConfigApp)
-		} else {
-			fetchInitializationApp(infoOrganization.INN, phone).then((res) => {
-				if (res) {
-					setInfoUser(res.user)
-					setConfigApp(res.dataConfigApp)
-				}
+		} else {		
+			Promise.all([FetchUser.getUserById(INN,idUSer),
+				FetchRuleOrganization.getParams(INN)
+			]).then(([actualDataUser,actualDataOrganization])=>{
+				setInfoUser(actualDataUser)
+				setInfoOrganization(actualDataOrganization)
 			})
+			
 		}
 	}, [])
 

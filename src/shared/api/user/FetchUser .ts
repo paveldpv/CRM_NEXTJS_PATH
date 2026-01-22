@@ -5,7 +5,7 @@ import { TOptionQuery } from '@/shared/model/types/subtypes/optionQuery'
 
 export class FetchUser {
 	static async getAllUsers(INN: string, optionQuery: TOptionQuery<TDBUser>): Promise<TUserDTOWithoutPas[] | []> {
-		const fetch = await serverClient.api<TUserDTOWithoutPas[] | []>(`${INN}/users/all`, {
+		const fetch = await serverClient.api<TUserDTOWithoutPas[] | []>(INN,`${INN}/users/all`, {
 			method: 'POST',
 			body: JSON.stringify(optionQuery),
 		})
@@ -16,7 +16,7 @@ export class FetchUser {
 		INN: string,
 		optionQuery: TOptionQuery<TDBUser>
 	): Promise<TUserDTOWithoutPas[]> {
-		const fetch = await serverClient.api<TUserDTOWithoutPas[]>(`${INN}/users/withoutDeleted`, {
+		const fetch = await serverClient.api<TUserDTOWithoutPas[]>(INN,`${INN}/users/withoutDeleted`, {
 			method: 'POST',
 			body: JSON.stringify(optionQuery),
 		})
@@ -24,12 +24,12 @@ export class FetchUser {
 	}
 
 	static async getDataAdmins(INN: string): Promise<TUserDTOWithoutPas[]> {
-		const fetch = await serverClient.api<TUserDTOWithoutPas[]>(`${INN}/users/admins`, { method: 'GET' })
+		const fetch = await serverClient.api<TUserDTOWithoutPas[]>(INN,`${INN}/users/admins`, { method: 'GET' })
 		return fetch
 	}
 
 	static async getUserById(INN: string, _id: string): Promise<TUserDTOWithoutPas> {
-		const fetch = await serverClient.api<TUserDTOWithoutPas>(`${INN}/user/id?id=${_id}`, { method: 'GET' })
+		const fetch = await serverClient.api<TUserDTOWithoutPas>(INN,`${INN}/user/id?id=${_id}`, { method: 'GET' })
 		return fetch
 	}
 
@@ -39,7 +39,7 @@ export class FetchUser {
 			dataGeo,
 		}
 
-		const fetch = await serverClient.api<TUserDTOWithoutPas>(`${INN}/user/newUser`, {
+		const fetch = await serverClient.api<TUserDTOWithoutPas>(INN,`${INN}/user/newUser`, {
 			method: 'POST',
 			body: JSON.stringify(dataBody),
 		})
@@ -49,7 +49,7 @@ export class FetchUser {
 	public async getUserByGroupID(INN: string, list_id: string[]): Promise<TUserDTOWithoutPas[]> {
 		const params = new URLSearchParams()
 		params.append('ids', list_id.join('!'))
-		const fetch = await serverClient.api<TUserDTOWithoutPas[]>(`${INN}/users/batch?${params}`, {
+		const fetch = await serverClient.api<TUserDTOWithoutPas[]>(INN,`${INN}/users/batch?${params}`, {
 			method: 'GET',
 		})
 		return fetch
@@ -58,7 +58,7 @@ export class FetchUser {
 	public async updateDataUser(INN: string, newDataUser: TUserDTOWithoutPas, dataGeo: TGeolLocationDTO): Promise<void> {
 		const dataBody = { newDataUser, dataGeo }
 
-		const fetch = await serverClient.api<void>(`${INN}/user/update/data`, {
+		const fetch = await serverClient.api<void>(INN,`${INN}/user/update/data`, {
 			method: 'PUT',
 			body: JSON.stringify(dataBody),
 		})
@@ -77,7 +77,7 @@ export class FetchUser {
 			data,
 			dataGeo,
 		}
-		const fetch = await serverClient.api<void>(`${INN}/user/update/password`, {
+		const fetch = await serverClient.api<void>(INN,`${INN}/user/update/password`, {
 			method: 'PUT',
 			body: JSON.stringify(dataBody),
 		})
@@ -85,12 +85,12 @@ export class FetchUser {
 	}
 
 	public async getUserByPhone(INN: string, phone: string): Promise<TUserDTOWithoutPas> {
-		const fetch = await serverClient.api<TUserDTOWithoutPas>(`${INN}/user/phone?phone=${phone}`)
+		const fetch = await serverClient.api<TUserDTOWithoutPas>(INN,`${INN}/user/phone?phone=${phone}`)
 		return fetch
 	}
 
 	public async removeUser(INN: string, _id: string, dataGeo: TGeolLocationDTO): Promise<void> {
-		const fetch = await serverClient.api<void>(`${INN}/user/remove/${_id}`, {
+		const fetch = await serverClient.api<void>(INN,`${INN}/user/remove/${_id}`, {
 			method: 'POST',
 			body: JSON.stringify(dataGeo),
 		})
@@ -98,7 +98,7 @@ export class FetchUser {
 	}
 
 	public async restoreUser(INN: string, _id: string, dataGeo: TGeolLocationDTO): Promise<void> {
-		const fetch = await serverClient.api<void>(`${INN}/user/restore/${_id}`, {
+		const fetch = await serverClient.api<void>(INN,`${INN}/user/restore/${_id}`, {
 			method: 'POST',
 			body: JSON.stringify(dataGeo),
 		})
@@ -106,7 +106,7 @@ export class FetchUser {
 	}
 
 	public async getUsersWithBirthdayToday(INN: string): Promise<TUserDTOByBirthday[]> {
-		const fetch = await serverClient.api<TUserDTOByBirthday[]>(`${INN}/users/batch/birthday`, { method: 'GET' })
+		const fetch = await serverClient.api<TUserDTOByBirthday[]>(INN,`${INN}/users/batch/birthday`, { method: 'GET' })
 		return fetch
 	}
 }

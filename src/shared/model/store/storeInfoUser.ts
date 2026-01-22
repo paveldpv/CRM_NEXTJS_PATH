@@ -1,9 +1,9 @@
 import { create } from 'zustand'
-import { TDBUserWithoutPas } from '../../../../Server/Service/serviceUser/model/types/Types'
+import { TDBUserWithoutPas, TUserDTOWithoutPas } from '../../../../Server/Service/serviceUser/model/types/Types'
 
 type TStoreInfoUser = {
-	setInfoUser: (state: TDBUserWithoutPas) => void
-	dataUser: TDBUserWithoutPas | null
+	setInfoUser: (state: TUserDTOWithoutPas) => void
+	dataUser: TUserDTOWithoutPas | null
 }
 
 export const useInfoUser = create<TStoreInfoUser>((set) => ({
