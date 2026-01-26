@@ -46,7 +46,7 @@ export class FetchUser {
 		return fetch
 	}
 
-	public async getUserByGroupID(INN: string, list_id: string[]): Promise<TUserDTOWithoutPas[]> {
+	static async getUserByGroupID(INN: string, list_id: string[]): Promise<TUserDTOWithoutPas[]> {
 		const params = new URLSearchParams()
 		params.append('ids', list_id.join('!'))
 		const fetch = await serverClient.api<TUserDTOWithoutPas[]>(INN,`${INN}/users/batch?${params}`, {
@@ -55,7 +55,7 @@ export class FetchUser {
 		return fetch
 	}
 
-	public async updateDataUser(INN: string, newDataUser: TUserDTOWithoutPas, dataGeo: TGeolLocationDTO): Promise<void> {
+	static async updateDataUser(INN: string, newDataUser: TUserDTOWithoutPas, dataGeo: TGeolLocationDTO): Promise<void> {
 		const dataBody = { newDataUser, dataGeo }
 
 		const fetch = await serverClient.api<void>(INN,`${INN}/user/update/data`, {
@@ -65,7 +65,7 @@ export class FetchUser {
 		return fetch
 	}
 
-	public async updatePass(
+	static async updatePass(
 		INN: string,
 		data: {
 			idUser: string
@@ -84,12 +84,12 @@ export class FetchUser {
 		return fetch
 	}
 
-	public async getUserByPhone(INN: string, phone: string): Promise<TUserDTOWithoutPas> {
+	static async getUserByPhone(INN: string, phone: string): Promise<TUserDTOWithoutPas> {
 		const fetch = await serverClient.api<TUserDTOWithoutPas>(INN,`${INN}/user/phone?phone=${phone}`)
 		return fetch
 	}
 
-	public async removeUser(INN: string, _id: string, dataGeo: TGeolLocationDTO): Promise<void> {
+	static async removeUser(INN: string, _id: string, dataGeo: TGeolLocationDTO): Promise<void> {
 		const fetch = await serverClient.api<void>(INN,`${INN}/user/remove/${_id}`, {
 			method: 'POST',
 			body: JSON.stringify(dataGeo),
@@ -97,7 +97,7 @@ export class FetchUser {
 		return fetch
 	}
 
-	public async restoreUser(INN: string, _id: string, dataGeo: TGeolLocationDTO): Promise<void> {
+	static async restoreUser(INN: string, _id: string, dataGeo: TGeolLocationDTO): Promise<void> {
 		const fetch = await serverClient.api<void>(INN,`${INN}/user/restore/${_id}`, {
 			method: 'POST',
 			body: JSON.stringify(dataGeo),
@@ -105,7 +105,7 @@ export class FetchUser {
 		return fetch
 	}
 
-	public async getUsersWithBirthdayToday(INN: string): Promise<TUserDTOByBirthday[]> {
+	static async getUsersWithBirthdayToday(INN: string): Promise<TUserDTOByBirthday[]> {
 		const fetch = await serverClient.api<TUserDTOByBirthday[]>(INN,`${INN}/users/batch/birthday`, { method: 'GET' })
 		return fetch
 	}

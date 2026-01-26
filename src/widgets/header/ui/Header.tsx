@@ -1,10 +1,12 @@
 'use client'
-import { hasNotIndicatedProperty } from '@/shared/lib/hasNotIndicatedProperty'
+import { maskPhoneNumber } from '@/shared/lib/utils/formatPhoneNumber'
+import { hasNotIndicatedProperty } from '@/shared/lib/utils/hasNotIndicatedProperty'
 import { useConfigApp } from '@/shared/model/store/storeConfigApp'
 import { useInfoOrganization } from '@/shared/model/store/storeInfoOrganization'
 import { useInfoUser } from '@/shared/model/store/storeInfoUser'
-import Notifications from '@/widgets/notifications/ui/Notifications'
+import Notifications from '@/widgets/header/ui/Notifications'
 import Link from 'next/link'
+
 export default function Header() {
 	const dataUser = useInfoUser((store) => store.dataUser)
 	const { configHeader } = useConfigApp((store) => store.dataConfigApp)
@@ -22,13 +24,13 @@ export default function Header() {
 		>
 			<div className='  flex justify-between text-xs  w-full '>
 				<ul className='text-list_menu flex flex-col gap-1 text-xs '>
-					<li style={{ color: configHeader?.color?.textColor }}>тел. : {dataUser?.phone}</li>
+					<li style={{ color: configHeader?.color?.textColor }}>тел. : {maskPhoneNumber(dataUser?.phone)}</li>
 					{!dataUser || hasNotIndicatedProperty(dataUser) ? (
 						<Link
 							className=' p-2 bg-menu_color rounded-md hover:text-color_header duration-700 active:text-color_header'
-							href={`/${INN}/${dataUser?.phone}/main/setting/profile`}
+							href={`/${INN}/${dataUser?._id}/main/setting/profile`}
 						>
-							Данные не заполнены
+							Данные профиля не заполнены
 						</Link>
 					) : (
 						<ul style={{ color: configHeader?.color?.textColor }}>

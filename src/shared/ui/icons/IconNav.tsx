@@ -4,7 +4,7 @@ import { FaBook, FaDrawPolygon, FaShippingFast, FaTable } from 'react-icons/fa'
 import { GoGraph } from 'react-icons/go'
 import { IoIosSettings } from 'react-icons/io'
 import { LiaTasksSolid } from 'react-icons/lia'
-import { MdOutlinePriceChange } from 'react-icons/md'
+import { MdOutlinePriceChange, MdStorage } from 'react-icons/md'
 import { PiSignOutBold } from 'react-icons/pi'
 
 import { TLink } from '@/shared/model/types/subtypes/Types'
@@ -29,6 +29,7 @@ const mapIconsNavLink = {
 	setting_history_entry_location: <BsGeoAlt />,
 	table: <FaTable />,
 	details: <FaDrawPolygon />,
+	storage:<MdStorage />
 }
 
 export default function IconNav({ id }: Pick<TLink, 'id'>) {

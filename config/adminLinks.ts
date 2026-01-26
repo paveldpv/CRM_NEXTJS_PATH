@@ -2,6 +2,7 @@
 import { idLink } from '@/shared/model/types/subtypes/enums'
 import { TLink } from '@/shared/model/types/subtypes/Types'
 import { ROOT_LINK } from '../Server/Service/servicePermissionRedactData/model/types/Types'
+
 export const adminLinks: TLink[] = [{
 		href: ROOT_LINK.order,
 		description: 'работа с текущими заказами - прием заказов ',
@@ -14,46 +15,46 @@ export const adminLinks: TLink[] = [{
 		title: 'расчеты и контрагенты',
 		id: idLink.payment,
 	},
-	{
-		href: ROOT_LINK.shipment,
-		description: 'отгрузить - формирование ТТН и прочих документов на забор грузов и прием деталей в работу ',
-		title: 'Прием/Отгрузки',
-		id: idLink.shipment,
-	},
+	// { на 26,01,2026 - нам это скорее всего не приголитсья - отгрузки через старницу заказов
+	// 	href: ROOT_LINK.shipment,
+	// 	description: 'Отгрузить - формирование ТТН и прочих документов на забор грузов и прием деталей в работу ',
+	// 	title: 'Прием/Отгрузки',
+	// 	id: idLink.shipment,
+	// },
 	{
 		href: ROOT_LINK.employee,
-		description: 'работа с назначениями, добавление изменение прав сотрудников  ',
+		description: 'Работа с назначениями, добавление изменение прав сотрудников  ',
 		title: 'Сотрудники',
 		id: idLink.employee,
 	},
 	{
 		href: ROOT_LINK.taskBoard,
-		description: 'распределения очередность выполнения работ',
+		description: 'Распределения очередность выполнения работ',
 		title: 'Задачи',
 		id: idLink.tasks,
 	},
 	{
 		href: ROOT_LINK.details,
-		description: 'детали',
-		title: 'детали',
+		description: 'Детали',
+		title: 'Детали',
 		id: idLink.details,
 	},
 	{
 		href: ROOT_LINK.application,
-		description: 'заявки на просчет стоимости выполнения работ',
+		description: 'Заявки на просчет стоимости выполнения работ',
 		title: 'Входящие заявки',
 		id: idLink.application,
 	},
 	{
-		href: ROOT_LINK.statistics,
-		description: 'статистика',
-		title: 'Статистика',
+		href: ROOT_LINK.storage,
+		description: 'Склад',
+		title: 'Склад',
 		id: idLink.statistic,
 	},
 	{
 		href: ROOT_LINK.price,
 		description: 'Прайс и цены',
-		title: 'Цены',
+		title: 'Прайсы',
 		id: idLink.price,
 		paramsHref:['initialPrice']
 	},

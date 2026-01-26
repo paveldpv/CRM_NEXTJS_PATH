@@ -11,30 +11,18 @@ import { useLoader } from '@/shared/ui/namedLoader/model/storeLoader'
 import CusSnackbar from '@/shared/ui/snackbar/ui/CusSnackbar'
 import { SessionProvider } from 'next-auth/react'
 
-import { TConfigAPP_DTO, TDataOrganizationDTO, TUserDTOWithoutPas } from '@/shared/model/types'
-import { FetchRuleOrganization } from '@/shared/api/ruleOrganization/fetchRuleOrganization'
-import { useParams } from 'next/navigation'
 import { FetchUser } from '@/shared/api'
+import { FetchRuleOrganization } from '@/shared/api/ruleOrganization/fetchRuleOrganization'
+import { TWrapper } from '../model/Types/Type'
 
-
-export type TWrapper = {
-	INN:string
-	idUSer:string,
-	infoOrganization: TDataOrganizationDTO
-	dataConfigApp: TConfigAPP_DTO
-	dataUser: TUserDTOWithoutPas
-	JWT?: string
-	refreshToken?: string
-}
-
-export default function Wrapper({idUSer,INN, dataConfigApp, dataUser, infoOrganization,JWT,refreshToken }: TWrapper) {
+export default function Wrapper({ idUSer, INN, dataConfigApp, dataUser, infoOrganization, JWT, refreshToken }: TWrapper) {
+	
 	const setInfoUser = useInfoUser((store) => store.setInfoUser)
 	const setConfigApp = useConfigApp((store) => store.setDataConfigApp)
 	const setTextLoader = useLoader((store) => store.setTextLoader)
 	const setInfoOrganization = useInfoOrganization((state) => state.setInfoOrganization)
+	console.log('🚀 ~ Wrapper ~ dataUser:', dataUser)
 	
-	
-
 	useEffect(() => {
 		if (JWT && refreshToken) {
 			setJWTToken(JWT)
@@ -48,21 +36,21 @@ export default function Wrapper({idUSer,INN, dataConfigApp, dataUser, infoOrgani
 		if (dataConfigApp && dataUser) {
 			setInfoUser(dataUser)
 			setConfigApp(dataConfigApp)
-		} else {		
-			Promise.all([FetchUser.getUserById(INN,idUSer),
-				FetchRuleOrganization.getParams(INN)
-			]).then(([actualDataUser,actualDataOrganization])=>{
-				setInfoUser(actualDataUser)
-				setInfoOrganization(actualDataOrganization)
-			})
-			
+		} else {
+			Promise.all([FetchUser.getUserById(INN, idUSer), FetchRuleOrganization.getParams(INN)]).then(
+				([actualDataUser, actualDataOrganization]) => {
+					setInfoUser(actualDataUser)
+					setInfoOrganization(actualDataOrganization)
+				}
+			)
 		}
 	}, [])
 
 	return (
-		<SessionProvider>
+		<div>
+			
 			<div className=' overflow-x-auto p-2 '></div>
 			<CusSnackbar />
-		</SessionProvider>
+		</div>
 	)
 }

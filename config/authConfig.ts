@@ -43,13 +43,19 @@ const authConfig: AuthOptions = {
 
 		async jwt({ token, user, account, profile }) {
 			if (user) {
-				token.jwt = user.token.jwt
-				token.refreshToken = user.token.refreshToken
-				user.dataUser = user.dataUser as TUserDTOWithoutPas
 				return {
-					...token,
-					...user,
-				}
+      ...token, // сперва token
+      jwt: user.token.jwt,
+      refreshToken: user.token.refreshToken,
+      dataUser: user.dataUser // ← отдельным полем
+    }
+				// token.jwt = user.token.jwt
+				// token.refreshToken = user.token.refreshToken
+				// user.dataUser = user.dataUser as TUserDTOWithoutPas
+				// return {
+				// 	...token,
+				// 	...user,
+				// }
 			}
 
 			return token
@@ -66,8 +72,7 @@ const authConfig: AuthOptions = {
 			},
 			async authorize(credentials, req) {
 				const serviceAuth = new ServiceAuth(credentials as TFormLogin)
-				const resultAuth = await serviceAuth.auth()
-
+				const resultAuth = await serviceAuth.auth()				
 				if (resultAuth?.dataUser) return resultAuth as any
 				return null
 			},

@@ -22,6 +22,7 @@ export enum PURPOSE_USE {
 	redact = 'REDACT',
 	auth = 'AUTH',
 	registrate = 'REGISTRATE',
+	out='OUT'
 }
 
 export type TGeolLocationFullInfo = Omit<TGeoLocation, 'user'> & { user: TDBUserWithoutPas }

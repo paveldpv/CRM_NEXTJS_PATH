@@ -73,7 +73,7 @@ export class FetchPrevCalc {
 		return fetch
 	}
 
-	public async setVerifiedRequest(INN: string, idRequest: string, dataGeo: TNewDataGeoLocationDTO) {
+	static async setVerifiedRequest(INN: string, idRequest: string, dataGeo: TNewDataGeoLocationDTO) {
 		const dataBody = { idRequest, dataGeo }
 		const fetch = await serverClient.api<void>(INN,`${INN}/prevCalc/set/verified`, {
 			method: 'PUT',

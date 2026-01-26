@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react'
 import { PURPOSE_USE, TNewDataGeoLocationDTO } from '../types'
 
-export default function useGeo(idEmployee: string, process: PURPOSE_USE, options?: any) {
-	const [dataGeo, setDataGeo] = useState<TNewDataGeoLocationDTO>()
+export default function useGeo(idEmployee: string, process: PURPOSE_USE,description?:string, options?: any) {
+	const [dataGeo, setDataGeo] = useState<TNewDataGeoLocationDTO>({
+  user: idEmployee,
+  process,
+  safeDeleted: false})
 
 	useEffect(() => {
 		const successHandler = (e: { coords: GeolocationCoordinates; timestamp: number; toJSON: () => any }) => {
@@ -12,6 +15,7 @@ export default function useGeo(idEmployee: string, process: PURPOSE_USE, options
 				user: idEmployee,
 				process,
 				safeDeleted: false,
+				descriptionProcess:description
 			}
 
 			setDataGeo(geolocation)
@@ -28,6 +32,7 @@ export default function useGeo(idEmployee: string, process: PURPOSE_USE, options
 				user: idEmployee,
 				process,
 				safeDeleted: false,
+				descriptionProcess:description
 			}
 			setDataGeo(geolocation)
 			return geolocation

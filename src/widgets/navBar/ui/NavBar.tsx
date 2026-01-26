@@ -1,20 +1,20 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { useMemo } from 'react'
+import { memo, useMemo } from 'react'
 import { adminLinks } from '../../../../config/adminLinks'
 
 import ListLinks from '../../../shared/ui/listLInks/ui/ListLinks'
 
 import { useInfoUser } from '@/shared/model/store/storeInfoUser'
-import { TConfigAPP } from '@/shared/model/types/subtypes/TAppearanceConfigApp'
+
 import { TLink } from '@/shared/model/types/subtypes/Types'
 import { useConfigApp } from '../../../shared/model/store/storeConfigApp'
 import BottomNavBar from './BottomNavBar'
 
 export default function NavBar() {
 	const userData = useInfoUser((store) => store.dataUser)
-	const { configNavMenu } = useConfigApp((store) => store.dataConfigApp) as TConfigAPP
+	const { configNavMenu } = useConfigApp((store) => store.dataConfigApp)
 
 	const currentLink: TLink[] | null = useMemo(() => {
 		if (!userData) return null

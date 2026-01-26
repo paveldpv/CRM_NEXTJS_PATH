@@ -26,7 +26,7 @@ export class ServiceSession extends Service {
 			const controllerSession = new ControllerSession(this.INN)			
 			
 			const checkSession = await controllerSession.getPersonalSession(idUser)
-			console.log("🚀 ~ ServiceSession ~ addSession ~ checkSession:", checkSession)
+			
 			
 			if (checkSession === null) {
 				await Promise.all([

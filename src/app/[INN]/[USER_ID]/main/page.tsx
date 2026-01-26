@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth'
 import authConfig from '../../../../../config/authConfig'
 
 import { isError } from '@/shared/lib/IsError'
-import { TConfigAPP_DTO, TDataOrganizationDTO } from '@/shared/model/types'
+import { TConfigAPP_DTO, TDataOrganizationDTO, TUserDTOWithoutPas } from '@/shared/model/types'
 import { typicalError } from '@/shared/model/types/subtypes/enums'
 import Wrapper from '@/widgets/wrapper/ui/Wrapper'
 import { redirect } from 'next/navigation'
@@ -12,7 +12,7 @@ import { ConfigAppDTO } from '../../../../../Server/Service/serviceConfigApp/con
 import { ServiceConfigApp } from '../../../../../Server/Service/serviceConfigApp/serviceConfigApp'
 import { RuleOrganizationDTO } from '../../../../../Server/Service/serviceRuleOrganization/ruleOrganizzation..dto'
 import { ServiceRuleOrganization } from '../../../../../Server/Service/serviceRuleOrganization/serviceRuleOrganization'
-import { TUserDTOWithoutPas } from '../../../../../Server/Service/serviceUser/model/types/Types'
+
 
 const initializationApp = async (
 	INN: string,
@@ -25,6 +25,7 @@ const initializationApp = async (
 	const [configApp, dataOrganization] = await Promise.all([
 		serviceConfigApp.getPersonalConfig(_idUser),
 		serviceRuleOrganization.getParamsOrganizationWithoutRequisites(),
+		
 	])
 	if (isError(configApp) || isError(dataOrganization) || !configApp) {
 		return null
@@ -40,13 +41,17 @@ export default async function page({ params }: { params: { INN: string; USER_ID:
 	const { USER_ID, INN } = params
 	const session = await getServerSession(authConfig)
 	const dataUser = session?.user as TUserDTOWithoutPas
+	
 	const JWT = session?.jwt
 	const refreshToken = session?.refreshToken
 	const resultInitializationApp = await initializationApp(INN, USER_ID)
+
+	
+	
 	if (!resultInitializationApp) {
 		redirect(`/ERROR/${typicalError.error_sever}`)
 	}
-
+	
 	return (
 		<Wrapper
 			idUSer={USER_ID}

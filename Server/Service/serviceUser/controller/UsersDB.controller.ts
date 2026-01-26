@@ -1,10 +1,8 @@
-
-
-import { TOptionQuery } from '@/shared/model/types/optionQuery'
-import { Model, Query, Types } from 'mongoose'
+import { Model, Types } from 'mongoose'
 import ControllerDB from '../../../classes/ControllerDB'
 import { userSchema } from '../model/schema/usersSchema'
 import { TBirthdayDate, TDBUser, TDBUserWithoutPas, TNewUser } from '../model/types/Types'
+import { TOptionQuery } from '@/shared/model/types/subtypes/optionQuery'
 
 export default class ControllerDBUser extends ControllerDB {
 	constructor(INN: string) {
@@ -24,9 +22,8 @@ export default class ControllerDBUser extends ControllerDB {
 		if (!this.modelUser) await this.initModel()
 	}
 	// private getQueryWithOption (data:Query<,TDBUser>,option?:TOptionQuery<TDBUser>){
-		
+
 	// }
-	
 
 	public async restoreUser(idEmployee: Types.ObjectId): Promise<void> {
 		await this.changeReadinessModel()
@@ -44,22 +41,22 @@ export default class ControllerDBUser extends ControllerDB {
 		return await newAdmin.save() //надо сохранить и вернуть то что сохранили
 	}
 
-	public async getUsers(option?:TOptionQuery<TDBUser>): Promise<TDBUserWithoutPas[] | []> {
+	public async getUsers(option?: TOptionQuery<TDBUser>): Promise<TDBUserWithoutPas[] | []> {
 		await this.changeReadinessModel()
-		const dataUSer =  this.modelUser!.find({ safeDeleted: false }, { password: 0 })
-		return this.applyQueryOptions(dataUSer,option).exec()
+		const dataUSer = this.modelUser!.find({ safeDeleted: false }, { password: 0 })
+		return this.applyQueryOptions(dataUSer, option).exec()
 	}
 
-	public async getUsersWithDeleted(option?:TOptionQuery<TDBUser>): Promise<TDBUser[] | []> {
+	public async getUsersWithDeleted(option?: TOptionQuery<TDBUser>): Promise<TDBUser[] | []> {
 		await this.changeReadinessModel()
 		const dataUser = this.modelUser!.find({})
-		return this.applyQueryOptions(dataUser,option).exec()
+		return this.applyQueryOptions(dataUser, option).exec()
 	}
 
-	public async getUsersByParams(params: Partial<TDBUser>,option?:TOptionQuery<TDBUser>): Promise<TDBUser | null> {
+	public async getUsersByParams(params: Partial<TDBUser>, option?: TOptionQuery<TDBUser>): Promise<TDBUser | null> {
 		await this.changeReadinessModel()
 		const dataUSer = this.modelUser!.findOne(params)
-		return this.applyQueryOptions(dataUSer,option)
+		return this.applyQueryOptions(dataUSer, option).lean()
 	}
 
 	public async getUserByID(idEmployee: Types.ObjectId): Promise<TDBUser | null> {
@@ -78,10 +75,10 @@ export default class ControllerDBUser extends ControllerDB {
 		await this.modelUser!.updateOne({ _id: idEmployee }, { $set: { srcPhoto: 'NOT_FOUND' } })
 	}
 
-	public async getUsersByGroupID(listID: Types.ObjectId[],option?:TOptionQuery<TDBUser>): Promise<TDBUser[] | []> {
+	public async getUsersByGroupID(listID: Types.ObjectId[], option?: TOptionQuery<TDBUser>): Promise<TDBUser[] | []> {
 		await this.changeReadinessModel()
-		const dataUsers=  this.modelUser!.find({ _id: { $in: listID } })
-		return this.applyQueryOptions(dataUsers,option).exec()
+		const dataUsers = this.modelUser!.find({ _id: { $in: listID } })
+		return this.applyQueryOptions(dataUsers, option).exec()
 	}
 
 	public async getAdmins(): Promise<TDBUser[] | []> {
@@ -99,17 +96,13 @@ export default class ControllerDBUser extends ControllerDB {
 		option?: TOptionQuery<TDBUser>
 	): Promise<TDBUserWithoutPas[] | []> {
 		await this.changeReadinessModel()
-		let data =  this.modelUser!.find({			
-				dateBirthday: {
-					$gte: startDay,
-					$lte: endDay,
-				},
-			
+		let data = this.modelUser!.find({
+			dateBirthday: {
+				$gte: startDay,
+				$lte: endDay,
+			},
 		}).select('-password')
-		
-		return  this.applyQueryOptions(data,option).exec()
-		
-		
+
+		return this.applyQueryOptions(data, option).exec()
 	}
-	
 }

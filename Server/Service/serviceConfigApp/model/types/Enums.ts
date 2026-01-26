@@ -17,3 +17,4 @@ export enum nameSettingLayout {
   bottom = "Настройка Подвала",
   main = "Настройка осн.Окна",
 }
+
