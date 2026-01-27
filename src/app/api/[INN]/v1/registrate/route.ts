@@ -8,7 +8,7 @@ import { typicalError } from '@/shared/model/types/subtypes/enums'
 export async function POST(request: NextRequest, { params }: { params: { INN: string } }) {
 	const { data, dataGeo } = (await request.json()) as {
 		data: TFormRegistrate
-		dataGeo: Omit<TGeoLocation, 'date' | 'user' >
+		dataGeo:  Omit<TGeoLocation, 'date' | 'user' | '_id'>
 	}	
 
   const serviceRegistrate   = new ServiceRegistrated(data,dataGeo)
@@ -16,7 +16,7 @@ export async function POST(request: NextRequest, { params }: { params: { INN: st
   if(isError(result)){
     return NextResponse.json({ message: typicalError.error_DB }, { status: 404 })
   }else{
-    return NextResponse.json({ message: 'OK' }, { status: 200 })
+    return NextResponse.json('OK' , { status: 200 })
 
   }
 

@@ -11,7 +11,7 @@ export type TGeoLocation = {
 	descriptionProcess?: string //?enums
 } & TEntities
 
-export type TNewDataGeoLocationDTO = Omit<TGeoLocation, 'date' | 'user'> & { user: string }
+export type TNewDataGeoLocationDTO = Omit<TGeoLocation, 'date' | 'user'|'_id'> & { user: string }
 
 export type TCoordinateLocation = {
 	latitude: number
@@ -22,9 +22,12 @@ export enum PURPOSE_USE {
 	redact = 'REDACT',
 	auth = 'AUTH',
 	registrate = 'REGISTRATE',
+	out='OUT'
 }
 
 export type TGeolLocationFullInfo = Omit<TGeoLocation, 'user'> & { user: TDBUserWithoutPas }
 
 export type TGeolLocationDTO = Omit<TGeoLocation, 'user' | '_id'> & { user: string; _id: string }
 export type TGeolLocationFullInfoDTO = Omit<TGeolLocationDTO, 'user'> & { user: TUserDTOWithoutPas }
+
+

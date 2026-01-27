@@ -8,12 +8,12 @@ export class FetchPrice {
 		const params = new URLSearchParams()
 		if (idUser) params.append('idUser', idUser)
 		if(_id) params.append('_id',_id)
-		const fetch = await serverClient.api<TPriceDTO>(`${INN}/price/get?${params}`, { method: 'GET' })
+		const fetch = await serverClient.api<TPriceDTO>(INN,`${INN}/price/get?${params}`, { method: 'GET' })
 		return fetch
 	}
 
 	static async getListInfoPrices(INN: string): Promise<TLink[]> {
-		const fetch = await serverClient.api<TLink[]>(`${INN}/price/getList`, { method: 'GET' })
+		const fetch = await serverClient.api<TLink[]>(INN,`${INN}/price/getList`, { method: 'GET' })
 		return fetch
 	}
 
@@ -26,7 +26,7 @@ export class FetchPrice {
 			nameTable,
 			dataGeo,
 		}
-		const fetch = await serverClient.api<TDataTablePriceDTO>(`${INN}/price/create`, {
+		const fetch = await serverClient.api<TDataTablePriceDTO>(INN,`${INN}/price/create`, {
 			method: 'POST',
 			body: JSON.stringify(dataBody),
 		})
@@ -38,12 +38,12 @@ export class FetchPrice {
 			dataGeo,
 			dataTable,
 		}
-		const fetch = await serverClient.api<void>(`${INN}/price/update`, { method: 'PUT', body: JSON.stringify(dataBody) })
+		const fetch = await serverClient.api<void>(INN,`${INN}/price/update`, { method: 'PUT', body: JSON.stringify(dataBody) })
 		return fetch
 	}
 
 	static async deletedPrice(INN: string, _id: string, dataGeo: TNewDataGeoLocationDTO): Promise<void> {
-		const fetch = await serverClient.api<void>(`${INN}/price/deleted?_id=${_id}`, {
+		const fetch = await serverClient.api<void>(INN,`${INN}/price/deleted?_id=${_id}`, {
 			method: 'POST',
 			body: JSON.stringify(dataGeo),
 		})
@@ -56,7 +56,7 @@ export class FetchPrice {
 			_id,
 			dataGeo,
 		}
-		const fetch = await serverClient.api<void>(`${INN}/price/rename`, { method: 'PUT', body: JSON.stringify(dataBody) })
+		const fetch = await serverClient.api<void>(INN,`${INN}/price/rename`, { method: 'PUT', body: JSON.stringify(dataBody) })
 		return fetch
 	}
 }

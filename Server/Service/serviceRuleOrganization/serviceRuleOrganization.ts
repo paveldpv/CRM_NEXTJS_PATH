@@ -67,6 +67,18 @@ export class ServiceRuleOrganization extends Service {
 		}
 	}
 
+	public async getParamsOrganizationWithoutRequisites ():Promise<TDataOrganization|TError>{
+		try {
+			const dataOrganization = await new ControllerRuleOrganizationDB(this.INN).getInfoOrganizationWithoutRequisites()
+			if (dataOrganization === null) {
+				return this.createError(`data organization NULL bad INN ${this.INN}`)
+			}
+			return this.normalizeDataFromMongoDB(dataOrganization)
+		} catch (error) {
+			return this.createError(`error get data organization from DB ,error : ${error}`, error)
+		}
+	}
+
 	public async getParamsOrganization(): Promise<TDataOrganizationFullInfo | TError> {
 		try {
 			const dataOrganization = await new ControllerRuleOrganizationDB(this.INN).getInfoOrganization()

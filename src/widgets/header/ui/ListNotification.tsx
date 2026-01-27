@@ -3,23 +3,26 @@ import AutoScrollContainer from '@/shared/ui/autoScrollContainer/ui/AutoScrollCo
 import Link from 'next/link'
 import { BiMessageAdd } from 'react-icons/bi'
 import { FaBirthdayCake } from 'react-icons/fa'
-import { TNotificationsList } from '../model/types'
-import { useMemo } from 'react'
 
+import { formatPhoneNumber, maskPhoneNumber } from '@/shared/lib/utils/formatPhoneNumber'
+import { memo, useMemo, useReducer } from 'react'
+import { TNotificationsList } from '../model/Types'
 
-export default function ListNotification({ birthdayUser, newPrevCalc }: TNotificationsList) {
+function ListNotification({ birthdayUser, newPrevCalc }: TNotificationsList) {
 	const configApp = useConfigApp((state) => state.dataConfigApp)
 	const { configMain } = configApp
-	const speedAutoScroll = useMemo(()=>{
-		const countBirthday = birthdayUser?.length||0
-		const countNewPrevCalc = newPrevCalc?.length||0
+	const [stateEntryPhone, dispatch] = useReducer((state) => !state, false)
 
-		if(countBirthday+countNewPrevCalc<5){
+	const speedAutoScroll = useMemo(() => {
+		const countBirthday = birthdayUser?.length || 0
+		const countNewPrevCalc = newPrevCalc?.length || 0
+
+		if (countBirthday + countNewPrevCalc < 5) {
 			return undefined
-		}else{
-			return countBirthday+countBirthday
+		} else {
+			return countBirthday + countBirthday
 		}
-	},[])
+	}, [])
 
 	return (
 		<AutoScrollContainer speed={speedAutoScroll}>
@@ -56,9 +59,20 @@ export default function ListNotification({ birthdayUser, newPrevCalc }: TNotific
 							</li>
 						</Link>
 						{newPrevCalc?.map((data, index) => (
-							<li key={index} className=' text-left pb-2'>
-								<p>от :{data?.name}</p> тел:{data?.phone} почта:{data?.email} ИНН:{data?.INN}
-							</li>
+							<ul key={index} className=' text-left pb-2'>
+								<li>от :{data?.dataClient.name}</li>
+								<li onMouseEnter={dispatch} onMouseLeave={dispatch}>
+									тел:
+									{stateEntryPhone
+										? `${formatPhoneNumber(data.dataClient.phone)}`
+										: `${maskPhoneNumber(data.dataClient.phone)}`}
+								</li>
+								<li>почта:{data?.dataClient.email}</li>
+								<li>
+									ИНН:
+									{data?.dataClient.INN || 'не указан'}
+								</li>
+							</ul>
 						))}
 					</ul>
 				)}
@@ -66,3 +80,4 @@ export default function ListNotification({ birthdayUser, newPrevCalc }: TNotific
 		</AutoScrollContainer>
 	)
 }
+export default memo(ListNotification)

@@ -1,11 +1,11 @@
+import { isError } from '@/shared/lib/IsError'
 import { TNewDataGeoLocationDTO } from '@/shared/model/types'
 import { NextRequest, NextResponse } from 'next/server'
 import { MongoHelpers } from '../../../../../../../Server/classes/until/MongoHelpers'
+import { ServiceGeoLocation } from '../../../../../../../Server/Service/serviceGeoLocation/serviceGeoLocation'
 import { ROOT_LINK } from '../../../../../../../Server/Service/servicePermissionRedactData/model/types/Types'
 import ServicePermissionRedactData from '../../../../../../../Server/Service/servicePermissionRedactData/ServicePermissionRedactData'
-import { ServiceGeoLocation } from '../../../../../../../Server/Service/serviceGeoLocation/serviceGeoLocation'
 import { ServicePropertyDetail } from '../../../../../../../Server/Service/servicePropertyDetail/servicePropertyDetail'
-import { isError } from '@/shared/lib/IsError'
 
 export async function POST(request: NextRequest, { params }: { params: { INN: string } }) {
 	const { INN } = params
@@ -25,32 +25,16 @@ export async function POST(request: NextRequest, { params }: { params: { INN: st
 		return NextResponse.json({ message: 'Permission denied for propertyDetail' }, { status: 403 })
 	}
 
-	
-
 	const servicePropertyDetail = new ServicePropertyDetail(INN)
 	const serviceGeoLocation = new ServiceGeoLocation(INN)
 
 	const result = await Promise.all([
 		servicePropertyDetail.addPropertyDetail(property),
-		serviceGeoLocation.setDataLocation({...dataGeo,user:userId}),
+		serviceGeoLocation.setDataLocation({ ...dataGeo, user: userId }),
 	])
-  const errors = result.filter(el => isError(el));
-    if (errors.length > 0) {
-      return NextResponse.json(
-        { message: errors[0].message || 'Failed to add property detail' },
-        { status: 500 }
-      );
-    }
-     return NextResponse.json(
-      { 
-        message: 'OK', 
-        data: {
-          propertyDetail: result[0],
-          geoLocation: result[1]
-        }
-      },
-      { status: 201 }
-    );
-
-
+	const errors = result.filter((el) => isError(el))
+	if (errors.length > 0) {
+		return NextResponse.json({ message: errors[0].message || 'Failed to add property detail' }, { status: 500 })
+	}
+	return NextResponse.json('OK', { status: 201 })
 }

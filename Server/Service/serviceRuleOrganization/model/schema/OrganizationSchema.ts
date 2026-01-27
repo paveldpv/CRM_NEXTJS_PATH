@@ -12,6 +12,7 @@ export const organizationSchema = new Schema<TDataOrganization>({
 		ref: 'requisites',
 	},
 	safeDeleted: {
+		type:Boolean,
 		required: true,
 		default: false,
 	},

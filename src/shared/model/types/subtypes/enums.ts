@@ -14,15 +14,12 @@ export enum idLink {
   setting_organization ="setting_organization",
   setting_history_entry_location='setting_history_entry_location',
   table='table',
-  details='details'
+  details='details',
+  storage="storage"
 
 }
 
-export enum typeDialog {
-  error = "ERROR",
-  default = "DEFAULT",
-  dialog = "DIALOG",
-}
+
 export enum typicalError {
   not_geo = "NOT_GEO",
   not_valid_password ='NOT_VALID_PAS',

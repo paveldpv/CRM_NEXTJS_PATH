@@ -6,7 +6,7 @@ export class FetchDetail {
 	
 	static async addDetailForOrder(INN: string, data: TNewDetailDTO, dataGeo: TNewDataGeoLocationDTO): Promise<TDetailDTO> {
 		const dataBody = { data, dataGeo }
-		const fetch = await serverClient.api<TDetailDTO>(`${INN}/detail/new`, { method: 'POST', body: JSON.stringify(dataBody) })
+		const fetch = await serverClient.api<TDetailDTO>(INN,`${INN}/detail/new`, { method: 'POST', body: JSON.stringify(dataBody) })
 		return fetch
 	}
 
@@ -21,17 +21,17 @@ export class FetchDetail {
 			idDetail,
 			dataGeo,
 		}
-		const fetch = await serverClient.api<void>(`${INN}/detail/remove`, { method: 'POST', body: JSON.stringify(dataBody) })
+		const fetch = await serverClient.api<void>(INN,`${INN}/detail/remove`, { method: 'POST', body: JSON.stringify(dataBody) })
 		return fetch
 	}
 
 	static async getDetailByIdOrder(INN: string, idOrder: string): Promise<TDetailDTO[]> {
-		const fetch = serverClient.api<TDetailDTO[]>(`${INN}/detail/get?idOrder=${idOrder}`, { method: 'GET' })
+		const fetch = serverClient.api<TDetailDTO[]>(INN,`${INN}/detail/get?idOrder=${idOrder}`, { method: 'GET' })
 		return fetch
 	}
 
 	static async getDetailFromOrderWithDeleted(INN: string, idOrder: string): Promise<TDetailDTO[]> {
-		const fetch = serverClient.api<TDetailDTO[]>(`${INN}/detail/getAll?idOrder=${idOrder}`, { method: 'GET' })
+		const fetch = serverClient.api<TDetailDTO[]>(INN,`${INN}/detail/getAll?idOrder=${idOrder}`, { method: 'GET' })
 		return fetch
 	}
 
@@ -46,12 +46,12 @@ export class FetchDetail {
 			idDetail,
 			dataGeo,
 		}
-		const fetch = await serverClient.api<void>(`${INN}/detail/restore`, { method: 'POST', body: JSON.stringify(dataBody) })
+		const fetch = await serverClient.api<void>(INN,`${INN}/detail/restore`, { method: 'POST', body: JSON.stringify(dataBody) })
 		return fetch
 	}
 
 	static async searchDetail(INN: string, req: string): Promise<TFullInfoTDetailDTO[]> {
-		const fetch = await serverClient.api<TFullInfoTDetailDTO[]>(`${INN}/detail/search?req=${req}`, { method: 'GET' })
+		const fetch = await serverClient.api<TFullInfoTDetailDTO[]>(INN,`${INN}/detail/search?req=${req}`, { method: 'GET' })
 		return fetch
 	}
 
@@ -60,7 +60,7 @@ export class FetchDetail {
 			data,
 			dataGeo,
 		}
-		const fetch = await serverClient.api<void>(`${INN}/detail/update`, { method: 'PUT', body: JSON.stringify(dataBody) })
+		const fetch = await serverClient.api<void>(INN,`${INN}/detail/update`, { method: 'PUT', body: JSON.stringify(dataBody) })
 		return fetch
 	}
 
@@ -71,7 +71,7 @@ export class FetchDetail {
 		dataGeo: TNewDataGeoLocationDTO
 	): Promise<void> {
 		const dataBody = { dataFiles, dataGeo }
-		const fetch = await serverClient.api<void>(`${INN}/detail/${idDetail}/files/add`, {
+		const fetch = await serverClient.api<void>(INN,`${INN}/detail/${idDetail}/files/add`, {
 			method: 'PUT',
 			body: JSON.stringify(dataBody),
 		})
@@ -85,7 +85,7 @@ export class FetchDetail {
 		dataGeo: TNewDataGeoLocationDTO
 	): Promise<void> {
 		const dataBody = { FullPath, dataGeo }
-		const fetch = await serverClient.api<void>(`${INN}/detail/${idDetail}/files/remove`, {
+		const fetch = await serverClient.api<void>(INN,`${INN}/detail/${idDetail}/files/remove`, {
 			method: 'PUT',
 			body: JSON.stringify(dataBody),
 		})
@@ -93,7 +93,7 @@ export class FetchDetail {
 	}
 	static async addNewStep(INN: string, idDetail: string, name: string, dataGeo: TNewDataGeoLocationDTO): Promise<void> {
 		const dataBody = { dataGeo, name }
-		const fetch = await serverClient.api<void>(`${INN}/detail/${idDetail}/addNewStep`, {
+		const fetch = await serverClient.api<void>(INN,`${INN}/detail/${idDetail}/addNewStep`, {
 			method: 'POST',
 			body: JSON.stringify(dataBody),
 		})
@@ -106,7 +106,7 @@ export class FetchDetail {
 		dataGeo: TNewDataGeoLocationDTO
 	): Promise<void> {
 		const dataBody = { dataGeo, name }
-		const fetch = await serverClient.api<void>(`${INN}/detail/${idDetail}/completedStep`, {
+		const fetch = await serverClient.api<void>(INN,`${INN}/detail/${idDetail}/completedStep`, {
 			method: 'POST',
 			body: JSON.stringify(dataBody),
 		})
@@ -122,7 +122,7 @@ export class FetchDetail {
 			dataGeo,
 			idOrder,
 		}
-		const fetch = await serverClient.api<void>(`${INN}/detail/${idDetail}/completed`, {
+		const fetch = await serverClient.api<void>(INN,`${INN}/detail/${idDetail}/completed`, {
 			method: 'POST',
 			body: JSON.stringify(dataBody),
 		})

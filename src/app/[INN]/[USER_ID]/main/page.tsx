@@ -1,60 +1,66 @@
 import { getServerSession } from 'next-auth'
 
-import { redirect } from 'next/navigation'
 import authConfig from '../../../../../config/authConfig'
 
+import { isError } from '@/shared/lib/IsError'
+import { TConfigAPP_DTO, TDataOrganizationDTO, TUserDTOWithoutPas } from '@/shared/model/types'
 import { typicalError } from '@/shared/model/types/subtypes/enums'
-
-import { TError } from '@/shared/model/types/subtypes/TError'
-import { TDataOrganization } from '@/shared/model/types/subtypes/TOrganization'
-
 import Wrapper from '@/widgets/wrapper/ui/Wrapper'
-
+import { redirect } from 'next/navigation'
+import { MongoHelpers } from '../../../../../Server/classes/until/MongoHelpers'
+import { ConfigAppDTO } from '../../../../../Server/Service/serviceConfigApp/configApp.dto'
+import { ServiceConfigApp } from '../../../../../Server/Service/serviceConfigApp/serviceConfigApp'
+import { RuleOrganizationDTO } from '../../../../../Server/Service/serviceRuleOrganization/ruleOrganizzation..dto'
 import { ServiceRuleOrganization } from '../../../../../Server/Service/serviceRuleOrganization/serviceRuleOrganization'
 
-import { isError } from '../../../../shared/lib/IsError'
 
-import { Types } from 'mongoose'
-import { TConfigAPP } from '../../../../../Server/Service/serviceConfigApp/model/types/Type'
-import { ServiceConfigApp } from '../../../../../Server/Service/serviceConfigApp/serviceConfigApp'
-import { TDBUserWithoutPas } from '../../../../../Server/Service/serviceUser/model/types/Types'
-
-const initializationConfigApp = async (INN: string, idUser?: Types.ObjectId): Promise<TConfigAPP | TError | null> => {
-	if (!idUser) return null
+const initializationApp = async (
+	INN: string,
+	idUser: string
+): Promise<{ infoOrganization: TDataOrganizationDTO; dataConfigApp: TConfigAPP_DTO } | null> => {
+	const _idUser = MongoHelpers.stringToObjectId(idUser)
+	if (!_idUser) return null
 	const serviceConfigApp = new ServiceConfigApp(INN)
-	return await serviceConfigApp.getPersonalConfig(idUser)
-}
-
-const initializationOrganization = async (INN: string): Promise<TDataOrganization | null | TError> => {
-	const serviceOrganization = new ServiceRuleOrganization(INN)
-	return await serviceOrganization.getParamsOrganization()
-}
-
-export default async function page({ params }: { params: { INN: string; PHONE: string } }) {
-	const { PHONE, INN } = params
-	const session = await getServerSession(authConfig)
-	const dataUser = session?.user as TDBUserWithoutPas
-	const jwt = session?.jwt
-	const refreshToken = session?.refreshToken
-
-	const dataApp = await Promise.all([initializationConfigApp(INN, dataUser._id), initializationOrganization(INN)])
-	console.log(`data app test from page`, dataApp[0])
-
-	const er = dataApp.some((el) => isError(el))
-
-	if (er) {
-		redirect(`/ERROR/${typicalError.error_DB}`)
+	const serviceRuleOrganization = new ServiceRuleOrganization(INN)
+	const [configApp, dataOrganization] = await Promise.all([
+		serviceConfigApp.getPersonalConfig(_idUser),
+		serviceRuleOrganization.getParamsOrganizationWithoutRequisites(),
+		
+	])
+	if (isError(configApp) || isError(dataOrganization) || !configApp) {
+		return null
 	}
 
-	const [configApp, infoOrganization] = dataApp as [TConfigAPP | null, TDataOrganization]
+	return {
+		infoOrganization: RuleOrganizationDTO.createDataOrganizationDTO(dataOrganization),
+		dataConfigApp: ConfigAppDTO.createConfigAppDTO(configApp),
+	}
+}
 
+export default async function page({ params }: { params: { INN: string; USER_ID: string } }) {
+	const { USER_ID, INN } = params
+	const session = await getServerSession(authConfig)
+	const dataUser = session?.user as TUserDTOWithoutPas
+	
+	const JWT = session?.jwt
+	const refreshToken = session?.refreshToken
+	const resultInitializationApp = await initializationApp(INN, USER_ID)
+
+	
+	
+	if (!resultInitializationApp) {
+		redirect(`/ERROR/${typicalError.error_sever}`)
+	}
+	
 	return (
 		<Wrapper
-			phone={PHONE}
-			dataConfigApp={configApp}
+			idUSer={USER_ID}
+			INN={INN}
+			JWT={JWT}
+			refreshToken={refreshToken}
+			dataConfigApp={resultInitializationApp.dataConfigApp}
 			dataUser={dataUser}
-			infoOrganization={infoOrganization}
-			tokens={{ jwt, refreshToken }}
+			infoOrganization={resultInitializationApp.infoOrganization}
 		/>
 	)
 }

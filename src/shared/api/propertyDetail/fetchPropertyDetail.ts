@@ -7,7 +7,7 @@ export class FetchPropertyDetail {
 			property,
 			dataGeo,
 		}
-		const fetch = await serverClient.api<void>(`${INN}/propertyDetail/add`, {
+		const fetch = await serverClient.api<void>(INN,`${INN}/propertyDetail/add`, {
 			method: 'POST',
 			body: JSON.stringify(dataBody),
 		})
@@ -19,7 +19,7 @@ export class FetchPropertyDetail {
 			idProperty,
 			dataGeo,
 		}
-		const fetch = await serverClient.api<void>(`${INN}/propertyDetail/remove`, {
+		const fetch = await serverClient.api<void>(INN,`${INN}/propertyDetail/remove`, {
 			method: 'POST',
 			body: JSON.stringify(dataBody),
 		})
@@ -27,14 +27,14 @@ export class FetchPropertyDetail {
 	}
 
 	static async getProperties(INN: string): Promise<TPropertyDetailDTO[]> {
-		const fetch = await serverClient.api<TPropertyDetailDTO[]>(`${INN}/propertyDetail/get`, {
+		const fetch = await serverClient.api<TPropertyDetailDTO[]>(INN,`${INN}/propertyDetail/get`, {
 			method: 'GET',
 		})
 		return fetch
 	}
 
 	static async searchProperties(INN: string, dataSearch: string): Promise<TPropertyDetailDTO[]> {
-		const fetch = await serverClient.api<TPropertyDetailDTO[]>(
+		const fetch = await serverClient.api<TPropertyDetailDTO[]>(INN,
 			`${INN}/propertyDetail/search?search=${encodeURIComponent(dataSearch.trim())}`,
 			{ method: 'GET' }
 		)

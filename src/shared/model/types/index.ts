@@ -1,3 +1,4 @@
+import { keyColorOption, keyConfigLayout } from '../../../../Server/Service/serviceConfigApp/model/types/Enums'
 import { TConfigAPP_DTO } from '../../../../Server/Service/serviceConfigApp/model/types/Type'
 import {
 	TCounterparty,
@@ -11,6 +12,7 @@ import {
 	TNewDetailDTO,
 } from '../../../../Server/Service/serviceDetails/model/types/Types'
 import {
+	PURPOSE_USE,
 	TGeolLocationDTO,
 	TGeolLocationFullInfoDTO,
 	TGeoLocation,
@@ -44,6 +46,7 @@ import {
 	TUserDTOWithoutPas,
 } from '../../../../Server/Service/serviceUser/model/types/Types'
 
+export {PURPOSE_USE}
 export type {
 	TConfigAPP_DTO,
 	TCounterparty,
@@ -76,5 +79,5 @@ export type {
 	TTokens,
 	TUserDTOByBirthday,
 	TUserDTOWithoutPas,
-	TUserOnlineDTO,
+	TUserOnlineDTO,keyColorOption, keyConfigLayout 
 }

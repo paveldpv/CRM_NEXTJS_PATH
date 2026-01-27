@@ -23,8 +23,11 @@ export class ServiceSession extends Service {
 			safeDeleted: false,
 		}
 		try {
-			const controllerSession = new ControllerSession(this.INN)
+			const controllerSession = new ControllerSession(this.INN)			
+			
 			const checkSession = await controllerSession.getPersonalSession(idUser)
+			
+			
 			if (checkSession === null) {
 				await Promise.all([
 					controllerSession.addSession(newSession),
@@ -41,7 +44,7 @@ export class ServiceSession extends Service {
 				jwt: Token.generate(1),
 			}
 		} catch (error) {
-			return this.createError(`error add session , data new session : ${newSession}`, error)
+			return this.createError(`error add session , data new session : ${JSON.stringify(newSession)}`, error)
 		}
 	}
 
@@ -55,7 +58,7 @@ export class ServiceSession extends Service {
 		}
 	}
 
-	public async getNewJWTToken(idUser: Types.ObjectId, refreshToken: string): Promise<string | TError> {
+	public async getNewJWTToken( refreshToken: string): Promise<string | TError> {
 		try {
 			const controllerSession = new ControllerSession(this.INN)
 			const changeSession = await controllerSession.getSessionByRefreshToken(refreshToken)
@@ -70,11 +73,11 @@ export class ServiceSession extends Service {
 				return this.createError('EXPIRED')
 			}
 			return jwt.sign(
-				{ _id: idUser, exp: add(new Date(), { weeks: 3 }) },
+				{ _id: changeSession.user, exp: add(new Date(), { weeks: 3 }) },
 				process.env.NEXTAUTH_SERCRET || 'suerpsercretkey'
 			)
 		} catch (error) {
-			return this.createError(`error get new jwt token, id user :${idUser},refresh token :${refreshToken}`, error)
+			return this.createError(`error get new jwt token,refresh token :${refreshToken}`, error)
 		}
 	}
 

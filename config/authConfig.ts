@@ -1,27 +1,28 @@
 import { TFormLogin } from '@/shared/model/types/subtypes/Types'
 import type { AuthOptions } from 'next-auth'
 
+import { TUserDTOWithoutPas } from '@/shared/model/types'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { ServiceAuth } from '../Server/Service/serviceAuth/serviceAuth'
 import { TTokens } from '../Server/Service/serviceSession/model/types/Type'
-import { TDBUserWithoutPas } from '../Server/Service/serviceUser/model/types/Types'
 
 declare module 'next-auth' {
 	interface Session {
 		jwt: string // Позволяет session.jwt
 		refreshToken: string
+		user:TUserDTOWithoutPas
 		dataSessionUser?: any // Если используется
 	}
 }
 
 declare module 'next-auth' {
 	interface User {
-		dataUser: TDBUserWithoutPas
+		dataUser: TUserDTOWithoutPas
 		token: TTokens
 	}
 
 	interface AdapterUser {
-		dataUser: TDBUserWithoutPas
+		dataUser: TUserDTOWithoutPas
 		token: TTokens
 	}
 }
@@ -35,20 +36,26 @@ const authConfig: AuthOptions = {
 		async session({ session, token, user }) {
 			session.jwt = token.jwt as string
 			session.refreshToken = token.refreshToken as string
-			session.user = token.dataUser as TDBUserWithoutPas
+			session.user = token.dataUser as TUserDTOWithoutPas
 
 			return { ...session }
 		},
 
 		async jwt({ token, user, account, profile }) {
 			if (user) {
-				token.jwt = user.token.jwt
-				token.refreshToken = user.token.refreshToken
-				user.dataUser = user.dataUser as TDBUserWithoutPas
 				return {
-					...token,
-					...user,
-				}
+      ...token, // сперва token
+      jwt: user.token.jwt,
+      refreshToken: user.token.refreshToken,
+      dataUser: user.dataUser // ← отдельным полем
+    }
+				// token.jwt = user.token.jwt
+				// token.refreshToken = user.token.refreshToken
+				// user.dataUser = user.dataUser as TUserDTOWithoutPas
+				// return {
+				// 	...token,
+				// 	...user,
+				// }
 			}
 
 			return token
@@ -65,8 +72,7 @@ const authConfig: AuthOptions = {
 			},
 			async authorize(credentials, req) {
 				const serviceAuth = new ServiceAuth(credentials as TFormLogin)
-				const resultAuth = await serviceAuth.auth()
-
+				const resultAuth = await serviceAuth.auth()				
 				if (resultAuth?.dataUser) return resultAuth as any
 				return null
 			},

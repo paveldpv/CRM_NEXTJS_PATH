@@ -1,6 +1,5 @@
 'use client'
-import { typeDialog, typicalError } from '@/shared/model/types/subtypes/enums'
-
+import { typicalError } from '@/shared/model/types/subtypes/enums'
 
 import { InputAdornment, TextField } from '@mui/material'
 import { fieldData } from '../../registrated/model/FieldData'
@@ -14,15 +13,15 @@ import SignupSchemaFormRegistrate from '../lib/validateFormRegistrate'
 
 import { styleTextFiled } from '../../../../config/muiCustomStyle/textField'
 
-
+import { FetchRegistrate } from '@/shared/api/registrate/fetchRegistrate'
+import { TGeoLocation } from '@/shared/model/types'
 import { TFormRegistrate } from '@/shared/model/types/subtypes/Types'
 import MiniLoader from '@/shared/ui/loaders/MiniLoader'
 import Link from 'next/link'
 import { useEffect, useReducer } from 'react'
-import IconFieldFormRegistrated from './IconFieldFormRegistrated'
-import { TGeoLocation } from '@/shared/model/types'
 import { PURPOSE_USE } from '../../../../Server/Service/serviceGeoLocation/model/types/type'
-import { FetchRegistrate } from '@/shared/api/registrate/fetchRegistrate'
+import IconFieldFormRegistrated from './IconFieldFormRegistrated'
+import { typeDialog } from '@/shared/ui/dialogWindow/model/Types/Types'
 
 export default function FormRegistrate() {
 	const [visiblePas, dispatchVisiblePas] = useReducer((state) => !state, true)
@@ -31,6 +30,7 @@ export default function FormRegistrate() {
 
 	useEffect(() => {
 		setLoader(false)
+		
 	}, [setLoader])
 
 	const { push } = useRouter()
@@ -40,11 +40,11 @@ export default function FormRegistrate() {
 		password: '',
 		phone: '',
 		INN: '',
-
-		//INN:null
 	}
 
 	const onSubmit = async () => {
+		
+		
 		setLoader(true)
 		if (Object.keys(errors).length) return
 
@@ -52,23 +52,20 @@ export default function FormRegistrate() {
 			async (pos) => {
 				const { latitude, longitude } = pos.coords
 
-				const dataGeo: Omit<TGeoLocation, 'date' | 'user'|'_id'> = {
+				const dataGeo: Omit<TGeoLocation, 'date' | 'user' | '_id'> = {
 					location: {
 						latitude,
 						longitude,
 					},
-					process: PURPOSE_USE.registrate,			
-					
-					safeDeleted: false
+					process: PURPOSE_USE.registrate,
+
+					safeDeleted: false,
 				}
-
-				const newUser = {
-					...values,
-				}
-
-			const candidateNewAdmin = await FetchRegistrate.registrateOrganization(newUser, dataGeo)
-
-				if (candidateNewAdmin.status === 200 && candidateNewAdmin.response === 'OK') {					
+				
+				
+				const candidateNewAdmin = await FetchRegistrate.registrateOrganization(newUser, dataGeo)
+				
+				if (candidateNewAdmin.status === 200 && candidateNewAdmin.response === 'OK') {
 					localStorage.setItem('mes_INN', newUser.INN)
 					localStorage.setItem('mes_password', newUser.password)
 
@@ -99,7 +96,13 @@ export default function FormRegistrate() {
 		)
 	}
 
-	const { handleChange, values, errors, setErrors, initialErrors } = useFormik({
+	const {
+		handleChange,
+		values: newUser,
+		errors,
+		setErrors,
+		initialErrors,
+	} = useFormik({
 		initialValues,
 		onSubmit,
 		validationSchema: SignupSchemaFormRegistrate,
@@ -126,17 +129,11 @@ export default function FormRegistrate() {
 						InputProps={{
 							startAdornment: (
 								<InputAdornment position='start'>
-									<span
-										className=' cursor-pointer'
-										onClick={() => field.name === 'password' && dispatchVisiblePas()}
-									>
+									<span className=' cursor-pointer' onClick={() => field.name === 'password' && dispatchVisiblePas()}>
 										{field.name === 'password' ? (
-											<IconFieldFormRegistrated
-												nameFiled={visiblePas ? 'visiblePassword' : 'password'}
-											/>
+											<IconFieldFormRegistrated nameFiled={visiblePas ? 'visiblePassword' : 'password'} />
 										) : (
-											// @ts-ignore
-											<IconFieldFormRegistrated nameFiled={field.name} />
+											<IconFieldFormRegistrated nameFiled={field.name as any} />
 										)}
 									</span>
 								</InputAdornment>
@@ -164,7 +161,7 @@ export default function FormRegistrate() {
 					className=' rounded-xl p-5 bg-highlight_two w-24 font-bold text-4xs hover:underline hover:text-highlight_one'
 					href={'/sign'}
 				>
-					Войти
+					Вход
 				</Link>
 			</div>
 		</form>

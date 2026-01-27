@@ -1,14 +1,39 @@
-function formatPhoneNumber(phone: string): string {
-	const cleaned = phone.replace(/\D/g, '')
+export function maskPhoneNumber(phone?: string): string {
+	if(!phone){
+		return '+7(●●●)●●●-●●-●●'
+	}
+	const digits = phone.replace(/\D/g, '')
 
-	let formatted = cleaned.startsWith('8') ? '7' + cleaned.slice(1) : cleaned
-
-	if (formatted.length === 11) {
-		return `+7(${formatted.slice(1, 4)})${formatted.slice(4, 7)}-${formatted.slice(
-			7,
-			9
-		)}-${formatted.slice(9)}`
+	if (digits.length !== 11) {
+		return '+7(●●●)●●●-●●-●●'
 	}
 
-	return phone
+	const countryCode = '+7'
+	const firstPart = '***'
+	const secondPart = '***'
+	const lastTwo1 = digits.slice(-4, -2)
+	const lastTwo2 = digits.slice(-2)
+
+	// 4. Собираем в нужном формате
+	return `${countryCode}(${firstPart})${secondPart}-${lastTwo1}-${lastTwo2}`
+}
+
+export function formatPhoneNumber(phone: string): string {
+  
+  const digits = phone.replace(/\D/g, '')
+  
+  
+  if (digits.length !== 11) {
+    return phone 
+  }
+  
+  
+  const countryCode = '+7'
+  const operatorCode = digits.slice(1, 4) // 910
+  const firstPart = digits.slice(4, 7)    // 629
+  const secondPart = digits.slice(7, 9)   // 25
+  const thirdPart = digits.slice(9)       // 50
+  
+  
+  return `${countryCode}(${operatorCode})${firstPart}-${secondPart}-${thirdPart}`
 }

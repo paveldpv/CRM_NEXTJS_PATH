@@ -2,10 +2,11 @@ import { getJWTToken, getRefreshToken, resetTokens, setJWTToken, setRefreshToken
 import { URL_REFRESH_TOKEN } from '../../../../config/urls'
 import { TTokens } from '../../../../Server/Service/serviceSession/model/types/Type'
 import { typicalError } from '../../model/types/subtypes/enums'
+import { VERSION_API } from '../../../../config/config'
 
 let refreshPromise: Promise<void> | null = null
 
-async function doRefresh(): Promise<void> {
+async function doRefresh(INN:string): Promise<void> {
 	const oldRefreshToken = getRefreshToken()
 
 	if (!oldRefreshToken) {
@@ -18,7 +19,7 @@ async function doRefresh(): Promise<void> {
 	}
 
 	refreshPromise = (async () => {
-		const res = await fetch(URL_REFRESH_TOKEN, {
+		const res = await fetch(`api/${VERSION_API}/${INN}/session/refresh`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ refreshToken: oldRefreshToken }),
@@ -120,7 +121,7 @@ export class ApiClient {
 		}
 	}
 
-	public async api<T = unknown>(url: string, options: TApiOptions = {}): Promise<T> {
+	public async api<T = unknown>(INN:string,url: string, options: TApiOptions = {}): Promise<T> {
 		const { parseJson = true, suppressErrorRedirect = true, timeoutMs, ...payload } = options
 		const headers = new Headers(payload.headers || {})
 
@@ -144,7 +145,7 @@ export class ApiClient {
 
 		if (res.status === 401) {
 			try {
-				await doRefresh()
+				await doRefresh(INN)
 			} catch (e) {
 				if (!suppressErrorRedirect) {
 					this.goToPageError(403)

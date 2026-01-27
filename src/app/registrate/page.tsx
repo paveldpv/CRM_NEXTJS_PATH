@@ -5,8 +5,8 @@ import DialogWindow from '@/shared/ui/dialogWindow/ui/DialogWindow'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-	title: 'Registrate',
-	description: 'create new MES user (admin user)',
+	title: 'Регистрация',
+	description: 'Создание нового пользователя',
 }
 
 export default function page() {

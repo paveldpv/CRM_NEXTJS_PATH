@@ -4,7 +4,7 @@ import { TOptionQuery } from '@/shared/model/types/subtypes/optionQuery'
 
 export class FetchPrevCalc {
 	static async saveRequest(INN: string, data: TRequestPrevCalc) {
-		const fetch = await serverClient.api<void>(`${INN}/prevCalc/new`, {
+		const fetch = await serverClient.api<void>(INN,`${INN}/prevCalc/new`, {
 			method: 'POST',
 			body: JSON.stringify(data),
 		})
@@ -16,7 +16,7 @@ export class FetchPrevCalc {
 			idRequest,
 			dataGeo,
 		}
-		const fetch = await serverClient.api<void>(`${INN}/prevCalc/deleted`, {
+		const fetch = await serverClient.api<void>(INN,`${INN}/prevCalc/deleted`, {
 			method: 'POST',
 			body: JSON.stringify(dataBody),
 		})
@@ -24,7 +24,7 @@ export class FetchPrevCalc {
 	}
 
 	static async getRequestPrevCalc(INN: string, option?: TOptionQuery<TRequestPrevCalc>) {
-		const fetch = serverClient.api<TDBRequestPrevCalcDTO[]>(`${INN}/prevCalc/get`, {
+		const fetch = serverClient.api<TDBRequestPrevCalcDTO[]>(INN,`${INN}/prevCalc/get`, {
 			method: 'POST',
 			body: JSON.stringify(option),
 		})
@@ -32,7 +32,7 @@ export class FetchPrevCalc {
 	}
 
 	static async getFavoritePrevCalc(INN: string, option?: TOptionQuery<TRequestPrevCalc>) {
-		const fetch = serverClient.api<TDBRequestPrevCalcDTO[]>(`${INN}/prevCalc/getFavorite`, {
+		const fetch = serverClient.api<TDBRequestPrevCalcDTO[]>(INN,`${INN}/prevCalc/getFavorite`, {
 			method: 'POST',
 			body: JSON.stringify(option),
 		})
@@ -48,7 +48,7 @@ export class FetchPrevCalc {
 			payload,
 			dataGeo,
 		}
-		const fetch = await serverClient.api<void>(`${INN}/prevCalc/setFavorite`, {
+		const fetch = await serverClient.api<void>(INN,`${INN}/prevCalc/setFavorite`, {
 			method: 'PUT',
 			body: JSON.stringify(dataBody),
 		})
@@ -56,26 +56,26 @@ export class FetchPrevCalc {
 	}
 
 	static async getDeletedRequest(INN: string) {
-		const fetch = await serverClient.api<TDBRequestPrevCalcDTO[]>(`${INN}/prevCalc/get/deleted`, { method: 'GET' })
+		const fetch = await serverClient.api<TDBRequestPrevCalcDTO[]>(INN,`${INN}/prevCalc/get/deleted`, { method: 'GET' })
 		return fetch
 	}
 
 	static async restoreRequest(INN: string, idRequest: string, dataGeo: TNewDataGeoLocationDTO) {
 		const dataBody = { dataGeo, idRequest }
-		const fetch = await serverClient.api<void>(`${INN}/prevCalc/restore`, {
+		const fetch = await serverClient.api<void>(INN,`${INN}/prevCalc/restore`, {
 			method: 'PUT',
 			body: JSON.stringify(dataBody),
 		})
 		return fetch
 	}
 	static async getNewRequest(INN: string) {
-		const fetch = await serverClient.api<TDBRequestPrevCalcDTO[]>(`${INN}/prevCalc/get/new`, { method: 'GET' })
+		const fetch = await serverClient.api<TDBRequestPrevCalcDTO[]>(INN,`${INN}/prevCalc/get/new`, { method: 'GET' })
 		return fetch
 	}
 
-	public async setVerifiedRequest(INN: string, idRequest: string, dataGeo: TNewDataGeoLocationDTO) {
+	static async setVerifiedRequest(INN: string, idRequest: string, dataGeo: TNewDataGeoLocationDTO) {
 		const dataBody = { idRequest, dataGeo }
-		const fetch = await serverClient.api<void>(`${INN}/prevCalc/set/verified`, {
+		const fetch = await serverClient.api<void>(INN,`${INN}/prevCalc/set/verified`, {
 			method: 'PUT',
 			body: JSON.stringify(dataBody),
 		})
@@ -86,7 +86,7 @@ export class FetchPrevCalc {
 			ids,
 			dataGeo,
 		}
-		const fetch = await serverClient.api<void>(`${INN}/prevCalc/set/verifiedMany`, {
+		const fetch = await serverClient.api<void>(INN,`${INN}/prevCalc/set/verifiedMany`, {
 			method: 'PUT',
 			body: JSON.stringify(dataBody),
 		})

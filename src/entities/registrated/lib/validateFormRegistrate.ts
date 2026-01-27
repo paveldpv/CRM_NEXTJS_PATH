@@ -2,7 +2,7 @@
 import * as Yup from "yup";
 
 const SignupSchemaFormRegistrate = Yup.object().shape({
- INN:Yup.string().required(`обязательное поле`),
+INN:Yup.string().required(`обязательное поле`),
 email: Yup.string().min(5,'минимум 5 символов').email("не корректный адрес эд почты").required("обязательное поле"),
 password: Yup.string()
   .required("обязательное поле")
