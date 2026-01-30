@@ -1,9 +1,10 @@
-import { TDataOrganization } from '@/shared/model/types/subtypes/TOrganization'
+
 import { create } from 'zustand'
+import { TDataOrganizationDTO } from '../types'
 
 type TStoreInfoOrganization = {
-	infoOrganization: Partial<TDataOrganization>
-	setInfoOrganization: (data: TDataOrganization) => void
+	infoOrganization: Partial<TDataOrganizationDTO>
+	setInfoOrganization: (data: TDataOrganizationDTO) => void
 }
 
 export const useInfoOrganization = create<TStoreInfoOrganization>((set) => ({

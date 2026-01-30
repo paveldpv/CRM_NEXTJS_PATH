@@ -1,12 +1,14 @@
 'use client'
 
 import Fieldset from '@/shared/components/fieldSet/ui/Fieldset'
-import { TConfigLayout } from '@/shared/model/types/subtypes/TAppearanceConfigApp'
-import Loader from '@/shared/ui/namedLoader/ui/Loader'
+
 import { useMemo, useState } from 'react'
 import { useConfigApp } from '../../../shared/model/store/storeConfigApp'
-import { useLoader } from '../../../shared/ui/namedLoader/model/storeLoader'
+
 import InputSettingColorLayout from './InputSettingColorLayout'
+import { useLoader } from '@/shared/ui/loaders/namedLoader/model/storeLoader'
+import Loader from '@/shared/ui/loaders/namedLoader/ui/Loader'
+import { TConfigLayout } from '../../../../Server/Service/serviceConfigApp/model/types/Type'
 
 export default function FormConfigApp() {
 	const visibleLoader = useLoader((state) => state.visible)

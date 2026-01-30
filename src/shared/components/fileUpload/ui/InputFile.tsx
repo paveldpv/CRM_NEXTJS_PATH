@@ -1,8 +1,10 @@
-import { Tooltip } from '@mui/material'
+
 import { ChangeEvent, DetailedHTMLProps, HTMLAttributes, useId } from 'react'
 import { FaCloudDownloadAlt } from 'react-icons/fa'
 import { cn } from '../../../lib/cn'
-import HorizonLoader from '@/shared/ui/loaders/PropsRuleLoaders/HorizonLoader'
+
+import { Tooltip } from 'antd'
+import StaticLoader from '@/shared/ui/loaders/staticLoaders/StaticLoader'
 
 
 type TInputFile = {
@@ -21,7 +23,9 @@ export default function InputFile({ pending, uploadFile, tooltipTitle = 'Фай�
 			)}
 		>
 			{pending ? (
-				<HorizonLoader visible={pending} />
+				<div>
+					Загрузка
+				</div>
 			) : (
 				<div>
 					<Tooltip title={tooltipTitle}>

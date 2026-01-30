@@ -2,23 +2,25 @@
 
 import { useEffect, useState } from 'react'
 
-import { TWithoutPassUser } from '@/shared/model/types/subtypes/Types'
+
 import LeftSlider from '../../../shared/components/leftSlider/ui/LeftSlider'
 import FormCardEmployee from './FormCardEmployee'
 import ListEmployee from './ListEmployee'
 import PanelRuleEmployee from './PanelRuleEmployee'
+import { TUserDTOWithoutPas } from '@/shared/model/types'
 
 export type TEmployees = {
-	dataEmployees: TWithoutPassUser[]
+	dataEmployees: TUserDTOWithoutPas[]
 }
 
 export default function Employees({ dataEmployees }: TEmployees) {
-	const [employees, setEmployees] = useState<TWithoutPassUser[] | []>([])
+	const [employees, setEmployees] = useState<TUserDTOWithoutPas[] | []>([])
 	const [visibleLoader, setVisibleLoader] = useState(true)
 	const [visibleCardEmployee, setVisibleCardEmployee] = useState<boolean>(false)
-	const [redactProfile, setRedactProfile] = useState<TWithoutPassUser | null>(null)
+	const [redactProfile, setRedactProfile] = useState<TUserDTOWithoutPas | null>(null)
 
 	useEffect(() => {
+		//TODO:
 		setEmployees(dataEmployees)
 		setVisibleLoader(false)
 	}, [])

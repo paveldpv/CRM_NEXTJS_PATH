@@ -12,6 +12,12 @@ import { ConfigAppDTO } from '../../../../../Server/Service/serviceConfigApp/con
 import { ServiceConfigApp } from '../../../../../Server/Service/serviceConfigApp/serviceConfigApp'
 import { RuleOrganizationDTO } from '../../../../../Server/Service/serviceRuleOrganization/ruleOrganizzation..dto'
 import { ServiceRuleOrganization } from '../../../../../Server/Service/serviceRuleOrganization/serviceRuleOrganization'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+	title: 'Главная',
+	
+}
 
 
 const initializationApp = async (

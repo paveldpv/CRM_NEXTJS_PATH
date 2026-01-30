@@ -1,12 +1,13 @@
 'use client'
-import { TConfigAPP } from '@/shared/model/types/subtypes/TAppearanceConfigApp'
+
 import { memo, useMemo } from 'react'
 import { cn } from '../../../shared/lib/cn'
+import { TConfigAPP_DTO } from '@/shared/model/types'
 
-export type TSelectTypicallyColor = Omit<TConfigAPP, 'idUser'> & {
+export type TSelectTypicallyColor = Omit<TConfigAPP_DTO, 'idUser'|'safeDeleted'|'_id'> & {
 	index: number
-	currentConfigApp: Partial<TConfigAPP>
-	setConfigApp: (config: Partial<TConfigAPP>) => void
+	currentConfigApp: Partial<TConfigAPP_DTO>
+	setConfigApp: (config: Partial<TConfigAPP_DTO>) => void
 }
 
 function SelectTypicallyColor({
@@ -17,6 +18,7 @@ function SelectTypicallyColor({
 	currentConfigApp,
 	setConfigApp,
 }: TSelectTypicallyColor) {
+	
 	const checkedColorSchema = useMemo(() => {
 		if (JSON.stringify(currentConfigApp) === JSON.stringify({ configHeader, configMain, configNavMenu })) {
 			return true

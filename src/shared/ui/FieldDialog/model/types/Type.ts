@@ -1,4 +1,4 @@
-import { TBodyDialogMessage } from '@/shared/ui/dialogWindow/model/storeDialogWindow'
+import { TBodyDialogMessage } from '@/shared/ui/dialogWindow/model/Types/Types'
 
 export type TFieldDialog = {
 	open: boolean
@@ -15,4 +15,4 @@ type TSetOpenFiledDialogArgs =
 			dispatchFn?: () => void
 			onCloseDispatchFn?: () => void
 			dataDialog?: TBodyDialogMessage
-		}
+	  }

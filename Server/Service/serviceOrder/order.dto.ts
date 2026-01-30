@@ -5,7 +5,12 @@ import { TOrder, TOrderDTO, TOrderFullInfo, TOrderFullInfoDTO } from './model/ty
 
 export class ServiceOrderDTO extends DTO {
 	static createOrderDTO(data: TOrder): TOrderDTO {
-		return { ...data, _id: this.objectIDToString(data._id) }
+		return {
+			...data,
+			_id: this.objectIDToString(data._id),
+			acceptedOfCargoEmployeeId: this.objectIDToString(data.acceptedOfCargoEmployeeId),
+			CounterParty: this.objectIDToString(data.CounterParty),details:this.listIDToListString(data.details)
+		}
 	}
 	static createListOrderDTO(data: TOrder[]): TOrderDTO[] {
 		return data.map((el) => this.createOrderDTO(el))

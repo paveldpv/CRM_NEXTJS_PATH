@@ -8,7 +8,7 @@ import Notifications from '@/widgets/header/ui/Notifications'
 import Link from 'next/link'
 
 export default function Header() {
-	const dataUser = useInfoUser((store) => store.dataUser)
+	const dataUser = useInfoUser((store) => {return store.dataUser}) 
 	const { configHeader } = useConfigApp((store) => store.dataConfigApp)
 
 	const { INN, nameOrganization } = useInfoOrganization((state) => state.infoOrganization)
@@ -47,7 +47,7 @@ export default function Header() {
 					className=' flex gap-1 flex-col  rounded-md p-2 '
 				>
 					<li className=' flex gap-2 '>
-						<Notifications />
+						<Notifications dataUser={dataUser!} />
 						<span className=' font-bold text-center grow '>«{nameOrganization?.abbreviated}»</span>
 					</li>
 					<li className=' underline font-bold '>ИНН ОРГАНИЗАЦИИ : {INN}</li>

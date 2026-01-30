@@ -1,9 +1,5 @@
 'use client'
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import DialogContentText from '@mui/material/DialogContentText'
-import DialogTitle from '@mui/material/DialogTitle'
+import { Modal, ModalProps } from 'antd'
 import { FaWindowClose } from 'react-icons/fa'
 
 import CusButton from '../../button/ui/CusButton'
@@ -11,12 +7,9 @@ import { useDialogWindow } from '../model/storeDialogWindow'
 import { typeDialog, TBodyDialogMessage } from '../model/Types/Types'
 
 const style: React.CSSProperties = {
-	border: 2,
-	borderColor: 'red',
-	borderStyle: 'solid',
+	border: '2px solid red',
 	color: 'red',
-	borderRadius:'0.2rem',
-	
+	borderRadius: '0.2rem',
 }
 
 export default function DialogWindow() {
@@ -28,35 +21,40 @@ export default function DialogWindow() {
 		any
 	] = useDialogWindow((state) => [state.open, state.type, state.setOpen, state.dataDialog, state.dispatchFn])
 
+	const modalProps: ModalProps = {
+		open: open,
+		onCancel: () => setOpen(false),
+		footer: null, // Будем рендерить футер вручную
+		centered: true,
+		closable: false, // Убираем стандартную кнопку закрытия
+		className: 'absolute',
+	}
+
 	return (
-		<Dialog
-			className=' absolute '
-			open={open}
-			keepMounted
-			onClose={() => setOpen(false)}
-			aria-describedby='alert-dialog-slide-description'
-		>
+		<Modal {...modalProps}>
 			<div style={(type === typeDialog.error && style) || undefined}>
 				{dataDialog && (
-					<DialogTitle className=' flex justify-between gap-4 '>
-						<span className=' text-4xl  hover:cursor-pointer'>
+					<div className='ant-modal-header flex justify-between gap-4 items-center p-4 border-0 border-b border-solid border-gray-200'>
+						<span className='text-4xl hover:cursor-pointer'>
 							<FaWindowClose onClick={() => setOpen(false)} />
 						</span>
-						{dataDialog.title}
-					</DialogTitle>
+						<div className='ant-modal-title text-lg font-semibold'>
+							{dataDialog.title}
+						</div>
+					</div>
 				)}
-				<DialogContent>
-					<section className=' text-center'>
+				<div className='ant-modal-body p-4'>
+					<section className='text-center'>
 						{dataDialog?.message && (
-							<DialogContentText className=' text-xl ' id='alert-dialog-slide-description'>
+							<div className='text-xl text-gray-800'>
 								{dataDialog.message}
-							</DialogContentText>
+							</div>
 						)}
 					</section>
-				</DialogContent>
+				</div>
 			</div>
 			{type === typeDialog.dialog && (
-				<DialogActions>
+				<div className='ant-modal-footer flex justify-end gap-2 p-4 border-0 border-t border-solid border-gray-200'>
 					<CusButton
 						onClick={() => {
 							setOpen(false)
@@ -72,8 +70,8 @@ export default function DialogWindow() {
 					>
 						Подтвердить
 					</CusButton>
-				</DialogActions>
+				</div>
 			)}
-		</Dialog>
+		</Modal>
 	)
 }

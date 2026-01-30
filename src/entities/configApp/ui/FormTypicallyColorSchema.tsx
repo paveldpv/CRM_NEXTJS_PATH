@@ -1,18 +1,17 @@
 'use client'
 
 import Fieldset from '@/shared/components/fieldSet/ui/Fieldset'
-import Loader from '@/shared/ui/namedLoader/ui/Loader'
+
 import { useConfigApp } from '../../../shared/model/store/storeConfigApp'
-import { useLoader } from '../../../shared/ui/namedLoader/model/storeLoader'
+
 import { dataTypicallyColor } from '../model/dataTypicallyColor'
 import SelectTypicallyColor from './SelectTypicallyColor'
+import { useLoader } from '@/shared/ui/loaders/namedLoader/model/storeLoader'
+import Loader from '@/shared/ui/loaders/namedLoader/ui/Loader'
 
 export default function FormTypicallyColorSchema() {
 	const visibleLoader = useLoader((state) => state.visible)
-	const [currentConfigApp, setConfigApp] = useConfigApp((state) => [
-		state.dataConfigApp,
-		state.setDataConfigApp,
-	])
+	const [currentConfigApp, setConfigApp] = useConfigApp((state) => [state.dataConfigApp, state.setDataConfigApp])
 
 	return (
 		<Fieldset legend='Стандартные оформление'>
@@ -23,7 +22,7 @@ export default function FormTypicallyColorSchema() {
 			) : (
 				<ul className=' grid  grid-cols-2  gap-4 justify-evenly '>
 					{dataTypicallyColor.map((element, index) => (
-						<SelectTypicallyColor
+						<SelectTypicallyColor						
 							setConfigApp={setConfigApp}
 							currentConfigApp={currentConfigApp}
 							index={index}

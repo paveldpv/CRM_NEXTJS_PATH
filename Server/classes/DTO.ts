@@ -6,6 +6,9 @@ export class DTO {
 	protected static objectIDToString(_id: Types.ObjectId): string {
 		return _id.toString()
 	}
+	protected static listIDToListString(ids:Types.ObjectId[]):string[]{
+		return ids.map(el=>el.toString())
+	}
 
 	protected static withProperty<T, K extends keyof T>(data: T, property: Array<K>) {
 		let result: Record<K, T[K]> = {} as Record<K, T[K]>

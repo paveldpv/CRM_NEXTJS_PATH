@@ -122,9 +122,10 @@ export class ApiClient {
 	}
 
 	public async api<T = unknown>(INN:string,url: string, options: TApiOptions = {}): Promise<T> {
+		
 		const { parseJson = true, suppressErrorRedirect = true, timeoutMs, ...payload } = options
 		const headers = new Headers(payload.headers || {})
-
+		
 		const body = payload.body
 		const isPlainObjectBody = this.isPlainObjectBody(body)
 
@@ -139,7 +140,7 @@ export class ApiClient {
 
 		const finalBody = isPlainObjectBody && !(typeof body === 'string') ? JSON.stringify(body) : body
 
-		const runFetch = () => this.doFetchWithTimeout(this.baseURL + url, { ...payload, headers, body: finalBody }, timeoutMs)
+		const runFetch = () => this.doFetchWithTimeout('/'+this.baseURL + url, { ...payload, headers, body: finalBody }, timeoutMs)
 
 		let res = await runFetch()
 
@@ -184,9 +185,3 @@ export class ApiClient {
 	}
 }
 
-//  const res = await apiClient.api<AddUserResponse>('user/addnewuser', {
-//     method: 'POST',
-//     body: { name: 'Alice', email: 'alice@example.com' }, // объект — будет сериализован в JSON
-//     timeoutMs: 10000, // опционально
-//   })
-//   console.log(res.id, res.name)

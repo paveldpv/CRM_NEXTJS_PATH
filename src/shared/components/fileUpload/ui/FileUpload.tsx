@@ -1,4 +1,4 @@
-import { typeDialog } from '@/shared/model/types/subtypes/enums'
+
 
 import { redirect, useParams } from 'next/navigation'
 import { ChangeEvent, DetailedHTMLProps, HTMLAttributes, useState } from 'react'
@@ -12,6 +12,7 @@ import { TResponseUploadFiles } from '@/shared/model/types/subtypes/Types'
 import DownloadFile from './DownloadFile'
 import InputFile from './InputFile'
 import PreviewPictureFile, { TPreviewUploadFile } from './PreviewPictureFile'
+import { typeDialog } from '@/shared/ui/dialogWindow/model/Types/Types'
 
 type TFileUpload = {
 	nameFiled: string
@@ -33,7 +34,7 @@ export default function FileUpload({
 	preview,
 	...props
 }: TFileUpload) {
-	const { INN } = useParams()
+	const { INN } = useParams() as {INN:string}
 	const setOpenDialogWindow = useDialogWindow((state) => state.setOpen)
 	const [file, setFile] = useState(src)
 	const [pending, setPending] = useState(false)

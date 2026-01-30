@@ -1,14 +1,7 @@
 'use client'
+import { Modal, Progress } from 'antd'
 import { memo, useCallback, useEffect, useState } from 'react'
 import { useProcessLoader } from '../model/storeProcessLoader'
-
-import Transition from '@/shared/components/transitionWrapper/ui/TransitionWrapper'
-
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import DialogTitle from '@mui/material/DialogTitle'
-import LinearProgress from '@mui/material/LinearProgress'
 
 function ProgressLoader() {
 	const [visible, setVisible, step, status, handlerCancel] = useProcessLoader((state) => [
@@ -46,31 +39,25 @@ function ProgressLoader() {
 	const clickCancelButton = useCallback(() => {
 		setVisible(false)
 		handlerCancel && handlerCancel()
-	}, [])
+	}, [setVisible, handlerCancel])
 
 	return (
-		<>
-			<Dialog TransitionComponent={Transition} keepMounted open={visible}>
-				<DialogTitle>
-					<span className=' text-2xl underline'>{status}</span>
-				</DialogTitle>
-				<DialogContent>
-					<LinearProgress
-						sx={{
-							backgroundColor: '#4F5162',
-							'& .MuiLinearProgress-bar': {
-								backgroundColor: '#F47C28',
-							},
-						}}
-						variant='determinate'
-						value={progress}
-					/>
-				</DialogContent>
-				<DialogActions>
-					<button onClick={clickCancelButton}>Отмена</button>
-				</DialogActions>
-			</Dialog>
-		</>
+		<Modal open={visible} onCancel={clickCancelButton} footer={null} closable={false} className='progress-loader-modal'>
+			<div className='p-6'>
+				<div className='text-2xl underline mb-4'>{status}</div>
+				<Progress
+					percent={Math.round(progress)}
+					strokeColor='#F47C28'					
+					showInfo={true}
+					strokeWidth={6}
+				/>
+				<div className='flex justify-end mt-6'>
+					<button onClick={clickCancelButton} className='px-4 py-2 border border-gray-300 rounded hover:bg-gray-50'>
+						Отмена
+					</button>
+				</div>
+			</div>
+		</Modal>
 	)
 }
 

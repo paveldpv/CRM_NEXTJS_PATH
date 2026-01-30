@@ -2,12 +2,14 @@
 import { idLink } from '@/shared/model/types/subtypes/enums'
 
 import Fieldset from '@/shared/components/fieldSet/ui/Fieldset'
-import { TLink } from '@/shared/model/types/Types'
+
 import { AnimatePresence } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { adminLinks } from '../../../../config/adminLinks'
-import { useConfigApp }@/shared/model/types/subtypes/Typesel/store/storeConfigApp'
+
 import ItemSelectedLink from './ItemSelectedLink'
+import { TLink } from '@/shared/model/types/subtypes/Types'
+import { useConfigApp } from '@/shared/model/store/storeConfigApp'
 
 export type TListLinkedAllowed = {
 	selectedLinks: TLink[] | []

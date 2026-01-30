@@ -1,6 +1,3 @@
-import { typeDialog, typicalError } from '@/shared/model/types/subtypes/enums'
-import { PURPOSE_USE } from '@/shared/model/types/subtypes/TGeoLocation'
-
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { FaEdit, FaTrashRestore } from 'react-icons/fa'
@@ -11,15 +8,16 @@ import { useInfoUser } from '@/shared/model/store/storeInfoUser'
 
 import { isError } from '@/shared/lib/IsError'
 import useGeo from '@/shared/model/hooks/useGeo'
-import { TWithoutPassUser } from '@/shared/model/types/subtypes/Types'
-import CusButton from '@/shared/ui/CusButton'
-import { useDialogWindow } from '@/shared/ui/dialogWindow/model/storeDialogWindow'
-import { fetchGetEmployee, TParamsAllEmployee } from '../api/getEmployee'
-import { fetchRemoveEmployee } from '../api/removeEmployee'
-import { fetchRestoreEmployee } from '../api/restoreEmployee'
-import { TPanelRuleEmployee } from './PanelRuleEmployee'
 
-type PanelEditEmployee = TWithoutPassUser & Omit<TPanelRuleEmployee, 'setVisibleAllEmployee'>
+import { useDialogWindow } from '@/shared/ui/dialogWindow/model/storeDialogWindow'
+
+import { PURPOSE_USE, TUserDTOWithoutPas } from '@/shared/model/types'
+import CusButton from '@/shared/ui/button/ui/CusButton'
+import { typeDialog } from '@/shared/ui/dialogWindow/model/Types/Types'
+import { TPanelRuleEmployee } from './PanelRuleEmployee'
+import { typicalError } from '@/shared/model/types/subtypes/enums'
+
+type PanelEditEmployee = TUserDTOWithoutPas & Omit<TPanelRuleEmployee, 'setVisibleAllEmployee'>
 
 export default function PanelEditEmployee({
 	setVisibleCardEmployee,
@@ -30,13 +28,10 @@ export default function PanelEditEmployee({
 	...dataProfile
 }: PanelEditEmployee) {
 	const searchParams = useSearchParams()
-	const [setOpenDialogWindow, dispatchFn] = useDialogWindow((state) => [
-		state.setOpen,
-		state.setDispatchFn,
-	])
-	const { idUser, phone, INN } = useInfoUser((state) => state.dataUser)
+	const [setOpenDialogWindow, dispatchFn] = useDialogWindow((state) => [state.setOpen, state.setDispatchFn])
+	const { _id, phone, INN } = useInfoUser((state) => state.dataUser!)
 	const { push } = useRouter()
-	const { dataGeo } = useGeo(idUser, PURPOSE_USE.redact)
+	const { dataGeo } = useGeo(_id, PURPOSE_USE.redact)
 
 	const deletedEmployee = async () => {
 		setOpenDialogWindow(
@@ -45,48 +40,17 @@ export default function PanelEditEmployee({
 			typeDialog.dialog
 		)
 		dispatchFn(async () => {
+			//TODO:
 			setVisibleLoader(true)
-
-			const response = await fetchRemoveEmployee(INN, dataProfile.idUser, dataGeo!)
-			if (response.status === 403) {
-				setOpenDialogWindow(true, { title: 'отказано в доступе' }, typeDialog.error)
-			} else if (response.status !== 200) {
-				push(`/ERROR/${typicalError.error_DB}`)
-			} else {
-				const isListEmployeeWithDeleted =
-					searchParams!.get('all') === null
-						? 0
-						: (Number(searchParams!.get('all')) as TParamsAllEmployee)
-				const updateListEmployee = await fetchGetEmployee(INN, isListEmployeeWithDeleted)
-				if (isError(updateListEmployee)) {
-					push(`/ERROR/${typicalError.error_DB}`)
-				} else {
-					setEmployee(updateListEmployee)
-					setVisibleLoader(false)
-				}
-			}
+			setVisibleLoader(false)
 		})
 	}
 
 	const restoreEmployee = async () => {
 		setVisibleLoader(true)
+		setVisibleLoader(false)
 
-		const response = await fetchRestoreEmployee(INN, dataProfile.idUser, dataGeo!)
-		if (response.status == 403) {
-			setOpenDialogWindow(true, { title: 'отказано в доступе' }, typeDialog.error)
-		} else if (response.status != 200) {
-			push(`/ERROR/${typicalError.error_DB}`)
-		} else {
-			const isListEmployeeWithDeleted =
-				searchParams!.get('all') === null ? 0 : (Number(searchParams!.get('all')) as TParamsAllEmployee)
-			const updateListEmployee = await fetchGetEmployee(INN, isListEmployeeWithDeleted)
-			if (isError(updateListEmployee)) {
-				push(`/ERROR/${typicalError.error_DB}`)
-			} else {
-				setEmployee(updateListEmployee)
-				setVisibleLoader(false)
-			}
-		}
+		
 	}
 
 	const redactProfile = () => {
@@ -96,9 +60,9 @@ export default function PanelEditEmployee({
 
 	return (
 		<section className=' col-span-2 text-xl m-2 flex gap-2'>
-			{dataProfile.idUser === idUser ? (
+			{dataProfile._id === _id ? (
 				<CusButton>
-					<Link href={`/${INN}/${phone}/main/setting/profile`}>
+					<Link href={`/${INN}/${_id}/main/setting/profile`}>
 						<FaEdit />
 					</Link>
 				</CusButton>
@@ -107,7 +71,7 @@ export default function PanelEditEmployee({
 					<FaEdit />
 				</CusButton>
 			)}
-			<Link href={`employee/${dataProfile.idUser}/statistic`}>
+			<Link href={`employee/${dataProfile._id}/statistic`}>
 				<CusButton>
 					<GoGraph />
 				</CusButton>

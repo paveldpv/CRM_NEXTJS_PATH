@@ -7,22 +7,20 @@ import { useInfoOrganization } from '@/shared/model/store/storeInfoOrganization'
 import { useInfoUser } from '@/shared/model/store/storeInfoUser'
 
 import { setJWTToken, setRefreshToken } from '@/shared/lib/authToken'
-import { useLoader } from '@/shared/ui/namedLoader/model/storeLoader'
+
 import CusSnackbar from '@/shared/ui/snackbar/ui/CusSnackbar'
-import { SessionProvider } from 'next-auth/react'
 
 import { FetchUser } from '@/shared/api'
 import { FetchRuleOrganization } from '@/shared/api/ruleOrganization/fetchRuleOrganization'
+import { useLoader } from '@/shared/ui/loaders/namedLoader/model/storeLoader'
 import { TWrapper } from '../model/Types/Type'
 
 export default function Wrapper({ idUSer, INN, dataConfigApp, dataUser, infoOrganization, JWT, refreshToken }: TWrapper) {
-	
 	const setInfoUser = useInfoUser((store) => store.setInfoUser)
 	const setConfigApp = useConfigApp((store) => store.setDataConfigApp)
 	const setTextLoader = useLoader((store) => store.setTextLoader)
 	const setInfoOrganization = useInfoOrganization((state) => state.setInfoOrganization)
-	console.log('🚀 ~ Wrapper ~ dataUser:', dataUser)
-	
+
 	useEffect(() => {
 		if (JWT && refreshToken) {
 			setJWTToken(JWT)
@@ -48,7 +46,6 @@ export default function Wrapper({ idUSer, INN, dataConfigApp, dataUser, infoOrga
 
 	return (
 		<div>
-			
 			<div className=' overflow-x-auto p-2 '></div>
 			<CusSnackbar />
 		</div>

@@ -1,6 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    
     "jsx": "preserve",
     "target": "ES6",
     "lib": [
@@ -44,3 +45,48 @@
     "node_modules"
   ]
 }
+// {
+//   "compileOnSave": false,
+//   "compilerOptions": {
+//     "target": "ES6",
+//     "lib": ["dom", "dom.iterable", "esnext"],
+//     "allowJs": true,
+//     "skipLibCheck": true,
+//     "strict": true,
+//     "noEmit": true,
+//     "esModuleInterop": true,
+//     "module": "esnext",
+//     "moduleResolution": "bundler",
+//     "resolveJsonModule": true,
+//     "isolatedModules": true,
+//     "jsx": "preserve",
+//     "incremental": true,
+    
+//     // УБИРАЕМ baseUrl и добавляем ignoreDeprecations
+//     "ignoreDeprecations": "6.0",
+    
+//     "plugins": [
+//       {
+//         "name": "next"
+//       },
+//       {
+//         "name": "typescript-plugin-css-modules"
+//       }
+//     ],
+//     "paths": {
+//       "@/*": ["./src/*"],
+//       "antd": ["./node_modules/antd"],
+//       "antd/*": ["./node_modules/antd/*"],
+//       "@ant-design/icons": ["./node_modules/@ant-design/icons"],
+//       "@ant-design/icons/*": ["./node_modules/@ant-design/icons/*"]
+//     },
+//     "allowSyntheticDefaultImports": true
+//   },
+//   "include": [
+//     "next-env.d.ts",
+//     "**/*.ts",
+//     "**/*.tsx",
+//     ".next/types/**/*.ts"
+//   ],
+//   "exclude": ["node_modules"]
+// }

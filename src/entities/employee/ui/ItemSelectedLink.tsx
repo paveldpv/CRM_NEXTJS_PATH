@@ -1,10 +1,11 @@
 import { TLink } from '@/shared/model/types/subtypes/Types'
-import { Tooltip } from '@mui/material'
+
 import { motion } from 'framer-motion'
 import { ChangeEvent, Dispatch, SetStateAction } from 'react'
 import { FaMinus, FaPlus } from 'react-icons/fa6'
 import { useConfigApp } from '../../../shared/model/store/storeConfigApp'
 import { TListLinkedAllowed } from './SelectedLinkedAllowed'
+import { Tooltip } from 'antd'
 
 export type TItemSelectedLink = {
 	initialList?: true

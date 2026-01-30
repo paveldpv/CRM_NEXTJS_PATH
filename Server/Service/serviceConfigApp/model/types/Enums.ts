@@ -1,4 +1,4 @@
-export enum keyColorOption {
+export  enum keyColorOption {
   bgColor = "bgColor",
   borderColor = "borderColor",
   textColor = "textColor",

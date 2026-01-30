@@ -12,7 +12,6 @@
     "@ant-design/icons": "^6.1.0",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@mui/material": "^5.14.11",
     "@types/bcrypt": "^5.0.0",
     "@types/mongoose": "^5.11.97",
     "@types/node": "20.5.7",
@@ -54,6 +53,7 @@
     "zustand": "^4.4.1"
   },
   "devDependencies": {
+    "@types/antd": "^1.0.4",
     "@types/crypto-js": "^4.2.2",
     "@types/jsonwebtoken": "^9.0.9",
     "typescript-plugin-css-modules": "^5.1.0"

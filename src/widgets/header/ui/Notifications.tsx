@@ -1,46 +1,53 @@
 'use client'
-import { useInfoUser } from '@/shared/model/store/storeInfoUser'
 import { useCusSnackbar } from '@/shared/ui/snackbar/model/useSnackbar.store'
-import { useEffect, useState } from 'react'
+import { useLayoutEffect, useState } from 'react'
 import { FaInfo } from 'react-icons/fa'
 import { ROOT_LINK } from '../../../../Server/Service/servicePermissionRedactData/model/types/Types'
 
 import { FetchPrevCalc, FetchUser } from '@/shared/api'
+import { TUserDTOWithoutPas } from '@/shared/model/types'
+import CusSpin from '@/shared/ui/loaders/CusSpin'
 import { TNotificationsList } from '../model/Types'
 import ListNotification from './ListNotification'
 
-export default function Notifications() {
+export default function Notifications({ dataUser }: { dataUser: TUserDTOWithoutPas }) {
 	const [setOpenSnackbar, setChildrenSnackbar] = useCusSnackbar((state) => [state.setOpen, state.setChildren])
-	const user = useInfoUser((state) => state.dataUser)
+
 	const [dataNotifications, setDataNotification] = useState<TNotificationsList>({})
 	const [amountEvents, setAmountEvents] = useState(0)
 	const [load, setLoad] = useState(true)
 
-	useEffect(() => {
-		if (user?.linksAllowed === 'ADMIN' || user?.linksAllowed.some((el) => el.href === ROOT_LINK.application)) {
-			Promise.all([FetchUser.getUsersWithBirthdayToday(user.INN), FetchPrevCalc.getNewRequest(user.INN)]).then((res) => {
-				
-				const birthdayUser = res[0]
-				console.log(birthdayUser);
-				const newPrevCalc = res[1]
-				const countEvents = (birthdayUser?.length || 0) + (newPrevCalc?.length || 0)
+	useLayoutEffect(() => {
+		if (!dataUser) return
+		FetchUser.getUsersWithBirthdayToday(dataUser?.INN).then((el) => {
+			console.log(el)
+		})
+		const permission =
+			dataUser?.linksAllowed === 'ADMIN' || dataUser?.linksAllowed.some((el) => el.href === ROOT_LINK.application)
+		if (permission) {
+			;(async () => {
+				const [dataBirthday, dataApplication] = await Promise.all([
+					FetchUser.getUsersWithBirthdayToday(dataUser.INN),
+					FetchPrevCalc.getNewRequest(dataUser.INN),
+				])
+				const amountEvent = dataBirthday.length + dataApplication.length
+				setAmountEvents(amountEvent)
 				setDataNotification({
-					birthdayUser,
-					newPrevCalc,
+					birthdayUser: dataBirthday,
+					newPrevCalc: dataApplication,
 				})
-
-				// setAmountEvents(countEvents)
 				setLoad(false)
-			})
-		}
-		{
-			FetchUser.getUsersWithBirthdayToday(user?.INN!).then((res) => {
-				setDataNotification({ birthdayUser: res })
-				setAmountEvents(res?.length || 0)
+			})()
+		} else {
+			;(async () => {
+				const dataBirthday = await FetchUser.getUsersWithBirthdayToday(dataUser.INN)
+				setDataNotification({
+					birthdayUser: dataBirthday,
+				})
 				setLoad(false)
-			})
+			})()
 		}
-	}, [])
+	}, [dataUser])
 
 	const handlerHover = async () => {
 		setChildrenSnackbar(
@@ -49,12 +56,11 @@ export default function Notifications() {
 		setOpenSnackbar({ open: true, autoHidden: true })
 		setAmountEvents(0)
 	}
-	
-	
+
 	return (
 		<div className={`relative text-xs  inline-block ${amountEvents != 0 ? 'cursor-pointer animate-pulse' : ' '}`}>
 			{load ? (
-				<span className='loaderSpinner'></span>
+				<CusSpin />
 			) : (
 				<span className='text-xl' onMouseEnter={handlerHover}>
 					<FaInfo />

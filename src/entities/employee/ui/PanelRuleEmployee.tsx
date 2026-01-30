@@ -2,21 +2,20 @@
 import { isError } from '@/shared/lib/IsError'
 import { useConfigApp } from '@/shared/model/store/storeConfigApp'
 import { useInfoUser } from '@/shared/model/store/storeInfoUser'
-import { TWithoutPassUser } from '@/shared/model/types/subtypes/Types'
-import CusButton from '@/shared/ui/CusButton'
-import { TextField } from '@mui/material'
-import Checkbox from '@mui/material/Checkbox'
+
+import { Input, Checkbox } from 'antd'
 import { redirect, usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { ChangeEvent, Dispatch, SetStateAction, useMemo } from 'react'
 import { IoPersonAdd } from 'react-icons/io5'
-import { styleTextFiled } from '../../../../config/muiCustomStyle/textField'
-import { fetchGetEmployee } from '../api/getEmployee'
+
+
+import { TUserDTOWithoutPas } from '@/shared/model/types'
+import CusButton from '@/shared/ui/button/ui/CusButton'
 
 export type TPanelRuleEmployee = {
 	setVisibleCardEmployee: (state: boolean) => void
-	setRedactProfile: (state: null | TWithoutPassUser) => void
-
-	setEmployee: Dispatch<SetStateAction<[] | TWithoutPassUser[]>>
+	setRedactProfile: (state: null | TUserDTOWithoutPas ) => void
+	setEmployee: Dispatch<SetStateAction<[] | TUserDTOWithoutPas []>>
 	setVisibleLoader: Dispatch<SetStateAction<boolean>>
 }
 
@@ -32,7 +31,8 @@ export default function PanelRuleEmployee({
 
 	const { configMain } = useConfigApp((state) => state.dataConfigApp)
 
-	const { linksAllowed, INN } = useInfoUser((state) => state.dataUser)
+	const { linksAllowed , INN } = useInfoUser((state) => state.dataUser!)
+
 	const permissionRedact = useMemo(() => {
 		if (linksAllowed === 'ADMIN') {
 			return true
@@ -46,7 +46,7 @@ export default function PanelRuleEmployee({
 		setRedactProfile(null)
 	}
 
-	const changeVisibleAllEmployee = async (e: ChangeEvent<HTMLInputElement>) => {
+	const changeVisibleAllEmployee = async (e: any) => {
 		setVisibleLoader(true)
 		const value = e.target.checked
 		const current = new URLSearchParams(Array.from(searchParams!.entries()))
@@ -54,17 +54,13 @@ export default function PanelRuleEmployee({
 		const search = current.toString()
 		const query = search ? `?${search}` : ''
 		router.push(`${pathname}${query}`)
+		//TODO:
+		setVisibleLoader(false)
 
-		const updateListEmployee = await fetchGetEmployee(INN, value ? 1 : 0)
-		if (isError(updateListEmployee)) {
-			redirect(`/ERROR/${updateListEmployee.typeError}`)
-		} else {
-			setEmployee(updateListEmployee)
-			setVisibleLoader(false)
-		}
+		
 	}
 
-	const searchEmployee = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+	const searchEmployee = (e: ChangeEvent<HTMLInputElement>) => {
 		const value = e.target.value
 		const regex = new RegExp(value)
 		setEmployee((employees) => {
@@ -79,19 +75,34 @@ export default function PanelRuleEmployee({
 	}
 
 	return (
-		<div className=' flex gap-4 border-b-2 pb-2 py-2  sticky top-0  overflow-hidden w-full  bg-white  z-50  '>
-			<CusButton className=' text-2xl  ' disabled={!permissionRedact} onClick={addNewEmployee}>
+		<div className='flex gap-4 border-b-2 pb-2 py-2 sticky top-0 overflow-hidden w-full bg-white z-50'>
+			<CusButton className='text-2xl' disabled={!permissionRedact} onClick={addNewEmployee}>
 				<IoPersonAdd />
 			</CusButton>
-			<section style={{ borderColor: configMain?.color.borderColor }} className=' flex gap-5  items-baseline'>
-				<div style={{ borderColor: configMain?.color.borderColor }} className=' border-2 border-solid pr-2 pl-2 rounded-md '>
-					<label htmlFor='' className=' text-xs'>
+			<section 
+				style={{ borderColor: configMain?.color.borderColor }} 
+				className='flex gap-5 items-baseline'
+			>
+				<div 
+					style={{ borderColor: configMain?.color.borderColor }} 
+					className='border-2 border-solid pr-2 pl-2 rounded-md flex items-center gap-2'
+				>
+					<label htmlFor='showAllCheckbox' className='text-xs whitespace-nowrap'>
 						показать всех
 					</label>
-					<Checkbox {...styleTextFiled} onChange={changeVisibleAllEmployee} />
+					<Checkbox 
+						id='showAllCheckbox'
+						onChange={changeVisibleAllEmployee}
+						className='m-0 p-0'
+					/>
 				</div>
 
-				<TextField {...styleTextFiled} onChange={searchEmployee} label='поиск' placeholder='тел|имя|фамилия' />
+				<Input
+					placeholder='тел|имя|фамилия'
+					onChange={searchEmployee}
+					className='w-64'
+					allowClear
+				/>
 			</section>
 		</div>
 	)

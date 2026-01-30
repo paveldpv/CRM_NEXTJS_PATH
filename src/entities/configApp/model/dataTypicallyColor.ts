@@ -1,6 +1,9 @@
-import { keyConfigLayout, nameSettingLayout } from '@/shared/model/types/subtypes/enums'
-import { TConfigAPP } from '@/shared/model/types/subtypes/TAppearanceConfigApp'
-type TTypicalSchema = Omit<TConfigAPP, 'idUser'> & { index: number }
+
+import { keyConfigLayout, nameSettingLayout } from '@/shared/model/types'
+import { TConfigAPP } from '../../../../Server/Service/serviceConfigApp/model/types/Type'
+
+
+type TTypicalSchema = Omit<TConfigAPP, 'idUser'|'_id'|'safeDeleted'> & { index: number }
 
 export const dataTypicallyColor: TTypicalSchema[] = [
 	{

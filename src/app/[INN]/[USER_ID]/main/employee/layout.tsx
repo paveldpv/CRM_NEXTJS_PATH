@@ -1,5 +1,5 @@
 
-import PrevLoaderEmployee from '@/entities/employee/ui/PrevLoaderEmployee'
+import PrevLoaderEmployee from '@/entities/employee/ui/SkeletonLoaderEmployee'
 import { Suspense } from "react";
 
 

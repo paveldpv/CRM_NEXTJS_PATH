@@ -5,7 +5,8 @@ import { ServiceUserDTO } from '../../../../../../../../Server/Service/serviceUs
 
 export async function GET(request: NextRequest, { params }: { params: { INN: string } }) {
 	const { INN } = params
-
+	console.log('TYK-TYK route');
+	
 	const serviceUser = new ServiceUsers(INN)
 	const result = await serviceUser.getUsersWithBirthdayToday()
 
@@ -14,5 +15,6 @@ export async function GET(request: NextRequest, { params }: { params: { INN: str
 	}
 
 	const resultDTO = ServiceUserDTO.createListUsersDTO(result)
+
 	return NextResponse.json(resultDTO, { status: 200 })
 }

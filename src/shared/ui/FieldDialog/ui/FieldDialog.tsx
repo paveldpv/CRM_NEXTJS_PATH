@@ -1,14 +1,9 @@
 'use client'
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import TextField from '@mui/material/TextField'
+import { Modal, Input } from 'antd'
 import { useState } from 'react'
 import { FaRegSave } from 'react-icons/fa'
 import { IoCloseSharp } from 'react-icons/io5'
-import { styleTextFiled } from '../../../../../config/muiCustomStyle/textField'
 import Fieldset from '../../../components/fieldSet/ui/Fieldset'
-
 import { useFieldDialog } from '../model/storeFiledDialog'
 import CusButton from '../../button/ui/CusButton'
 
@@ -29,25 +24,34 @@ export default function FieldDialog() {
 	}
 
 	return (
-		<Dialog open={open} onClose={closeDialog}>
-			<Fieldset className=' w-96 border-0'>
-				<DialogContent>
-					<p className=' text-xs mb-2'>{dataDialog?.title}</p>
-					<hr />
-					<p>{dataDialog?.message}</p>
-					<TextField
-						{...styleTextFiled}
+		<Modal
+			open={open}
+			onCancel={closeDialog}
+			footer={null}
+			closable={false}
+			className="p-0"
+		>
+			<Fieldset className='w-96 border-0 p-0'>
+				<div className='p-6'>
+					<p className='text-xs mb-2'>{dataDialog?.title}</p>
+					<hr className='my-2' />
+					<p className='mb-4'>{dataDialog?.message}</p>
+					<Input
 						value={value}
 						onChange={(e) => setValue(e.target.value)}
 						autoFocus
 						required
-						margin='dense'
-						label={dataDialog?.title}
-						fullWidth
-						helperText={value.length == 0 && 'обязательное поле'}
+						placeholder={dataDialog?.title}
+						className='w-full'
+						status={value.length === 0 ? 'error' : ''}
 					/>
-				</DialogContent>
-				<DialogActions>
+					{value.length === 0 && (
+						<div className='text-red-500 text-xs mt-1'>
+							обязательное поле
+						</div>
+					)}
+				</div>
+				<div className='flex justify-end gap-2 p-6 pt-0 border-0 border-t border-solid border-gray-200'>
 					{value.length !== 0 && (
 						<CusButton onClick={() => dispatchFn && dispatchFn(value)}>
 							<FaRegSave />
@@ -56,8 +60,8 @@ export default function FieldDialog() {
 					<CusButton onClick={closeDialog}>
 						<IoCloseSharp />
 					</CusButton>
-				</DialogActions>
+				</div>
 			</Fieldset>
-		</Dialog>
+		</Modal>
 	)
 }

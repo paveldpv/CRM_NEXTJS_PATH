@@ -1,6 +1,6 @@
 import style from './stylesPreLoader.module.css'
 
-export default function PrevLoaderSettingApp() {
+export default function SkeletonLoaderSettingApp() {
 	return (
 		<div className=' style_border  w-full p-2 mt-2  flex flex-col gap-5  '>
 			<div className=' grid  grid-cols-5 gap-4'>

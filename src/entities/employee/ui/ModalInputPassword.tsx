@@ -1,13 +1,11 @@
-
 import IconFieldFormRegistrated from '@/entities/registrated/ui/IconFieldFormRegistrated'
 import Fieldset from '@/shared/components/fieldSet/ui/Fieldset'
-import { InputAdornment, Modal, TextField } from '@mui/material'
 import React, { Dispatch, SetStateAction, useReducer } from 'react'
 import { FaRegSave } from 'react-icons/fa'
 import { IoCloseSharp } from 'react-icons/io5'
-import { styleTextFiled } from '../../../../config/muiCustomStyle/textField'
-import CusButton from '@/shared/ui/CusButton'
 
+import { Modal, Input } from 'antd'
+import CusButton from '@/shared/ui/button/ui/CusButton'
 
 export type TModalInputPassword = {
 	open: boolean
@@ -25,43 +23,50 @@ export default function ModalInputPassword({
 	open,
 }: TModalInputPassword) {
 	const [visiblePas, dispatchVisiblePas] = useReducer((state) => !state, false)
+	
 	return (
-		<Modal open={open} className=' flex justify-center  items-center'>
-			<Fieldset legend={label} className=' w-96 top-1/2 h-1/4 '>
-				<section>
-					<TextField
-						fullWidth
+		<Modal
+			open={open}
+			onCancel={() => setOpen(false)}
+			footer={null}
+			closable={false}
+			className="flex justify-center items-center"
+			width={400}
+		>
+			<Fieldset legend={label} className='w-96 top-1/2'>
+				<section className='mb-4'>
+					<Input
 						translate='no'
-						InputProps={{
-							startAdornment: (
-								<InputAdornment position='start'>
-									<span className=' cursor-pointer' onClick={() => dispatchVisiblePas()}>
-										<IconFieldFormRegistrated nameFiled={visiblePas ? 'visiblePassword' : 'password'} />
-									</span>
-								</InputAdornment>
-							),
-						}}
+						prefix={
+							<span 
+								className='cursor-pointer mr-2'
+								onClick={() => dispatchVisiblePas()}
+							>
+								<IconFieldFormRegistrated nameFiled={visiblePas ? 'visiblePassword' : 'password'} />
+							</span>
+						}
 						type={visiblePas ? 'password' : 'text'}
 						autoComplete='off'
 						onChange={(e) => handleChangePassword(e.target.value)}
-						label={'пароль'}
-						{...styleTextFiled}
-						placeholder={'пароль'}
-						title={'пароль'}
+						placeholder='пароль'
+						className='w-full'
 					/>
 				</section>
 				<section>
-					<div
-						className=' flex justify-between'
-						onClick={(e) => {
-							setOpen(false)
-							submitFunc(e)
-						}}
-					>
-						<CusButton className='  text-3xl mt-2'>
+					<div className='flex justify-between'>
+						<CusButton 
+							className='text-3xl mt-2'
+							onClick={(e) => {
+								submitFunc(e)
+								setOpen(false)
+							}}
+						>
 							<FaRegSave />
 						</CusButton>
-						<CusButton className='  text-3xl mt-2' onClick={() => setOpen(false)}>
+						<CusButton 
+							className='text-3xl mt-2' 
+							onClick={() => setOpen(false)}
+						>
 							<IoCloseSharp />
 						</CusButton>
 					</div>

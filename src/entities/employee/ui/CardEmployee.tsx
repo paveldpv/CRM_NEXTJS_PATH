@@ -6,7 +6,8 @@ import { useParams } from 'next/navigation'
 import { useMemo } from 'react'
 
 import { useInfoUser } from '@/shared/model/store/storeInfoUser'
-import { TWithoutPassUser } from '@/shared/model/types/subtypes/Types'
+
+import { TUserDTOWithoutPas } from '@/shared/model/types'
 import Link from 'next/link'
 import { employeeImage } from '../../../../config/urls'
 import PanelEditEmployee from './PanelEditEmployee'
@@ -14,10 +15,10 @@ import { TPanelRuleEmployee } from './PanelRuleEmployee'
 
 type TItemEmployee = {
 	index: number
-} & TWithoutPassUser &
+} & TUserDTOWithoutPas &
 	Omit<TPanelRuleEmployee, 'setVisibleAllEmployee'>
 
-export default function ItemsEmployee({
+export default function CardEmployee({
 	index,
 	setVisibleCardEmployee,
 	setRedactProfile,
@@ -27,7 +28,7 @@ export default function ItemsEmployee({
 	...dataProfile
 }: TItemEmployee) {
 	const { PHONE } = useParams() as { PHONE: string }
-	const { linksAllowed, idUser, phone, INN } = useInfoUser((state) => state.dataUser)
+	const { linksAllowed, _id, phone, INN } = useInfoUser((state) => state.dataUser!)
 
 	const permissionRedact = useMemo(() => {
 		if (linksAllowed === 'ADMIN') {
@@ -46,7 +47,7 @@ export default function ItemsEmployee({
 			}  rounded-md m-1 grid grid-cols-4  align-middle p-1  `}
 		>
 			<section className=' col-span-2 grid grid-cols-8'>
-				<Link href={permissionRedact ? `employee/${dataProfile.idUser}/fullProfile` : ''}>
+				<Link href={permissionRedact ? `employee/${dataProfile._id}/fullProfile` : ''}>
 					{dataProfile.srcPhoto === 'NOT_FOUND' ? (
 						<Image src={employeeImage} alt={'no found'} height={50} width={50} className='rounded-xl col-span-1  ' />
 					) : (

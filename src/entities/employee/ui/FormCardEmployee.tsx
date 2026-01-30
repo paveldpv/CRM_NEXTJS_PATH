@@ -1,35 +1,30 @@
 'use client'
 
-import { typeDialog, typicalError } from '@/shared/model/types/subtypes/enums'
-import { PURPOSE_USE, TGeoLocation } from '@/shared/model/types/subtypes/TGeoLocation'
+import Fieldset from '@/shared/components/fieldSet/ui/Fieldset'
+import { useInfoUser } from '@/shared/model/store/storeInfoUser'
 
-import { TextField, Tooltip } from '@mui/material'
+import { Form, Input, Tooltip } from 'antd'
 import { useFormik } from 'formik'
-import { redirect, useSearchParams } from 'next/navigation'
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { Dispatch, SetStateAction, useMemo, useState } from 'react'
 import { FaRegSave } from 'react-icons/fa'
 import { IoCloseSharp } from 'react-icons/io5'
 import { VscGistSecret } from 'react-icons/vsc'
-import { styleTextFiled } from '../../../../config/muiCustomStyle/textField'
 
-import Fieldset from '@/shared/components/fieldSet/ui/Fieldset'
-import { useInfoUser } from '@/shared/model/store/storeInfoUser'
-import { TNewEmployee, TWithoutPassUser } from '@/shared/model/types/subtypes/Types'
-import CusButton from '@/shared/ui/CusButton'
-import { isError } from '../../../shared/lib/IsError'
+import { PURPOSE_USE, TUserDTOWithoutPas } from '@/shared/model/types'
+import CusButton from '@/shared/ui/button/ui/CusButton'
+import { typeDialog } from '@/shared/ui/dialogWindow/model/Types/Types'
 import { useDialogWindow } from '../../../shared/ui/dialogWindow/model/storeDialogWindow'
-import { fetchUpdateDataUser } from '../../userProfile/api/updateDataUser'
-import { fetchAddNewEmployee } from '../api/addNewEmployee'
-import { fetchGetEmployee, TParamsAllEmployee } from '../api/getEmployee'
-import { fetchUpdatePasEmployee } from '../api/updatePasFromEmployee'
+
+import useGeo from '@/shared/model/hooks/useGeo'
 import NewEmployeeSchemaForm from '../lib/validateFormNewEmployee'
 import ModalInputPassword from './ModalInputPassword'
 import SelectedLinkedAllowed from './SelectedLinkedAllowed'
 
 type TCardEmployee = {
 	setVisibleCardEmployee: (state: boolean) => void
-	dataEmployee: TWithoutPassUser | null
-	setEmployees: Dispatch<SetStateAction<TWithoutPassUser[] | []>>
+	dataEmployee: TUserDTOWithoutPas | null
+	setEmployees: Dispatch<SetStateAction<TUserDTOWithoutPas[] | []>>
 
 	setVisibleLoader: Dispatch<SetStateAction<boolean>>
 }
@@ -42,30 +37,14 @@ export default function FormCardEmployee({
 	setVisibleLoader,
 }: TCardEmployee) {
 	const [openModal, setOpenModal] = useState(false)
-	const [dataGeo, setDataGeo] = useState<Omit<TGeoLocation, 'date'> | null>(null)
+
+	// const [dataGeo, setDataGeo] = useState<Omit<TGeoLocation, 'date'> | null>(null)
 	const [dataPassword, setDataPassword] = useState('')
-	const { idUser, INN } = useInfoUser((state) => state.dataUser)
+	const { _id, INN } = useInfoUser((state) => state.dataUser!)
 	const setOpenDialogWindow = useDialogWindow((state) => state.setOpen)
+	const dataGeo = useGeo(_id, PURPOSE_USE.redact, 'добавил нового сотрудника')
 
 	const searchParams = useSearchParams()
-	useEffect(() => {
-		navigator.geolocation.getCurrentPosition(
-			(data) => {
-				const { latitude, longitude } = data.coords
-				setDataGeo({
-					location: {
-						latitude,
-						longitude,
-					},
-					idEmployee: idUser,
-					process: PURPOSE_USE.redact,
-				})
-			},
-			() => {
-				redirect(`/ERROR/${typicalError.not_geo}`)
-			}
-		)
-	}, [])
 
 	const setNewPassword = async (e: React.MouseEvent) => {
 		e.preventDefault()
@@ -73,41 +52,19 @@ export default function FormCardEmployee({
 			setOpenDialogWindow(true, { title: 'пароль не должен быть пустым' }, typeDialog.error)
 			return
 		}
-		const setNewPas = await fetchUpdatePasEmployee(INN, dataPassword, dataEmployee?.idUser, dataGeo!)
-		if (isError(setNewPas)) {
-			redirect(`/ERROR/${setNewPas.typeError}`)
-		}
+		//TODO:
+		// const setNewPas = await fetchUpdatePasEmployee(INN, dataPassword, dataEmployee?.idUser, dataGeo!)
+		// if (isError(setNewPas)) {
+		// 	redirect(`/ERROR/${setNewPas.typeError}`)
+		// }
 		setVisibleCardEmployee(false)
 		setVisibleLoader(true)
 		setOpenDialogWindow(true, { title: 'пароль успешно обновлен' }, typeDialog.default)
 	}
 
 	const addNewEmployee = async (e: React.MouseEvent) => {
+		return
 		// setVisibleLoader(false)
-		e.preventDefault()
-		if (dataPassword.length === 0) {
-			setOpenDialogWindow(true, { title: 'пароль не должен быть пустым' }, typeDialog.error)
-			return
-		}
-		const isListEmployeeWithDeleted =
-			searchParams!.get('all') === null ? 0 : (Number(searchParams!.get('all')) as TParamsAllEmployee)
-		setVisibleCardEmployee(false)
-		setVisibleLoader(true)
-		const newEmployee = { ...dataEmployee, ...values, password: dataPassword } as TNewEmployee
-		const addNewEmployee = await fetchAddNewEmployee(INN, newEmployee, dataGeo!)
-
-		if (isError(addNewEmployee)) {
-			redirect(`/ERROR/${addNewEmployee.typeError}`)
-		} else {
-			const getAllEmployee = await fetchGetEmployee(INN, isListEmployeeWithDeleted)
-			if (isError(getAllEmployee)) {
-				redirect(`/ERROR/${getAllEmployee.typeError}`)
-			} else {
-				setEmployees(getAllEmployee)
-				setVisibleLoader(false)
-				// setVisibleCardEmployee(false)
-			}
-		}
 	}
 
 	const onSubmit = async () => {
@@ -115,22 +72,8 @@ export default function FormCardEmployee({
 			setOpenModal(true)
 			return
 		}
-		const isListEmployeeWithDeleted =
-			searchParams!.get('all') === null ? 0 : (Number(searchParams!.get('all')) as TParamsAllEmployee)
-		setVisibleLoader(true)
-		const updateDataEmployee = { ...dataEmployee, ...values } as TWithoutPassUser
-		const updateUser = await fetchUpdateDataUser(updateDataEmployee, dataGeo!, INN)
-		if (isError(updateUser)) {
-			redirect(`/ERROR/${updateUser.typeError}`)
-		} else {
-			const getAllEmployee = await fetchGetEmployee(INN, isListEmployeeWithDeleted)
-			if (isError(getAllEmployee)) {
-				redirect(`/ERROR/${getAllEmployee.typeError}`)
-			} else {
-				setEmployees(getAllEmployee)
-				setVisibleLoader(false)
-			}
-		}
+		//searchParams!.get('all') === null ? 0 : (Number(searchParams!.get('all')) as TParamsAllEmployee)
+		return
 	}
 	const closeCard = (e: React.MouseEvent) => {
 		e.preventDefault()
@@ -141,8 +84,9 @@ export default function FormCardEmployee({
 		e.preventDefault()
 		setOpenModal(true)
 	}
+	//TODO:
 
-	const initialValues: TNewEmployee = useMemo(() => {
+	const initialValues = useMemo(() => {
 		return {
 			name: dataEmployee?.name || '',
 			surname: dataEmployee?.surname || '',
@@ -166,9 +110,7 @@ export default function FormCardEmployee({
 		<div>
 			<Fieldset
 				className=' opacity-95'
-				legend={
-					!dataEmployee ? 'Добавить нового сотрудника' : `${dataEmployee?.surname} ${dataEmployee?.name}`
-				}
+				legend={!dataEmployee ? 'Добавить нового сотрудника' : `${dataEmployee?.surname} ${dataEmployee?.name}`}
 			>
 				<form
 					className=' relative'
@@ -178,71 +120,62 @@ export default function FormCardEmployee({
 					}}
 				>
 					<section className='grid grid-cols-2 gap-2 mb-2'>
-						<TextField
-							disabled={!!dataEmployee?.phone}
-							helperText={errors.phone}
-							error={!!errors.phone}
-							onChange={handleChange}
-							value={values.phone}
-							size='small'
-							className='col-span-2'
-							name='phone'
-							autoComplete='off'
+						<Form.Item
 							label='телефон'
-							placeholder='телефон'
-							{...styleTextFiled}
-						/>
-						<TextField
+							validateStatus={errors.phone ? 'error' : ''}
+							help={errors.phone}
+							className='col-span-2 mb-0'
+						>
+							<Input
+								disabled={!!dataEmployee?.phone}
+								onChange={handleChange}
+								value={values.phone}
+								size='small'
+								name='phone'
+								autoComplete='off'
+								placeholder='телефон'
+							/>
+						</Form.Item>
+						<Input
 							onChange={handleChange}
 							value={values.name}
 							size='small'
 							name='name'
 							autoComplete='off'
-							label='имя'
 							placeholder='имя'
-							{...styleTextFiled}
 						/>
-						<TextField
+						<Input
 							onChange={handleChange}
 							value={values.surname}
 							size='small'
 							name='surname'
 							autoComplete='off'
-							label='фамилия'
 							placeholder='фамилия'
-							{...styleTextFiled}
 						/>
-						<TextField
+						<Input
 							onChange={handleChange}
 							value={values.lastName}
 							size='small'
 							name='lastName'
 							autoComplete='off'
-							label='отчество'
 							placeholder='отчество'
-							{...styleTextFiled}
 						/>
 						{values.linksAllowed === 'ADMIN' ? (
 							<div className='  text-center p-2 text-highlight_three underline '>Руководитель</div>
 						) : (
-							<TextField
+							<Input
 								onChange={handleChange}
 								value={values.nameJobTitle || 'рабочий на станке'}
 								size='small'
 								name='nameJobTitle'
 								autoComplete='off'
-								label='должность'
 								placeholder='должность'
-								{...styleTextFiled}
 							/>
 						)}
 					</section>
 
 					{dataEmployee?.linksAllowed !== 'ADMIN' && (
-						<SelectedLinkedAllowed
-							setFieldValue={setFieldValue}
-							currentLinkedAllowed={dataEmployee?.linksAllowed}
-						/>
+						<SelectedLinkedAllowed setFieldValue={setFieldValue} currentLinkedAllowed={dataEmployee?.linksAllowed} />
 					)}
 
 					<div className='flex  justify-between'>
