@@ -23,7 +23,7 @@ export class ServiceOrder extends Service {
 
 	public async createOrder(dataNewOrder: TNewOrder): Promise<TOrderFullInfo | TError> {
 		try {
-			const dataOrder: Omit<TOrder, '_id' | 'safeDeleted' | 'complied'|'details'> = {
+			const dataOrder: Omit<TOrder, '_id' | 'safeDeleted' | 'complied' | 'details'> = {
 				...dataNewOrder,
 				numberOrder: await this.nextNumberOrder(),
 			}
@@ -69,8 +69,6 @@ export class ServiceOrder extends Service {
 		dateStart: Date
 		dateEndDate: Date
 	}): Promise<TOrderFullInfo[] | null | TError> {
-		
-
 		try {
 			const controllerOrder = new ControllerOrder(this.INN)
 			const dataOrder = await controllerOrder.searchOrderByDate(rangeDate)
@@ -109,13 +107,10 @@ export class ServiceOrder extends Service {
 			const controllerOrder = new ControllerOrder(this.INN)
 			await controllerOrder.addDetailByOrder(idOrder, idDetail)
 		} catch (error) {
-			return this.createError(
-				`error add detail  , id detail :${idDetail} , id Order :${idOrder} , INN:${this.INN}`,
-				error
-			)
+			return this.createError(`error add detail  , id detail :${idDetail} , id Order :${idOrder} , INN:${this.INN}`, error)
 		}
 	}
-	public async removeDetailByOrder(idOrder: Types.ObjectId, idDetail: Types.ObjectId):Promise<void|TError> {
+	public async removeDetailByOrder(idOrder: Types.ObjectId, idDetail: Types.ObjectId): Promise<void | TError> {
 		try {
 			const controllerOrder = new ControllerOrder(this.INN)
 			await controllerOrder.removeDetailByOrder(idOrder, idDetail)
@@ -143,6 +138,16 @@ export class ServiceOrder extends Service {
 			await controllerOrder.completedOrder(idOrder, date)
 		} catch (error) {
 			return this.createError(`error update process order ,id order :${idOrder.toString()}, INN :${this.INN}`, error)
+		}
+	}
+
+	public async getAmountOrder({ completed, deleted }: { completed: boolean; deleted: boolean }): Promise<number|TError> {
+
+		try {
+			const controllerOrder= new ControllerOrder(this.INN)
+			return controllerOrder.getAmountOrder({completed,deleted})
+		} catch (error) {
+			return this.createError("error get amount order",error)
 		}
 	}
 }

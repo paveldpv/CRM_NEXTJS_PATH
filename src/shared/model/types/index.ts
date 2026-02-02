@@ -1,3 +1,4 @@
+import { viewMode } from '@/shared/components/panelViewMode/model/Types'
 import { keyColorOption, keyConfigLayout, nameSettingLayout } from '../../../../Server/Service/serviceConfigApp/model/types/Enums'
 import { TConfigAPP_DTO } from '../../../../Server/Service/serviceConfigApp/model/types/Type'
 import {
@@ -47,7 +48,7 @@ import {
 } from '../../../../Server/Service/serviceUser/model/types/Types'
 
 export {PURPOSE_USE,keyColorOption,keyConfigLayout,nameSettingLayout }
-export type {
+export type {viewMode,
 	TConfigAPP_DTO,
 	TCounterparty,
 	TCounterpartyDTO,

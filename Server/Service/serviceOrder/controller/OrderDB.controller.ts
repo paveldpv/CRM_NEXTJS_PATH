@@ -25,7 +25,7 @@ export default class ControllerOrder extends ControllerDB {
 		await this.changeReadinessModel()
 		const newOrder = new this.modelOrder!(data)
 		const saveOrder = await newOrder.save()
-		const result =  (await saveOrder.populate(['CounterParty', 'acceptedOfCargoEmployeeId']))
+		const result = await saveOrder.populate(['CounterParty', 'acceptedOfCargoEmployeeId'])
 
 		return result.toObject() as TOrderFullInfo
 	}
@@ -81,9 +81,7 @@ export default class ControllerOrder extends ControllerDB {
 
 	public async getLastNumberOrder(): Promise<number | null> {
 		await this.changeReadinessModel()
-		const lastNumber = await this.modelOrder!.findOne()
-			.sort({ 'service.deadlines.startDate': -1 })
-			.select('numberOrder')
+		const lastNumber = await this.modelOrder!.findOne().sort({ 'service.deadlines.startDate': -1 }).select('numberOrder')
 		return lastNumber as number | null
 	}
 	public async updateProcessOrder(idOrder: Types.ObjectId) {
@@ -98,5 +96,10 @@ export default class ControllerOrder extends ControllerDB {
 			{ $set: { complied: true, 'service.deadlines.endDate': dateEnd } }
 		)
 		return
+	}
+	public async getAmountOrder({ completed, deleted }: { completed: boolean; deleted: boolean }): Promise<number> {
+		await this.changeReadinessModel()
+		const amount = await this.modelOrder!.countDocuments({ safeDeleted: deleted, complied: completed })
+		return amount
 	}
 }
