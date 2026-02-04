@@ -4,11 +4,12 @@ import { useConfigApp } from '@/shared/model/store/storeConfigApp'
 import React, { memo } from 'react'
 
 
-type TButtonProps = React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>
+type TButtonProps = React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> & {positionAPP?:string}
 
 const CusButton = React.forwardRef(
 	({ children, ...props }: TButtonProps, ref: React.ForwardedRef<HTMLButtonElement>) => {
 		const { configMain } = useConfigApp((state) => state.dataConfigApp)
+		
 		return (
 			<button
 			

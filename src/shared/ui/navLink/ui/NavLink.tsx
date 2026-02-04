@@ -22,9 +22,9 @@ function NavLink({
 	const pathName = usePathname()
 	const activeLink = pathName!.includes(href)
 	const INN = pathName!.split('/').filter((param) => !!param)[0]
-	const PHONE = pathName!.split('/').filter((param) => !!param)[1]
+	const USER_ID = pathName!.split('/').filter((param) => !!param)[1]
 
-	let link = `/${INN}/${PHONE}/main/${href}`
+	let link = `/${INN}/${USER_ID}/main/${href}`
 	if (paramsHref.length != 0) {
 		link += '/' + paramsHref.join('/')
 	}
@@ -34,7 +34,7 @@ function NavLink({
 			style={styleLinks}
 			className={cn(
 				`rounded-md   border-2 border-solid  border-menu_color  p-2  h-10 hover:bg-color_header delay-100  duration-300 ${
-					activeLink && 'activeLink'
+					activeLink && ' bg-black'
 				}`,
 				className
 			)}

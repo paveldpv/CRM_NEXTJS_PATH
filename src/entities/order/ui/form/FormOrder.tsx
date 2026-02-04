@@ -1,3 +1,4 @@
+'use client'
 import { TFormOrder } from '../../model/Type'
 
 

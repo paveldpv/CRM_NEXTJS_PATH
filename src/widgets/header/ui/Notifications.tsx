@@ -30,14 +30,18 @@ export default function Notifications({ dataUser }: { dataUser: TUserDTOWithoutP
 					FetchUser.getUsersWithBirthdayToday(dataUser.INN),
 					FetchPrevCalc.getNewRequest(dataUser.INN),
 				])
+				console.log("🚀 ~ Notifications ~ dataApplication:", dataApplication)
+				console.log("🚀 ~ Notifications ~ dataBirthday:", dataBirthday)
+
 				const amountEvent = dataBirthday.length + dataApplication.length
 				setAmountEvents(amountEvent)
 				setDataNotification({
 					birthdayUser: dataBirthday,
 					newPrevCalc: dataApplication,
 				})
-				setLoad(false)
+				
 			})()
+			setLoad(false)
 		} else {
 			;(async () => {
 				const dataBirthday = await FetchUser.getUsersWithBirthdayToday(dataUser.INN)

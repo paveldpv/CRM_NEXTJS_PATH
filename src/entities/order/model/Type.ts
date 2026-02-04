@@ -9,7 +9,7 @@ export type TDateSearch = {
 
 export type TRulePanelOrder = {
 	permission: boolean
-	serOpenForm: Dispatch<SetStateAction<boolean>>
+	setOpenForm: Dispatch<SetStateAction<boolean>>
 	load: boolean
 	setLoader: Dispatch<SetStateAction<boolean>>
 	setDataOrder: Dispatch<SetStateAction<TOrderFullInfoDTO[]>>
@@ -17,9 +17,14 @@ export type TRulePanelOrder = {
 	viewMode: viewMode
 }
 export type TListOrder = {
+	viewMode: viewMode
 	dataOrder: TOrderFullInfoDTO[]
+	permission: boolean
+	setOpenForm: Dispatch<SetStateAction<boolean>>
+	setSelectedOrder: Dispatch<SetStateAction<TOrderFullInfoDTO | null>>
 }
 export type TPaginationPanel = {
+	totalOrder: number
 	setLoader: Dispatch<SetStateAction<boolean>>
 	setDataOrder: Dispatch<SetStateAction<TOrderFullInfoDTO[]>>
 }
@@ -29,5 +34,5 @@ export type TFormOrder = {
 	setLoader: Dispatch<SetStateAction<boolean>>
 	setDataOrder: Dispatch<SetStateAction<TOrderFullInfoDTO[]>>
 	serOpenForm: Dispatch<SetStateAction<boolean>>
-	selectedOrder?: TOrderFullInfoDTO
+	selectedOrder: TOrderFullInfoDTO|null
 }

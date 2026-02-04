@@ -7,11 +7,12 @@ import Loader from '@/shared/ui/loaders/namedLoader/ui/Loader'
 import { Modal } from 'antd'
 import { useMemo, useState } from 'react'
 import { ROOT_LINK } from '../../../../Server/Service/servicePermissionRedactData/model/types/Types'
-import RulePanelOrder from './PanelControlOrder'
 import FormOrder from './form/FormOrder'
 import ListOrder from './orderView/ListOrder'
+import PaginationPanel from './PaginationPanel'
+import RulePanelOrder from './PanelControlOrder'
 
-export default function GeneralOrder({ data }: { data: TOrderFullInfoDTO[] }) {
+export default function GeneralOrder({ data, totalOrders }: { data: TOrderFullInfoDTO[]; totalOrders: number }) {
 	const [load, setLoad] = useState(true)
 	const [dataOrder, setDataOrder] = useState(data)
 	const [viewMode, setViewMode] = useState<viewMode>('list')
@@ -26,19 +27,34 @@ export default function GeneralOrder({ data }: { data: TOrderFullInfoDTO[] }) {
 	}, [])
 
 	return (
-		<div className=' grid grid-rows-3'>
-			(
+		<div className=' grid grid-rows-4'>
+			
 			<RulePanelOrder
 				permission={permission}
-				serOpenForm={setOpenForm}
+				setOpenForm={setOpenForm}
 				load={load}
 				setDataOrder={setDataOrder}
 				setLoader={setLoad}
 				viewMode={viewMode}
 				setViewMode={setViewMode}
 			/>
-			)<div className=' row-span-2'>{load ? <Loader /> : <ListOrder />}</div>
-			<nav></nav>
+			
+			<div className=' row-span-2'>
+				{load ? (
+					<Loader />
+				) : (
+					<ListOrder
+						viewMode={viewMode}
+						dataOrder={dataOrder}
+						permission={permission}
+						setOpenForm={setOpenForm}
+						setSelectedOrder={seSelectedOrder}
+					/>
+				)}
+			</div>
+			<nav>
+				<PaginationPanel totalOrder={totalOrders} setLoader={setLoad} setDataOrder={setDataOrder} />
+			</nav>
 			<Modal
 				open={openForm}
 				onCancel={() => {
@@ -46,7 +62,13 @@ export default function GeneralOrder({ data }: { data: TOrderFullInfoDTO[] }) {
 					seSelectedOrder(null)
 				}}
 			>
-				<FormOrder permission={permission} setLoader={setLoad} setDataOrder={setDataOrder} serOpenForm={setOpenForm} />
+				<FormOrder
+					permission={permission}
+					setLoader={setLoad}
+					setDataOrder={setDataOrder}
+					serOpenForm={setOpenForm}
+					selectedOrder={selectedOrder}
+				/>
 			</Modal>
 		</div>
 	)

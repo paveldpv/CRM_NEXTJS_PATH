@@ -10,9 +10,11 @@ export async function GET(request: NextRequest, { params }: { params: { INN: str
 	const deleted = searchParams.get('deleted') === 'true'
 
 	const serviceOrder = new ServiceOrder(INN)
-	const amountOrder = serviceOrder.getAmountOrder({ completed, deleted })
+	const amountOrder =await serviceOrder.getAmountOrder({ completed, deleted })
+	console.log("🚀 ~ GET ~ amountOrder :", amountOrder )
 	if (isError(amountOrder)) {
 		return NextResponse.json('error get amount order', { status: 500 })
 	}
+	
 	return NextResponse.json(amountOrder, { status: 200 })
 }

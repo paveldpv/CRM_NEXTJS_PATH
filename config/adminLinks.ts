@@ -7,7 +7,7 @@ export const adminLinks: TLink[] = [{
 		href: ROOT_LINK.order,
 		description: 'работа с текущими заказами - прием заказов ',
 		title: 'заказы',
-		id: idLink.payment,
+		id: idLink.order,
 	},
 	{
 		href: ROOT_LINK.payment,

@@ -1,19 +1,18 @@
 import { BiMessageAdd } from 'react-icons/bi'
-import { BsCashCoin, BsFillFileEarmarkPersonFill } from 'react-icons/bs'
-import { FaBook, FaDrawPolygon, FaShippingFast, FaTable } from 'react-icons/fa'
+import { BsCashCoin, BsFillFileEarmarkPersonFill, BsGear } from 'react-icons/bs'
+import { FaBook, FaDrawPolygon, FaMapMarkerAlt, FaShippingFast, FaSignOutAlt, FaTable } from 'react-icons/fa'
 import { GoGraph } from 'react-icons/go'
 import { IoIosSettings } from 'react-icons/io'
 import { LiaTasksSolid } from 'react-icons/lia'
 import { MdOutlinePriceChange, MdStorage } from 'react-icons/md'
-import { PiSignOutBold } from 'react-icons/pi'
 
 import { TLink } from '@/shared/model/types/subtypes/Types'
-import { BsGeoAlt } from 'react-icons/bs'
 import { CgProfile } from 'react-icons/cg'
-import { MdDisplaySettings, MdSettings } from 'react-icons/md'
+import { MdDisplaySettings } from 'react-icons/md'
+import { FaBookBookmark } from 'react-icons/fa6'
 
 const mapIconsNavLink = {
-	order: <FaBook />, 
+	order: <FaBookBookmark />,
 	payment: <BsCashCoin />,
 	shipment: <FaShippingFast />,
 	employee: <BsFillFileEarmarkPersonFill />,
@@ -22,14 +21,14 @@ const mapIconsNavLink = {
 	statistic: <GoGraph />,
 	price: <MdOutlinePriceChange />,
 	setting: <IoIosSettings />,
-	out: <PiSignOutBold />,
+	out: <FaSignOutAlt />, // или <PiSignOutBold />
 	setting_profile: <CgProfile />,
 	setting_app: <MdDisplaySettings />,
-	setting_organization: <MdSettings />,
-	setting_history_entry_location: <BsGeoAlt />,
+	setting_organization: <BsGear />,
+	setting_history_entry_location: <FaMapMarkerAlt />,
 	table: <FaTable />,
 	details: <FaDrawPolygon />,
-	storage:<MdStorage />
+	storage: <MdStorage />,
 }
 
 export default function IconNav({ id }: Pick<TLink, 'id'>) {
