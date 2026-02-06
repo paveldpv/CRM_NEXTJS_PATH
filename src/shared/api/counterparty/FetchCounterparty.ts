@@ -1,19 +1,29 @@
 import { serverClient } from '@/shared/lib/api/serverClient'
-import { TNewDataCounterparty, TGeolLocationDTO, TCounterpartyDTO, TCounterparty } from '@/shared/model/types'
+import {
+	TCounterparty,
+	TCounterpartyDTO,
+	TGeolLocationDTO,
+	TNewDataCounterparty,
+	TNewDataGeoLocationDTO,
+} from '@/shared/model/types'
 import { TResponseUploadFiles } from '@/shared/model/types/subtypes/Types'
 import { TOptionQuery } from '@/shared/model/types/subtypes/optionQuery'
 
 export class FetchCounterparty {
-	static async createCounterparty(INN: string, data: TNewDataCounterparty, dataGeo: TGeolLocationDTO): Promise<void> {
+	static async createCounterparty(
+		INN: string,
+		data: TNewDataCounterparty,
+		dataGeo: TNewDataGeoLocationDTO
+	): Promise<TCounterpartyDTO> {
 		const dataBody = {
 			data,
 			dataGeo,
 		}
-		await serverClient.api<void>(INN,`${INN}/counterparty/create`, {
+		const newCounterparty = await serverClient.api<TCounterpartyDTO>(INN, `${INN}/counterparty/create`, {
 			method: 'POST',
 			body: JSON.stringify(dataBody),
 		})
-		return
+		return newCounterparty
 	}
 
 	static async updateCounterparty(INN: string, data: TCounterpartyDTO, dataGeo: TGeolLocationDTO): Promise<void> {
@@ -21,7 +31,7 @@ export class FetchCounterparty {
 			data,
 			dataGeo,
 		}
-		await serverClient.api<void>(INN,`${INN}/counterparty/update`, {
+		await serverClient.api<void>(INN, `${INN}/counterparty/update`, {
 			method: 'PUT',
 			body: JSON.stringify(dataBody),
 		})
@@ -29,14 +39,14 @@ export class FetchCounterparty {
 	}
 
 	static async deletedCounterparty(INN: string, _id: string, dataGeo: TGeolLocationDTO): Promise<void> {
-		await serverClient.api<void>(INN,`${INN}/counterparty/remove/${_id}`, {
+		await serverClient.api<void>(INN, `${INN}/counterparty/remove/${_id}`, {
 			method: 'POST',
 			body: JSON.stringify(dataGeo),
 		})
 		return
 	}
 	static async restoreCounterparty(INN: string, _id: string, dataGeo: TGeolLocationDTO): Promise<void> {
-		await serverClient.api<void>(INN,`${INN}/counterparty/restore/${_id}`, {
+		await serverClient.api<void>(INN, `${INN}/counterparty/restore/${_id}`, {
 			method: 'POST',
 			body: JSON.stringify(dataGeo),
 		})
@@ -44,7 +54,7 @@ export class FetchCounterparty {
 	}
 
 	static async getAllCounterparty(INN: string, option?: TOptionQuery<TCounterparty>): Promise<TCounterpartyDTO[]> {
-		const data = await serverClient.api<TCounterpartyDTO[]>(INN,`${INN}/counterparty/all`, {
+		const data = await serverClient.api<TCounterpartyDTO[]>(INN, `${INN}/counterparty/all`, {
 			method: 'POST',
 			body: JSON.stringify(option),
 		})
@@ -55,7 +65,7 @@ export class FetchCounterparty {
 		INN: string,
 		option?: TOptionQuery<TCounterparty>
 	): Promise<TCounterpartyDTO[]> {
-		const data = await serverClient.api<TCounterpartyDTO[]>(INN,`${INN}/counterparty/allWithDeleted`, {
+		const data = await serverClient.api<TCounterpartyDTO[]>(INN, `${INN}/counterparty/allWithDeleted`, {
 			method: 'POST',
 			body: JSON.stringify(option),
 		})
@@ -69,7 +79,7 @@ export class FetchCounterparty {
 		dataGeo: TGeolLocationDTO
 	): Promise<void> {
 		const dataBody = { file, dataGeo }
-		await serverClient.api<void>(INN,`${INN}/counterparty/file/remove/${_id}`, {
+		await serverClient.api<void>(INN, `${INN}/counterparty/file/remove/${_id}`, {
 			method: 'POST',
 			body: JSON.stringify(dataBody),
 		})
@@ -77,7 +87,8 @@ export class FetchCounterparty {
 	}
 
 	static async searchCounterparty(INN: string, query: string, withDeleted: boolean): Promise<TCounterpartyDTO[] | null> {
-		const data = await serverClient.api<TCounterpartyDTO[]>(INN,
+		const data = await serverClient.api<TCounterpartyDTO[]>(
+			INN,
 			`${INN}/counterparty/query?query=${query}&withDeleted=${withDeleted}`,
 			{
 				method: 'GET',

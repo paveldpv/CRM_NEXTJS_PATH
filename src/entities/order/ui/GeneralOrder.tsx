@@ -7,7 +7,8 @@ import Loader from '@/shared/ui/loaders/namedLoader/ui/Loader'
 import { Modal } from 'antd'
 import { useMemo, useState } from 'react'
 import { ROOT_LINK } from '../../../../Server/Service/servicePermissionRedactData/model/types/Types'
-import FormOrder from './form/FormOrder'
+
+import GeneralFormOrder from './form/GeneralFormOrder'
 import ListOrder from './orderView/ListOrder'
 import PaginationPanel from './PaginationPanel'
 import RulePanelOrder from './PanelControlOrder'
@@ -28,7 +29,6 @@ export default function GeneralOrder({ data, totalOrders }: { data: TOrderFullIn
 
 	return (
 		<div className=' grid grid-rows-4'>
-			
 			<RulePanelOrder
 				permission={permission}
 				setOpenForm={setOpenForm}
@@ -38,7 +38,7 @@ export default function GeneralOrder({ data, totalOrders }: { data: TOrderFullIn
 				viewMode={viewMode}
 				setViewMode={setViewMode}
 			/>
-			
+
 			<div className=' row-span-2'>
 				{load ? (
 					<Loader />
@@ -56,13 +56,22 @@ export default function GeneralOrder({ data, totalOrders }: { data: TOrderFullIn
 				<PaginationPanel totalOrder={totalOrders} setLoader={setLoad} setDataOrder={setDataOrder} />
 			</nav>
 			<Modal
+				footer={null}
+				width='66.666%'
+				style={{
+					top: '5%',
+					height: '90vh',
+					maxHeight: '90vh',
+					overflow: 'hidden',
+				}}
+				wrapClassName='no-scroll-modal'
 				open={openForm}
 				onCancel={() => {
 					setOpenForm(false)
 					seSelectedOrder(null)
 				}}
 			>
-				<FormOrder
+				<GeneralFormOrder
 					permission={permission}
 					setLoader={setLoad}
 					setDataOrder={setDataOrder}

@@ -1,13 +1,14 @@
 'use client'
 import PanelViewMode from '@/shared/components/panelViewMode/PanelViewMode'
+import { useConfigApp } from '@/shared/model/store/storeConfigApp'
 import CusButton from '@/shared/ui/button/ui/CusButton'
-import { Checkbox, CheckboxChangeEvent, ConfigProvider, DatePicker, Input } from 'antd'
+import CusConfigProvider from '@/shared/ui/CusConfigProvider/ui/CusConfigProvider'
+import { Checkbox, CheckboxChangeEvent, DatePicker, Input } from 'antd'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useState } from 'react'
 import { FaPlus, FaSearch } from 'react-icons/fa'
 import { debounce } from 'ts-debounce'
 import { TDateSearch, TRulePanelOrder } from '../model/Type'
-import { useConfigApp } from '@/shared/model/store/storeConfigApp'
 
 export default function PanelControlOrder({
 	permission,
@@ -20,11 +21,10 @@ export default function PanelControlOrder({
 }: TRulePanelOrder) {
 	const [valueSearch, setValueSearch] = useState('')
 	const [dateSearch, setDateSearch] = useState<TDateSearch | null>()
-	const {configMain}=useConfigApp(state=>state.dataConfigApp)
+	const { configMain } = useConfigApp((state) => state.dataConfigApp)
 	const searchParams = useSearchParams()
 	const router = useRouter()
 	const pathname = usePathname()
-	
 
 	const handlerSearch = useCallback(async () => {
 		if (!valueSearch) return
@@ -50,6 +50,7 @@ export default function PanelControlOrder({
 		router.push(`${pathname}?${params.toString()}`)
 		setLoader(false)
 	}
+
 	const filterCompleted = async (e: CheckboxChangeEvent) => {
 		setLoader(true)
 		const checked = e.target.checked
@@ -71,14 +72,7 @@ export default function PanelControlOrder({
 			</li>
 			<li>
 				<div className='flex'>
-					<ConfigProvider
-						theme={{
-							token: {
-								colorPrimary: configMain?.color.borderColor,
-								colorPrimaryHover: configMain?.color.bgColor,
-							},
-						}}
-					>
+					<CusConfigProvider >
 						<Input
 							disabled={load}
 							placeholder='Поиск...'
@@ -88,7 +82,7 @@ export default function PanelControlOrder({
 							className='w-64 rounded-r-none '
 							onPressEnter={handlerSearch}
 						/>
-					</ConfigProvider>
+					</CusConfigProvider>
 					<CusButton onClick={handlerSearch} className='rounded-l-none'>
 						<FaSearch />
 					</CusButton>

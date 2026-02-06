@@ -1,5 +1,5 @@
 import { viewMode } from '@/shared/components/panelViewMode/model/Types'
-import { TOrderFullInfoDTO } from '@/shared/model/types'
+import { TCounterpartyDTO, TOrderFullInfoDTO } from '@/shared/model/types'
 import { Dispatch, SetStateAction } from 'react'
 
 export type TDateSearch = {
@@ -29,10 +29,28 @@ export type TPaginationPanel = {
 	setDataOrder: Dispatch<SetStateAction<TOrderFullInfoDTO[]>>
 }
 
-export type TFormOrder = {
+export type TGeneralFormOrder = {
 	permission: boolean
 	setLoader: Dispatch<SetStateAction<boolean>>
 	setDataOrder: Dispatch<SetStateAction<TOrderFullInfoDTO[]>>
 	serOpenForm: Dispatch<SetStateAction<boolean>>
-	selectedOrder: TOrderFullInfoDTO|null
+	selectedOrder: TOrderFullInfoDTO | null
+	
 }
+export type TFormCounterparty = {
+	permission:boolean
+	counterparty: TCounterpartyDTO[] | []
+	setCounterparty: Dispatch<SetStateAction<TCounterpartyDTO[]>>
+	selectedCounterpartyID: string | null
+	setSelectCounterpartyID: Dispatch<SetStateAction<string | null>>
+	setLoadForm: Dispatch<SetStateAction<boolean>>
+	focusForm: TFocusForm
+	setFocusForm: Dispatch<SetStateAction<TFocusForm>>
+	// setCounterparty:Dispatch<SetStateAction<TCounterpartyDTO>>
+}
+export type TFocusForm = 'ORDER' | 'DETAIL' | 'CP'
+
+export type TFormOrder = {permission:boolean, focusForm: TFocusForm; setFocusForm: Dispatch<SetStateAction<TFocusForm>> }
+export type TFromDetail = {permission:boolean, focusForm: TFocusForm; setFocusForm: Dispatch<SetStateAction<TFocusForm>> }
+export type TTitleFormTransform = {title:string,onClick:()=>void }
+//,place:TFocusForm, setFocusForm: Dispatch<SetStateAction<TFocusForm>>

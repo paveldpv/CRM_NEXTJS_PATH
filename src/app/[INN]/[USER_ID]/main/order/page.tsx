@@ -17,14 +17,11 @@ async function dataOrder(INN: string): Promise<{ data: TOrderFullInfoDTO[]; tota
 		serviceOrder.getOrders({ completed: false, deleted: false }),
 		serviceOrder.getAmountOrder({ completed: false, deleted: false }),
 	])
-	console.log("🚀 ~ dataOrder ~ totalOrders:", totalOrders)
-	console.log("🚀 ~ dataOrder ~ data:", data)
+	
 	
 	if (isError(data)  || isError(totalOrders) ) {
 		return null
-	}
-
-	
+	}	
 	return {
 		data: data?ServiceOrderFullInfo.createListOrderFullInfoDTO(data):[],
 		totalOrders:totalOrders?totalOrders:0,
@@ -34,7 +31,7 @@ async function dataOrder(INN: string): Promise<{ data: TOrderFullInfoDTO[]; tota
 export default async function page({ params }: { params: { INN: string; USER_ID: string } }) {
 	const { INN } = params
 	const initialDataOrder = await dataOrder(INN)
-	console.log("🚀 ~ page ~ initialDataOrder:", initialDataOrder)
+	
 
 	if (!initialDataOrder  ) {
 		<div></div>
