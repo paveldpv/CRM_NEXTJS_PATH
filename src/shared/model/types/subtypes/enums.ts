@@ -15,7 +15,8 @@ export enum idLink {
   setting_history_entry_location='setting_history_entry_location',
   table='table',
   details='details',
-  storage="storage"
+  storage="storage",
+  
 
 }
 

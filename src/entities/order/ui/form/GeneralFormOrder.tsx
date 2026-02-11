@@ -1,57 +1,26 @@
 'use client'
-import { FetchCounterparty } from '@/shared/api'
 import { TCounterpartyDTO } from '@/shared/model/types'
-import { useParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
-import { TFocusForm, TGeneralFormOrder } from '../../model/Type'
+import { useState } from 'react'
+
+import { useInfoUser } from '@/shared/model/store/storeInfoUser'
+import { TGeneralFormOrder } from '../../model/Types'
 import FormCounterparty from './FormCounterparty'
 import FormDetails from './FormDetails'
 import FormOrder from './FormOrder'
 
-export default function GeneralFormOrder({
-	permission,
-	serOpenForm,
-	setDataOrder,
-	setLoader,
-	selectedOrder,
-}: TGeneralFormOrder) {
-	const [counterparty, setCounterparty] = useState<TCounterpartyDTO[]>([])
-	const [selectedCounterpartyID, setSelectCounterpartyID] = useState<string | null>(null)
-	const [loadForm, setLoadForm] = useState(true)
-	const [focusForm, setFocusForm] = useState<TFocusForm>('ORDER')
+export default function GeneralFormOrder({ listCounterparty, order }: TGeneralFormOrder) {
+	const permission = useInfoUser((state) => state.permission)
 
-	const params = useParams()
-	const INN = params!.INN as string // для route /[INN]/*
-
-	useEffect(() => {
-		if (!selectedOrder) {
-			setLoadForm(false)
-			return
-		}
-		;(async () => {
-			const dataCounterparty = await FetchCounterparty.getAllCounterparty(INN)
-			setCounterparty(dataCounterparty)
-			setLoadForm(false)
-		})()
-	}, [selectedOrder])
+	const [counterparty, setCounterparty] = useState<TCounterpartyDTO[]>(listCounterparty || [])
 
 	return (
 		<div className=' bg-gray-100 p-4 h-full overflow-hidden'>
-			<div className='grid grid-cols-12 grid-rows-6 gap-4 h-screen'>
-				<div className='col-span-12 row-span-3 grid grid-cols-2 gap-4'>
-					<FormOrder setFocusForm={setFocusForm} focusForm={focusForm} permission={permission} />
-					<FormCounterparty
-						permission={permission}
-						setFocusForm={setFocusForm}
-						focusForm={focusForm}
-						setLoadForm={setLoadForm}
-						counterparty={counterparty}
-						setCounterparty={setCounterparty}
-						selectedCounterpartyID={selectedCounterpartyID}
-						setSelectCounterpartyID={setSelectCounterpartyID}
-					/>
+			<div className='grid grid-rows-5 gap-2 h-screen'>
+				<div className=' row-span-3 grid  grid-cols-3 gap-2'>
+					<FormOrder permission={permission} order={order} />
+					<FormCounterparty permission={permission} counterparty={counterparty} selectedCounterparty={order?.CounterParty} />
 				</div>
-				<FormDetails setFocusForm={setFocusForm} focusForm={focusForm} permission={permission} />
+				<FormDetails permission={permission} idOrder={order?._id}  />
 			</div>
 		</div>
 	)

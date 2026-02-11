@@ -15,7 +15,7 @@ export type TOrder = {
 	complied: boolean
 	numberOrder: number
 	acceptedOfCargoEmployeeId: Types.ObjectId
-	details: Types.ObjectId[] | []
+	details: Types.ObjectId[] | [] 
 	service: TServiceOrder
 	payment?:TPaymentOrder
 	optionsDescription?: string[]

@@ -18,7 +18,7 @@ export class ServiceOrderDTO extends DTO {
 	}
 }
 
-export class ServiceOrderFullInfo extends DTO {
+export class ServiceOrderFullInfoDTO extends DTO {
 	static createOrderFullInfoDTO(data: TOrderFullInfo): TOrderFullInfoDTO {
 		const { _id, CounterParty, details, acceptedOfCargoEmployeeId } = data
 		const userDTO = ServiceUserDTO.createUserDTO(acceptedOfCargoEmployeeId)

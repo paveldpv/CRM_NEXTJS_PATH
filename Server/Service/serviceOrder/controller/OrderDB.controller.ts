@@ -65,9 +65,9 @@ export default class ControllerOrder extends ControllerDB {
 		await this.modelOrder!.findOneAndUpdate({ _id: dataOrder._id }, dataOrder)
 	}
 
-	public async getOrderByID(idOrder: Types.ObjectId): Promise<null | TOrder> {
+	public async getOrderByID(idOrder: Types.ObjectId): Promise<null | TOrderFullInfo> {
 		await this.changeReadinessModel()
-		return await this.modelOrder!.findOne({ _id: idOrder }).populate('counterparty')
+		return await this.modelOrder!.findOne({ _id: idOrder }).populate('counterparty').populate('acceptedOfCargoEmployeeId')
 	}
 
 	public async addDetailByOrder(idOrder: Types.ObjectId, idDetail: Types.ObjectId): Promise<void> {

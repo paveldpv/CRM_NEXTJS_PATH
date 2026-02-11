@@ -9,15 +9,14 @@ import { useCallback, useState } from 'react'
 import { FaPlus, FaSearch } from 'react-icons/fa'
 import { debounce } from 'ts-debounce'
 import { TDateSearch, TRulePanelOrder } from '../model/Type'
+import Link from 'next/link'
 
 export default function PanelControlOrder({
-	permission,
-	setOpenForm,
-	setDataOrder,
+	permission,	
 	setLoader,
 	setViewMode,
 	viewMode,
-	load,
+	load,totalOrder
 }: TRulePanelOrder) {
 	const [valueSearch, setValueSearch] = useState('')
 	const [dateSearch, setDateSearch] = useState<TDateSearch | null>()
@@ -36,14 +35,11 @@ export default function PanelControlOrder({
 		}, 1000)
 	}, [])
 
-	const addNewOrder = async () => {
-		setOpenForm(true)
-	}
+	
 
 	const filterDeleted = async (e: CheckboxChangeEvent) => {
 		setLoader(true)
-		const checked = e.target.checked
-		console.log('🚀 ~ filterDeleted ~ checked:', e.target)
+		const checked = e.target.checked		
 		const params = new URLSearchParams(searchParams!.toString())
 		params.set('deleted', String(checked))
 		//setDataOrder
@@ -65,16 +61,18 @@ export default function PanelControlOrder({
 		<ul className=' flex gap-2 items-center border-b-2 pb-2'>
 			<li className=''>
 				{permission && (
-					<CusButton className='p-2' onClick={addNewOrder} disabled={load}>
-						<FaPlus />
-					</CusButton>
+					<Link href={'/NEW_ORDER'}>
+						<CusButton className='p-2'  disabled={load}>
+							<FaPlus />
+						</CusButton>
+					</Link>
 				)}
 			</li>
 			<li>
 				<div className='flex'>
 					<CusConfigProvider >
 						<Input
-							disabled={load}
+							disabled={load || totalOrder == 0}
 							placeholder='Поиск...'
 							value={valueSearch}
 							onChange={(e) => setValueSearch(e.target.value)}
@@ -107,11 +105,11 @@ export default function PanelControlOrder({
 			</li>
 			<li>
 				<ul className='flex gap-2 items-center'>
-					<li className='flex border-2 p-1 gap-1  items-center'>
+					<li className='flex border-2 p-1 pl-2 gap-1  items-center'>
 						<label className='block text-xs  rounded-sm'>удаленные</label>
 						<Checkbox onChange={filterDeleted} />
 					</li>
-					<li className=' flex border-2 p-1 gap-1 items-center'>
+					<li className=' flex border-2 p-1 gap-1 pl-2 items-center'>
 						<label className='block text-xs  rounded-sm'>завершенные</label>
 						<Checkbox onChange={filterCompleted} />
 					</li>

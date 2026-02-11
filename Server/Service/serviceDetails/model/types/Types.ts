@@ -22,6 +22,8 @@ export type TDetail = {
 	nameDetail: string
 	dateAddDetail: Date
 	completed: boolean
+	amount:number
+	completedAmount:number
 	description?: string[]
 	files?: TResponseUploadFiles[] | []
 	price?: {

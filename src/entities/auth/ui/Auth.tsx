@@ -107,7 +107,7 @@ export default function Auth() {
 						name='INN'
 						id='INN'
 						placeholder='ИНН'
-						value={Number(values.INN)}
+						value={values.INN}
 						onChange={handleChange}
 					/>
 					{!!errors.INN && (

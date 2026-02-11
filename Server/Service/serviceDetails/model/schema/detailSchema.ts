@@ -17,6 +17,7 @@ const PropertyStepSchema = new Schema<TPropertyStep>(
 			required: true,
 			ref: 'user',
 		},
+		
 		createBy: { type: Schema.Types.ObjectId, required: true, ref: 'user' },
 		dateCompleted: {
 			type: Date,
@@ -40,6 +41,14 @@ export const detailSchema = new Schema<TDetail>({
 		type: Schema.Types.ObjectId,
 		required: true,
 		ref: 'order',
+	},
+	amount:{
+		type:Number,
+		default:1
+	},
+	completedAmount:{
+		type:Number,
+		default:0
 	},
 	nameDetail: {
 		type: String,

@@ -9,6 +9,7 @@ export const adminLinks: TLink[] = [{
 		title: 'заказы',
 		id: idLink.order,
 	},
+
 	{
 		href: ROOT_LINK.payment,
 		description: 'выставление и отслеживание оплаты счетов ,отправка счетов',

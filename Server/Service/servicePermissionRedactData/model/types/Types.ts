@@ -9,5 +9,6 @@ export enum ROOT_LINK {
   price= 'price',
   setting= 'setting',
   details='details',
-  storage = 'storage'
+  storage = 'storage',
+  
 } 

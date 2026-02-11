@@ -1,20 +1,18 @@
-import { motion } from 'framer-motion'
-import { TFromDetail } from '../../model/Type'
+'use client'
+import Fieldset from '@/shared/components/fieldSet/ui/Fieldset'
+import CusSpin from '@/shared/ui/loaders/CusSpin'
+import { useState } from 'react'
+import { TFormDetails } from '../../model/Types'
+import ListDetails from '../lists/ListDetails'
+import { FaCubes } from 'react-icons/fa'
 
-type Props = {}
+export default function FormDetails({}: TFormDetails) {
+	const [details, setDetails] = useState()
+	const [loader, setLoader] = useState(true)
 
-export default function FormDetails({ setFocusForm, focusForm }: TFromDetail) {
 	return (
-		<motion.div
-			className='col-span-12 row-span-3 bg-white rounded-xl shadow-lg p-6'
-			animate={{
-				y: focusForm === 'DETAIL' ? -100 : 0,
-				scaleY: focusForm === 'DETAIL' ? 1.2 : 0.8,
-			}}
-			 transition={{ type: "spring", stiffness: 200, damping: 25 }}
-			onClick={() => setFocusForm('DETAIL')}
-		>
-			<div>detail</div>
-		</motion.div>
+		<Fieldset legend={<FaCubes />} className=' row-span-2'>
+			{loader ? <CusSpin visible={loader} /> : <ListDetails />}
+		</Fieldset>
 	)
 }

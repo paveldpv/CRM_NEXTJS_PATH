@@ -92,7 +92,7 @@ export class ServiceOrder extends Service {
 		}
 	}
 
-	public async getOrderByID(idOrder: Types.ObjectId): Promise<TOrder | TError | null> {
+	public async getOrderByID(idOrder: Types.ObjectId): Promise<TOrderFullInfo | TError | null> {
 		try {
 			const controllerOrder = new ControllerOrder(this.INN)
 			const data = controllerOrder.getOrderByID(idOrder)

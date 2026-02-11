@@ -3,17 +3,15 @@ import { TCounterpartyDTO } from '@/shared/model/types'
 import { AutoCompleteProps } from 'antd'
 import { FaHandshake } from 'react-icons/fa'
 
-
-export const renderCounterpartyOption = (data: TCounterpartyDTO[]): AutoCompleteProps[] => {
-	if (data.length === 0) {
+export const renderCounterpartyOption = (data: TCounterpartyDTO[] | null): AutoCompleteProps[] => {
+	if (!data || data.length === 0) {
 		return []
 	}
-	
 
 	return data.map((cp) => {
 		return {
 			value: cp._id,
-			data:cp,
+			data: cp,
 			label: (
 				<div className='flex'>
 					<p className='flex flex-row'>
