@@ -17,7 +17,7 @@ export type TOrder = {
 	acceptedOfCargoEmployeeId: Types.ObjectId
 	details: Types.ObjectId[] | [] 
 	service: TServiceOrder
-	payment?:TPaymentOrder
+	payment?:TPaymentOrder 
 	optionsDescription?: string[]
 	processCompleted?: number
 } & TEntities
@@ -79,6 +79,7 @@ export type TDriver = {
 	lastName?: string
 	surName?: string
 	phone?: string
+	otherData?:string
 }
 
 

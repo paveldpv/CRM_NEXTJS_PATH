@@ -7,11 +7,16 @@ const deliveredSchema = new Schema<TDelivered>({
 		required: true,
 	},
 	car: {
+
 		type: {
 			driver: {
 				name: {
 					type: String,
 					required: false,
+				},
+				otherData:{
+					type:String,
+					default:false
 				},
 				lastName: {
 					type: String,

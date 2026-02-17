@@ -3,7 +3,7 @@ import { TCounterpartyDTO } from '@/shared/model/types'
 import { AutoCompleteProps } from 'antd'
 import { FaHandshake } from 'react-icons/fa'
 
-export const renderCounterpartyOption = (data: TCounterpartyDTO[] | null): AutoCompleteProps[] => {
+export const renderCounterpartyOption = (data?: TCounterpartyDTO[] | null): AutoCompleteProps[] => {
 	if (!data || data.length === 0) {
 		return []
 	}

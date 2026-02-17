@@ -1,5 +1,9 @@
 import { viewMode } from '@/shared/components/panelViewMode/model/Types'
-import { keyColorOption, keyConfigLayout, nameSettingLayout } from '../../../../Server/Service/serviceConfigApp/model/types/Enums'
+import {
+	keyColorOption,
+	keyConfigLayout,
+	nameSettingLayout,
+} from '../../../../Server/Service/serviceConfigApp/model/types/Enums'
 import { TConfigAPP_DTO } from '../../../../Server/Service/serviceConfigApp/model/types/Type'
 import {
 	TCounterparty,
@@ -7,11 +11,7 @@ import {
 	TNewDataCounterparty,
 } from '../../../../Server/Service/serviceCounterparty/models/types/Types'
 import { TDaDataOrganizationDTO } from '../../../../Server/Service/serviceDaData/model/types/Type'
-import {
-	TDetailDTO,
-	TFullInfoTDetailDTO,
-	TNewDetailDTO,
-} from '../../../../Server/Service/serviceDetails/model/types/Types'
+import { TDetailDTO, TFullInfoTDetailDTO, TNewDetailDTO } from '../../../../Server/Service/serviceDetails/model/types/Types'
 import {
 	PURPOSE_USE,
 	TGeolLocationDTO,
@@ -25,6 +25,8 @@ import {
 	TOrder,
 	TOrderDTO,
 	TOrderFullInfoDTO,
+	TPaymentOrder,
+	TServiceOrder,
 } from '../../../../Server/Service/serviceOrder/model/types/Types'
 import { TDBRequestPrevCalcDTO, TRequestPrevCalc } from '../../../../Server/Service/servicePrevCacl/model/types/Types'
 import { TDataTablePriceDTO, TPriceDTO } from '../../../../Server/Service/servicePrice/model/types/Types'
@@ -35,11 +37,7 @@ import {
 	TDataOrganizationDTO,
 	TDataOrganizationFullInfoDTO,
 } from '../../../../Server/Service/serviceRuleOrganization/model/types/Types'
-import {
-	TSessionFullInfoDTO,
-	TTokens,
-	TUserOnlineDTO,
-} from '../../../../Server/Service/serviceSession/model/types/Type'
+import { TSessionFullInfoDTO, TTokens, TUserOnlineDTO } from '../../../../Server/Service/serviceSession/model/types/Type'
 import {
 	TDBUser,
 	TNewUser,
@@ -47,8 +45,8 @@ import {
 	TUserDTOWithoutPas,
 } from '../../../../Server/Service/serviceUser/model/types/Types'
 
-export {PURPOSE_USE,keyColorOption,keyConfigLayout,nameSettingLayout }
-export type {viewMode,
+export { keyColorOption, keyConfigLayout, nameSettingLayout, PURPOSE_USE }
+export type {
 	TConfigAPP_DTO,
 	TCounterparty,
 	TCounterpartyDTO,
@@ -72,13 +70,16 @@ export type {viewMode,
 	TOrder,
 	TOrderDTO,
 	TOrderFullInfoDTO,
+	TPaymentOrder,
 	TPriceDTO,
 	TPropertyDetailDTO,
 	TRequestPrevCalc,
 	TRequisitesDTO,
+	TServiceOrder,
 	TSessionFullInfoDTO,
 	TTokens,
 	TUserDTOByBirthday,
 	TUserDTOWithoutPas,
-	TUserOnlineDTO
+	TUserOnlineDTO,
+	viewMode,
 }

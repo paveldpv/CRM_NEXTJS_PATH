@@ -1,60 +1,48 @@
 'use client'
 import { Collapse } from 'antd'
-import { FaArrowCircleDown } from 'react-icons/fa'
-import type { CollapseProps } from 'antd'
 
-import { TCusAccordion } from './model/Types'
+import { CusAccordionProps } from './model/Types'
 
+import { motion } from 'framer-motion'
+import { forwardRef } from 'react'
+import { FaChevronDown } from 'react-icons/fa'
 
+import CusConfigProvider from '@/shared/ui/CusConfigProvider/ui/CusConfigProvider'
 
-
-export default function CusAccordion({ 
-	titleAccordion, 
-	children, 
-	className,
-	defaultActiveKey,
-	activeKey,
-	onChange,
-	collapsible,
-	...props 
-}: TCusAccordion) {
-	
-	
-	const collapseProps: CollapseProps = {
-		// Основные пропсы
-		className: className,
-		defaultActiveKey: defaultActiveKey,
-		activeKey: activeKey,
-		onChange,
-		collapsible,
+const CusAccordion = forwardRef<HTMLDivElement, CusAccordionProps>(
+	({ children, defaultActive = false, onToggle, ...props }, ref) => {
 		
-		// Кастомная иконка с вращением
-		expandIcon: ({ isActive }) => (
-			<span 
-				className='text-2xl text-color_header'
-				style={{ 
-					transform: isActive ? 'rotate(180deg)' : 'rotate(0deg)',
-					transition: 'transform 0.3s ease-in-out',
-					display: 'inline-flex',
-					alignItems: 'center'
-				}}
-			>
-				<FaArrowCircleDown />
-			</span>
-		),
-		
-		// Используем items пропс вместо children
-		items: [
-			{
-				key: '1',
-				label: titleAccordion,
-				children: children,
+		const handlerChange = (isOpen: string[]) => {
+			if (onToggle) {
+				onToggle(isOpen)
 			}
-		],
-		
-		// Остальные пропсы
-		...props,
-	}
+		}
 
-	return <Collapse {...collapseProps}  />
-}
+		return (
+			<CusConfigProvider>
+				<Collapse
+					onChange={handlerChange}
+					ref={ref}
+					defaultActiveKey={defaultActive ? ['1'] : []}
+					expandIcon={({ isActive }) => (
+						<motion.span
+							animate={{ rotate: isActive ? 180 : 0 }}
+							transition={{ duration: 0.3 }}
+							className='inline-flex items-center'
+						>
+							<FaChevronDown />
+						</motion.span>
+					)}
+					expandIconPlacement='start'
+					{...props}
+				>
+					{children}
+				</Collapse>
+			</CusConfigProvider>
+		)
+	}
+)
+
+CusAccordion.displayName = 'CusAccordion'
+
+export default CusAccordion
