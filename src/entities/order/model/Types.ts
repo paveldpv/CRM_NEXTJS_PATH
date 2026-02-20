@@ -7,12 +7,10 @@ export type TGeneralFormOrder = {
 }
 export type TFormOrder = {
 	permission: boolean
-	setOrderData: Dispatch<SetStateAction<TOrderFullInfoDTO | undefined>>
-	order?: TOrderFullInfoDTO
 }
-
 export type TFormCounterparty = {
 	permission: boolean
+	onSelectCounterparty: (counterparty: TCounterpartyDTO) => void
 	counterparty?: TCounterpartyDTO[] | []
 	selectedCounterparty?: TCounterpartyDTO
 	setCounterparty: Dispatch<SetStateAction<TCounterpartyDTO[]>>

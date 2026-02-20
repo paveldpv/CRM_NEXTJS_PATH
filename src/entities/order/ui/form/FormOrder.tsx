@@ -1,31 +1,63 @@
 import Fieldset from '@/shared/components/fieldSet/ui/Fieldset'
+import { TOrderFullInfoDTO } from '@/shared/model/types'
+import CusButton from '@/shared/ui/button/ui/CusButton'
 import { Checkbox } from 'antd'
-import { FaInfoCircle } from 'react-icons/fa'
+import { useFormikContext } from 'formik'
+import { FaCheck, FaInfoCircle } from 'react-icons/fa'
 import { TFormOrder } from '../../model/Types'
 import GeneralInfo from '../simple/GeneralInfo'
 import PaymentInfo from '../simple/PaymentInfo'
 import TooltipAcceptOfCargoEmployee from '../simple/TooltipAcceptOfCargoEmployee'
 
-export default function FormOrder({ permission, order, setOrderData }: TFormOrder) {
+export default function FormOrder({ permission }: TFormOrder) {
+	const { values, setFieldValue, handleSubmit } = useFormikContext<TOrderFullInfoDTO>()
+
+	if (!values.CounterParty) {
+		return (
+			<Fieldset legend={<FaInfoCircle />} className=' col-span-2'>
+				<div className='flex items-center justify-center h-full text-gray-400'>
+					<p>Выберите контрагента для заполнения данных заказа</p>
+				</div>
+			</Fieldset>
+		)
+	}
+
 	return (
-		<Fieldset legend={order ? `№:${order?.numberOrder}` : <FaInfoCircle />} className=' col-span-2'>
-			{order && (
+		<Fieldset
+			legend={values.numberOrder ? `№:${values.numberOrder}` : <FaInfoCircle />}
+			className=' col-span-2 relative'
+		>
+			{values.numberOrder !== 0 && (
 				<div className=' flex justify-between border-b border-gray-500 w-full m-2 '>
 					<div className='flex gap-2 justify-start'>
 						<label className='block text-sm mb-1'>Выполнено</label>
-						<Checkbox checked={order.complied} disabled={!permission} />
+						<Checkbox
+							checked={values.complied}
+							onChange={(e) => setFieldValue('complied', e.target.checked)}
+							disabled={!permission}
+						/>
 					</div>
 					<div>
-						{order.acceptedOfCargoEmployeeId && <TooltipAcceptOfCargoEmployee {...order.acceptedOfCargoEmployeeId} />}
+						{values.acceptedOfCargoEmployeeId && (
+							<TooltipAcceptOfCargoEmployee {...values.acceptedOfCargoEmployeeId} />
+						)}
 					</div>
 				</div>
 			)}
 
 			<div className=' grid grid-cols-3 gap-2'>
-				<GeneralInfo {...order?.service} />
-				<PaymentInfo {...order?.payment} />
+				<GeneralInfo permission={permission} />
+				<PaymentInfo permission={permission} />
 			</div>
-			
+
+			<div className='absolute bottom-4 right-4'>
+				<CusButton onClick={() => handleSubmit()} disabled={!permission}>
+					<FaCheck className='mr-2' /> Сохранить
+				</CusButton>
+			</div>
 		</Fieldset>
 	)
 }
+
+
+

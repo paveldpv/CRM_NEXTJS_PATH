@@ -27,6 +27,7 @@ import {
 	TOrderFullInfoDTO,
 	TPaymentOrder,
 	TServiceOrder,
+	type_payment,
 } from '../../../../Server/Service/serviceOrder/model/types/Types'
 import { TDBRequestPrevCalcDTO, TRequestPrevCalc } from '../../../../Server/Service/servicePrevCacl/model/types/Types'
 import { TDataTablePriceDTO, TPriceDTO } from '../../../../Server/Service/servicePrice/model/types/Types'
@@ -45,7 +46,7 @@ import {
 	TUserDTOWithoutPas,
 } from '../../../../Server/Service/serviceUser/model/types/Types'
 
-export { keyColorOption, keyConfigLayout, nameSettingLayout, PURPOSE_USE }
+export { keyColorOption, keyConfigLayout, nameSettingLayout, PURPOSE_USE,type_payment }
 export type {
 	TConfigAPP_DTO,
 	TCounterparty,

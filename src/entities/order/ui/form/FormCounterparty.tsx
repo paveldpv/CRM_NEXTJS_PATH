@@ -11,15 +11,16 @@ import { FaHandshake, FaPlus } from 'react-icons/fa'
 import Fieldset from '@/shared/components/fieldSet/ui/Fieldset'
 import CusSpin from '@/shared/ui/loaders/CusSpin'
 import { AutoComplete, Input } from 'antd'
+import { format } from 'date-fns'
 import Link from 'next/link'
 import { renderCounterpartyOption } from '../../lib/renderCounterpartyOption'
 import { TFormCounterparty } from '../../model/Types'
-import { format } from 'date-fns'
 export default function FormCounterparty({
 	setCounterparty,
 	permission,
 	counterparty,
 	selectedCounterparty,
+	onSelectCounterparty,
 }: TFormCounterparty) {
 	const [formData, setFormData] = useState<TCounterpartyDTO | null>(null)
 	const [isEditing, setIsEditing] = useState(false)
@@ -42,7 +43,7 @@ export default function FormCounterparty({
 			setIsEditing(true)
 			setLoader(false)
 		}
-	}, [])
+	}, [selectedCounterparty])
 
 	const handlerChange = (e: string) => {}
 
@@ -52,17 +53,27 @@ export default function FormCounterparty({
 		setCounterparty((prev) => [...prev, dataNewCounterparty])
 		setIsEditing(true)
 		setFormData(dataNewCounterparty)
+		onSelectCounterparty(dataNewCounterparty)
 		setLoader(false)
+	}
+
+	const handleSelect = (value: string, option: any) => {
+		const selected = counterparty?.find((c) => c._id === option.key)
+		if (selected) {
+			setFormData(selected)
+			onSelectCounterparty(selected)
+		}
 	}
 
 	const handleInputChange = (field: keyof TCounterpartyDTO) => (e: React.ChangeEvent<HTMLInputElement>) => {
 		console.log(`input handler change ${e}`)
-
 		if (formData) {
-			setFormData({
+			const updated = {
 				...formData,
 				[field]: e.target.value,
-			})
+			}
+			setFormData(updated)
+			onSelectCounterparty(updated) // Синхронизируем с Formik
 		}
 	}
 
@@ -73,18 +84,15 @@ export default function FormCounterparty({
 			) : (
 				<div>
 					{permission && !formData && (
-						<div>
+						<div className=' flex  flex-row gap-2'>
 							<AutoComplete
 								showSearch={{
-									filterOption: (inputValue, option) => {
-										//TODO:
-										console.log('🚀 ~ FormCounterparty ~ option:', option)
-										console.log('🚀 ~ FormCounterparty ~ inputValue:', inputValue)
-										return false
-									},
+									filterOption: (inputValue, option: any) =>
+										(option?.label ?? '').toString().toLowerCase().includes(inputValue.toLowerCase()),
 								}}
+								onSelect={handleSelect}
 								onChange={(e) => setPhoneValue(e)}
-								options={renderCounterpartyOption(counterparty)}
+								options={renderCounterpartyOption(counterparty || [])}
 							>
 								<Input placeholder='Тел' />
 							</AutoComplete>
