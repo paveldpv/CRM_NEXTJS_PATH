@@ -19,7 +19,7 @@ export type TRulePanelOrder = {
 export type TListOrder = {
 	viewMode: viewMode
 	dataOrder: TOrderFullInfoDTO[]
-	permission: boolean
+	
 
 }
 export type TPaginationPanel = {

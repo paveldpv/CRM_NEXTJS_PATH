@@ -1,4 +1,3 @@
-
 import { DTO } from '../../classes/DTO'
 import { CounterpartyDTO } from '../serviceCounterparty/counterparty.dto'
 import { ServiceUserDTO } from '../serviceUser/user.dto'
@@ -10,7 +9,8 @@ export class ServiceOrderDTO extends DTO {
 			...data,
 			_id: this.objectIDToString(data._id),
 			acceptedOfCargoEmployeeId: this.objectIDToString(data.acceptedOfCargoEmployeeId),
-			CounterParty: this.objectIDToString(data.CounterParty),details:this.listIDToListString(data.details)
+			CounterParty: this.objectIDToString(data.CounterParty),
+			details: this.listIDToListString(data.details),
 		}
 	}
 	static createListOrderDTO(data: TOrder[]): TOrderDTO[] {
@@ -20,6 +20,7 @@ export class ServiceOrderDTO extends DTO {
 
 export class ServiceOrderFullInfoDTO extends DTO {
 	static createOrderFullInfoDTO(data: TOrderFullInfo): TOrderFullInfoDTO {
+		
 		const { _id, CounterParty, details, acceptedOfCargoEmployeeId } = data
 		const userDTO = ServiceUserDTO.createUserDTO(acceptedOfCargoEmployeeId)
 		return {
@@ -30,7 +31,6 @@ export class ServiceOrderFullInfoDTO extends DTO {
 			acceptedOfCargoEmployeeId: userDTO,
 		}
 	}
-
 	static createListOrderFullInfoDTO(data: TOrderFullInfo[]): TOrderFullInfoDTO[] {
 		return data.map((el) => this.createOrderFullInfoDTO(el))
 	}

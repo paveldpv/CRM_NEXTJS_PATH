@@ -11,7 +11,7 @@ export default function PaymentInfo({ permission }: { permission: boolean }) {
 	const { payment } = values
 
 	return (
-		<Fieldset legend={<FaMoneyBillWave />} className='h-full'>
+		<Fieldset legend={<FaMoneyBillWave />} className='h-full col-span-1 w-full'>
 			<CusConfigProvider>
 				<div className='flex flex-col gap-4'>
 					<div className='flex flex-col'>

@@ -1,4 +1,4 @@
-import { TNewDataCounterparty, TGeolLocationDTO } from '@/shared/model/types'
+import { TNewDataCounterparty, TGeolLocationDTO, TCounterparty } from '@/shared/model/types'
 import { NextRequest, NextResponse } from 'next/server'
 import { MongoHelpers } from '../../../../../../../Server/classes/until/MongoHelpers'
 import ServicePermissionRedactData from '../../../../../../../Server/Service/servicePermissionRedactData/ServicePermissionRedactData'
@@ -6,6 +6,7 @@ import { ROOT_LINK } from '../../../../../../../Server/Service/servicePermission
 import { ServiceGeoLocation } from '../../../../../../../Server/Service/serviceGeoLocation/serviceGeoLocation'
 import { ServiceCounterparty } from '../../../../../../../Server/Service/serviceCounterparty/serviceCounterparty'
 import { isError } from '@/shared/lib/IsError'
+import { CounterpartyDTO } from '../../../../../../../Server/Service/serviceCounterparty/counterparty.dto'
 
 export async function POST(request: NextRequest, { params }: { params: { INN: string } }) {
 	const { INN } = params
@@ -35,7 +36,7 @@ export async function POST(request: NextRequest, { params }: { params: { INN: st
   if(error.length!=0){
      return NextResponse.json({ message: 'permission blocked' }, { status: 500 })
   }else{
-    return NextResponse.json({ message: 'OK' }, { status: 200 })
+    return NextResponse.json( CounterpartyDTO.createCounterpartyDTO(result[1] as TCounterparty) , { status: 200 })
   }
 
 

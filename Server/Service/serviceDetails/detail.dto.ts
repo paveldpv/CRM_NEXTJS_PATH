@@ -1,5 +1,5 @@
 import { DTO } from '../../classes/DTO'
-import { ServiceOrderFullInfo } from '../serviceOrder/order.dto'
+import { ServiceOrderFullInfoDTO } from '../serviceOrder/order.dto'
 
 import { TDetail, TDetailDTO, TFullInfoTDetail, TFullInfoTDetailDTO } from './model/types/Types'
 
@@ -18,7 +18,7 @@ export class ServiceFullInfoDetailDTO extends DTO {
 		return {
 			...data,
 			_id: this.objectIDToString(data._id),
-			order: ServiceOrderFullInfo.createOrderFullInfoDTO(data.order),
+			order: ServiceOrderFullInfoDTO.createOrderFullInfoDTO(data.order),
 		}
 	}
 	static createListFullInfoOrderDTO(data: TFullInfoTDetail[]): TFullInfoTDetailDTO[] {

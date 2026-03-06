@@ -14,13 +14,17 @@ import ListDetails from '../lists/ListDetails'
 import HeaderDetails from '../simple/HeaderDetails'
 import FormUpdateDetail from './FormUpdateDetail'
 
-export default function FormDetails({ amountDetails, idOrder, permission }: TFormDetails) {
+export default function FormDetails({ amountDetails, idOrder, permission, numberOrder }: TFormDetails) {
 	const [details, setDetails] = useState<TDetailDTO[]>([])
 	const [loader, setLoader] = useState(true)
 	const [modalDetail, setModalDetail] = useState(false)
 	const [redactDetail, setRedactDetail] = useState<TDetailDTO | null>(null)
 	const params = useParams()
 	const INN = params!.INN as string
+
+	if (!idOrder) {
+		return null
+	}
 
 	const loadDetails = async () => {
 		if (!idOrder) {
@@ -32,7 +36,9 @@ export default function FormDetails({ amountDetails, idOrder, permission }: TFor
 		setDetails(dataDetails)
 		setLoader(false)
 	}
-	const addNewDetail = useCallback(() => {		
+
+	const addNewDetail = useCallback((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+		e.preventDefault()
 		setRedactDetail(null)
 		setModalDetail(true)
 	}, [])
@@ -41,26 +47,32 @@ export default function FormDetails({ amountDetails, idOrder, permission }: TFor
 		<>
 			<Fieldset legend={<FaCubes />} className=' row-span-2'>
 				<CusAccordion onToggle={loadDetails}>
-					<Collapse.Panel key='1' header={<HeaderDetails amountDetails={amountDetails} />} className=' flex  justify-center'>
+					<Collapse.Panel
+						key='1'
+						header={<HeaderDetails amountDetails={amountDetails} />}
+						className=' flex  flex-col justify-start'
+					>
 						{loader ? (
 							<CusSpin visible={loader} />
 						) : (
-							<>
+							<div className=' '>
 								<p>
 									{permission && (
-										<CusButton className='p-2 text-sm w-9' onClick={addNewDetail}>
+										<CusButton className='p-2 text-sm  flex justify-center' onClick={addNewDetail}>
 											<FaPlus />
 											<p className=' font-bold pl-2 pr-2'>Добавить</p>
 										</CusButton>
 									)}
 								</p>
-								<ListDetails
-									permission={permission}
-									setModalDetail={setModalDetail}
-									setRedactDetail={setRedactDetail}
-									details={details}
-								/>
-							</>
+								{details.length!== 0 && (
+									<ListDetails
+										permission={permission}
+										setModalDetail={setModalDetail}
+										setRedactDetail={setRedactDetail}
+										details={details}
+									/>
+								)}
+							</div>
 						)}
 					</Collapse.Panel>
 				</CusAccordion>
@@ -71,12 +83,16 @@ export default function FormDetails({ amountDetails, idOrder, permission }: TFor
 					setRedactDetail(null)
 					setModalDetail(false)
 				}}
+				footer={null}
+				width={800}
 			>
 				<FormUpdateDetail
 					setModalDetail={setModalDetail}
 					setDetails={setDetails}
 					setLoader={setLoader}
 					redactDetail={redactDetail}
+					idOrder={idOrder}
+					numberOrder={numberOrder}
 				/>
 			</Modal>
 		</>

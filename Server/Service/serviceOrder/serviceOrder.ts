@@ -95,7 +95,8 @@ export class ServiceOrder extends Service {
 	public async getOrderByID(idOrder: Types.ObjectId): Promise<TOrderFullInfo | TError | null> {
 		try {
 			const controllerOrder = new ControllerOrder(this.INN)
-			const data = controllerOrder.getOrderByID(idOrder)
+			const data =await controllerOrder.getOrderByID(idOrder)
+			
 			return this.normalizeDataFromMongoDB(data)
 		} catch (error) {
 			return this.createError(`error get order by id , INN:${this.INN} , id order :${idOrder}, error :${error}`, error)

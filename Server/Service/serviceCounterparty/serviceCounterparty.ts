@@ -6,19 +6,19 @@ import { TResponseUploadFiles } from '@/shared/model/types/subtypes/Types'
 
 import { Service } from '../../classes/Service'
 
+import { TOptionQuery } from '@/shared/model/types/subtypes/optionQuery'
 import { Types } from 'mongoose'
 import { ServiceDaDataOrganization } from '../serviceDaData/serviceDaDataOrganization'
 import { ServiceRequisites } from '../serviceRequisites/serviceReqisites'
 import ControllerCounterpartyDB from './controller/CounterPartyDB.controller'
 import { TCounterparty, TNewDataCounterparty } from './models/types/Types'
-import { TOptionQuery } from '@/shared/model/types/subtypes/optionQuery'
 
 export class ServiceCounterparty extends Service {
 	constructor(INN: string) {
 		super(INN)
 	}
 
-	public async createNewCounterparty(newCounterparty: TNewDataCounterparty): Promise<void | TError> {
+	public async createNewCounterparty(newCounterparty: TNewDataCounterparty): Promise<TCounterparty | TError> {
 		const dateCreate = new Date()
 		let newDataCounterParty: Omit<TCounterparty, '_id'> = {
 			dateCreate,
@@ -49,7 +49,9 @@ export class ServiceCounterparty extends Service {
 			}
 
 			const controllerCounterpartyDB = new ControllerCounterpartyDB(this.INN)
-			await controllerCounterpartyDB.addNewCounterparty(newDataCounterParty)
+		const _newCounterparty = 	await controllerCounterpartyDB.addNewCounterparty(newDataCounterParty)
+			return this.normalizeDataFromMongoDB(_newCounterparty)
+
 		} catch (error) {
 			return this.createError(
 				`error create new counterparty,data new counterparty :${newCounterparty},error ;${error}`,

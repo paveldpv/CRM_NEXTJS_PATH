@@ -1,3 +1,4 @@
+'use client'
 import Fieldset from '@/shared/components/fieldSet/ui/Fieldset'
 import { TOrderFullInfoDTO } from '@/shared/model/types'
 import CusButton from '@/shared/ui/button/ui/CusButton'
@@ -12,7 +13,7 @@ import TooltipAcceptOfCargoEmployee from '../simple/TooltipAcceptOfCargoEmployee
 export default function FormOrder({ permission }: TFormOrder) {
 	const { values, setFieldValue, handleSubmit } = useFormikContext<TOrderFullInfoDTO>()
 
-	if (!values.CounterParty) {
+	if (!values?.CounterParty || Object.keys(values?.CounterParty).length === 0) {
 		return (
 			<Fieldset legend={<FaInfoCircle />} className=' col-span-2'>
 				<div className='flex items-center justify-center h-full text-gray-400'>
@@ -25,7 +26,7 @@ export default function FormOrder({ permission }: TFormOrder) {
 	return (
 		<Fieldset
 			legend={values.numberOrder ? `№:${values.numberOrder}` : <FaInfoCircle />}
-			className=' col-span-2 relative'
+			className=' col-span-2 relative w-full'
 		>
 			{values.numberOrder !== 0 && (
 				<div className=' flex justify-between border-b border-gray-500 w-full m-2 '>
@@ -38,26 +39,26 @@ export default function FormOrder({ permission }: TFormOrder) {
 						/>
 					</div>
 					<div>
-						{values.acceptedOfCargoEmployeeId && (
-							<TooltipAcceptOfCargoEmployee {...values.acceptedOfCargoEmployeeId} />
-						)}
+						{values.acceptedOfCargoEmployeeId && <TooltipAcceptOfCargoEmployee {...values.acceptedOfCargoEmployeeId} />}
 					</div>
 				</div>
 			)}
 
-			<div className=' grid grid-cols-3 gap-2'>
-				<GeneralInfo permission={permission} />
-				<PaymentInfo permission={permission} />
-			</div>
-
-			<div className='absolute bottom-4 right-4'>
-				<CusButton onClick={() => handleSubmit()} disabled={!permission}>
-					<FaCheck className='mr-2' /> Сохранить
-				</CusButton>
+			<div>
+				<div className=' grid grid-cols-3 gap-1'>
+					<GeneralInfo permission={permission} />
+					<PaymentInfo permission={permission} />
+				</div>
+				{permission && (
+					<div className='absolute bottom-5 right-5 '>
+						<CusButton className=' rounded-lg' onClick={() => handleSubmit()}>
+							<p className=' flex justify-center'>
+								<FaCheck className='mr-2' /> <p>Сохранить</p>
+							</p>
+						</CusButton>
+					</div>
+				)}{' '}
 			</div>
 		</Fieldset>
 	)
 }
-
-
-

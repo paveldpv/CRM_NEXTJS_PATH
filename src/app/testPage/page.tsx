@@ -37,10 +37,11 @@ async function getDataOrderPage(params: { INN: string; ID_ORDER: string }): Prom
 }
 
 export default async function page({ params }: { params: { INN: string; USER_ID: string; ID_ORDER: string } }) {
-	// const dataOrderPage = await getDataOrderPage(params)
-	// if (!dataOrderPage) {
-	// 	return <div>Ошибка загрузки данных</div>
-	// }
+	const dataOrderPage = await getDataOrderPage(params)
+	if (!dataOrderPage) {
+		return <div>Ошибка загрузки данных</div>
+	}
 
 	return <GeneralFormOrder listCounterparty={[]} order={undefined} />
 }
+

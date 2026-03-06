@@ -7,7 +7,7 @@ import { TNewOrder, TOrderFullInfo } from '../../../../../../../Server/Service/s
 import { ServiceOrder } from '../../../../../../../Server/Service/serviceOrder/serviceOrder'
 import { ROOT_LINK } from '../../../../../../../Server/Service/servicePermissionRedactData/model/types/Types'
 import ServicePermissionRedactData from '../../../../../../../Server/Service/servicePermissionRedactData/ServicePermissionRedactData'
-import { ServiceOrderFullInfo } from '../../../../../../../Server/Service/serviceOrder/order.dto'
+import { ServiceOrderFullInfoDTO } from '../../../../../../../Server/Service/serviceOrder/order.dto'
 
 export async function POST(request: NextRequest, { params }: { params: { INN: string } }) {
 	const { INN } = params
@@ -47,6 +47,6 @@ export async function POST(request: NextRequest, { params }: { params: { INN: st
 	if (error.length != 0) {
 		return NextResponse.json({ message: error[0].message }, { status: 500 })
 	}
-	const orderFullInfoDTO = ServiceOrderFullInfo.createOrderFullInfoDTO(result[0] as TOrderFullInfo)
+	const orderFullInfoDTO = ServiceOrderFullInfoDTO.createOrderFullInfoDTO(result[0] as TOrderFullInfo)
 	return NextResponse.json(orderFullInfoDTO, { status: 201 })
 }

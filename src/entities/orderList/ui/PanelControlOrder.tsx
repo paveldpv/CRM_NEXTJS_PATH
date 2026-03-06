@@ -23,7 +23,8 @@ export default function PanelControlOrder({
 	const { configMain } = useConfigApp((state) => state.dataConfigApp)
 	const searchParams = useSearchParams()
 	const router = useRouter()
-	const pathname = usePathname()
+	const pathname = usePathname()		
+
 
 	const handlerSearch = useCallback(async () => {
 		if (!valueSearch) return
@@ -61,7 +62,7 @@ export default function PanelControlOrder({
 		<ul className=' flex gap-2 items-center border-b-2 pb-2'>
 			<li className=''>
 				{permission && (
-					<Link href={'/NEW_ORDER'}>
+					<Link href={`${pathname}/NEW_ORDER`}>
 						<CusButton className='p-2'  disabled={load}>
 							<FaPlus />
 						</CusButton>

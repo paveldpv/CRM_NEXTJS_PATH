@@ -19,9 +19,9 @@ export default function Notifications({ dataUser }: { dataUser: TUserDTOWithoutP
 
 	useLayoutEffect(() => {
 		if (!dataUser) return
-		FetchUser.getUsersWithBirthdayToday(dataUser?.INN).then((el) => {
-			console.log(el)
-		})
+		// FetchUser.getUsersWithBirthdayToday(dataUser?.INN).then((el) => {
+		// 	console.log(el)
+		// })
 		const permission =
 			dataUser?.linksAllowed === 'ADMIN' || dataUser?.linksAllowed.some((el) => el.href === ROOT_LINK.application)
 		if (permission) {
@@ -30,8 +30,8 @@ export default function Notifications({ dataUser }: { dataUser: TUserDTOWithoutP
 					FetchUser.getUsersWithBirthdayToday(dataUser.INN),
 					FetchPrevCalc.getNewRequest(dataUser.INN),
 				])
-				console.log("🚀 ~ Notifications ~ dataApplication:", dataApplication)
-				console.log("🚀 ~ Notifications ~ dataBirthday:", dataBirthday)
+
+				console.log('🚀 ~ Notifications ~ dataApplication:', dataApplication.length)
 
 				const amountEvent = dataBirthday.length + dataApplication.length
 				setAmountEvents(amountEvent)
@@ -39,7 +39,6 @@ export default function Notifications({ dataUser }: { dataUser: TUserDTOWithoutP
 					birthdayUser: dataBirthday,
 					newPrevCalc: dataApplication,
 				})
-				
 			})()
 			setLoad(false)
 		} else {
@@ -54,8 +53,12 @@ export default function Notifications({ dataUser }: { dataUser: TUserDTOWithoutP
 	}, [dataUser])
 
 	const handlerHover = async () => {
+		if(amountEvents ==0){
+			return
+		}
+		
 		setChildrenSnackbar(
-			<ListNotification newPrevCalc={dataNotifications.newPrevCalc} birthdayUser={dataNotifications.birthdayUser} />
+			<ListNotification newPrevCalc={dataNotifications.newPrevCalc} birthdayUser={dataNotifications.birthdayUser} />,
 		)
 		setOpenSnackbar({ open: true, autoHidden: true })
 		setAmountEvents(0)

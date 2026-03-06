@@ -1,8 +1,8 @@
+import { TOptionQuery } from '@/shared/model/types/subtypes/optionQuery'
 import { Model, Types } from 'mongoose'
 import ControllerDB from '../../../classes/ControllerDB'
 import { counterpartySchema } from '../models/schema/CounterpartySchema'
 import { TCounterparty } from '../models/types/Types'
-import { TOptionQuery } from '@/shared/model/types/subtypes/optionQuery'
 
 export default class ControllerCounterpartyDB extends ControllerDB {
 	constructor(INN: string) {
@@ -15,17 +15,17 @@ export default class ControllerCounterpartyDB extends ControllerDB {
 		await this.connectDB()
 		if (!this.dbConnection) throw new Error(`error init model counterparty from INN :${this.INN}`)
 
-		this.counterpartyModel = this.dbConnection.model<TCounterparty>('counterParty', counterpartySchema)
+		this.counterpartyModel = this.dbConnection.model<TCounterparty>('counterparty', counterpartySchema)
 	}
 
 	private async changeReadinessModel() {
 		if (!this.counterpartyModel) await this.initModel()
 	}
 
-	public async addNewCounterparty(data: Omit<TCounterparty, '_id'>) {
+	public async addNewCounterparty(data: Omit<TCounterparty, '_id'>): Promise<TCounterparty> {
 		await this.changeReadinessModel()
 		const newCounterparty = new this.counterpartyModel!(data)
-		await newCounterparty.save()
+		return await newCounterparty.save()
 	}
 
 	public async removeCounterparty(_id: Types.ObjectId) {

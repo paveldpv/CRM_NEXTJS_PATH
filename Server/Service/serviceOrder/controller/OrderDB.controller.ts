@@ -1,9 +1,10 @@
 import { TOptionQuery } from '@/shared/model/types/subtypes/optionQuery'
 import { Model, Types } from 'mongoose'
 import ControllerDB from '../../../classes/ControllerDB'
+import { counterpartySchema } from '../../serviceCounterparty/models/schema/CounterpartySchema'
+import { userSchema } from '../../serviceUser/model/schema/usersSchema'
 import { orderSchema } from '../model/schema/orderSchema'
 import { TOrder, TOrderFullInfo } from '../model/types/Types'
-
 export default class ControllerOrder extends ControllerDB {
 	constructor(INN: string) {
 		super(INN)
@@ -14,6 +15,10 @@ export default class ControllerOrder extends ControllerDB {
 	private async initModel() {
 		await this.connectDB()
 		if (!this.dbConnection) throw new Error(`error init model order from INN :${this.INN}`)
+
+		// Регистрируем схемы для populate
+		this.dbConnection.model('counterparty', counterpartySchema)
+		this.dbConnection.model('user', userSchema)
 
 		this.modelOrder = this.dbConnection.model<TOrder>('order', orderSchema)
 	}
@@ -67,9 +72,8 @@ export default class ControllerOrder extends ControllerDB {
 
 	public async getOrderByID(idOrder: Types.ObjectId): Promise<null | TOrderFullInfo> {
 		await this.changeReadinessModel()
-		return await this.modelOrder!.findOne({ _id: idOrder }).populate('counterparty').populate('acceptedOfCargoEmployeeId')
+		return await this.modelOrder!.findOne({ _id: idOrder }).populate('CounterParty').populate('acceptedOfCargoEmployeeId')
 	}
-
 	public async addDetailByOrder(idOrder: Types.ObjectId, idDetail: Types.ObjectId): Promise<void> {
 		await this.changeReadinessModel()
 		await this.modelOrder!.findOneAndUpdate({ _id: idOrder }, { $push: { IDDetails: idDetail } })
@@ -82,7 +86,7 @@ export default class ControllerOrder extends ControllerDB {
 	public async getLastNumberOrder(): Promise<number | null> {
 		await this.changeReadinessModel()
 		const lastNumber = await this.modelOrder!.findOne().sort({ 'service.deadlines.startDate': -1 }).select('numberOrder')
-		return lastNumber as number | null
+		return lastNumber?.numberOrder ?? null
 	}
 	public async updateProcessOrder(idOrder: Types.ObjectId) {
 		await this.changeReadinessModel()
@@ -93,7 +97,7 @@ export default class ControllerOrder extends ControllerDB {
 		await this.changeReadinessModel()
 		await this.modelOrder!.findOneAndUpdate(
 			{ _id: idOrder },
-			{ $set: { complied: true, 'service.deadlines.endDate': dateEnd } }
+			{ $set: { complied: true, 'service.deadlines.endDate': dateEnd } },
 		)
 		return
 	}

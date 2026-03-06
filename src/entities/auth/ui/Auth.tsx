@@ -13,7 +13,7 @@ import LoginSchemaForm from '../lib/validateFormAuth'
 import { typicalError } from '@/shared/model/types/subtypes/enums'
 import { TFormLogin } from '@/shared/model/types/subtypes/Types'
 import { typeDialog } from '@/shared/ui/dialogWindow/model/Types/Types'
-import MiniLoader from '@/shared/ui/loaders/MiniLoader'
+
 import Link from 'next/link'
 
 export default function Auth() {
@@ -74,7 +74,7 @@ export default function Auth() {
 			}}
 			className='  w-3/4 relative '
 		>
-			<MiniLoader className=' scale-150 absolute left-1/2 top-32 ' />
+			
 			<ul
 				className={` bg-color_header p-9 rounded-md  flex flex-col gap-4 ${
 					loader && 'blur-md opacity-70 delay-500  duration-500'

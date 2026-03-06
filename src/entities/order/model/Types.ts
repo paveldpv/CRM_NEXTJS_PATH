@@ -19,6 +19,7 @@ export type TFormDetails = {
 	permission: boolean
 	amountDetails: number
 	idOrder?: string
+	numberOrder?: number
 }
 export type TListDetails = {
 	permission: boolean
@@ -31,8 +32,9 @@ export type TFormUpdateDetail = {
 	setModalDetail: Dispatch<SetStateAction<boolean>>
 	setLoader: Dispatch<SetStateAction<boolean>>
 	redactDetail: TDetailDTO | null
+	idOrder: string
+	numberOrder?: number
 }
-
 export type TDetail = {
 	permission: boolean
 	detail: TDetailDTO
@@ -41,7 +43,7 @@ export type TDetail = {
 }
 
 export type TTooltipAcceptOfCargoEmployee = {
-	_id:string,
+	_id: string
 	phone: string
 	name?: string
 	surname?: string

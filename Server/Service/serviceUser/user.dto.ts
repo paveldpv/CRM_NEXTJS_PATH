@@ -3,6 +3,8 @@ import { TDBUser, TDBUserWithoutPas, TUserDTOWithoutPas } from './model/types/Ty
 
 export class ServiceUserDTO extends DTO {
 	static createUserDTO(data: TDBUserWithoutPas | TDBUser): TUserDTOWithoutPas {
+		
+		
 		if ('password' in data) {
 			const { password, ...newData } = data
 
@@ -15,8 +17,6 @@ export class ServiceUserDTO extends DTO {
 		return data.map((user) => this.createUserDTO(user))
 	}
 
-
-	
 	static userWithoutProperty<K extends keyof TDBUserWithoutPas>(data: TDBUserWithoutPas, property: Array<K>) {
 		return this.withoutProperty(data, property)
 	}

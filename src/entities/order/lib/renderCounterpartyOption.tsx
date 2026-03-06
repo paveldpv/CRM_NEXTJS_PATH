@@ -9,11 +9,14 @@ export const renderCounterpartyOption = (data?: TCounterpartyDTO[] | null): Auto
 	}
 
 	return data.map((cp) => {
+		const labelString = `${maskPhoneNumber(cp.phone)} ${cp?.name || ''} ${cp?.email || ''} ${cp?.INN || ''}`
+
 		return {
+			key: cp._id,
 			value: cp._id,
 			data: cp,
 			label: (
-				<div className='flex'>
+				<div className='flex ga'>
 					<p className='flex flex-row'>
 						<span>{maskPhoneNumber(cp.phone)}</span>
 						<span>{cp?.name}</span>
@@ -25,6 +28,8 @@ export const renderCounterpartyOption = (data?: TCounterpartyDTO[] | null): Auto
 					<span>{cp?.INN}</span>
 				</div>
 			),
+			// Добавляем строковое представление для фильтрации
+			filterText: labelString,
 		}
 	})
 }
