@@ -45,19 +45,19 @@ export default function FormOrder({ permission }: TFormOrder) {
 			)}
 
 			<div>
-				<div className=' grid grid-cols-3 gap-1'>
+				<div className=' grid grid-cols-3 gap-1 relative '>
 					<GeneralInfo permission={permission} />
 					<PaymentInfo permission={permission} />
-				</div>
 				{permission && (
-					<div className='absolute bottom-5 right-5 '>
+					<div className=' absolute bottom-5 right-5 '>
 						<CusButton className=' rounded-lg' onClick={() => handleSubmit()}>
 							<p className=' flex justify-center'>
 								<FaCheck className='mr-2' /> <p>Сохранить</p>
 							</p>
 						</CusButton>
 					</div>
-				)}{' '}
+				)}
+				</div>
 			</div>
 		</Fieldset>
 	)

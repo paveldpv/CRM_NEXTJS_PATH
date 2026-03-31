@@ -25,7 +25,6 @@ export default function FormDetails({ amountDetails, idOrder, permission, number
 	if (!idOrder) {
 		return null
 	}
-
 	const loadDetails = async () => {
 		if (!idOrder) {
 			setLoader(false)
@@ -55,7 +54,7 @@ export default function FormDetails({ amountDetails, idOrder, permission, number
 						{loader ? (
 							<CusSpin visible={loader} />
 						) : (
-							<div className=' '>
+							<div>
 								<p>
 									{permission && (
 										<CusButton className='p-2 text-sm  flex justify-center' onClick={addNewDetail}>
@@ -64,7 +63,7 @@ export default function FormDetails({ amountDetails, idOrder, permission, number
 										</CusButton>
 									)}
 								</p>
-								{details.length!== 0 && (
+								{details.length !== 0 && (
 									<ListDetails
 										permission={permission}
 										setModalDetail={setModalDetail}
@@ -78,6 +77,7 @@ export default function FormDetails({ amountDetails, idOrder, permission, number
 				</CusAccordion>
 			</Fieldset>
 			<Modal
+				classNames={{ container: '!bg-transparent' }}
 				open={modalDetail}
 				onCancel={() => {
 					setRedactDetail(null)
@@ -85,6 +85,11 @@ export default function FormDetails({ amountDetails, idOrder, permission, number
 				}}
 				footer={null}
 				width={800}
+				styles={{
+					container: {
+						backgroundColor: 'transparent',
+					},
+				}}
 			>
 				<FormUpdateDetail
 					setModalDetail={setModalDetail}

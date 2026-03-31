@@ -12,3 +12,10 @@ export type TParamsOpenSnackbar ={
 	open:boolean,
 	autoHidden:boolean
 } | false
+
+export type TSnackbarSeverity = 'success' | 'error' | 'warning' | 'info'
+
+export type TSnackbarMessage = {
+	message: string
+	severity: TSnackbarSeverity
+}

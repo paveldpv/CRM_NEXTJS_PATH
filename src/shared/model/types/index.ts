@@ -32,7 +32,7 @@ import {
 import { TDBRequestPrevCalcDTO, TRequestPrevCalc } from '../../../../Server/Service/servicePrevCacl/model/types/Types'
 import { TDataTablePriceDTO, TPriceDTO } from '../../../../Server/Service/servicePrice/model/types/Types'
 
-import { TPropertyDetailDTO } from '../../../../Server/Service/servicePropertyDetail/model/types/Types'
+import { TPropertyDetail, TPropertyDetailDTO } from '../../../../Server/Service/servicePropertyDetail/model/types/Types'
 import { TRequisitesDTO } from '../../../../Server/Service/serviceRequisites/model/types/Type'
 import {
 	TDataOrganizationDTO,
@@ -47,7 +47,7 @@ import {
 } from '../../../../Server/Service/serviceUser/model/types/Types'
 
 export { keyColorOption, keyConfigLayout, nameSettingLayout, PURPOSE_USE,type_payment }
-export type {
+export type {TPropertyDetail,
 	TConfigAPP_DTO,
 	TCounterparty,
 	TCounterpartyDTO,

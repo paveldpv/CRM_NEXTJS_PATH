@@ -1,4 +1,5 @@
-import { TDBUser } from '../../../Server/Service/serviceUser/model/types/Types'
+import { TDBUser } from '@/shared/model/types'
+
 
 
 

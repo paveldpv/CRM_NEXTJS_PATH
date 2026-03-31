@@ -31,7 +31,7 @@ async function dataOrder(INN: string): Promise<{ data: TOrderFullInfoDTO[]; tota
 export default async function page({ params }: { params: { INN: string; USER_ID: string } }) {
 	const { INN } = params
 	const initialDataOrder = await dataOrder(INN)
- 
+
 	if (!initialDataOrder) {
 		;<div></div>
 	}

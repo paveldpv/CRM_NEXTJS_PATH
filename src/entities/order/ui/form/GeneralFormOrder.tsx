@@ -48,6 +48,7 @@ export default function GeneralFormOrder({ listCounterparty, order }: TGeneralFo
 			},
 		[order],
 	)
+	
 	const handleSubmit = async (values: Partial<TOrderFullInfoDTO>, helpers: FormikHelpers<Partial<TOrderFullInfoDTO>>) => {
 		const errors = helpers.validateForm()
 		if (Object.keys(errors).length > 0) {
@@ -104,6 +105,7 @@ export default function GeneralFormOrder({ listCounterparty, order }: TGeneralFo
 
 	return (
 		<Formik
+		
 			initialValues={initialValues}
 			enableReinitialize
 			validationSchema={validationSchemaOrder}
@@ -117,7 +119,7 @@ export default function GeneralFormOrder({ listCounterparty, order }: TGeneralFo
 						</div>
 					) : (
 						<div className='grid  gap-2 h-screen'>
-							<div className=' row-span-3  grid grid-cols-3 gap-1  '>
+							<div className=' row-span-3  grid grid-cols-3 gap-1  '>							
 								<FormOrder permission={permission} />
 								<FormCounterparty
 									setCounterparty={setCounterparty}

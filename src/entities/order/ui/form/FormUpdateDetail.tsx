@@ -1,10 +1,17 @@
 'use client'
+import { FetchDetail } from '@/shared/api'
+import { FetchPropertyDetail } from '@/shared/api/propertyDetail/fetchPropertyDetail'
 import Fieldset from '@/shared/components/fieldSet/ui/Fieldset'
-import { TDetailDTO } from '@/shared/model/types'
+import { getPropertyStrings } from '@/shared/lib/utils/getPropertyStrings'
+import useGeo from '@/shared/model/hooks/useGeo'
+import { PURPOSE_USE, TDetailDTO, TNewDetailDTO } from '@/shared/model/types'
 import CusConfigProvider from '@/shared/ui/CusConfigProvider/ui/CusConfigProvider'
 import CusButton from '@/shared/ui/button/ui/CusButton'
 import { Checkbox, Input, InputNumber, Select } from 'antd'
+import { BaseOptionType } from 'antd/es/select'
 import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
+import { useParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { FaImage, FaInfoCircle, FaMinus, FaPlus, FaSave } from 'react-icons/fa'
 import { TFormUpdateDetail } from '../../model/Types'
 
@@ -16,7 +23,23 @@ export default function FormUpdateDetail({
 	setDetails,
 	setLoader,
 }: TFormUpdateDetail) {
-	const initialValues: Partial<TDetailDTO> = redactDetail || {
+	const params = useParams()
+	const INN = params!.INN as string
+	const idEmployee = params!.idEmployee as string
+
+	const { dataGeo } = useGeo(idEmployee, PURPOSE_USE.redact, 'Добавление/редактирование детали')
+	const [propertyDetail, setPropertyDetail] = useState<BaseOptionType[]>([])
+
+	useEffect(() => {
+		setLoader(true);
+		(async () => {
+			const dataPropertyDetail = await FetchPropertyDetail.getProperties(INN)
+			setPropertyDetail(getPropertyStrings(dataPropertyDetail))
+      setLoader(false)
+		})()
+	}, [redactDetail, INN])
+
+	const initialValues: TNewDetailDTO | TDetailDTO = redactDetail || {
 		order: idOrder,
 		nameDetail: '',
 		completed: false,
@@ -30,11 +53,62 @@ export default function FormUpdateDetail({
 	}
 
 	const handleSubmit = async (values: Partial<TDetailDTO>) => {
-		console.log('🚀 ~ handleSubmit ~ values:', values)
-		// Здесь будет вызов API
-		setModalDetail(false)
+		setLoader(true)
+
+		
+
+		if (redactDetail) {
+			const updatedDetail = {
+				...values,
+				_id: redactDetail._id,
+				order: redactDetail.order,
+				description: Array.isArray(values.description) ? values.description.filter(Boolean) : [''],
+				propertyDetail: Array.isArray(values.propertyDetail) ? values.propertyDetail : [],
+			} as TDetailDTO
+			
+
+			await FetchDetail.updateDataDetail(INN, updatedDetail, dataGeo)
+			setDetails((prev) => prev.map((item) => (item._id === updatedDetail._id ? updatedDetail : item)))
+			setModalDetail(false)
+			setLoader(false)
+		} else {
+			const newDetailData: TNewDetailDTO = {
+				order: idOrder,
+				nameDetail: values.nameDetail || '',
+				completed: values.completed || false,
+				amount: values.amount || 1,
+				completedAmount: values.completedAmount || 0,
+				description: Array.isArray(values.description) ? values.description.filter(Boolean) : [''],
+				price: values.price || { price: 0 },
+				propertyDetail: Array.isArray(values.propertyDetail) ? values.propertyDetail : [],
+			}
+			
+			const createdDetail = await FetchDetail.addDetailForOrder(INN, newDetailData, dataGeo)
+			setDetails((prev) => [...prev, createdDetail])
+			setModalDetail(false)
+			setLoader(false)
+		}
 	}
-	const complitedDetail = async () => {}
+
+	const completedDetail = async () => {
+		setLoader(true)
+		if (!redactDetail) {
+			return
+		}
+		await FetchDetail.completedDetail(INN, redactDetail?._id, redactDetail.order, dataGeo)
+		setLoader(false)
+	}
+
+	const addNewProperty = async (value: string) => {
+		console.log('testing add new property on press enter');
+		
+		console.log("🚀 ~ addNewProperty ~ value:", value)
+		return
+		const isNewProperty =   propertyDetail.some(prop => prop.property.trim().toLowerCase() === value.trim().toLowerCase())
+   if (!isNewProperty) return
+		
+   await FetchPropertyDetail.addPropertyDetail(INN, value, dataGeo)
+  }
 
 	return (
 		<CusConfigProvider>
@@ -44,7 +118,7 @@ export default function FormUpdateDetail({
 						<Fieldset legend={numberOrder ? `Заказ №: ${numberOrder}` : <FaInfoCircle />} className='flex flex-col gap-4'>
 							<div className='grid grid-cols-2 gap-4'>
 								<div className='flex flex-col gap-1'>
-									<label className='text-xs'>Имя детали</label>
+									<label className='text-xs font-bold'>Имя детали</label>
 									<Input
 										value={values.nameDetail}
 										onChange={(e) => setFieldValue('nameDetail', e.target.value)}
@@ -52,21 +126,23 @@ export default function FormUpdateDetail({
 									/>
 								</div>
 								<div className='flex items-end pb-2 gap-2'>
-									<Checkbox
-										checked={values.completed}
-										onChange={(e) => {
-											setFieldValue('completed', e.target.checked)
-											complitedDetail()
-										}}
-									>
-										Завершены
-									</Checkbox>
+									{redactDetail && (
+										<Checkbox
+											checked={values.completed}
+											onChange={(e) => {
+												setFieldValue('completed', e.target.checked)
+												completedDetail()
+											}}
+										>
+											Завершены
+										</Checkbox>
+									)}
 								</div>
 							</div>
 
 							<div className='grid grid-cols-2 gap-4 mt-4'>
 								<div className='flex flex-col gap-1'>
-									<label className='text-xs'>Количество</label>
+									<label className='text-xs font-bold'>Количество</label>
 									<div className='flex items-center gap-2'>
 										<CusButton
 											type='button'
@@ -109,10 +185,10 @@ export default function FormUpdateDetail({
 							</div>
 
 							<div className='mt-4'>
-								<label className='text-xs'>Описание</label>
+								<label className='text-xs font-bold'>Описание</label>
 								<FieldArray name='description'>
 									{({ push, remove }: FieldArrayRenderProps) => (
-										<div className='flex flex-col gap-2'>
+										<div className='flex flex-col gap-2 '>
 											{values.description?.map((_, index) => (
 												<div key={index} className='flex gap-2'>
 													<Input
@@ -147,25 +223,32 @@ export default function FormUpdateDetail({
 							</div>
 							<div className='grid grid-cols-2 gap-4 mt-4'>
 								<div className='flex flex-col gap-1'>
-									<label className='text-xs'>Цена</label>
-									<InputNumber
-										value={values.price?.price}
-										onChange={(val) => setFieldValue('price.price', val)}
-										className='w-full'
-										formatter={(value) => `₽ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-										parser={(value) => (value ? Number(value.replace(/\s/g, '')) : 0)}
-									/>
+									<div className=' flex flex-col gap-2'>
+										<label className='text-xs  font-bold'>Цена за шт.</label>
+										<InputNumber
+											value={values.price?.price}
+											onChange={(val) => setFieldValue('price.price', val)}
+											className='w-full'
+											formatter={(value) => `₽ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+											parser={(value) => (value ? Number(value.replace(/\s/g, '')) : 0)}
+										/>
+									</div>
+									{values.price?.price && (
+										<label className=' text-xl underline font-bold'>Общая цена :{values.amount * values.price?.price}</label>
+									)}
 								</div>
+
 								<div className='flex flex-col gap-1'>
-									<label className='text-xs'>Свойства детали</label>
+									<label className='text-xs font-bold'>Свойства детали</label>
 									<Select
+										options={propertyDetail}
 										mode='tags'
 										style={{ width: '100%' }}
 										placeholder='Добавьте свойства'
 										value={values.propertyDetail}
 										onChange={(val) => {
 											setFieldValue('propertyDetail', val)
-											alert(`Свойства изменены: ${val.join(', ')}`)
+                      addNewProperty(val[val.length - 1])
 										}}
 									/>
 								</div>
@@ -173,7 +256,7 @@ export default function FormUpdateDetail({
 
 							<div className='grid grid-cols-2 gap-4 mt-4'>
 								<div className='flex flex-col gap-1'>
-									<label className='text-xs'>Эскиз</label>
+									<label className='text-xs font-bold'>Эскиз</label>
 									<CusButton
 										type='button'
 										className='flex items-center justify-center gap-2'
@@ -183,7 +266,7 @@ export default function FormUpdateDetail({
 									</CusButton>
 								</div>
 								<div className='flex flex-col gap-1'>
-									<label className='text-xs'>Файлы</label>
+									<label className='text-xs font-bold'>Файлы</label>
 									<div className='p-2 border border-dashed border-gray-300 rounded text-center text-gray-400 text-xs'>
 										Загрузка файлов (заглушка)
 									</div>

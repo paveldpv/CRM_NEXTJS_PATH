@@ -3,6 +3,8 @@ config/
 !config/DaDataConfig.ts
 # dependencies
 /node_modules
+.gigaide
+.idea
 /.pnp
 .pnp.js
 
