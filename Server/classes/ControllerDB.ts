@@ -19,6 +19,8 @@ export default class ControllerDB extends ContextOrganization {
 		const urlDB = `${process.env.DB_URL}${dbName}`
 		if (poolConnections[dbName]) {
 			this.dbConnection = poolConnections[dbName]
+			
+			
 			return
 		}
 
@@ -27,6 +29,7 @@ export default class ControllerDB extends ContextOrganization {
 			poolConnections[dbName] = _connection
 			this.dbConnection = _connection
 			this.log(`connected mongo from ${this.INN}`)
+
 		} catch (error) {
 			this.createError(`error create connection mongo from ${this.INN}`)
 			throw error

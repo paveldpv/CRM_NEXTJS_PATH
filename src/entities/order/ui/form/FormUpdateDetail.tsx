@@ -2,18 +2,19 @@
 import { FetchDetail } from '@/shared/api'
 import { FetchPropertyDetail } from '@/shared/api/propertyDetail/fetchPropertyDetail'
 import Fieldset from '@/shared/components/fieldSet/ui/Fieldset'
-import { getPropertyStrings } from '@/shared/lib/utils/getPropertyStrings'
+import { getPropertyStrings } from '@/shared/lib/utils/getPropertyToBaseOptionType'
 import useGeo from '@/shared/model/hooks/useGeo'
-import { PURPOSE_USE, TDetailDTO, TNewDetailDTO } from '@/shared/model/types'
+import { PURPOSE_USE, TDetailDTO, TNewDetailDTO, TPropertyDetail, TPropertyDetailDTO } from '@/shared/model/types'
 import CusConfigProvider from '@/shared/ui/CusConfigProvider/ui/CusConfigProvider'
 import CusButton from '@/shared/ui/button/ui/CusButton'
-import { Checkbox, Input, InputNumber, Select } from 'antd'
+import { Checkbox, Input, InputNumber, Select, Tooltip } from 'antd'
 import { BaseOptionType } from 'antd/es/select'
 import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { FaImage, FaInfoCircle, FaMinus, FaPlus, FaSave } from 'react-icons/fa'
+import { FaImage, FaInfoCircle, FaMinus, FaPlus, FaQuestionCircle, FaSave } from 'react-icons/fa'
 import { TFormUpdateDetail } from '../../model/Types'
+import { getNewProperties } from '@/shared/lib/utils/getNewPropertiesDeatil'
 
 export default function FormUpdateDetail({
 	redactDetail,
@@ -29,13 +30,16 @@ export default function FormUpdateDetail({
 
 	const { dataGeo } = useGeo(idEmployee, PURPOSE_USE.redact, 'Добавление/редактирование детали')
 	const [propertyDetail, setPropertyDetail] = useState<BaseOptionType[]>([])
+	const [currentProperty, setCurrentProperty] = useState<TPropertyDetailDTO[]>([])
 
 	useEffect(() => {
-		setLoader(true);
-		(async () => {
-			const dataPropertyDetail = await FetchPropertyDetail.getProperties(INN)
+		setLoader(true)
+		;(async () => {
+			const dataPropertyDetail = await FetchPropertyDetail.getProperties(INN)			
 			setPropertyDetail(getPropertyStrings(dataPropertyDetail))
-      setLoader(false)
+
+			setCurrentProperty(dataPropertyDetail)
+			setLoader(false)
 		})()
 	}, [redactDetail, INN])
 
@@ -53,9 +57,11 @@ export default function FormUpdateDetail({
 	}
 
 	const handleSubmit = async (values: Partial<TDetailDTO>) => {
+		const newPropertyDetail = getNewProperties(values.propertyDetail ||[],currentProperty)
+		if(newPropertyDetail.length!=0){
+			await FetchPropertyDetail.addPropertyDetailList(INN,newPropertyDetail,dataGeo)
+		}
 		setLoader(true)
-
-		
 
 		if (redactDetail) {
 			const updatedDetail = {
@@ -65,7 +71,6 @@ export default function FormUpdateDetail({
 				description: Array.isArray(values.description) ? values.description.filter(Boolean) : [''],
 				propertyDetail: Array.isArray(values.propertyDetail) ? values.propertyDetail : [],
 			} as TDetailDTO
-			
 
 			await FetchDetail.updateDataDetail(INN, updatedDetail, dataGeo)
 			setDetails((prev) => prev.map((item) => (item._id === updatedDetail._id ? updatedDetail : item)))
@@ -82,7 +87,7 @@ export default function FormUpdateDetail({
 				price: values.price || { price: 0 },
 				propertyDetail: Array.isArray(values.propertyDetail) ? values.propertyDetail : [],
 			}
-			
+
 			const createdDetail = await FetchDetail.addDetailForOrder(INN, newDetailData, dataGeo)
 			setDetails((prev) => [...prev, createdDetail])
 			setModalDetail(false)
@@ -99,16 +104,11 @@ export default function FormUpdateDetail({
 		setLoader(false)
 	}
 
-	const addNewProperty = async (value: string) => {
-		console.log('testing add new property on press enter');
-		
-		console.log("🚀 ~ addNewProperty ~ value:", value)
-		return
-		const isNewProperty =   propertyDetail.some(prop => prop.property.trim().toLowerCase() === value.trim().toLowerCase())
-   if (!isNewProperty) return
-		
-   await FetchPropertyDetail.addPropertyDetail(INN, value, dataGeo)
-  }
+	const addNewProperty = async (value: string) => {		
+		const isNewProperty = propertyDetail.some((prop) => prop.property.trim().toLowerCase() === value.trim().toLowerCase())
+		if (!isNewProperty) return
+		await FetchPropertyDetail.addPropertyDetail(INN, value, dataGeo)
+	}
 
 	return (
 		<CusConfigProvider>
@@ -248,9 +248,14 @@ export default function FormUpdateDetail({
 										value={values.propertyDetail}
 										onChange={(val) => {
 											setFieldValue('propertyDetail', val)
-                      addNewProperty(val[val.length - 1])
+											addNewProperty(val[val.length - 1])
 										}}
 									/>
+									<Tooltip title='Процесс обработки детали'>
+										<span>
+											<FaQuestionCircle className='ml-2 text-lg' />
+										</span>
+									</Tooltip>
 								</div>
 							</div>
 

@@ -1,23 +1,23 @@
 import { Model, Types } from 'mongoose'
 import ControllerDB from '../../../classes/ControllerDB'
 import { propertyDetailSchema } from '../model/schema/propertyDetailSchema'
-import { TPropertyDetail } from '../model/types/Types'
+import { TNewPropertyDetail, TPropertyDetail } from '../model/types/Types'
 
 export default class ControllerPropertyDetail extends ControllerDB {
 	constructor(INN: string) {
 		super(INN)
 	}
-	private propertyDetailModel:Model<TPropertyDetail>|null = null
+	private propertyDetailModel: Model<TPropertyDetail> | null = null
 
-	private async initModel(){
-		this.connectDB()
-		if(!this.dbConnection)throw new Error(`error init model property detail from INN:${this.INN}`)
+	private async initModel() {
+		await this.connectDB()
+		if (!this.dbConnection) throw new Error(`error init model property detail from INN:${this.INN}`)
 
-			this.propertyDetailModel = this.dbConnection.model<TPropertyDetail>('propertyDetail',propertyDetailSchema)
+		this.propertyDetailModel = this.dbConnection.model<TPropertyDetail>('propertyDetail', propertyDetailSchema)
 	}
 
-	private async changeReadinessModel(){
-		if(!this.propertyDetailModel) await this.initModel()
+	private async changeReadinessModel() {
+		if (!this.propertyDetailModel) await this.initModel()
 	}
 
 	public async searchProperty(dataSearch: RegExp) {
@@ -25,9 +25,9 @@ export default class ControllerPropertyDetail extends ControllerDB {
 		return await this.propertyDetailModel!.find({ property: dataSearch })
 	}
 
-	public async addNewProperty(property: string) {
+	public async addNewProperty(property: TNewPropertyDetail) {
 		await this.changeReadinessModel()
-		const newProperty = new this.propertyDetailModel!({ property })
+		const newProperty = new this.propertyDetailModel!(property)
 		await newProperty.save()
 	}
 
@@ -36,8 +36,13 @@ export default class ControllerPropertyDetail extends ControllerDB {
 		await this.propertyDetailModel!.findOneAndDelete({ _id })
 	}
 
-	public async getProperty():Promise<TPropertyDetail[]> {
+	public async getProperty(): Promise<TPropertyDetail[]> {
 		await this.changeReadinessModel()
-		return await this.propertyDetailModel!.find({})
+		return await this.propertyDetailModel!.find({ safeDeleted: false }).sort({ property: 1 }).exec()
+	}
+
+	public async addListProperty(property: TNewPropertyDetail[]) {
+		await this.changeReadinessModel()
+		await this.propertyDetailModel!.insertMany(property)
 	}
 }

@@ -12,9 +12,21 @@ export class ServicePropertyDetail extends Service {
 	public async addPropertyDetail(property: string): Promise<void | TError> {
 		try {
 			const controllerPropertyDetail = new ControllerPropertyDetail(this.INN)
-			await controllerPropertyDetail.addNewProperty(property.trim())
+			await controllerPropertyDetail.addNewProperty({property:property.trim(),safeDeleted:false})
 		} catch (error) {
 			return this.createError(`error add new property, INN :${this.INN}, error :${error}`, error)
+		}
+	}
+
+	public async addListPropertyDetail(properties: string[]): Promise<void | TError> {
+		try {
+			const controllerPropertyDetail = new ControllerPropertyDetail(this.INN)
+			const _properties = properties.map((property) => {
+				return {property:property.trim(),safeDeleted:false}})
+
+			await controllerPropertyDetail.addListProperty(_properties)
+		} catch (error) {
+			return this.createError(`error add list property, INN :${this}`,error)
 		}
 	}
 
@@ -33,6 +45,7 @@ export class ServicePropertyDetail extends Service {
 		try {
 			const controllerPropertyDetail = new ControllerPropertyDetail(this.INN)
 			const property = await controllerPropertyDetail.getProperty()
+			
 			return this.normalizeDataFromMongoDB(property)
 		} catch (error) {
 			return this.createError(`error get Property detail , INN:${this.INN} error :${error}`, error)

@@ -7,11 +7,23 @@ export class FetchPropertyDetail {
 			property,
 			dataGeo,
 		}
-		const fetch = await serverClient.api<void>(INN,`${INN}/propertyDetail/add`, {
+		const fetch = await serverClient.api<void>(INN, `${INN}/propertyDetail/add`, {
 			method: 'POST',
 			body: JSON.stringify(dataBody),
 		})
 		return fetch
+	}
+
+	static async addPropertyDetailList(INN: string, properties: string[], dataGeo: TNewDataGeoLocationDTO): Promise<void> {
+		const dataBody = {
+			properties,
+			dataGeo,
+		}
+
+		await serverClient.api(INN, `/${INN}/propertyDetail/addList`, {
+			method: 'POST',
+			body: JSON.stringify(dataBody),
+		})
 	}
 
 	static async removePropertyDetail(INN: string, idProperty: string, dataGeo: TNewDataGeoLocationDTO): Promise<void> {
@@ -19,7 +31,7 @@ export class FetchPropertyDetail {
 			idProperty,
 			dataGeo,
 		}
-		const fetch = await serverClient.api<void>(INN,`${INN}/propertyDetail/remove`, {
+		const fetch = await serverClient.api<void>(INN, `${INN}/propertyDetail/remove`, {
 			method: 'POST',
 			body: JSON.stringify(dataBody),
 		})
@@ -27,16 +39,17 @@ export class FetchPropertyDetail {
 	}
 
 	static async getProperties(INN: string): Promise<TPropertyDetailDTO[]> {
-		const fetch = await serverClient.api<TPropertyDetailDTO[]>(INN,`${INN}/propertyDetail/get`, {
+		const fetch = await serverClient.api<TPropertyDetailDTO[]>(INN, `${INN}/propertyDetail/get`, {
 			method: 'GET',
 		})
 		return fetch
 	}
 
 	static async searchProperties(INN: string, dataSearch: string): Promise<TPropertyDetailDTO[]> {
-		const fetch = await serverClient.api<TPropertyDetailDTO[]>(INN,
+		const fetch = await serverClient.api<TPropertyDetailDTO[]>(
+			INN,
 			`${INN}/propertyDetail/search?search=${encodeURIComponent(dataSearch.trim())}`,
-			{ method: 'GET' }
+			{ method: 'GET' },
 		)
 		return fetch
 	}

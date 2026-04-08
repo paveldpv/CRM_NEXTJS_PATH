@@ -5,3 +5,4 @@ export type TPropertyDetail = {
 } & TEntities
 
 export type TPropertyDetailDTO = Omit<TPropertyDetail, '_id'> & { _id: string }
+export type TNewPropertyDetail = Omit<TPropertyDetail, '_id'> 
