@@ -1,20 +1,21 @@
 'use client'
 import { FetchDetail } from '@/shared/api'
+import { FetchAssemblyDetail } from '@/shared/api/detail/FetchAssemblyDeatail'
 import { FetchPropertyDetail } from '@/shared/api/propertyDetail/fetchPropertyDetail'
 import Fieldset from '@/shared/components/fieldSet/ui/Fieldset'
+import { getNewProperties } from '@/shared/lib/utils/getNewPropertiesDeatil'
 import { getPropertyStrings } from '@/shared/lib/utils/getPropertyToBaseOptionType'
 import useGeo from '@/shared/model/hooks/useGeo'
-import { PURPOSE_USE, TDetailDTO, TNewDetailDTO, TPropertyDetail, TPropertyDetailDTO } from '@/shared/model/types'
+import { PURPOSE_USE, TBaseDetailDTO, TDetailDTO, TNewDetailDTO, TPropertyDetailDTO } from '@/shared/model/types'
 import CusConfigProvider from '@/shared/ui/CusConfigProvider/ui/CusConfigProvider'
 import CusButton from '@/shared/ui/button/ui/CusButton'
 import { Checkbox, Input, InputNumber, Select, Tooltip } from 'antd'
 import { BaseOptionType } from 'antd/es/select'
 import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
-import { useParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { FaImage, FaInfoCircle, FaMinus, FaPlus, FaQuestionCircle, FaSave } from 'react-icons/fa'
 import { TFormUpdateDetail } from '../../model/Types'
-import { getNewProperties } from '@/shared/lib/utils/getNewPropertiesDeatil'
 
 export default function FormUpdateDetail({
 	redactDetail,
@@ -27,6 +28,7 @@ export default function FormUpdateDetail({
 	const params = useParams()
 	const INN = params!.INN as string
 	const idEmployee = params!.idEmployee as string
+	const searchParams = useSearchParams()
 
 	const { dataGeo } = useGeo(idEmployee, PURPOSE_USE.redact, 'Добавление/редактирование детали')
 	const [propertyDetail, setPropertyDetail] = useState<BaseOptionType[]>([])
@@ -35,7 +37,7 @@ export default function FormUpdateDetail({
 	useEffect(() => {
 		setLoader(true)
 		;(async () => {
-			const dataPropertyDetail = await FetchPropertyDetail.getProperties(INN)			
+			const dataPropertyDetail = await FetchPropertyDetail.getProperties(INN)
 			setPropertyDetail(getPropertyStrings(dataPropertyDetail))
 
 			setCurrentProperty(dataPropertyDetail)
@@ -43,7 +45,8 @@ export default function FormUpdateDetail({
 		})()
 	}, [redactDetail, INN])
 
-	const initialValues: TNewDetailDTO | TDetailDTO = redactDetail || {
+	const initialValues: TNewDetailDTO | TBaseDetailDTO = redactDetail || {
+		entitiesType: 'DETAIL',
 		order: idOrder,
 		nameDetail: '',
 		completed: false,
@@ -57,11 +60,11 @@ export default function FormUpdateDetail({
 	}
 
 	const handleSubmit = async (values: Partial<TDetailDTO>) => {
-		const newPropertyDetail = getNewProperties(values.propertyDetail ||[],currentProperty)
-		if(newPropertyDetail.length!=0){
-			await FetchPropertyDetail.addPropertyDetailList(INN,newPropertyDetail,dataGeo)
-		}
 		setLoader(true)
+		const newPropertyDetail = getNewProperties(values.propertyDetail || [], currentProperty)
+		if (newPropertyDetail.length != 0) {
+			await FetchPropertyDetail.addPropertyDetailList(INN, newPropertyDetail, dataGeo)
+		}
 
 		if (redactDetail) {
 			const updatedDetail = {
@@ -78,6 +81,7 @@ export default function FormUpdateDetail({
 			setLoader(false)
 		} else {
 			const newDetailData: TNewDetailDTO = {
+				entitiesType: 'DETAIL',
 				order: idOrder,
 				nameDetail: values.nameDetail || '',
 				completed: values.completed || false,
@@ -87,7 +91,21 @@ export default function FormUpdateDetail({
 				price: values.price || { price: 0 },
 				propertyDetail: Array.isArray(values.propertyDetail) ? values.propertyDetail : [],
 			}
-
+			const assemblyParams = new URLSearchParams(searchParams?.toString())
+			if (assemblyParams.has('idAssembly') && assemblyParams.get('idAssembly')!=null) {
+				const idAssembly = assemblyParams.get('idAssembly')  as string
+				assemblyParams.delete('idAssembly')
+				const createdDetail = await FetchDetail.addDetailForOrder(INN, newDetailData, dataGeo)
+				await FetchAssemblyDetail.addComponentAssemblyDetail(INN, idAssembly, createdDetail._id, dataGeo)
+				setDetails((prev) =>
+					prev.map((detail) =>
+						detail._id === idAssembly && detail.entitiesType === 'ASSEMBLY'
+							? { ...detail, components: [...detail.components, createdDetail._id] }
+							: detail,
+					),
+				)
+				
+			}
 			const createdDetail = await FetchDetail.addDetailForOrder(INN, newDetailData, dataGeo)
 			setDetails((prev) => [...prev, createdDetail])
 			setModalDetail(false)
@@ -104,7 +122,7 @@ export default function FormUpdateDetail({
 		setLoader(false)
 	}
 
-	const addNewProperty = async (value: string) => {		
+	const addNewProperty = async (value: string) => {
 		const isNewProperty = propertyDetail.some((prop) => prop.property.trim().toLowerCase() === value.trim().toLowerCase())
 		if (!isNewProperty) return
 		await FetchPropertyDetail.addPropertyDetail(INN, value, dataGeo)

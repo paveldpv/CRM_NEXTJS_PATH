@@ -1,13 +1,13 @@
 'use client'
 import { FetchDetail } from '@/shared/api'
+import ContextMenu from '@/shared/components/contextMenu/ui/ContextMenu' // Добавляем импорт
 import CusAccordion from '@/shared/components/CusAccordion/CusAccordion'
 import Fieldset from '@/shared/components/fieldSet/ui/Fieldset'
-import { TDetailDTO } from '@/shared/model/types'
-import CusButton from '@/shared/ui/button/ui/CusButton'
+import { TAssemblyDetailDTO, TBaseDetailDTO, TDetailDTO } from '@/shared/model/types'
 import CusSpin from '@/shared/ui/loaders/CusSpin'
 import { Collapse, Modal } from 'antd'
 import { useParams } from 'next/navigation'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { FaCubes, FaPlus } from 'react-icons/fa'
 import { TFormDetails } from '../../model/Types'
 import ListDetails from '../lists/ListDetails'
@@ -18,7 +18,10 @@ export default function FormDetails({ amountDetails, idOrder, permission, number
 	const [details, setDetails] = useState<TDetailDTO[]>([])
 	const [loader, setLoader] = useState(true)
 	const [modalDetail, setModalDetail] = useState(false)
-	const [redactDetail, setRedactDetail] = useState<TDetailDTO | null>(null)
+	const [redactDetail, setRedactDetail] = useState<TBaseDetailDTO | null>(null)
+
+	const [redactAssemblyDetail, setRedactAssemblyDetail] = useState<TAssemblyDetailDTO | null>(null)
+	const [modalAssemblyDetail, setModalAssemblyDetail] = useState(false)
 	const params = useParams()
 	const INN = params!.INN as string
 
@@ -42,6 +45,27 @@ export default function FormDetails({ amountDetails, idOrder, permission, number
 		setModalDetail(true)
 	}, [])
 
+	const addNewSBDetail = useCallback((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+		e.preventDefault()
+		// TODO: Реализовать логику для сборочной детали
+		console.log('Добавить сборочную деталь')
+		alert('Функция "Добавить сборочную деталь" в разработке')
+	}, [])
+
+	const itemsContextMenu = useMemo(
+		() => [
+			{
+				title: 'Добавить деталь',
+				onClickFunc: addNewDetail,
+			},
+			{
+				title: 'Добавить сборочную деталь',
+				onClickFunc: addNewSBDetail,
+			},
+		],
+		[addNewDetail, addNewSBDetail],
+	)
+
 	return (
 		<>
 			<Fieldset legend={<FaCubes />} className=' row-span-2'>
@@ -57,14 +81,21 @@ export default function FormDetails({ amountDetails, idOrder, permission, number
 							<div>
 								<p>
 									{permission && (
-										<CusButton className='p-2 text-sm  flex justify-center' onClick={addNewDetail}>
+										<ContextMenu
+											itemsMenu={itemsContextMenu}
+											className='p-2 text-sm flex justify-center items-center'
+										>
 											<FaPlus />
-											<p className=' font-bold pl-2 pr-2'>Добавить</p>
-										</CusButton>
+											<p className='font-bold pl-2 pr-2'>Добавить</p>
+										</ContextMenu>
 									)}
 								</p>
 								{details.length !== 0 && (
 									<ListDetails
+									setLoader={setLoader}
+										setDetails={setDetails}
+										setRedactAssemblyDetail={setRedactAssemblyDetail}
+										setModalAssemblyDetail={setModalAssemblyDetail}
 										permission={permission}
 										setModalDetail={setModalDetail}
 										setRedactDetail={setRedactDetail}

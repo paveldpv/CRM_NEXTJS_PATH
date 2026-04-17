@@ -1,14 +1,29 @@
+'use client'
+import { FetchDetail } from '@/shared/api'
+import useGeo from '@/shared/model/hooks/useGeo'
+import { PURPOSE_USE } from '@/shared/model/types'
 import CusButton from '@/shared/ui/button/ui/CusButton'
 import { format } from 'date-fns'
+import { useParams } from 'next/navigation'
 import { FaCheck, FaClock, FaSearch, FaTimes } from 'react-icons/fa'
 import { TDetail } from '../../model/Types'
 
-export default function Detail({ detail, setRedactDetail, setModalDetail, permission }: TDetail) {
+export default function Detail({ setLoader, setDetails, detail, setRedactDetail, setModalDetail, permission }: TDetail) {
+	const params = useParams()
+	const INN = params!.INN as string
+	const idUser = params!.USER_ID as string
+	const { dataGeo } = useGeo(idUser, PURPOSE_USE.redact, 'удалил деталь')
+
 	const redactDetail = () => {
 		setRedactDetail(detail)
 		setModalDetail(true)
 	}
-	const removeDetail = async () => {}
+	const removeDetail = async () => {
+		setLoader(true)
+		await FetchDetail.removeDetailForOrder(INN, detail.order, detail._id, dataGeo)
+		setDetails((prev) => prev.filter((el) => el._id != detail._id))
+		setLoader(false)
+	}
 	return (
 		<div className='p-4 bg-white rounded-lg shadow'>
 			<div className='grid grid-cols-12 gap-4 px-4 py-3 border-b hover:bg-gray-50'>
