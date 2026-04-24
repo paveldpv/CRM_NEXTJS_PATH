@@ -1,4 +1,6 @@
 import { TAssemblyDetailDTO, TBaseDetailDTO, TCounterpartyDTO, TDetailDTO, TOrderFullInfoDTO } from '@/shared/model/types'
+import { BaseOptionType } from 'antd/es/cascader'
+import { FormikValues } from 'formik'
 import { Dispatch, SetStateAction } from 'react'
 
 export type TGeneralFormOrder = {
@@ -18,8 +20,8 @@ export type TFormCounterparty = {
 export type TFormDetails = {
 	permission: boolean
 	amountDetails: number
-	idOrder?: string
-	numberOrder?: number
+	numberOrder: number
+	idOrder: string
 }
 export type TListDetails = {
 	setLoader: Dispatch<SetStateAction<boolean>>
@@ -74,4 +76,36 @@ export type TListComponentsAssemblyDetail = {
 	setComponents: Dispatch<SetStateAction<TBaseDetailDTO[]>>
 	openRedactComponentDetail: (component: TBaseDetailDTO) => void
 	removeComponent: (componentId: string) => void
+}
+
+export type TListBaseDetailImAssembly = {
+	redactAssemblyDetail: TAssemblyDetailDTO
+	loadComponents: () => {}
+	loaderComponents: boolean
+	addBaseDetailFromAssembly: () => {}
+	componentsBaseDetail: TBaseDetailDTO[]
+	redactComponentDetail: (baseDetail: TBaseDetailDTO) => void
+}
+
+export type TFormUpdateAssemblyDetail = {
+	idOrder: string
+	numberOrder: number //!FIXME:
+	redactAssemblyDetail: TAssemblyDetailDTO | null
+	setLoader: Dispatch<SetStateAction<boolean>>
+	setDetails: Dispatch<SetStateAction<TDetailDTO[]>>
+	setRedactDetail: Dispatch<SetStateAction<TBaseDetailDTO | null>>
+	setModalDetail: Dispatch<SetStateAction<boolean>>
+}
+
+export type TFormDetailBasicFields = {
+	completedDetail:() => Promise<void>
+	values: FormikValues
+	setFieldValue: (field: string, value: any) => void
+	redactDetail: boolean
+}
+
+export type TFormDetailProperties = {
+	values: FormikValues
+	setFieldValue: (field: string, value: any) => void
+	propertyDetail: BaseOptionType[]
 }

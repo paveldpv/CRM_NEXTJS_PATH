@@ -14,8 +14,7 @@ export class FetchAssemblyDetail {
 			body: JSON.stringify(dataBody),
 		})
 		return fetch
-
-		// not realise on server
+		
 	}
 
 		static async addComponentAssemblyDetail(
@@ -30,7 +29,9 @@ export class FetchAssemblyDetail {
 			body: JSON.stringify(dataBody),
 		})
 		return fetch
-		//not readlise server
+		
 	}
+
+
 
 }

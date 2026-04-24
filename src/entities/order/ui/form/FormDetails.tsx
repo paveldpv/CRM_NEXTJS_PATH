@@ -5,14 +5,15 @@ import CusAccordion from '@/shared/components/CusAccordion/CusAccordion'
 import Fieldset from '@/shared/components/fieldSet/ui/Fieldset'
 import { TAssemblyDetailDTO, TBaseDetailDTO, TDetailDTO } from '@/shared/model/types'
 import CusSpin from '@/shared/ui/loaders/CusSpin'
-import { Collapse, Modal } from 'antd'
+import { Collapse } from 'antd'
 import { useParams } from 'next/navigation'
 import { useCallback, useMemo, useState } from 'react'
 import { FaCubes, FaPlus } from 'react-icons/fa'
 import { TFormDetails } from '../../model/Types'
 import ListDetails from '../lists/ListDetails'
 import HeaderDetails from '../simple/HeaderDetails'
-import FormUpdateDetail from './FormUpdateDetail'
+import FormUpdateAssemblyDetailModal from './FormUpdateAssemblyDetailModal'
+import FormUpdateDetailModal from './FormUpdateDetailModal'
 
 export default function FormDetails({ amountDetails, idOrder, permission, numberOrder }: TFormDetails) {
 	const [details, setDetails] = useState<TDetailDTO[]>([])
@@ -25,9 +26,10 @@ export default function FormDetails({ amountDetails, idOrder, permission, number
 	const params = useParams()
 	const INN = params!.INN as string
 
-	if (!idOrder) {
+	if (!idOrder || !numberOrder) {
 		return null
 	}
+
 	const loadDetails = async () => {
 		if (!idOrder) {
 			setLoader(false)
@@ -45,11 +47,10 @@ export default function FormDetails({ amountDetails, idOrder, permission, number
 		setModalDetail(true)
 	}, [])
 
-	const addNewSBDetail = useCallback((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+	const addNewAssemblyDetail = useCallback((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.preventDefault()
-		// TODO: Реализовать логику для сборочной детали
-		console.log('Добавить сборочную деталь')
-		alert('Функция "Добавить сборочную деталь" в разработке')
+		setRedactAssemblyDetail(null)
+		setModalAssemblyDetail(true)
 	}, [])
 
 	const itemsContextMenu = useMemo(
@@ -60,10 +61,10 @@ export default function FormDetails({ amountDetails, idOrder, permission, number
 			},
 			{
 				title: 'Добавить сборочную деталь',
-				onClickFunc: addNewSBDetail,
+				onClickFunc: addNewAssemblyDetail,
 			},
 		],
-		[addNewDetail, addNewSBDetail],
+		[addNewDetail, addNewAssemblyDetail],
 	)
 
 	return (
@@ -81,10 +82,7 @@ export default function FormDetails({ amountDetails, idOrder, permission, number
 							<div>
 								<p>
 									{permission && (
-										<ContextMenu
-											itemsMenu={itemsContextMenu}
-											className='p-2 text-sm flex justify-center items-center'
-										>
+										<ContextMenu itemsMenu={itemsContextMenu} className='p-2 text-sm flex justify-center items-center'>
 											<FaPlus />
 											<p className='font-bold pl-2 pr-2'>Добавить</p>
 										</ContextMenu>
@@ -92,7 +90,7 @@ export default function FormDetails({ amountDetails, idOrder, permission, number
 								</p>
 								{details.length !== 0 && (
 									<ListDetails
-									setLoader={setLoader}
+										setLoader={setLoader}
 										setDetails={setDetails}
 										setRedactAssemblyDetail={setRedactAssemblyDetail}
 										setModalAssemblyDetail={setModalAssemblyDetail}
@@ -107,30 +105,33 @@ export default function FormDetails({ amountDetails, idOrder, permission, number
 					</Collapse.Panel>
 				</CusAccordion>
 			</Fieldset>
-			<Modal
-				classNames={{ container: '!bg-transparent' }}
-				open={modalDetail}
+			<FormUpdateDetailModal
 				onCancel={() => {
 					setRedactDetail(null)
 					setModalDetail(false)
 				}}
-				footer={null}
-				width={800}
-				styles={{
-					container: {
-						backgroundColor: 'transparent',
-					},
+				open={modalDetail}
+				setModalDetail={setModalDetail}
+				setDetails={setDetails}
+				setLoader={setLoader}
+				redactDetail={redactDetail}
+				idOrder={idOrder}
+				numberOrder={numberOrder}
+			/>
+			<FormUpdateAssemblyDetailModal
+				open={modalAssemblyDetail}
+				onCancel={() => {
+					setRedactAssemblyDetail(null)
+					setModalAssemblyDetail(false)
 				}}
-			>
-				<FormUpdateDetail
-					setModalDetail={setModalDetail}
-					setDetails={setDetails}
-					setLoader={setLoader}
-					redactDetail={redactDetail}
-					idOrder={idOrder}
-					numberOrder={numberOrder}
-				/>
-			</Modal>
+				idOrder={idOrder}
+				redactAssemblyDetail={redactAssemblyDetail}
+				setLoader={setLoader}
+				setDetails={setDetails}
+				setRedactDetail={setRedactDetail}
+				setModalDetail={setModalDetail}
+				numberOrder={numberOrder}
+			/>
 		</>
 	)
 }

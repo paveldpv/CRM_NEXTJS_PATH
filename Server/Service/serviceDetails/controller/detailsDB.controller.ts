@@ -27,7 +27,7 @@ export class ControllerDetail extends ControllerDB {
 		const result = await _newDetail.save()
 		return result
 	}
-	public async removeDetailFromOrder(idDetail: Types.ObjectId): Promise<void> {
+	public async removeDetail(idDetail: Types.ObjectId): Promise<void> {
 		await this.changeReadinessModel()
 		await this.detailModel!.findOneAndUpdate({ _id: idDetail }, { $set: { safeDeleted: true } })
 	}
@@ -91,11 +91,51 @@ export class ControllerDetail extends ControllerDB {
 					'step.$.employeeId': employeeId,
 					'step.$.dateCompleted': new Date(),
 				},
-			}
+			},
 		)
 	}
 	public async completedDetail(idDetail: Types.ObjectId) {
 		await this.changeReadinessModel()
 		await this.detailModel!.findOneAndUpdate({ _id: idDetail }, { $set: { completed: true } })
+	}
+
+	public async getBaseDetailsByIDs(ids: Types.ObjectId[]): Promise<TDetail[] | []> {
+		await this.changeReadinessModel()
+		return await this.detailModel!.find({
+			_id: { $in: ids },
+			entitiesType: 'DETAIL',
+			safeDeleted: false,
+		}).exec()
+	}
+
+	public async removeBunchDetailsForOrder(idOrder: Types.ObjectId, idDetails: Types.ObjectId[]): Promise<void> {
+		await this.changeReadinessModel()
+		await this.detailModel!.updateMany(
+			{
+				_id: { $in: idDetails },
+				order: idOrder, // защита: только детали этого заказа
+			},
+			{ $set: { safeDeleted: true } },
+		)
+	}
+
+	public async removeComponentFromAssembly(idAssembly: Types.ObjectId, idDetail: Types.ObjectId): Promise<void> {
+		await this.changeReadinessModel()
+		await this.detailModel!.updateOne({ _id: idAssembly, entitiesType: 'ASSEMBLY' }, { $pull: { components: idDetail } })
+	}
+
+	public async addComponentToAssembly(idAssembly: Types.ObjectId, idDetail: Types.ObjectId): Promise<void> {
+		await this.changeReadinessModel()
+
+		await this.detailModel!.updateOne(
+			{
+				_id: idAssembly,
+				entitiesType: 'ASSEMBLY',
+				components: { $ne: idDetail },
+			},
+			{
+				$addToSet: { components: idDetail }
+			},
+		)
 	}
 }

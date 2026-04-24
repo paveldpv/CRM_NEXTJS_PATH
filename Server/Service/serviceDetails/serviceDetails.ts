@@ -8,17 +8,13 @@ import { ServiceOrder } from '../serviceOrder/serviceOrder'
 import { ControllerDetail } from './controller/detailsDB.controller'
 import { TDetail, TFullInfoTDetail, TNewDetail, TNewStep } from './model/types/Types'
 
-
-
-
 export class ServiceDetails extends Service {
-	
 	constructor(INN: string) {
 		super(INN)
 	}
 
-	public async addDetailForOrder(newDetail: TNewDetail): Promise<TDetail| TError> {
-		try {			
+	public async addDetailForOrder(newDetail: TNewDetail): Promise<TDetail | TError> {
+		try {
 			const controllerDetail = new ControllerDetail(this.INN)
 			const result = await controllerDetail.addDetailForOrder(newDetail)
 			return result
@@ -31,14 +27,11 @@ export class ServiceDetails extends Service {
 		try {
 			const controllerDetail = new ControllerDetail(this.INN)
 			const serviceOrder = new ServiceOrder(this.INN)
-			await Promise.all([
-				controllerDetail.removeDetailFromOrder(idDetail),
-				serviceOrder.removeDetailByOrder(idOrder, idDetail),
-			])
+			await Promise.all([controllerDetail.removeDetail(idDetail), serviceOrder.removeDetailByOrder(idOrder, idDetail)])
 		} catch (error) {
 			return this.createError(
 				`error remove detail from order , id order :${idOrder} , id Detail :${idDetail} , INN:${this.INN}`,
-				error
+				error,
 			)
 		}
 	}
@@ -74,7 +67,7 @@ export class ServiceDetails extends Service {
 	}
 
 	public async searchDetail(req?: string): Promise<null | TError | TFullInfoTDetail[]> {
-		const regex = new RegExp(req||'', 'i') 
+		const regex = new RegExp(req || '', 'i')
 		try {
 			const controllerDetail = new ControllerDetail(this.INN)
 			const data = await controllerDetail.searchDetail(regex)
@@ -100,7 +93,7 @@ export class ServiceDetails extends Service {
 		} catch (error) {
 			return this.createError(
 				`error add files from detail , id detail :${idDetail}, files :${files} , INN:${this.INN}`,
-				error
+				error,
 			)
 		}
 	}
@@ -112,7 +105,7 @@ export class ServiceDetails extends Service {
 		} catch (error) {
 			return this.createError(
 				` error remove file from detail id detail :${idDetail} , full path file :${FullPath},INN:${this.INN}`,
-				error
+				error,
 			)
 		}
 	}
@@ -135,7 +128,7 @@ export class ServiceDetails extends Service {
 	public async completedStepDetail(
 		idDetail: Types.ObjectId,
 		name: string,
-		employeeId: Types.ObjectId
+		employeeId: Types.ObjectId,
 	): Promise<void | TError> {
 		try {
 			const controllerDetail = new ControllerDetail(this.INN)
@@ -143,7 +136,7 @@ export class ServiceDetails extends Service {
 		} catch (error) {
 			return this.createError(
 				`error next step detail , INN organization ${this.INN},id detail ;${idDetail.toString()}, name operation :${name}`,
-				error
+				error,
 			)
 		}
 	}
@@ -164,6 +157,59 @@ export class ServiceDetails extends Service {
 		} catch (error) {
 			return this.createError(
 				`error completed detail , INN :${this.INN},id detail :${idDetail.toString()} , id order :${idOrder.toString()}`,
+				error,
+			)
+		}
+	}
+
+	public async getBaseDetailsByIDs(ids: Types.ObjectId[]): Promise<TDetail[] | TError> {
+		try {
+			const controllerDetail = new ControllerDetail(this.INN)
+			const data = await controllerDetail.getBaseDetailsByIDs(ids)
+			if (!data) return []
+			return this.normalizeDataFromMongoDB(data)
+		} catch (error) {
+			return this.createError(`error get base details by ids, ids count: ${ids.length}, INN: ${this.INN}`, error)
+		}
+	}
+
+	public async removeBunchDetailsForOrder(idOrder: Types.ObjectId, idDetails: Types.ObjectId[]): Promise<void | TError> {
+		try {
+			const controllerDetail = new ControllerDetail(this.INN)
+			await controllerDetail.removeBunchDetailsForOrder(idOrder, idDetails)
+		} catch (error) {
+			return this.createError(
+				`error remove bunch details from order, idOrder: ${idOrder}, ids count: ${idDetails.length}, INN: ${this.INN}`,
+				error,
+			)
+		}
+	}
+
+	public async removeComponentAssemblyDetail(idAssembly: Types.ObjectId, idDetail: Types.ObjectId): Promise<void | TError> {
+		try {
+			const controllerDetail = new ControllerDetail(this.INN)
+			await Promise.all([
+				controllerDetail.removeComponentFromAssembly(idAssembly, idDetail),
+				controllerDetail.removeDetail(idDetail),
+			])
+		} catch (error) {
+			return this.createError(
+				`error remove component from assembly, idAssembly: ${idAssembly}, idDetail: ${idDetail}, INN: ${this.INN}`,
+				error,
+			)
+		}
+	}
+
+	public async addComponentAssemblyDetail(
+		idAssembly: Types.ObjectId,
+		idDetail: Types.ObjectId,
+	): Promise<void | TError> {
+		try {
+			const controllerDetail = new ControllerDetail(this.INN)
+			await controllerDetail.addComponentToAssembly(idAssembly, idDetail)
+		} catch (error) {			
+			return this.createError(
+				`error add component to assembly, idAssembly: ${idAssembly}, idDetail: ${idDetail}, INN: ${this.INN}`,
 				error
 			)
 		}

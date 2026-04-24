@@ -10,6 +10,7 @@
 - **Backend API:** Next.js API routes
 - **База данных:** MongoDB + Mongoose
 - **Архитектура:** API → Service → Controller → Mongoose Model
+- **Не ври** не знаешь если что то так и говори будем искать выходы
 
 ## Правила общения со мной
 

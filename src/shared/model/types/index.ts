@@ -11,7 +11,7 @@ import {
 	TNewDataCounterparty,
 } from '../../../../Server/Service/serviceCounterparty/models/types/Types'
 import { TDaDataOrganizationDTO } from '../../../../Server/Service/serviceDaData/model/types/Type'
-import { TAssemblyDetailDTO, TBaseDetailDTO, TDetailDTO, TFullInfoTDetailDTO, TNewDetailDTO } from '../../../../Server/Service/serviceDetails/model/types/Types'
+import { TAssemblyDetailDTO, TBaseDetailDTO, TDetailDTO, TFullInfoTDetailDTO, TNewAssemblyDetailDTO, TNewDetailDTO } from '../../../../Server/Service/serviceDetails/model/types/Types'
 import {
 	PURPOSE_USE,
 	TGeolLocationDTO,
@@ -48,8 +48,8 @@ import {
 
 export { keyColorOption, keyConfigLayout, nameSettingLayout, PURPOSE_USE,type_payment }
 
-
-export type {TPropertyDetail,TBaseDetailDTO,TAssemblyDetailDTO,
+//TAssemblyDetailDTO, TNewAssemblyDetailDTO
+export type {TPropertyDetail,TBaseDetailDTO,TAssemblyDetailDTO,TNewAssemblyDetailDTO,
 	TConfigAPP_DTO,
 	TCounterparty,
 	TCounterpartyDTO,

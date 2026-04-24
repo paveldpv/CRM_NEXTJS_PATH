@@ -1,5 +1,5 @@
 'use client'
-import { FetchDetail } from '@/shared/api'
+import { FetchDetail, FetchOrder } from '@/shared/api'
 import { FetchAssemblyDetail } from '@/shared/api/detail/FetchAssemblyDeatail'
 import CusAccordion from '@/shared/components/CusAccordion/CusAccordion'
 import useGeo from '@/shared/model/hooks/useGeo'
@@ -52,6 +52,7 @@ export default function AssemblyDetail({
 		setLoader(true)
 		const removeDetails = [detail._id, ...detail.components]
 		await FetchDetail.removeBunchDetailsForOrder(INN, detail.order, removeDetails, dataGeo)
+		await FetchDetail.removeDetailForOrder(INN,detail.order,detail._id,dataGeo)
 		setDetails((prev) => prev.filter((el) => el._id !== detail._id))
 		setLoader(false)
 	}, [detail._id, detail.components, INN, detail.order, dataGeo, setLoader, setDetails])

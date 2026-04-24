@@ -144,7 +144,7 @@ export class FetchDetail {
 		const idsParam = idDetails.join('!')
 		const fetch = await serverClient.api<TBaseDetailDTO[]>(INN, `${INN}/detail/bulk?ids=${idsParam}`, { method: 'GET' })
 		return fetch
-		//not realis server
+		
 	}
 
 	static async removeBunchDetailsForOrder(
@@ -157,8 +157,7 @@ export class FetchDetail {
 			idOrder,
 			ids: idDetails,
 			dataGeo,
-		}
-		//not realis server
+		}		
 		const fetch = await serverClient.api<void>(INN, `${INN}/detail/bunch/remove`, {
 			method: 'POST',
 			body: JSON.stringify(dataBody),
