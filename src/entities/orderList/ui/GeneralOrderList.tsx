@@ -11,14 +11,17 @@ import { useEffect, useState } from 'react'
 import PaginationPanel from './PaginationPanel'
 import RulePanelOrder from './PanelControlOrder'
 import ListOrder from './ListOrder'
+import { useLoader } from '@/shared/ui/loaders/namedLoader/model/storeLoader'
 
 export default function GeneralOrderList({ data, totalOrders }: { data: TOrderFullInfoDTO[]; totalOrders: number }) {
-	const [load, setLoad] = useState(true)
+	
+	const [load, setLoad] = useLoader(state=>[state.visible,state.setVisibleLoader])
 	const [dataOrder, setDataOrder] = useState(data)
 	const [viewMode, setViewMode] = useState<viewMode>('list')
 	const permission = useInfoUser((state) => state.permission)
 
 	useEffect(() => {
+		setLoad(true)
 		if (data) {
 			setDataOrder(data)
 			setLoad(false)

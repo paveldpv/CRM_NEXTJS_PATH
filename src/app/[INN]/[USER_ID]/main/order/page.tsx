@@ -33,7 +33,7 @@ export default async function page({ params }: { params: { INN: string; USER_ID:
 	const initialDataOrder = await dataOrder(INN)
 
 	if (!initialDataOrder) {
-		;<div></div>
+		<div></div>
 	}
 	return <GeneralOrderList data={initialDataOrder?.data!} totalOrders={initialDataOrder?.totalOrders!} />
 }

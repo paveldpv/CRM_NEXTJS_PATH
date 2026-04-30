@@ -3,7 +3,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { isError } from '@/shared/lib/IsError'
 import { ServiceOrder } from '../../../../../../../Server/Service/serviceOrder/serviceOrder'
 import { TOrderFullInfo } from '../../../../../../../Server/Service/serviceOrder/model/types/Types'
-import { ServiceOrderFullInfo } from '../../../../../../../Server/Service/serviceOrder/order.dto'
+import { ServiceOrderFullInfoDTO } from '../../../../../../../Server/Service/serviceOrder/order.dto'
+
 
 export async function GET(request: NextRequest, { params }: { params: { INN: string } }) {
 	const { INN } = params
@@ -24,13 +25,13 @@ export async function GET(request: NextRequest, { params }: { params: { INN: str
 		return NextResponse.json({ error: 'dateStart must be before or equal to dateEnd' }, { status: 400 })
 	}
 
-	const service = new ServiceOrder(INN)
-	const result = await service.searchOrderByDate({ dateStart, dateEndDate: dateEnd })
+	const serviceOrder = new ServiceOrder(INN)
+	const result = await serviceOrder.searchOrderByDate({ dateStart, dateEndDate: dateEnd })
 
 	if (isError(result)) {
 		return NextResponse.json({ message: result.message }, { status: 500 })
 	}
-	const ordersDTO = ServiceOrderFullInfo.createListOrderFullInfoDTO(result as TOrderFullInfo[])
+	const ordersDTO = ServiceOrderFullInfoDTO.createListOrderFullInfoDTO(result as TOrderFullInfo[])
 	return NextResponse.json(ordersDTO, { status: 200 })
 
 

@@ -2,6 +2,14 @@ import { serverClient } from '@/shared/lib/api/serverClient'
 import { TNewDataGeoLocationDTO, TNewOrderDTO, TOrder, TOrderDTO, TOrderFullInfoDTO } from '@/shared/model/types'
 import { TOptionQuery } from '@/shared/model/types/subtypes/optionQuery'
 
+export type TSearchParamsOrder = {
+	INN: string
+	dateStart?: Date
+	dateEndDate?: Date
+	deleted?: boolean
+	completed?: boolean
+}
+
 export class FetchOrder {
 	static async createOrder(INN: string, data: TNewOrderDTO, dataGeo: TNewDataGeoLocationDTO): Promise<TOrderFullInfoDTO> {
 		const dataBody = {
@@ -36,16 +44,20 @@ export class FetchOrder {
 		return fetch
 	}
 
-	static async getOrders(
-		INN: string,
-		deleted = false,
-		completed = false,
-		option: TOptionQuery<TOrder>
-	): Promise<TOrderFullInfoDTO[]> {
+	static async getOrders({
+		INN,
+		completed,
+		deleted,
+		option,
+		dateEndDate = new Date(),
+		dateStart,
+	}: TSearchParamsOrder & { option: TOptionQuery<TOrder> }): Promise<TOrderFullInfoDTO[]> {
 		const dataBody = {
+			dateEndDate,
 			deleted,
 			completed,
 			option,
+			dateStart,
 		}
 		const fetch = await serverClient.api<TOrderFullInfoDTO[]>(INN, `${INN}/order/get`, {
 			method: 'POST',
@@ -54,15 +66,7 @@ export class FetchOrder {
 		return fetch
 	}
 
-	static async searchOrderByDate(INN: string, dateStart: Date, dateEndDate: Date): Promise<TOrderFullInfoDTO[]> {
-		const params = new URLSearchParams({
-			dateStart: dateStart.toISOString(),
-			dateEnd: dateEndDate.toISOString(),
-		})
-		const fetch = await serverClient.api<TOrderFullInfoDTO[]>(INN, `${INN}/order/search?${params}`, { method: 'GET' })
-		return fetch
-	}
-
+	
 	static async updateOrder(INN: string, data: TOrderDTO, dataGeo: TNewDataGeoLocationDTO): Promise<void> {
 		const dataBody = {
 			data,
@@ -81,10 +85,7 @@ export class FetchOrder {
 		return fetch
 	}
 
-	static async getAmountOrder(
-		INN: string,
-		{ completed, deleted }: { completed: boolean; deleted: boolean }
-	): Promise<number> {
+	static async getAmountOrder(INN: string, { completed, deleted }: { completed: boolean; deleted: boolean }): Promise<number> {
 		const params = new URLSearchParams({
 			completed: completed ? 'true' : 'false',
 			deleted: deleted ? 'true' : 'false',

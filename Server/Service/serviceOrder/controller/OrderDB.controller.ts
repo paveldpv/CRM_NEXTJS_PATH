@@ -48,11 +48,24 @@ export default class ControllerOrder extends ControllerDB {
 		completed: boolean
 		deleted: boolean
 		option?: TOptionQuery<TOrder>
+		dateStart?: Date
+		dateEndDate?: Date
 	}): Promise<null | TOrderFullInfo[]> {
 		await this.changeReadinessModel()
-		const modelOrder = this.modelOrder!.find({ safeDeleted: params.deleted, complied: params.completed })
-			.populate('CounterParty')
-			.populate('acceptedOfCargoEmployeeId')
+
+		const filter: Record<string, unknown> = {
+			safeDeleted: params.deleted,
+			complied: params.completed,
+		}
+
+		if (params.dateStart && params.dateEndDate) {
+			filter['service.deadlines.startDate'] = {
+				$gte: params.dateStart,
+				$lte: params.dateEndDate,
+			}
+		}
+
+		const modelOrder = this.modelOrder!.find(filter).populate('CounterParty').populate('acceptedOfCargoEmployeeId')
 
 		return this.applyQueryOptions(modelOrder, params.option)
 	}
@@ -95,10 +108,7 @@ export default class ControllerOrder extends ControllerDB {
 	}
 	public async completedOrder(idOrder: Types.ObjectId, dateEnd: Date) {
 		await this.changeReadinessModel()
-		await this.modelOrder!.findOneAndUpdate(
-			{ _id: idOrder },
-			{ $set: { complied: true, 'service.deadlines.endDate': dateEnd } },
-		)
+		await this.modelOrder!.findOneAndUpdate({ _id: idOrder }, { $set: { complied: true, 'service.deadlines.endDate': dateEnd } })
 		return
 	}
 	public async getAmountOrder({ completed, deleted }: { completed: boolean; deleted: boolean }): Promise<number> {

@@ -121,5 +121,14 @@ export const orderSchema = new Schema<TOrder>({
 	payment:payment
 })
 
+orderSchema.index({
+	safeDeleted: 1,
+	complied: 1,
+	'service.deadlines.startDate': 1
+}, {
+	name: 'idx_orders_filter',
+	unique: false,
+})
+
 // const modelOrder = (models.order as Model<TOrder>) || model<TOrder>('order', orderSchema)
 // export default modelOrder

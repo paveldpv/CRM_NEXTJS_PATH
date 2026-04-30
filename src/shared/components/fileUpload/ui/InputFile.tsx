@@ -1,17 +1,10 @@
-
-import { ChangeEvent, DetailedHTMLProps, HTMLAttributes, useId } from 'react'
+import { useId } from 'react'
 import { FaCloudDownloadAlt } from 'react-icons/fa'
 import { cn } from '../../../lib/cn'
 
+import CusSpin from '@/shared/ui/loaders/CusSpin'
 import { Tooltip } from 'antd'
-import StaticLoader from '@/shared/ui/loaders/staticLoaders/StaticLoader'
-
-
-type TInputFile = {
-	pending: boolean
-	uploadFile: (e: ChangeEvent<HTMLInputElement>) => void
-	tooltipTitle?: string
-} & DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
+import { TInputFile } from '../model/type'
 
 export default function InputFile({ pending, uploadFile, tooltipTitle = 'Файл', ...props }: TInputFile) {
 	const idLabel = useId()
@@ -19,12 +12,12 @@ export default function InputFile({ pending, uploadFile, tooltipTitle = 'Фай�
 		<div
 			className={cn(
 				' h-full text-5xl w-full border-menu_color border-2 border-dashed rounded-md flex items-center justify-center p-4  hover:text-color_header',
-				props.className
+				props.className,
 			)}
 		>
 			{pending ? (
 				<div>
-					Загрузка
+					<CusSpin />
 				</div>
 			) : (
 				<div>

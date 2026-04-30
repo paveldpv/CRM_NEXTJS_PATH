@@ -74,6 +74,7 @@ function FormUpdateDetail({ redactDetail, idOrder, numberOrder, setModalDetail, 
 			await FetchDetail.updateDataDetail(INN, updatedDetail, dataGeo)
 			setDetails((prev) => prev.map((item) => (item._id === updatedDetail._id ? updatedDetail : item)))
 			setModalDetail(false)
+			
 			setLoader(false)
 		} else {
 			const newDetailData: TNewDetailDTO = {

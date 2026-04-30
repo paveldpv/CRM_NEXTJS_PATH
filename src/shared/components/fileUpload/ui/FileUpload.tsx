@@ -1,29 +1,17 @@
-
-
 import { redirect, useParams } from 'next/navigation'
-import { ChangeEvent, DetailedHTMLProps, HTMLAttributes, useState } from 'react'
-import { fetchDeletedFile } from '../../../api/file_manager/deletedFile'
-import { fetchUploadFileOrganization } from '../../../api/file_manager/uploadFile'
+import { ChangeEvent, useState } from 'react'
+
 import { combineFilesToFormData } from '../../../lib/combineFilesToFormData'
 import { isError } from '../../../lib/IsError'
 import { useDialogWindow } from '../../../ui/dialogWindow/model/storeDialogWindow'
 
-import { TResponseUploadFiles } from '@/shared/model/types/subtypes/Types'
+import { FetchFileManager } from '@/shared/api/file_manager/FetchFilemanager'
+import { typeDialog } from '@/shared/ui/dialogWindow/model/Types/Types'
+import { IMAGE_FORMAT } from '../model/consts'
+import { TFileUpload } from '../model/type'
 import DownloadFile from './DownloadFile'
 import InputFile from './InputFile'
-import PreviewPictureFile, { TPreviewUploadFile } from './PreviewPictureFile'
-import { typeDialog } from '@/shared/ui/dialogWindow/model/Types/Types'
-
-type TFileUpload = {
-	nameFiled: string
-	set: (nameField: string, data: 'NOT_FOUND' | TResponseUploadFiles) => void
-	tooltipTitle?: string
-	src?: 'NOT_FOUND' | TResponseUploadFiles
-	preview?: TPreviewUploadFile
-	permissionDeletedFile?: boolean
-} & DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
-
-const IMAGE_FORMAT = ['jpg', 'gif', 'png', 'jpeg']
+import PreviewPictureFile from './PreviewPictureFile'
 
 export default function FileUpload({
 	src = 'NOT_FOUND',
@@ -32,9 +20,11 @@ export default function FileUpload({
 	tooltipTitle = 'файл',
 	set,
 	preview,
+	fallBackDeleted,
+	fallBackUpload,
 	...props
 }: TFileUpload) {
-	const { INN } = useParams() as {INN:string}
+	const { INN } = useParams() as { INN: string }
 	const setOpenDialogWindow = useDialogWindow((state) => state.setOpen)
 	const [file, setFile] = useState(src)
 	const [pending, setPending] = useState(false)
@@ -43,15 +33,23 @@ export default function FileUpload({
 		setPending(true)
 		e.preventDefault()
 		if (file === 'NOT_FOUND') return
-
-		const deletedFile = await fetchDeletedFile(file.FullPath)
+		const deletedFile = await FetchFileManager.deletedFile(file.FullPath)
 
 		if (isError(deletedFile)) {
-			redirect(`/ERROR/${deletedFile.typeError || ''}`)
+			setOpenDialogWindow(
+				true,
+				{
+					title: 'ошибка удаления ',
+					message: 'проблемы сервера работающего с файлами',
+				},
+				typeDialog.error,
+			)
+			
 		} else {
 			setFile('NOT_FOUND')
 			set(nameFiled, 'NOT_FOUND')
 			setPending(false)
+			fallBackDeleted && fallBackDeleted()
 		}
 	}
 
@@ -60,7 +58,7 @@ export default function FileUpload({
 		if (!e.currentTarget.files) return
 		const file = e.currentTarget.files[0]
 		const combineFile = combineFilesToFormData([file])
-		const uploadFile = await fetchUploadFileOrganization(INN.toString(), combineFile)
+		const uploadFile = await FetchFileManager.uploadFileOrganization(INN.toString(), combineFile)
 		if (isError(uploadFile)) {
 			setOpenDialogWindow(true, { title: 'ошибка загрузки файла' }, typeDialog.error)
 			setTimeout(() => {
@@ -70,14 +68,11 @@ export default function FileUpload({
 			setFile(uploadFile[0])
 			setPending(false)
 			set(nameFiled, uploadFile[0])
+			fallBackUpload && fallBackUpload(uploadFile[0])
 		}
 	}
 
-	if (
-		file !== 'NOT_FOUND' &&
-		preview?.preview &&
-		IMAGE_FORMAT.some((format) => format === file.fileFormat)
-	) {
+	if (file !== 'NOT_FOUND' && preview?.preview && IMAGE_FORMAT.some((format) => format === file.fileFormat)) {
 		return (
 			<PreviewPictureFile
 				height={preview.height}

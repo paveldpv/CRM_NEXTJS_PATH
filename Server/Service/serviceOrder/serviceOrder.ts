@@ -52,18 +52,21 @@ export class ServiceOrder extends Service {
 	}
 
 	public async getOrders(params: {
-		completed: boolean
-		deleted: boolean
-		option?: TOptionQuery<TOrder>
-	}): Promise<TOrderFullInfo[] | TError | null> {
-		try {
-			const controllerOrder = new ControllerOrder(this.INN)
-			const data = await controllerOrder.getOrders(params)
-			return this.normalizeDataFromMongoDB(data)
-		} catch (error) {
-			return this.createError(`error get order , params get order :${params} , INN:${this.INN} ,error :${error}`)
-		}
+	completed: boolean
+	deleted: boolean
+	option?: TOptionQuery<TOrder>
+	dateStart?: Date
+	dateEndDate?: Date
+}): Promise<TOrderFullInfo[] | TError | null> {
+	try {
+		const controllerOrder = new ControllerOrder(this.INN)
+		const data = await controllerOrder.getOrders(params)
+		return this.normalizeDataFromMongoDB(data)
+	} catch (error) {
+		return this.createError(`error get order , params get order :${params} , INN:${this.INN} ,error :${error}`)
 	}
+}
+
 
 	public async searchOrderByDate(rangeDate: {
 		dateStart: Date
@@ -71,8 +74,8 @@ export class ServiceOrder extends Service {
 	}): Promise<TOrderFullInfo[] | null | TError> {
 		try {
 			const controllerOrder = new ControllerOrder(this.INN)
-			const dataOrder = await controllerOrder.searchOrderByDate(rangeDate)
-			return this.normalizeDataFromMongoDB(dataOrder)
+		const dataOrder = await controllerOrder.searchOrderByDate(rangeDate)
+		return this.normalizeDataFromMongoDB(dataOrder)
 		} catch (error) {
 			return this.createError(
 				`error search order by date , range date :start data : ${format(

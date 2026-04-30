@@ -130,9 +130,9 @@ export default function GeneralFormOrder({ listCounterparty, order }: TGeneralFo
 							</div>
 							<FormDetails
 								permission={permission}
-								idOrder={values._id}
+								idOrder={values._id!}
 								amountDetails={values.details?.length || 0}
-								numberOrder={values.numberOrder}
+								numberOrder={values.numberOrder!}
 							/>
 						</div>
 					)}

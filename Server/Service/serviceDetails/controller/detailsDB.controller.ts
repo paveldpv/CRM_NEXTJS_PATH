@@ -113,7 +113,7 @@ export class ControllerDetail extends ControllerDB {
 		await this.detailModel!.updateMany(
 			{
 				_id: { $in: idDetails },
-				order: idOrder, // защита: только детали этого заказа
+				order: idOrder, 
 			},
 			{ $set: { safeDeleted: true } },
 		)

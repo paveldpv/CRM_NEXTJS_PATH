@@ -11,7 +11,7 @@ export type TRulePanelOrder = {
 	permission: boolean
 	totalOrder: number
 	load: boolean
-	setLoader: Dispatch<SetStateAction<boolean>>
+	setLoader: (state:boolean)=>void
 	setDataOrder: Dispatch<SetStateAction<TOrderFullInfoDTO[]>>
 	setViewMode: Dispatch<SetStateAction<viewMode>>
 	viewMode: viewMode
@@ -24,7 +24,7 @@ export type TListOrder = {
 }
 export type TPaginationPanel = {
 	totalOrder: number
-	setLoader: Dispatch<SetStateAction<boolean>>
+	setLoader: (state:boolean)=>void
 	setDataOrder: Dispatch<SetStateAction<TOrderFullInfoDTO[]>>
 }
 

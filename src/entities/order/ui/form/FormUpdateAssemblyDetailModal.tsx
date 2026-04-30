@@ -8,28 +8,24 @@ import {
 	PURPOSE_USE,
 	TAssemblyDetailDTO,
 	TBaseDetailDTO,
-	TDetailDTO,
 	TNewAssemblyDetailDTO,
 	TPropertyDetailDTO,
 } from '@/shared/model/types'
 import CusButton from '@/shared/ui/button/ui/CusButton'
 import CusConfigProvider from '@/shared/ui/CusConfigProvider/ui/CusConfigProvider'
-import { Checkbox, Form, Input, InputNumber, Modal, ModalProps, Select, Tooltip } from 'antd'
+import { Form, Modal, ModalProps } from 'antd'
 import { BaseOptionType } from 'antd/es/select'
-import { FieldArray, FieldArrayRenderProps, Formik } from 'formik'
+import { Formik } from 'formik'
 import { useParams, useSearchParams } from 'next/navigation'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { FaImage, FaInfoCircle, FaMinus, FaPlus, FaPuzzlePiece, FaQuestion, FaQuestionCircle, FaSave } from 'react-icons/fa'
+import { useEffect, useState } from 'react'
+import { FaInfoCircle, FaSave } from 'react-icons/fa'
 
 import { FetchDetail } from '@/shared/api'
 import { TFormUpdateAssemblyDetail } from '../../model/Types'
-import ListBaseDetailImAssembly from '../lists/ListBaseDetailImAssembly'
+import FormDetailAssembly from './basicFormDetail/FormDetailAssembly'
+import FormDetailAttachments from './basicFormDetail/FormDetailAttachments'
 import FormDetailBasicFields from './basicFormDetail/FormDetailBasicFields'
 import FormDetailProperties from './basicFormDetail/FormDetailProperties'
-import FormDetailAttachments from './basicFormDetail/FormDetailAttachments'
-import FormDetailAssembly from './basicFormDetail/FormDetailAssembly'
-
-
 
 function FormUpdateAssemblyDetail({
 	idOrder,
@@ -40,7 +36,6 @@ function FormUpdateAssemblyDetail({
 	setModalDetail,
 	setRedactDetail,
 }: TFormUpdateAssemblyDetail) {
-	
 	const params = useParams()
 	const INN = params!.INN as string
 	const idEmployee = params!.idEmployee as string
@@ -83,17 +78,60 @@ function FormUpdateAssemblyDetail({
 			await FetchPropertyDetail.addPropertyDetailList(INN, newPropertyDetail, dataGeo)
 		}
 
-		//submit
+		if (redactAssemblyDetail && '_id' in redactAssemblyDetail) {
+			const updatedAssembly: TAssemblyDetailDTO = {
+				...values,
+				_id: redactAssemblyDetail._id,
+				order: redactAssemblyDetail.order,
+				entitiesType: 'ASSEMBLY',
+				description: Array.isArray(values.description) ? values.description.filter(Boolean) : [''],
+				propertyDetail: Array.isArray(values.propertyDetail) ? values.propertyDetail : [],
+				components: redactAssemblyDetail.components,
+				completedAmount: values.completedAmount ?? redactAssemblyDetail.completedAmount,
+				completed: values.completed || redactAssemblyDetail.completed,
+				nameDetail: values.nameDetail || redactAssemblyDetail.nameDetail,
+				amount: values.amount || redactAssemblyDetail.amount,
+				price: values.price || redactAssemblyDetail.price,
+				dateAddDetail:redactAssemblyDetail.dateAddDetail,
+				safeDeleted:redactAssemblyDetail.safeDeleted
+			} 
+
+			setDetails((prev) => prev.map((item) => (item._id === updatedAssembly._id ? updatedAssembly : item)))
+			setModalDetail(false)
+		} else {
+			const newAssembly: TNewAssemblyDetailDTO = {
+				entitiesType: 'ASSEMBLY',
+				order: idOrder,
+				nameDetail: values.nameDetail || '',
+				completed: values.completed || false,
+				amount: values.amount || 1,
+				completedAmount: values.completedAmount || 0,
+				description: Array.isArray(values.description) ? values.description.filter(Boolean) : [''],
+				price: values.price || { price: 0 },
+				propertyDetail: Array.isArray(values.propertyDetail) ? values.propertyDetail : [],
+				components: values.components || [],
+			}
+			const createdAssembly = await FetchDetail.addDetailForOrder(INN, newAssembly, dataGeo)
+			setDetails((prev) => [...prev, createdAssembly])
+			setModalDetail(false)
+		}
+		setLoader(false)
+	
 	}
 
-	const completedAssemblyDetail = async () => {}
+	const completedAssemblyDetail = async () => {
+		setLoader(true)
+		if(!redactAssemblyDetail?._id || !redactAssemblyDetail.order){return}
+		await FetchDetail.completedDetail(INN,redactAssemblyDetail?._id,redactAssemblyDetail?.order,dataGeo)
+		setLoader(false)
+	}
 
 	const loadComponents = async () => {
-		if (!redactAssemblyDetail || redactAssemblyDetail.components.length===0) {
+		if (!redactAssemblyDetail || redactAssemblyDetail.components.length === 0) {
 			return
 		}
 		setLoaderComponents(true)
-		const dataDetails = await FetchDetail.getBaseDetailsByIDs(INN,redactAssemblyDetail.components)
+		const dataDetails = await FetchDetail.getBaseDetailsByIDs(INN, redactAssemblyDetail.components)
 		setComponentsBaseDetail(dataDetails)
 		setLoaderComponents(false)
 	}
@@ -102,7 +140,7 @@ function FormUpdateAssemblyDetail({
 		setModalDetail(true)
 	}
 
-	const addBaseDetailFromAssembly = async() => {
+	const addBaseDetailFromAssembly = async () => {
 		if (redactAssemblyDetail && '_id' in redactAssemblyDetail) {
 			const params = new URLSearchParams(searchParams!.toString())
 			params.set('idAssembly', redactAssemblyDetail._id) //!BUG
@@ -113,23 +151,19 @@ function FormUpdateAssemblyDetail({
 		}
 	}
 
-return (
+	return (
 		<CusConfigProvider>
 			<Formik initialValues={initialValues} onSubmit={handleSubmit} enableReinitialize>
 				{({ values, setFieldValue }) => (
-					<Form className="p-4">
-						<Fieldset legend={numberOrder ? `Заказ №: ${numberOrder}` : <FaInfoCircle />} className="flex flex-col gap-4">
+					<Form className='p-4'>
+						<Fieldset legend={numberOrder ? `Заказ №: ${numberOrder}` : <FaInfoCircle />} className='flex flex-col gap-4'>
 							<FormDetailBasicFields
 								completedDetail={completedAssemblyDetail}
 								values={values}
 								setFieldValue={setFieldValue}
 								redactDetail={!!redactAssemblyDetail}
 							/>
-							<FormDetailProperties
-								values={values}
-								setFieldValue={setFieldValue}
-								propertyDetail={propertyDetail}
-							/>
+							<FormDetailProperties values={values} setFieldValue={setFieldValue} propertyDetail={propertyDetail} />
 							<FormDetailAttachments />
 							<FormDetailAssembly
 								redactAssemblyDetail={redactAssemblyDetail!}
@@ -139,8 +173,8 @@ return (
 								componentsBaseDetail={componentsBaseDetail}
 								redactComponentDetail={redactComponentDetail}
 							/>
-							<div className="flex justify-end mt-6">
-								<CusButton type="submit" className="flex items-center gap-2">
+							<div className='flex justify-end mt-6'>
+								<CusButton type='submit' className='flex items-center gap-2'>
 									<FaSave /> Сохранить
 								</CusButton>
 							</div>
